@@ -10,7 +10,16 @@ export default class DefaultFieldStyle extends AtomStyle {
                     backgroundColor: Colors.red.withAlphaPercent(0.1)
                 },
                 " > .help": {
-                    paddingLeft: "5px",
+                    marginLeft: "5px",
+                    borderRadius: "50%",
+                    display: "inline-block",
+                    width: "10px",
+                    height: "10px",
+                    padding: "3px",
+                    textAlign: "center",
+                    color: Colors.white,
+                    backgroundColor: Colors.limeGreen,
+                    cursor: "pointer",
                     fontSize: "70%"
                 },
                 " > .label": {

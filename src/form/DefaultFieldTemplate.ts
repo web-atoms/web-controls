@@ -58,7 +58,7 @@ export default  class DefaultFieldTemplate extends AtomFieldTemplate {
 
             this.bind(e3, "styleDisplay",  [["this","field","hasHelp"]], false , (v1) => (v1) ? '' : 'none' , __creator);
             
-        const e4 = document.createTextNode("(?)");
+        const e4 = document.createTextNode("?");
         
         e3.appendChild(e4);
 
