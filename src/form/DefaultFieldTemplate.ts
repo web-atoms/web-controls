@@ -18,9 +18,9 @@ export default  class DefaultFieldTemplate extends AtomFieldTemplate {
                     this.element = document.createElement("div");
                     
                     
-            this.bind(this.element, "class",  [["this","controlStyle","root","className"],["this","field","hasError"]], false , (v1,v2) =>  ({
-        [(v1)]: true,
-        'has-error': (v2)
+            this.bind(this.element, "class",  [["this","field","hasError"]], false , (v1) =>  ({
+        'form-field': 1,
+        'has-error': (v1)
     })  , __creator);
                     
             const e1 = document.createElement("label");

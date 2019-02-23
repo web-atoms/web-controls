@@ -2,8 +2,17 @@ import Colors from "web-atoms-core/dist/core/Colors";
 import { AtomStyle } from "web-atoms-core/dist/web/styles/AtomStyle";
 import { IStyleDeclaration } from "web-atoms-core/dist/web/styles/IStyleDeclaration";
 
-export default class DefaultFieldStyle extends AtomStyle {
+export default class AtomFormStyle extends AtomStyle {
+
     public get root(): IStyleDeclaration {
+        return {
+            subclasses: {
+                " > .form-field": this.field
+            }
+        };
+    }
+
+    public get field(): IStyleDeclaration {
         return {
             subclasses: {
                 ".has-error": {
@@ -41,4 +50,5 @@ export default class DefaultFieldStyle extends AtomStyle {
             }
         };
     }
+
 }

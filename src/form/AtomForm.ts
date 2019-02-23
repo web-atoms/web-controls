@@ -3,13 +3,12 @@ import { IClassOf } from "web-atoms-core/dist/core/types";
 import { AtomControl } from "web-atoms-core/dist/web/controls/AtomControl";
 import AtomField from "./AtomField";
 import AtomFieldTemplate from "./AtomFieldTemplate";
+import AtomFormStyle from "./AtomFormStyle";
 import DefaultFieldTemplate from "./DefaultFieldTemplate";
 
 export default class AtomForm extends AtomControl {
 
     public fieldTemplate: IClassOf<AtomFieldTemplate> = DefaultFieldTemplate;
-
-    public fieldStyle: any = null;
 
     public children: AtomControl[] = [];
 
@@ -20,14 +19,19 @@ export default class AtomForm extends AtomControl {
         }
 
         const fieldContainer = new (this.fieldTemplate)(this.app);
-        if (this.fieldStyle) {
-            fieldContainer.defaultControlStyle = this.fieldStyle;
-        }
         fieldContainer.field = e as AtomField;
         this.app.callLater(() => {
             AtomBinder.refreshValue(e, "viewModel");
             AtomBinder.refreshValue(e, "localViewModel");
         });
         return super.append(fieldContainer);
+    }
+
+    protected preCreate(): void {
+        super.preCreate();
+        this.defaultControlStyle = AtomFormStyle;
+        this.runAfterInit(() => {
+            this.element.classList.add(this.controlStyle.root.className);
+        });
     }
 }
