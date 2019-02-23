@@ -1,0 +1,29 @@
+<script>
+    import AtomFieldTemplate from "./AtomFieldTemplate";
+</script>
+<AtomFieldTemplate.div
+    class="[ ({
+        [$this.controlStyle.root.className]: true,
+        'has-error': $this.field.hasError
+    }) ]"
+    >
+    <label
+        class="label"
+        presenter="labelPresenter"
+        text="[$this.field.label]"></label>
+    <span
+        class="required"
+        style-display="[ $this.field.required ? '' : 'none' ]"
+        text="*"></span>
+    <span
+        class="help"
+        event-click="{ () => this.field.openHelp() }" 
+        style-display="[$this.field.hasHelp ? '' : 'none']">(?)</span>
+    <div 
+        class="presenter"
+        presenter="contentPresenter"></div>    
+    <span
+        class="error"
+        style-display="[ $this.field.error ? '' : 'none' ]"
+        text="[$this.field.error]"></span>
+</AtomFieldTemplate.div>

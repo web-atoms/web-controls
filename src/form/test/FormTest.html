@@ -1,0 +1,27 @@
+<script>
+    import AtomForm from "../AtomForm";
+    import AtomField from "../AtomField";
+    import FormViewModel from "./FormViewModel";
+</script>
+<div view-model="{ this.resolve(FormViewModel) }">
+    <AtomForm>
+        <AtomField
+            label="Name:"
+            required="true"
+            error="[$viewModel.errorName]"
+            help-text="Enter your full name">
+            <input type="text" value="$[viewModel.model.name]"/>
+        </AtomField>
+        <AtomField
+            label="Email:"
+            required="true"
+            error="[$viewModel.errorEmail]"
+            help-link="@web-atoms/web-controls/dist/form/test/CustomHelp">
+            <input type="text" value="$[viewModel.model.email]"/>
+        </AtomField>
+        <AtomField>
+            This is simple display text without label and anything
+        </AtomField>
+    </AtomForm>
+    <button event-click="{ () => this.viewModel.save() }">Save</button>
+</div>

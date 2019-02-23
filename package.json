@@ -1,0 +1,25 @@
+{
+  "name": "@web-atoms/web-controls",
+  "version": "1.0.1",
+  "description": "HTML controls for web atoms core",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "version": "npm publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/web-atoms/web-controls.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/web-atoms/web-controls/issues"
+  },
+  "homepage": "https://github.com/web-atoms/web-controls#readme",
+  "dependencies": {
+    "reflect-metadata": "^0.1.13",
+    "web-atoms-amd-loader": "^1.0.183",
+    "web-atoms-core": "^1.0.614"
+  }
+}
