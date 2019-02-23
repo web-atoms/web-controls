@@ -9,6 +9,8 @@ export default class AtomForm extends AtomControl {
 
     public fieldTemplate: IClassOf<AtomFieldTemplate> = DefaultFieldTemplate;
 
+    public fieldStyle: any = null;
+
     public children: AtomControl[] = [];
 
     public append(e: AtomControl | HTMLElement | Text): AtomControl {
@@ -18,6 +20,9 @@ export default class AtomForm extends AtomControl {
         }
 
         const fieldContainer = new (this.fieldTemplate)(this.app);
+        if (this.fieldStyle) {
+            fieldContainer.defaultControlStyle = this.fieldStyle;
+        }
         fieldContainer.field = e as AtomField;
         this.app.callLater(() => {
             AtomBinder.refreshValue(e, "viewModel");
