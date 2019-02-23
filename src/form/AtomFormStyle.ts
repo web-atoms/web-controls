@@ -1,4 +1,4 @@
-import Colors from "web-atoms-core/dist/core/Colors";
+import Colors, { ColorItem } from "web-atoms-core/dist/core/Colors";
 import { AtomStyle } from "web-atoms-core/dist/web/styles/AtomStyle";
 import { IStyleDeclaration } from "web-atoms-core/dist/web/styles/IStyleDeclaration";
 
@@ -43,9 +43,14 @@ export default class AtomFormStyle extends AtomStyle {
                     clear: "both"
                 },
                 " > .error": {
-                    display: "block",
+                    display: "inline-block",
                     clear: "both",
-                    color: Colors.red
+                    color: Colors.white,
+                    backgroundColor: Colors.red,
+                    fontWeight: "bold",
+                    padding: "3px",
+                    borderRadius: "3px",
+                    fontSize: "70%"
                 }
             }
         };

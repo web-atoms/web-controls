@@ -78,7 +78,7 @@ export default  class DefaultFieldTemplate extends AtomFieldTemplate {
         this.setPrimitiveValue(e6, "class", "error" );
         
 
-            this.bind(e6, "styleDisplay",  [["this","field","error"]], false , (v1) =>  (v1) ? '' : 'none'  , __creator);
+            this.bind(e6, "styleDisplay",  [["this","field","hasError"]], false , (v1) =>  (v1) ? '' : 'none'  , __creator);
 
             this.bind(e6, "text",  [["this","field","error"]], false , (v1) => (v1) , __creator);
             
