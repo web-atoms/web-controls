@@ -34,6 +34,7 @@ export default class AtomForm extends AtomControl {
 
     protected createField(e: AtomField): AtomFieldTemplate {
         const field = new (this.fieldTemplate)(this.app);
+        field.field = e;
         this.app.callLater(() => {
             AtomBinder.refreshValue(e, "viewModel");
             AtomBinder.refreshValue(e, "localViewModel");
@@ -45,6 +46,9 @@ export default class AtomForm extends AtomControl {
         const f = this.fields.map((x) => x);
         for (let i = 0; i < f.length ; i ++) {
             const iterator = f[i];
+            iterator.field.element.remove();
+            iterator.field = null;
+            iterator.dispose();
             iterator.element.remove();
             const fc = this.createField(iterator.field);
             this.fields[i] = fc;
