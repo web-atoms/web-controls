@@ -8,28 +8,53 @@ import DefaultFieldTemplate from "./DefaultFieldTemplate";
 
 export default class AtomForm extends AtomControl {
 
-    public fieldTemplate: IClassOf<AtomFieldTemplate> = DefaultFieldTemplate;
+    public fieldTemplate: IClassOf<AtomFieldTemplate>;
 
-    public children: AtomControl[] = [];
+    public fields: AtomFieldTemplate[] = [];
 
     public append(e: AtomControl | HTMLElement | Text): AtomControl {
 
         if (!(e instanceof AtomField)) {
             throw new Error(`Only AtomField can be added inside AtomForm`);
         }
+        const fieldContainer = this.createField(e);
+        this.fields.push(fieldContainer);
+        return super.append(fieldContainer);
+    }
 
-        const fieldContainer = new (this.fieldTemplate)(this.app);
-        fieldContainer.field = e as AtomField;
+    public onPropertyChanged(name: keyof AtomForm): void {
+        switch (name) {
+            case "fieldTemplate":
+            if (this.fields.length) {
+                this.rebuild();
+            }
+            break;
+        }
+    }
+
+    protected createField(e: AtomField): AtomFieldTemplate {
+        const field = new (this.fieldTemplate)(this.app);
         this.app.callLater(() => {
             AtomBinder.refreshValue(e, "viewModel");
             AtomBinder.refreshValue(e, "localViewModel");
         });
-        return super.append(fieldContainer);
+        return field;
+    }
+
+    protected rebuild(): void {
+        const f = this.fields.map((x) => x);
+        for (let i = 0; i < f.length ; i ++) {
+            const iterator = f[i];
+            iterator.element.remove();
+            const fc = this.createField(iterator.field);
+            this.fields[i] = fc;
+        }
     }
 
     protected preCreate(): void {
         super.preCreate();
         this.defaultControlStyle = AtomFormStyle;
+        this.fieldTemplate = DefaultFieldTemplate;
         this.runAfterInit(() => {
             this.element.classList.add(this.controlStyle.root.className);
         });
