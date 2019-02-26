@@ -1,4 +1,5 @@
 import { AtomBinder } from "web-atoms-core/dist/core/AtomBinder";
+import { BindableProperty } from "web-atoms-core/dist/core/BindableProperty";
 import { IClassOf } from "web-atoms-core/dist/core/types";
 import { AtomControl } from "web-atoms-core/dist/web/controls/AtomControl";
 import AtomField from "./AtomField";
@@ -8,6 +9,7 @@ import DefaultFieldTemplate from "./DefaultFieldTemplate";
 
 export default class AtomForm extends AtomControl {
 
+    @BindableProperty
     public fieldTemplate: IClassOf<AtomFieldTemplate>;
 
     public fields: AtomFieldTemplate[] = [];
