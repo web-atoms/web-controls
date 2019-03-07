@@ -18,6 +18,9 @@ export default class AtomFormStyle extends AtomStyle {
                 ".has-error": {
                     backgroundColor: Colors.red.withAlphaPercent(0.1)
                 },
+                ".field-hidden": {
+                    display: "none"
+                },
                 " > .help": {
                     marginLeft: "5px",
                     borderRadius: "50%",
