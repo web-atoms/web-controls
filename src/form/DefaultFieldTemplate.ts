@@ -1,6 +1,5 @@
 // tslint:disable
 import {BindableProperty} from "web-atoms-core/dist/core/BindableProperty";
-import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 
     import AtomFieldTemplate from "./AtomFieldTemplate";
 
@@ -18,9 +17,10 @@ export default  class DefaultFieldTemplate extends AtomFieldTemplate {
                     this.element = document.createElement("div");
                     
                     
-            this.bind(this.element, "class",  [["this","field","hasError"]], false , (v1) =>  ({
+            this.bind(this.element, "class",  [["this","field","hasError"],["this","field","visible"]], false , (v1,v2) =>  ({
         'form-field': 1,
-        'has-error': (v1)
+        'has-error': (v1),
+        'field-hidden': !(v2)
     })  , __creator);
                     
             const e1 = document.createElement("label");

@@ -25,17 +25,8 @@ export default  class FormTest extends AtomControl {
             const e1 = new AtomForm(this.app);
             
             
+            
             const e2 = new AtomField(this.app);
-            
-            
-            const e3 = document.createElement("input");
-            
-            e2.append(e3);
-            
-        e2.setPrimitiveValue(e3, "type", "text" );
-        
-
-            e2.bind(e3, "value",  [["viewModel","model","name"]], true  );
             
             
         e2.setPrimitiveValue(e2.element, "label", "Name:" );
@@ -48,20 +39,20 @@ export default  class FormTest extends AtomControl {
 
         e2.setPrimitiveValue(e2.element, "helpText", "Enter your full name" );
         
+            
+            const e3 = document.createElement("input");
+            
+            e2.append(e3);
+            
+        e2.setPrimitiveValue(e3, "type", "text" );
+        
+
+            e2.bind(e3, "value",  [["viewModel","model","name"]], true  );
+            
             e1.append(e2);
 
 
             const e4 = new AtomField(this.app);
-            
-            
-            const e5 = document.createElement("input");
-            
-            e4.append(e5);
-            
-        e4.setPrimitiveValue(e5, "type", "text" );
-        
-
-            e4.bind(e5, "value",  [["viewModel","model","email"]], true  );
             
             
         e4.setPrimitiveValue(e4.element, "label", "Email:" );
@@ -74,19 +65,28 @@ export default  class FormTest extends AtomControl {
 
         e4.setPrimitiveValue(e4.element, "helpLink", "@web-atoms/web-controls/dist/form/test/CustomHelp" );
         
+            
+            const e5 = document.createElement("input");
+            
+            e4.append(e5);
+            
+        e4.setPrimitiveValue(e5, "type", "text" );
+        
+
+            e4.bind(e5, "value",  [["viewModel","model","email"]], true  );
+            
             e1.append(e4);
 
 
             const e6 = new AtomField(this.app);
             
             
+            
         const e7 = document.createTextNode("\r\n            This is simple display text without label and anything\r\n        ");
         
         e6.element.appendChild(e7);
-            
             e1.append(e6);
 
-            
             this.append(e1);
 
 

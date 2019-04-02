@@ -5,10 +5,10 @@
 				{
   "form": {
     "DefaultFieldTemplate": "@web-atoms/web-controls/dist/form/DefaultFieldTemplate",
+    "HelpPopup": "@web-atoms/web-controls/dist/form/HelpPopup",
     "test": {
-      "FormTest": "@web-atoms/web-controls/dist/form/test/FormTest",
-      "CustomHelp": "@web-atoms/web-controls/dist/form/test/CustomHelp"
-    },
-    "HelpPopup": "@web-atoms/web-controls/dist/form/HelpPopup"
+      "CustomHelp": "@web-atoms/web-controls/dist/form/test/CustomHelp",
+      "FormTest": "@web-atoms/web-controls/dist/form/test/FormTest"
+    }
   }
 }
