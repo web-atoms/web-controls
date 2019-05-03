@@ -4,7 +4,9 @@
     import FormViewModel from "./FormViewModel";
 </script>
 <div view-model="{ this.resolve(FormViewModel) }">
-    <AtomForm>
+    <AtomForm
+        event-submit="{ () => alert('done') }" 
+        focus-next-on-enter="{ true }">
         <AtomField
             label="Name:"
             required="true"
@@ -17,7 +19,7 @@
             required="true"
             error="[$viewModel.errorEmail]"
             help-link="@web-atoms/web-controls/dist/form/test/CustomHelp">
-            <input type="text" value="$[viewModel.model.email]"/>
+            <input class="submit" value="$[viewModel.model.email]"/>
         </AtomField>
         <AtomField>
             This is simple display text without label and anything

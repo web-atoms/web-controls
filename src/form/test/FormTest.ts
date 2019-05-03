@@ -25,6 +25,9 @@ export default  class FormTest extends AtomControl {
             const e1 = new AtomForm(this.app);
             
             
+                e1.setPrimitiveValue(e1.element, "eventSubmit",  () => alert('done') );
+
+                e1.setPrimitiveValue(e1.element, "focusNextOnEnter",  true );
             
             const e2 = new AtomField(this.app);
             
@@ -70,7 +73,7 @@ export default  class FormTest extends AtomControl {
             
             e4.append(e5);
             
-        e4.setPrimitiveValue(e5, "type", "text" );
+        e4.setPrimitiveValue(e5, "class", "submit" );
         
 
             e4.bind(e5, "value",  [["viewModel","model","email"]], true  );

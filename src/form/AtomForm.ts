@@ -11,6 +11,10 @@ export default class AtomForm extends AtomControl {
 
     public fieldTemplate: IClassOf<AtomFieldTemplate>;
 
+    public focusNextOnEnter: boolean = /mobile/i.test(navigator.userAgent);
+
+    public eventSubmit: (e: any) => void = null;
+
     public append(e: AtomControl | HTMLElement | Text): AtomControl {
 
         if (!(e instanceof AtomField)) {
@@ -36,6 +40,45 @@ export default class AtomForm extends AtomControl {
         this.fieldTemplate = DefaultFieldTemplate;
         this.runAfterInit(() => {
             this.element.classList.add(this.controlStyle.root.className);
+
+            this.bindEvent(this.element, "keypress", (e) => {
+                this.onKeyPress(e as any);
+            });
         });
+    }
+
+    protected onKeyPress(e: KeyboardEvent): void {
+        if (!this.focusNextOnEnter) {
+            return;
+        }
+        const target = e.target as HTMLElement;
+        if (!/input/i.test(target.tagName)) {
+            return;
+        }
+        const input = target as HTMLInputElement;
+        if (e.keyCode === 13) {
+            if (/submit/i.test(input.className)) {
+                if (this.eventSubmit) {
+                    this.eventSubmit(e);
+                    return;
+                }
+            }
+
+            this.focusNextInput(target);
+        }
+    }
+
+    private focusNextInput(target: Element) {
+        const elements = document.getElementsByTagName("input");
+        let last = null;
+        // tslint:disable-next-line:prefer-for-of
+        for (let index = 0; index < elements.length; index++) {
+            const element = elements[index];
+            if (last === target) {
+                element.focus();
+                return;
+            }
+            last = element;
+        }
     }
 }
