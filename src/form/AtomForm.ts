@@ -38,9 +38,9 @@ export default class AtomForm extends AtomControl {
             this.element.classList.add(this.controlStyle.root.className);
             
             this.app.callLater(() => {
-                this.refreshInherited("viewModel", (a) => a.mViewModel === undefined);
-                this.refreshInherited("localViewModel", (a) => a.mLocalViewModel === undefined);
-                this.refreshInherited("data", (a) => a.mData === undefined);
+                this.refreshInherited("viewModel", (a) => (a as any).mViewModel === undefined);
+                this.refreshInherited("localViewModel", (a) => (a as any).mLocalViewModel === undefined);
+                this.refreshInherited("data", (a) => (a as any).mData === undefined);
             });
 
             this.bindEvent(this.element, "keypress", (e) => {
