@@ -27,10 +27,6 @@ export default class AtomForm extends AtomControl {
     protected createField(e: AtomField): AtomFieldTemplate {
         const field = new (this.fieldTemplate)(this.app);
         field.field = e;
-        this.app.callLater(() => {
-            AtomBinder.refreshValue(e, "viewModel");
-            AtomBinder.refreshValue(e, "localViewModel");
-        });
         return field;
     }
 
@@ -40,6 +36,12 @@ export default class AtomForm extends AtomControl {
         this.fieldTemplate = DefaultFieldTemplate;
         this.runAfterInit(() => {
             this.element.classList.add(this.controlStyle.root.className);
+            
+            this.app.callLater(() => {
+                this.refreshInherited("viewModel", (a) => a.mViewModel === undefined);
+                this.refreshInherited("localViewModel", (a) => a.mLocalViewModel === undefined);
+                this.refreshInherited("data", (a) => a.mData === undefined);
+            });
 
             this.bindEvent(this.element, "keypress", (e) => {
                 this.onKeyPress(e as any);
