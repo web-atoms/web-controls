@@ -27,6 +27,9 @@ export default class AtomField extends AtomControl {
     @BindableProperty
     public visible: boolean = true;
 
+    @BindableProperty
+    public fieldClass: string = "";
+
     public get hasError(): boolean {
         return this.error ? true : false;
     }
