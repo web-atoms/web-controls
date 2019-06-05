@@ -1,0 +1,27 @@
+<script>
+    import AtomPageFrameStyle, { FrameStyle } from "./AtomPageFrameStyle";
+</script>
+<div
+    default-style="{ AtomPageFrameStyle }"
+    style-class="{ this.controlStyle.root }"
+    properties=" url: null, titlePresenter: null, commandPresenter: null ">
+
+    <div class="title-bar">
+        <span 
+            class="[`icon fas ${ $localViewModel.canGoBack ? 'fa-arrow-left' : 'fa-bars' }`]" 
+            event-click="{()=> $localViewModel.iconClick()}"></span>
+        <div
+            class="title" 
+            presenter="titlePresenter"></div>
+        <div
+            class="commands" 
+            presenter="commandPresenter"></div>
+    </div>
+
+    <AtomFrame.div
+        class="page-host"
+        current="$[localViewModel.owner.currentPage]"
+        url="[$localViewModel.owner.url]"
+        control-style="{ FrameStyle }"></AtomFrame.div>
+
+</div>

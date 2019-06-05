@@ -1,0 +1,16 @@
+<script>
+    import Page from "../Page";
+    import ListPageViewModel from "./ListPageViewModel";
+</script>
+<Page.div view-model="{ this.resolve(ListPageViewModel) }">
+
+    <div template="commandTemplate">
+        <span class="fas fa-filter" event-click="{ () => this.viewModel.openFilter() }"></span>
+        <span class="fas fa-question-circle"></span>
+    </div>
+    
+    This is a list page;
+    <button 
+        event-click="{ () => this.app.broadcast('root-page', '@web-atoms/web-controls/dist/mobile/pages/sample/DetailPage?canGoBack=true') }"
+        >Open Detail Page</button>
+</Page.div>
