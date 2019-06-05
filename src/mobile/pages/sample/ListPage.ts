@@ -19,9 +19,12 @@ export default  class ListPage extends Page {
                     this.element = document.createElement("div");
                     
                     
+        this.setPrimitiveValue(this.element, "title", "List Page" );
+        
+
                 this.viewModel =  this.resolve(ListPageViewModel) ;
 
-        this.commandTemplate = ListPage_commandTemplate_1_11Creator(this);
+        this.commandTemplate = ListPage_commandTemplate_1_13Creator(this);
             
                     
         const e1 = document.createTextNode("\r\n    \r\n    This is a list page;\r\n    ");
@@ -40,8 +43,8 @@ export default  class ListPage extends Page {
                 }
             }
 
-            function ListPage_commandTemplate_1_11Creator(__creator){
-                return  class ListPage_commandTemplate_1_11 extends AtomControl {
+            function ListPage_commandTemplate_1_13Creator(__creator){
+                return  class ListPage_commandTemplate_1_13 extends AtomControl {
 
                 
 

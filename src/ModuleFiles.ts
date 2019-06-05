@@ -21,7 +21,8 @@
         "ListPage": "@web-atoms/web-controls/dist/mobile/pages/sample/ListPage",
         "HomePage": "@web-atoms/web-controls/dist/mobile/pages/sample/HomePage",
         "DetailPage": "@web-atoms/web-controls/dist/mobile/pages/sample/DetailPage"
-      }
+      },
+      "TitleTemplate": "@web-atoms/web-controls/dist/mobile/pages/TitleTemplate"
     }
   }
 }

@@ -2,7 +2,9 @@
     import Page from "../Page";
     import ListPageViewModel from "./ListPageViewModel";
 </script>
-<Page.div view-model="{ this.resolve(ListPageViewModel) }">
+<Page.div 
+    title="List Page"
+    view-model="{ this.resolve(ListPageViewModel) }">
 
     <div template="commandTemplate">
         <span class="fas fa-filter" event-click="{ () => this.viewModel.openFilter() }"></span>

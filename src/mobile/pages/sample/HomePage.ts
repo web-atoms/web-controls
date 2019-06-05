@@ -18,7 +18,10 @@ export default  class HomePage extends Page {
                     this.element = document.createElement("div");
                     
                     
-        this.commandTemplate = HomePage_commandTemplate_1_8Creator(this);
+        this.setPrimitiveValue(this.element, "title", "Home Page" );
+        
+
+        this.commandTemplate = HomePage_commandTemplate_1_12Creator(this);
             
                     
         const e1 = document.createTextNode("\r\n    This is home page...\r\n");
@@ -27,8 +30,8 @@ export default  class HomePage extends Page {
                 }
             }
 
-            function HomePage_commandTemplate_1_8Creator(__creator){
-                return  class HomePage_commandTemplate_1_8 extends AtomControl {
+            function HomePage_commandTemplate_1_12Creator(__creator){
+                return  class HomePage_commandTemplate_1_12 extends AtomControl {
 
                 
 

@@ -1,10 +1,7 @@
 // tslint:disable
 import {BindableProperty} from "web-atoms-core/dist/core/BindableProperty";
 import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
-
-    import Page from "../Page";
-
-export default  class DetailPage extends Page {
+export default  class TitleTemplate extends AtomControl {
 
                 
 
@@ -15,15 +12,11 @@ export default  class DetailPage extends Page {
 
                     
 
-                    this.element = document.createElement("div");
+                    this.element = document.createElement("span");
                     
                     
-        this.setPrimitiveValue(this.element, "title", "Detail Page" );
-        
+            this.bind(this.element, "text",  [["localViewModel","owner","currentPage","title"],["localViewModel","title"]], false , (v1,v2) =>  (v1) || (v2)  );
                     
-        const e1 = document.createTextNode("\r\n    This is detail page...\r\n");
-        
-        this.element.appendChild(e1);
                 }
             }
 

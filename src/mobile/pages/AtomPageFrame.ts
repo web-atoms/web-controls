@@ -4,6 +4,7 @@ import { AtomControl } from "web-atoms-core/dist/web/controls/AtomControl";
 import AtomPageFrameTemplate from "./AtomPageFrameTemplate";
 import Page from "./Page";
 import PageFrameViewModel from "./PageFrameViewModel";
+import TitleTemplate from "./TitleTemplate";
 
 export default class AtomPageFrame extends AtomControl {
 
@@ -88,16 +89,4 @@ export default class AtomPageFrame extends AtomControl {
         (this.frame.commandPresenter as HTMLElement).appendChild(c.element);
     }
 
-}
-
-export class TitleTemplate extends AtomControl {
-
-    public preCreate(): void {
-        this.element = document.createElement("span");
-        super.preCreate();
-    }
-
-    protected create(): void {
-        this.bind(this.element, "text", [["localViewModel", "title"]], false, (v) => v || "(title)");
-    }
 }
