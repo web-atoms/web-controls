@@ -33,7 +33,7 @@ export default class AtomPopupButton extends AtomControl {
             path = pt;
         } else {
             const rs = this.app.resolve(ReferenceService) as ReferenceService;
-            const c = rs.put(rs);
+            const c = rs.put(pt);
             path = `app://class/${c.key}`;
         }
         return navigationService.openPage(path, this.popupParameters);
