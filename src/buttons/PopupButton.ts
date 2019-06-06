@@ -6,19 +6,37 @@ import { AtomControl } from "web-atoms-core/dist/web/controls/AtomControl";
 export default class PopupButton extends AtomControl {
 
     @BindableProperty
-    public popupTemplate: any;
+    public popupTemplate: any = null;
+
+    @BindableProperty
+    public popupParameters: any = null;
 
     public preCreate(): void {
         super.preCreate();
 
-        const navigationService = this.app.resolve(NavigationService) as NavigationService;
-        const rs = this.app.resolve(ReferenceService) as ReferenceService;
-        const c = rs.put(rs);
-        const path = `app://class/${c.key}`;
         this.bindEvent(
             this.element,
             "click",
-            () => navigationService.openPage(path));
+            () => this.openPopup());
+    }
+
+    protected openPopup(): Promise<void> {
+        const navigationService = this.app.resolve(NavigationService) as NavigationService;
+        const pt = this.popupTemplate;
+        if (!pt) {
+            // tslint:disable-next-line:no-console
+            console.error("No popup template specified in PopupButton");
+            return;
+        }
+        let path: string;
+        if (typeof pt === "string") {
+            path = pt;
+        } else {
+            const rs = this.app.resolve(ReferenceService) as ReferenceService;
+            const c = rs.put(rs);
+            path = `app://class/${c.key}`;
+        }
+        return navigationService.openPage(path, this.popupParameters);
     }
 
 }
