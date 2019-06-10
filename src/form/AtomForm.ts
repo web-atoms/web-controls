@@ -4,6 +4,7 @@ import { IClassOf } from "web-atoms-core/dist/core/types";
 import { AtomControl } from "web-atoms-core/dist/web/controls/AtomControl";
 import AtomField from "./AtomField";
 import AtomFieldTemplate from "./AtomFieldTemplate";
+import AtomFormGroup from "./AtomFormGroup";
 import AtomFormStyle from "./AtomFormStyle";
 import DefaultFieldTemplate from "./DefaultFieldTemplate";
 
@@ -18,12 +19,12 @@ export default class AtomForm extends AtomControl {
     public append(e: AtomControl | HTMLElement | Text): AtomControl {
 
         // you can create nested AtomForm
-        if (e instanceof AtomForm) {
+        if (e instanceof AtomFormGroup) {
             return super.append(e);
         }
 
         if (!(e instanceof AtomField)) {
-            throw new Error(`Only AtomField can be added inside AtomForm`);
+            throw new Error(`Only AtomField or AtomFormGroup can be added inside AtomForm`);
         }
         const fieldContainer = this.createField(e);
         return super.append(fieldContainer);
