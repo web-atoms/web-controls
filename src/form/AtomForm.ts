@@ -17,6 +17,11 @@ export default class AtomForm extends AtomControl {
 
     public append(e: AtomControl | HTMLElement | Text): AtomControl {
 
+        // you can create nested AtomForm
+        if (e instanceof AtomForm) {
+            return super.append(e);
+        }
+
         if (!(e instanceof AtomField)) {
             throw new Error(`Only AtomField can be added inside AtomForm`);
         }
@@ -36,7 +41,7 @@ export default class AtomForm extends AtomControl {
         this.fieldTemplate = DefaultFieldTemplate;
         this.runAfterInit(() => {
             this.element.classList.add(this.controlStyle.root.className);
-            
+
             this.app.callLater(() => {
                 this.refreshInherited("viewModel", (a) => (a as any).mViewModel === undefined);
                 this.refreshInherited("localViewModel", (a) => (a as any).mLocalViewModel === undefined);
