@@ -4,7 +4,6 @@ import { IClassOf } from "web-atoms-core/dist/core/types";
 import { AtomControl } from "web-atoms-core/dist/web/controls/AtomControl";
 import AtomField from "./AtomField";
 import AtomFieldTemplate from "./AtomFieldTemplate";
-import AtomFormGroup from "./AtomFormGroup";
 import AtomFormStyle from "./AtomFormStyle";
 import DefaultFieldTemplate from "./DefaultFieldTemplate";
 
@@ -19,7 +18,7 @@ export default class AtomForm extends AtomControl {
     public append(e: AtomControl | HTMLElement | Text): AtomControl {
 
         // you can create nested AtomForm
-        if (e instanceof AtomFormGroup) {
+        if (e instanceof AtomForm) {
             return super.append(e);
         }
 
@@ -49,9 +48,13 @@ export default class AtomForm extends AtomControl {
                 this.refreshInherited("data", (a) => (a as any).mData === undefined);
             });
 
-            this.bindEvent(this.element, "keypress", (e) => {
-                this.onKeyPress(e as any);
-            });
+            this.watchKeyInput();
+        });
+    }
+
+    protected watchKeyInput(): void {
+        this.bindEvent(this.element, "keypress", (e) => {
+            this.onKeyPress(e as any);
         });
     }
 
