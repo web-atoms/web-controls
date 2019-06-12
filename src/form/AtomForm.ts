@@ -75,21 +75,40 @@ export default class AtomForm extends AtomControl {
                 }
             }
 
-            this.focusNextInput(target);
+            const next = this.focusNextInput(target);
+            next.focus();
         }
     }
 
-    private focusNextInput(target: Element) {
-        const elements = document.getElementsByTagName("input");
-        let last = null;
-        // tslint:disable-next-line:prefer-for-of
-        for (let index = 0; index < elements.length; index++) {
-            const element = elements[index];
-            if (last === target) {
-                element.focus();
+    private focusNextInput(target: Element): HTMLInputElement | HTMLTextAreaElement {
+        let found = false;
+        let result: HTMLInputElement | HTMLTextAreaElement = null;
+        function find(e: Element): HTMLInputElement | HTMLTextAreaElement {
+            if (result) {
                 return;
             }
-            last = element;
+            const isText = /input|textarea/i.test(e.tagName);
+            if (found) {
+                if (isText) {
+                    result = e as any;
+                    return;
+                }
+            }
+
+            if (e === target) {
+                found = true;
+            }
+
+            const child = e.firstElementChild;
+            if (child) {
+                find(child);
+            }
+            const next = e.nextElementSibling;
+            if (next) {
+                find(next);
+            }
         }
+        find(document.body);
+        return result;
     }
 }
