@@ -37,7 +37,6 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 				
 				super.create();
 				
-				
 				const e1 = document.createElement("span");
 				
 				this.append(e1);

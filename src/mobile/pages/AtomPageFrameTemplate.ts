@@ -9,13 +9,13 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 	export default class AtomPageFrameTemplate extends AtomControl {
 		
 		@BindableProperty
-		public  url: any =  null;
+		public  url:  string  ;
 		
 		@BindableProperty
-		public  titlePresenter: any =  null;
+		public titlePresenter:  HTMLElement ;
 		
 		@BindableProperty
-		public  commandPresenter: any =  null ;
+		public commandPresenter: HTMLElement  ;
 		
 		constructor(app: any, e?: any) {
 			super(app, e || document.createElement("div"));
