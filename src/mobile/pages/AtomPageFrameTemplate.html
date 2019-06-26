@@ -1,5 +1,6 @@
 <script>
     import AtomPageFrameStyle, { FrameStyle } from "./AtomPageFrameStyle";
+    import PageFrame from "./PageFrame";
 </script>
 <div
     default-style="{ AtomPageFrameStyle }"
@@ -18,10 +19,10 @@
             presenter="commandPresenter"></div>
     </div>
 
-    <AtomFrame.div
+    <PageFrame
         class="page-host"
         current="$[localViewModel.owner.currentPage]"
         url="[$localViewModel.owner.url]"
-        control-style="{ FrameStyle }"></AtomFrame.div>
+        control-style="{ FrameStyle }"></PageFrame>
 
 </div>

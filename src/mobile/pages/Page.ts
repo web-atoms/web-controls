@@ -1,3 +1,4 @@
+import { App } from "web-atoms-core/dist/App";
 import { BindableProperty } from "web-atoms-core/dist/core/BindableProperty";
 import { AtomControl } from "web-atoms-core/dist/web/controls/AtomControl";
 
@@ -11,6 +12,10 @@ export default class Page extends AtomControl {
 
     @BindableProperty
     public commandTemplate: any;
+
+    constructor(app: App, e?: HTMLElement) {
+        super(app, e || document.createElement("div"));
+    }
 
     public preCreate(): void {
         this.bind(this.element, "title", [["viewModel", "title"]]);
