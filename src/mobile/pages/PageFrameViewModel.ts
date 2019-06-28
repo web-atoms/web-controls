@@ -38,6 +38,7 @@ export default class PageFrameViewModel extends AtomViewModel {
     public async iconClick(): Promise<void> {
         if (this.owner.keepStack && this.owner.stack.length) {
             this.owner.backCommand();
+            this.canGoBack = this.owner.stack.length;
             return;
         }
 

@@ -15,6 +15,6 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 			
 			const __creator = this;
 			
-			this.bind(this.element, "text",  [["localViewModel","owner","currentPage","title"],["localViewModel","title"]], false , (v1,v2) =>  (v1) || (v2)  );
+			this.bind(this.element, "text",  [["localViewModel","owner","current","title"],["localViewModel","title"]], false , (v1,v2) =>  (v1) || (v2)  );
 		}
 	}
