@@ -3,7 +3,6 @@ import {BindableProperty} from "web-atoms-core/dist/core/BindableProperty";
 import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 	
 	    import AtomPageFrameStyle, { FrameStyle } from "./AtomPageFrameStyle";
-	    import PageFrame from "./PageFrame";
 	
 	
 	export default class AtomPageFrameTemplate extends AtomControl {
@@ -15,7 +14,10 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 		public titlePresenter:  HTMLElement ;
 		
 		@BindableProperty
-		public commandPresenter: HTMLElement  ;
+		public commandPresenter: HTMLElement ;
+		
+		@BindableProperty
+		public  pagePresenter:  HTMLElement  ;
 		
 		constructor(app: any, e?: any) {
 			super(app, e || document.createElement("div"));
@@ -61,15 +63,9 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 			
 			this.setPrimitiveValue(e4, "class", "commands" );
 			
-			const e5 = new PageFrame(this.app);
+			const e5 = document.createElement("div");
 			
-			e5.setPrimitiveValue(e5.element, "class", "page-host" );
-			
-			e5.bind(e5.element, "current",  [["localViewModel","owner","currentPage"]], true  );
-			
-			e5.bind(e5.element, "url",  [["localViewModel","owner","url"]], false , null );
-			
-			e5.controlStyle =  FrameStyle ;
+			this.pagePresenter = e5;
 			
 			this.append(e5);
 		}

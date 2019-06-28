@@ -1,15 +1,18 @@
+import { Atom } from "web-atoms-core/dist/Atom";
 import { AtomBinder } from "web-atoms-core/dist/core/AtomBinder";
+import { AtomLoader } from "web-atoms-core/dist/core/AtomLoader";
+import { AtomUri } from "web-atoms-core/dist/core/AtomUri";
 import { BindableProperty } from "web-atoms-core/dist/core/BindableProperty";
+import { NavigationService } from "web-atoms-core/dist/services/NavigationService";
+import { AtomWindowViewModel } from "web-atoms-core/dist/view-model/AtomWindowViewModel";
 import { AtomControl } from "web-atoms-core/dist/web/controls/AtomControl";
+import { AtomFrame } from "web-atoms-core/dist/web/controls/AtomFrame";
 import AtomPageFrameTemplate from "./AtomPageFrameTemplate";
 import Page from "./Page";
 import PageFrameViewModel from "./PageFrameViewModel";
 import TitleTemplate from "./TitleTemplate";
 
-export default class AtomPageFrame extends AtomControl {
-
-    @BindableProperty
-    public url: string = null;
+export default class AtomPageFrame extends AtomFrame {
 
     @BindableProperty
     public menuUrl: string = null;
@@ -17,20 +20,6 @@ export default class AtomPageFrame extends AtomControl {
     public frameTemplate: any = AtomPageFrameTemplate;
 
     public titleTemplate: any = TitleTemplate;
-
-    private mCurrentPage: Page = null;
-    public get currentPage(): Page {
-        return this.mCurrentPage;
-    }
-
-    public set currentPage(v: Page) {
-        if (this.mCurrentPage === v) {
-            return;
-        }
-        this.mCurrentPage = v;
-        this.bindCommands(v);
-        AtomBinder.refreshValue(this, "currentPage");
-    }
 
     private created: boolean = false;
 
@@ -47,6 +36,15 @@ export default class AtomPageFrame extends AtomControl {
 
     }
 
+    public clearStack(): void {
+        for (const iterator of this.stack) {
+            const e = iterator.page.element;
+            iterator.page.dispose();
+            e.remove();
+        }
+        this.stack.length = 0;
+    }
+
     public onUpdateUI(): void {
         if (this.created) {
             return;
@@ -60,6 +58,20 @@ export default class AtomPageFrame extends AtomControl {
 
         this.element.appendChild(this.frame.element);
 
+        this.pagePresenter = this.frame.pagePresenter;
+
+    }
+
+    public push(ctrl: AtomControl): void {
+        if (!this.frame) {
+            setTimeout(() => {
+                this.push(ctrl);
+            }, 100);
+            return;
+        }
+        (ctrl as any).title = null;
+        super.push(ctrl);
+        this.bindCommands(ctrl as Page);
     }
 
     protected bindCommands(v: Page): void {

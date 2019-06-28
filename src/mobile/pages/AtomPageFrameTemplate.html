@@ -1,11 +1,10 @@
 <script>
     import AtomPageFrameStyle, { FrameStyle } from "./AtomPageFrameStyle";
-    import PageFrame from "./PageFrame";
 </script>
 <div
     default-style="{ AtomPageFrameStyle }"
     style-class="{ this.controlStyle.root }"
-    @properties=" url: string ,titlePresenter: HTMLElement,commandPresenter:HTMLElement ">
+    @properties=" url: string ,titlePresenter: HTMLElement,commandPresenter:HTMLElement, pagePresenter: HTMLElement ">
 
     <div class="title-bar">
         <span 
@@ -19,10 +18,6 @@
             presenter="commandPresenter"></div>
     </div>
 
-    <PageFrame
-        class="page-host"
-        current="$[localViewModel.owner.currentPage]"
-        url="[$localViewModel.owner.url]"
-        control-style="{ FrameStyle }"></PageFrame>
+    <div presenter="pagePresenter"></div>
 
 </div>

@@ -7,8 +7,6 @@ export default class PageFrameViewModel extends AtomViewModel {
 
     public owner: any = null;
 
-    public pageFrame: any;
-
     public canGoBack: boolean = false;
 
     public title: string = "Mobile Page";
@@ -28,25 +26,19 @@ export default class PageFrameViewModel extends AtomViewModel {
         const ownerUrl = this.owner.url;
         if (this.canGoBack && ownerUrl) {
             // this.stack.push(ownerUrl);
-            if (this.pageFrame) {
-                this.pageFrame.keepStack = true;
-            }
+            this.owner.keepStack = true;
         } else {
-            if (this.pageFrame) {
-                this.pageFrame.clearStack();
-                this.pageFrame.keepStack = false;
-            }
+            this.owner.clearStack();
+            this.owner.keepStack = false;
         }
         this.owner.url = data;
     }
 
     @Receive("root-page-go-back")
     public async iconClick(): Promise<void> {
-        if (this.pageFrame) {
-            if (this.pageFrame.keepStack && this.pageFrame.stack.length) {
-                this.pageFrame.backCommand();
-                return;
-            }
+        if (this.owner.keepStack && this.owner.stack.length) {
+            this.owner.backCommand();
+            return;
         }
 
         await this.navigationService.openPage(this.owner.menuUrl);
