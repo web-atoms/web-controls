@@ -29,7 +29,9 @@ export default class AtomPageFrame extends AtomFrame {
 
     public preCreate(): void {
         super.preCreate();
-
+        this.runAfterInit(() => {
+            this.saveScrollPosition = true;
+        });
         this.localViewModel = this.resolve(PageFrameViewModel, () => ({
             owner: this
         }));
