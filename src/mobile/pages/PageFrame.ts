@@ -7,4 +7,14 @@ export default class PageFrame extends AtomFrame {
         (ctrl as any).title = null;
         super.push(ctrl);
     }
+
+    public clearStack(): void {
+        for (const iterator of this.stack) {
+            const e = iterator.element;
+            iterator.dispose();
+            e.remove();
+        }
+        this.stack.length = 0;
+    }
+
 }

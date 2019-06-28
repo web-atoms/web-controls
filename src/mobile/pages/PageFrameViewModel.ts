@@ -27,17 +27,23 @@ export default class PageFrameViewModel extends AtomViewModel {
         this.title = (url.query.title as string) || this.title;
         const ownerUrl = this.owner.url;
         if (this.canGoBack && ownerUrl) {
-            this.stack.push(ownerUrl);
+            // this.stack.push(ownerUrl);
+            this.owner.keepStack = true;
+        } else {
+            this.owner.clearStack();
+            this.owner.keepStack = false;
         }
         this.owner.url = data;
     }
 
+    @Receive("root-page-go-back")
     public async iconClick(): Promise<void> {
-        if (this.canGoBack && this.stack.length) {
-            const url = new AtomUri(this.stack.pop());
-            this.canGoBack = (url.query.canGoBack as boolean || false);
-            this.title = (url.query.title as string) || "Mobile Page";
-            this.owner.url = url.toString();
+        if (this.owner.keepStack && this.owner.stack.length) {
+            // const url = new AtomUri(this.stack.pop());
+            // this.canGoBack = (url.query.canGoBack as boolean || false);
+            // this.title = (url.query.title as string) || "Mobile Page";
+            // this.owner.url = url.toString();
+            this.owner.backCommand();
             return;
         }
 
