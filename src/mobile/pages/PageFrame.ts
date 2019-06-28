@@ -17,4 +17,12 @@ export default class PageFrame extends AtomFrame {
         this.stack.length = 0;
     }
 
+    protected preCreate(): void {
+        super.preCreate();
+
+        this.runAfterInit(() => {
+            this.localViewModel.pageFrame = this;
+        });
+    }
+
 }

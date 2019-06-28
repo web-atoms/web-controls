@@ -7,14 +7,14 @@ export default class PageFrameViewModel extends AtomViewModel {
 
     public owner: any = null;
 
+    public pageFrame: any;
+
     public canGoBack: boolean = false;
 
     public title: string = "Mobile Page";
 
     @Inject
     public navigationService: NavigationService;
-
-    private stack: string[] = [];
 
     @Receive("root-page")
     public watchUrl(channel: string, data: string): void {
@@ -28,23 +28,25 @@ export default class PageFrameViewModel extends AtomViewModel {
         const ownerUrl = this.owner.url;
         if (this.canGoBack && ownerUrl) {
             // this.stack.push(ownerUrl);
-            this.owner.keepStack = true;
+            if (this.pageFrame) {
+                this.pageFrame.keepStack = true;
+            }
         } else {
-            this.owner.clearStack();
-            this.owner.keepStack = false;
+            if (this.pageFrame) {
+                this.pageFrame.clearStack();
+                this.pageFrame.keepStack = false;
+            }
         }
         this.owner.url = data;
     }
 
     @Receive("root-page-go-back")
     public async iconClick(): Promise<void> {
-        if (this.owner.keepStack && this.owner.stack.length) {
-            // const url = new AtomUri(this.stack.pop());
-            // this.canGoBack = (url.query.canGoBack as boolean || false);
-            // this.title = (url.query.title as string) || "Mobile Page";
-            // this.owner.url = url.toString();
-            this.owner.backCommand();
-            return;
+        if (this.pageFrame) {
+            if (this.pageFrame.keepStack && this.pageFrame.stack.length) {
+                this.pageFrame.backCommand();
+                return;
+            }
         }
 
         await this.navigationService.openPage(this.owner.menuUrl);
