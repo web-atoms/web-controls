@@ -68,5 +68,7 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 			this.pagePresenter = e5;
 			
 			this.append(e5);
+			
+			this.setPrimitiveValue(e5, "class", "page-presenter" );
 		}
 	}

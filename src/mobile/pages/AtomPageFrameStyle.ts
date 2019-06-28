@@ -11,6 +11,10 @@ export default class AtomPageFrameStyle extends AtomStyle {
                 " .title-bar": {
 
                     backgroundColor: Colors.lightSeaGreen,
+                    position: "fixed",
+                    left: 0,
+                    top: 0,
+                    right: 0,
 
                     padding: "4px",
                     subclasses: {
@@ -26,6 +30,10 @@ export default class AtomPageFrameStyle extends AtomStyle {
                             float: "right"
                         }
                     }
+                },
+
+                " .page-presenter": {
+                    marginTop: "25px"
                 }
             }
         };
