@@ -14,26 +14,6 @@ export default class PageFrameViewModel extends AtomViewModel {
     @Inject
     public navigationService: NavigationService;
 
-    @Receive("root-page")
-    public watchUrl(channel: string, data: string): void {
-        if (!data) {
-            return;
-        }
-
-        const url = new AtomUri(data);
-        this.canGoBack = (url.query.canGoBack as boolean) || false;
-        this.title = (url.query.title as string) || this.title;
-        const ownerUrl = this.owner.url;
-        if (this.canGoBack && ownerUrl) {
-            // this.stack.push(ownerUrl);
-            this.owner.keepStack = true;
-        } else {
-            this.owner.clearStack();
-            this.owner.keepStack = false;
-        }
-        this.owner.url = data;
-    }
-
     @Receive("root-page-go-back")
     public async iconClick(): Promise<void> {
         if (this.owner.keepStack && this.owner.stack.length) {
