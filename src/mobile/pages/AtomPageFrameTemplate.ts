@@ -43,7 +43,7 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 			
 			e1.appendChild(e2);
 			
-			this.bind(e2, "class",  [["localViewModel","canGoBack"]], false , (v1) => `icon fas ${ (v1) ? 'fa-arrow-left' : 'fa-bars' }` );
+			this.bind(e2, "class",  [["localViewModel","owner","canGoBack"]], false , (v1) => `icon fas ${ (v1) ? 'fa-arrow-left' : 'fa-bars' }` );
 			
 			this.runAfterInit( () => this.setLocalValue(e2, "eventClick", ()=> (this.localViewModel).iconClick()) );
 			
