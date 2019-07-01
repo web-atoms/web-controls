@@ -8,7 +8,7 @@
 
     <div class="title-bar">
         <span 
-            class="[`icon fas ${ $localViewModel.canGoBack ? 'fa-arrow-left' : 'fa-bars' }`]" 
+            class="[`icon fas ${ $localViewModel.owner.canGoBack ? 'fa-arrow-left' : 'fa-bars' }`]" 
             event-click="{()=> $localViewModel.iconClick()}"></span>
         <div
             class="title" 
