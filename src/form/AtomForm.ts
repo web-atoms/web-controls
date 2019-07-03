@@ -13,8 +13,6 @@ export default class AtomForm extends AtomControl {
 
     public focusNextOnEnter: boolean = /mobile/i.test(navigator.userAgent);
 
-    public eventSubmit: (e: any) => void = null;
-
     public append(e: AtomControl | HTMLElement | Text): AtomControl {
 
         // you can create nested AtomForm
@@ -69,15 +67,22 @@ export default class AtomForm extends AtomControl {
         const input = target as HTMLInputElement;
         if (e.keyCode === 13) {
             if (/submit/i.test(input.className)) {
-                if (this.eventSubmit) {
-                    this.eventSubmit(e);
-                    return;
-                }
+                this.fireSubmitEvent();
+                return;
             }
 
             const next = this.focusNextInput(target);
-            next.focus();
+            if (next) {
+                next.focus();
+            } else {
+                this.fireSubmitEvent();
+            }
         }
+    }
+
+    protected fireSubmitEvent(): void {
+        const e = new CustomEvent("submit", { bubbles: false, cancelable: false });
+        this.element.dispatchEvent(e);
     }
 
     private focusNextInput(target: Element): HTMLInputElement | HTMLTextAreaElement {
