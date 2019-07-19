@@ -17,7 +17,10 @@ export default class PageFrameViewModel extends AtomViewModel {
     @Receive("root-page-go-back")
     public async iconClick(): Promise<void> {
         if (this.owner.keepStack && this.owner.stack.length) {
-            this.owner.backCommand();
+            const p = this.owner.backCommand();
+            if (p && p.then && p.catch) {
+                await p;
+            }
             setTimeout(() => {
                 this.canGoBack = this.owner.stack.length;
             }, 500);
