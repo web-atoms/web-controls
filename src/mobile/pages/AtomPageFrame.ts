@@ -73,7 +73,12 @@ export default class AtomPageFrame extends AtomFrame {
         }
         (ctrl as any).title = null;
         super.push(ctrl);
-        this.bindCommands(ctrl as Page);
+    }
+
+    public onPropertyChanged(name: keyof AtomPageFrame): void {
+        if (name === "current") {
+            this.bindCommands(this.current as Page);
+        }
     }
 
     protected bindCommands(v: Page): void {
