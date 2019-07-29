@@ -37,6 +37,7 @@ export default class PageFrameViewModel extends AtomViewModel {
 
         this.cancelToken = new CancelToken();
         await this.navigationService.openPage(this.owner.menuUrl, null, { cancelToken: this.cancelToken });
+        this.cancelToken = null;
     }
 
 }
