@@ -32,6 +32,7 @@ export default class PageFrameViewModel extends AtomViewModel {
 
         if (this.cancelToken) {
             this.cancelToken.cancel();
+            this.cancelToken = null;
             return;
         }
 
