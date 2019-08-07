@@ -38,7 +38,11 @@ export default class PageFrameViewModel extends AtomViewModel {
         }
 
         this.cancelToken = new CancelToken();
-        await this.navigationService.openPage(this.owner.menuUrl, null, { cancelToken: this.cancelToken })
+
+        // not awaiting on this promise because
+        // button click will not work till the promise
+        // finishes
+        this.navigationService.openPage(this.owner.menuUrl, null, { cancelToken: this.cancelToken })
             .then(() => this.cancelToken = null)
             .catch(() => this.cancelToken = null);
     }
