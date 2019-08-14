@@ -81,8 +81,10 @@ export default class AtomForm extends AtomControl {
     }
 
     protected fireSubmitEvent(): void {
-        const e = new CustomEvent("submit", { bubbles: false, cancelable: false });
-        this.element.dispatchEvent(e);
+        this.app.callLater(() => {
+            const e = new CustomEvent("submit", { bubbles: false, cancelable: false });
+            this.element.dispatchEvent(e);
+        });
     }
 
     private focusNextInput(target: Element): HTMLInputElement | HTMLTextAreaElement {
