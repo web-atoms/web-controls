@@ -67,7 +67,7 @@ export default class AtomForm extends AtomControl {
         const input = target as HTMLInputElement;
         if (e.keyCode === 13) {
             if (/submit/i.test(input.className)) {
-                this.fireSubmitEvent();
+                this.fireSubmitEvent(input);
                 return;
             }
 
@@ -75,12 +75,16 @@ export default class AtomForm extends AtomControl {
             if (next) {
                 next.focus();
             } else {
-                this.fireSubmitEvent();
+                this.fireSubmitEvent(input);
             }
         }
     }
 
-    protected fireSubmitEvent(): void {
+    protected fireSubmitEvent(target: HTMLInputElement): void {
+
+        // fire change event...
+        target.dispatchEvent(new Event("change"));
+
         this.app.callLater(() => {
             const e = new CustomEvent("submit", { bubbles: false, cancelable: false });
             this.element.dispatchEvent(e);
