@@ -24,6 +24,14 @@ export default class AtomPopupButton extends AtomControl {
             this.element,
             "click",
             () => this.app.runAsync(() => this.openPopup()));
+
+        this.bind(
+            this.element,
+            "styleBorder",
+            [["this", "isOpen"]],
+            false,
+            (v) => v ? "1px solid gray" : "1px solid transparent",
+            this);
     }
 
     protected async openPopup(): Promise<void> {
