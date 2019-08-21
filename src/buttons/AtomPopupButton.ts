@@ -3,6 +3,7 @@ import { CancelToken } from "web-atoms-core/dist/core/types";
 import { NavigationService } from "web-atoms-core/dist/services/NavigationService";
 import ReferenceService from "web-atoms-core/dist/services/ReferenceService";
 import { AtomControl } from "web-atoms-core/dist/web/controls/AtomControl";
+import { AtomPopupButtonStyle } from "./AtomPopupButtonStyle";
 
 export default class AtomPopupButton extends AtomControl {
 
@@ -20,6 +21,8 @@ export default class AtomPopupButton extends AtomControl {
     public preCreate(): void {
         super.preCreate();
 
+        this.defaultControlStyle = AtomPopupButtonStyle;
+
         this.bindEvent(
             this.element,
             "click",
@@ -27,10 +30,13 @@ export default class AtomPopupButton extends AtomControl {
 
         this.bind(
             this.element,
-            "styleBorder",
+            "styleClass",
             [["this", "isOpen"]],
-            false,
-            (v) => v ? "1px solid gray" : "1px solid transparent",
+            false ,
+            (v) => ({
+                [this.controlStyle.root]: 1,
+                "is-open": v
+            }),
             this);
     }
 
