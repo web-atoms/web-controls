@@ -45,6 +45,7 @@ export default class AtomPopupButton extends AtomControl {
         if (this.cancelToken) {
             this.cancelToken.cancel();
             this.cancelToken = null;
+            this.isOpen = false;
             return;
         }
 
@@ -74,6 +75,7 @@ export default class AtomPopupButton extends AtomControl {
             this.element.dispatchEvent(new CustomEvent("result", { detail: result }));
 
         } finally {
+            this.cancelToken = null;
             this.isOpen = false;
         }
     }
