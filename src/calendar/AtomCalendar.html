@@ -12,10 +12,10 @@
     <div 
     class="header">
         <i 
-            event-click="{ ()=> $localViewModel.callMonth(-1)}"
+            event-click="{ ()=> $localViewModel.changeMonth(-1)}"
             class="fas fa-caret-left"
             title="Previous Month"
-            style="margin-right: 15px; font-size: 120%; cursor: pointer;"></i>
+            style="margin-right: 15px; font-size: 120%; cursor: pointer; padding:0 10px 0 10px;"></i>
 
         <AtomComboBox.select
             value-path="value"
@@ -30,10 +30,10 @@
             <option template="itemTemplate" text="{$data.label}"></option>
         </AtomComboBox.select>
         <i 
-            event-click="{ ()=> $localViewModel.callMonth(1)}"
+            event-click="{ ()=> $localViewModel.changeMonth(1)}"
             class="fas fa-caret-right"
             title="Next Month"
-            style="margin-left: 15px; font-size: 120%; cursor: pointer;"></i>
+            style="margin-left: 15px; font-size: 120%; cursor: pointer; padding:0 10px 0 10px;"></i>
     </div>
     <AtomItemsControl.div
         items="{ this.srCalendar.weekDays }"
@@ -42,7 +42,7 @@
     <AtomItemsControl.div 
         class="month-days"
         item-template="[$this.itemTemplate]"
-        items="{$localViewModel.items}">
+        items="[$localViewModel.items]">
     </AtomItemsControl.div>  
 
     <div 

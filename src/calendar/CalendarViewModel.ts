@@ -84,6 +84,13 @@ export default class CalendarViewModel extends AtomViewModel {
         return a;
     }
 
+    public changeMonth(step: number): void {
+        const d = new Date(this.year, this.month);
+        d.setMonth(d.getMonth() + step);
+        this.year = d.getFullYear();
+        this.month = d.getMonth();
+    }
+
     public dateClicked(item: ICalendarItem): void {
         const e = this.owner.element as HTMLElement;
         this.owner.selectedDate = item.value;

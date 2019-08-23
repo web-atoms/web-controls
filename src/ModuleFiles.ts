@@ -9,6 +9,12 @@
       "CalendarTest": "@web-atoms/web-controls/dist/calendar/test/CalendarTest"
     }
   },
+  "dateField": {
+    "AtomDateField": "@web-atoms/web-controls/dist/date-field/AtomDateField",
+    "test": {
+      "DateFieldTest": "@web-atoms/web-controls/dist/date-field/test/DateFieldTest"
+    }
+  },
   "form": {
     "DefaultFieldTemplate": "@web-atoms/web-controls/dist/form/DefaultFieldTemplate",
     "HelpPopup": "@web-atoms/web-controls/dist/form/HelpPopup",
@@ -28,12 +34,6 @@
         "PageApp": "@web-atoms/web-controls/dist/mobile/pages/sample/PageApp"
       },
       "TitleTemplate": "@web-atoms/web-controls/dist/mobile/pages/TitleTemplate"
-    }
-  },
-  "dateField": {
-    "AtomDateField": "@web-atoms/web-controls/dist/date-field/AtomDateField",
-    "test": {
-      "DateFieldTest": "@web-atoms/web-controls/dist/date-field/test/DateFieldTest"
     }
   }
 }

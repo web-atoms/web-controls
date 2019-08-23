@@ -1,7 +1,5 @@
 // tslint:disable
 import {BindableProperty} from "web-atoms-core/dist/core/BindableProperty";
-import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
-import {AtomWindow} from "web-atoms-core/dist/web/controls/AtomWindow";
 	
 	    import AtomPopupButton from "../buttons/AtomPopupButton";
 	    import AtomCalendar from "../calendar/AtomCalendar";
@@ -54,12 +52,12 @@ import {AtomWindow} from "web-atoms-core/dist/web/controls/AtomWindow";
 			
 			this.setPrimitiveValue(this.element, "eventResult",  (e) => this.selectedDate = e.detail );
 			
-			this.popupTemplate = AtomDateField_popupTemplate_1_56Creator(this);
+			this.popupTemplate = AtomDateField_popupTemplate_1_4Creator(this);
 		}
 	}
 	
-	function AtomDateField_popupTemplate_1_56Creator(__creator) {
-		return class AtomDateField_popupTemplate_1_56 extends AtomCalendar {
+	function AtomDateField_popupTemplate_1_4Creator(__creator) {
+		return class AtomDateField_popupTemplate_1_4 extends AtomCalendar {
 			
 			public create(): void {
 				

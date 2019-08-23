@@ -57,7 +57,7 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 			
 			this.bind(this.element, "styleClass",  [["this","controlStyle","root"]], false , null , __creator);
 			
-			this.itemTemplate = AtomCalendar_itemTemplate_3_41Creator(this);
+			this.itemTemplate = AtomCalendar_itemTemplate_3_24Creator(this);
 			
 			const e1 = document.createElement("div");
 			
@@ -69,13 +69,13 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 			
 			e1.appendChild(e2);
 			
-			this.runAfterInit( () => this.setLocalValue(e2, "eventClick",  ()=> (this.localViewModel).callMonth(-1)) );
+			this.runAfterInit( () => this.setLocalValue(e2, "eventClick",  ()=> (this.localViewModel).changeMonth(-1)) );
 			
 			this.setPrimitiveValue(e2, "class", "fas fa-caret-left" );
 			
 			this.setPrimitiveValue(e2, "title", "Previous Month" );
 			
-			this.setPrimitiveValue(e2, "style", "margin-right: 15px; font-size: 120%; cursor: pointer;" );
+			this.setPrimitiveValue(e2, "style", "margin-right: 15px; font-size: 120%; cursor: pointer; padding:0 10px 0 10px;" );
 			
 			const e3 = new AtomComboBox(this.app, document.createElement("select"));
 			
@@ -85,7 +85,7 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 			
 			e3.bind(e3.element, "items",  [["localViewModel","yearList"]], false , null );
 			
-			e3.itemTemplate = AtomCalendar_itemTemplate_1_39Creator(this);
+			e3.itemTemplate = AtomCalendar_itemTemplate_1_22Creator(this);
 			
 			e1.appendChild(e3.element);
 			
@@ -97,7 +97,7 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 			
 			e4.setPrimitiveValue(e4.element, "items",  this.srCalendar.monthList );
 			
-			e4.itemTemplate = AtomCalendar_itemTemplate_1_40Creator(this);
+			e4.itemTemplate = AtomCalendar_itemTemplate_1_23Creator(this);
 			
 			e1.appendChild(e4.element);
 			
@@ -105,13 +105,13 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 			
 			e1.appendChild(e5);
 			
-			this.runAfterInit( () => this.setLocalValue(e5, "eventClick",  ()=> (this.localViewModel).callMonth(1)) );
+			this.runAfterInit( () => this.setLocalValue(e5, "eventClick",  ()=> (this.localViewModel).changeMonth(1)) );
 			
 			this.setPrimitiveValue(e5, "class", "fas fa-caret-right" );
 			
 			this.setPrimitiveValue(e5, "title", "Next Month" );
 			
-			this.setPrimitiveValue(e5, "style", "margin-left: 15px; font-size: 120%; cursor: pointer;" );
+			this.setPrimitiveValue(e5, "style", "margin-left: 15px; font-size: 120%; cursor: pointer; padding:0 10px 0 10px;" );
 			
 			const e6 = new AtomItemsControl(this.app, document.createElement("div"));
 			
@@ -127,14 +127,14 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 			
 			e7.bind(e7.element, "itemTemplate",  [["this","itemTemplate"]], false , null , __creator);
 			
-			e7.runAfterInit( () => e7.setLocalValue(e7.element, "items", ((e7.localViewModel) ? e7.localViewModel.items : undefined)) );
+			e7.bind(e7.element, "items",  [["localViewModel","items"]], false , null );
 			
 			this.append(e7);
 		}
 	}
 	
-	function AtomCalendar_itemTemplate_1_39Creator(__creator) {
-		return class AtomCalendar_itemTemplate_1_39 extends AtomControl {
+	function AtomCalendar_itemTemplate_1_22Creator(__creator) {
+		return class AtomCalendar_itemTemplate_1_22 extends AtomControl {
 			
 			constructor(app: any, e?: any) {
 				super(app, e || document.createElement("option"));
@@ -149,8 +149,8 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 		}
 	}
 	
-	function AtomCalendar_itemTemplate_1_40Creator(__creator) {
-		return class AtomCalendar_itemTemplate_1_40 extends AtomControl {
+	function AtomCalendar_itemTemplate_1_23Creator(__creator) {
+		return class AtomCalendar_itemTemplate_1_23 extends AtomControl {
 			
 			constructor(app: any, e?: any) {
 				super(app, e || document.createElement("option"));
@@ -165,8 +165,8 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 		}
 	}
 	
-	function AtomCalendar_itemTemplate_3_41Creator(__creator) {
-		return class AtomCalendar_itemTemplate_3_41 extends AtomControl {
+	function AtomCalendar_itemTemplate_3_24Creator(__creator) {
+		return class AtomCalendar_itemTemplate_3_24 extends AtomControl {
 			
 			constructor(app: any, e?: any) {
 				super(app, e || document.createElement("div"));
