@@ -1,0 +1,20 @@
+<script>
+    import AtomPopupButton from "../buttons/AtomPopupButton";
+    import AtomCalendar from "../calendar/AtomCalendar";
+    import SRCalendar from "../calendar/res/SRCalendar";
+</script>
+<AtomPopupButton
+    @properties=" selectedDate: Date = null, yearStart:any = -10, yearEnd: any = 10, enableFunc: any = null, currentMonth: any, itemTemplate: any"
+    @inject=" srCalendar: SRCalendar"
+    atom-text="[$this.selectedDate ? this.srCalendar.toShortDate($this.selectedDate) : 'Select Date']"
+    event-result="{ (e) => this.selectedDate = e.detail }">
+    <AtomCalendar
+        template="popupTemplate"
+        selected-date="$[this.selectedDate]"
+        year-start="[$this.yearStart]"
+        year-end="[$this.yearEnd]"
+        enable-func="[$this.enableFunc]"
+        item-template="[$this.itemTemplate]"
+        event-date-clicked="{ (e) => $viewModel.close(e.detail.value) }"
+        ></AtomCalendar>
+</AtomPopupButton>

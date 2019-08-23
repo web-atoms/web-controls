@@ -7,18 +7,22 @@ import { AtomPopupButtonStyle } from "./AtomPopupButtonStyle";
 
 export default class AtomPopupButton extends AtomControl {
 
-    @BindableProperty
-    public isOpen: boolean = false;
+    public isOpen: boolean;
 
-    @BindableProperty
-    public popupTemplate: any = null;
+    public popupTemplate: any;
 
-    @BindableProperty
-    public popupParameters: any = null;
+    public popupParameters: any;
 
     private cancelToken: CancelToken = null;
 
     public preCreate(): void {
+
+        this.popupTemplate = null;
+
+        this.popupParameters = null;
+
+        this.isOpen = false;
+
         super.preCreate();
 
         this.defaultControlStyle = AtomPopupButtonStyle;
