@@ -43,7 +43,7 @@ export default class AtomCalendarStyle extends AtomStyle {
                     subclasses: {
                         " > div" : {
                             width: "calc(100%/7)",
-                            height: "28px",
+                            minHeight: "28px",
                             display: "inline-block",
                             borderRadius: "50%",
                             backgroundColor: Colors.white,
@@ -144,7 +144,7 @@ export default class AtomCalendarStyle extends AtomStyle {
         }
     public get calendarContainer(): IStyleDeclaration {
         return {
-            width: "305px",
+            minWidth: "305px",
             textAlign: "center",
             fontFamily: "'Muli', sans-serif",
             boxSizing: "content-box",
