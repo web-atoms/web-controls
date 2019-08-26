@@ -83,6 +83,10 @@ export default class AtomPageFrame extends AtomFrame {
 
     protected bindCommands(v: Page): void {
 
+        if(!this.frame) {
+            return;
+        }
+
         // remove existing commands...
         if (!this.frame.commandPresenter) {
             return;
