@@ -26,7 +26,7 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 		public  enableFunc:  any  ;
 		
 		@BindableProperty
-		public  currentMonth:  any ;
+		public  currentDate:  any ;
 		
 		@BindableProperty
 		public  itemTemplate:  any ;
@@ -57,7 +57,7 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 			
 			this.bind(this.element, "styleClass",  [["this","controlStyle","root"]], false , null , __creator);
 			
-			this.itemTemplate = AtomCalendar_itemTemplate_3_24Creator(this);
+			this.itemTemplate = AtomCalendar_itemTemplate_3_9Creator(this);
 			
 			const e1 = document.createElement("div");
 			
@@ -85,7 +85,7 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 			
 			e3.bind(e3.element, "items",  [["localViewModel","yearList"]], false , null );
 			
-			e3.itemTemplate = AtomCalendar_itemTemplate_1_22Creator(this);
+			e3.itemTemplate = AtomCalendar_itemTemplate_1_7Creator(this);
 			
 			e1.appendChild(e3.element);
 			
@@ -97,7 +97,7 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 			
 			e4.setPrimitiveValue(e4.element, "items",  this.srCalendar.monthList );
 			
-			e4.itemTemplate = AtomCalendar_itemTemplate_1_23Creator(this);
+			e4.itemTemplate = AtomCalendar_itemTemplate_1_8Creator(this);
 			
 			e1.appendChild(e4.element);
 			
@@ -133,8 +133,8 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 		}
 	}
 	
-	function AtomCalendar_itemTemplate_1_22Creator(__creator) {
-		return class AtomCalendar_itemTemplate_1_22 extends AtomControl {
+	function AtomCalendar_itemTemplate_1_7Creator(__creator) {
+		return class AtomCalendar_itemTemplate_1_7 extends AtomControl {
 			
 			constructor(app: any, e?: any) {
 				super(app, e || document.createElement("option"));
@@ -149,8 +149,8 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 		}
 	}
 	
-	function AtomCalendar_itemTemplate_1_23Creator(__creator) {
-		return class AtomCalendar_itemTemplate_1_23 extends AtomControl {
+	function AtomCalendar_itemTemplate_1_8Creator(__creator) {
+		return class AtomCalendar_itemTemplate_1_8 extends AtomControl {
 			
 			constructor(app: any, e?: any) {
 				super(app, e || document.createElement("option"));
@@ -165,8 +165,8 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 		}
 	}
 	
-	function AtomCalendar_itemTemplate_3_24Creator(__creator) {
-		return class AtomCalendar_itemTemplate_3_24 extends AtomControl {
+	function AtomCalendar_itemTemplate_3_9Creator(__creator) {
+		return class AtomCalendar_itemTemplate_3_9 extends AtomControl {
 			
 			constructor(app: any, e?: any) {
 				super(app, e || document.createElement("div"));

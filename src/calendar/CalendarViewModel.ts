@@ -33,9 +33,39 @@ export default class CalendarViewModel extends AtomViewModel {
 
     public owner: any;
 
-    public year: number = now.getFullYear();
+    public get year() {
+        return this.start.getFullYear();
+    }
 
-    public month: number = now.getMonth();
+    public set year(v: number) {
+        if (this.start.getFullYear() === v) {
+            return;
+        }
+        this.start.setFullYear(v);
+        this.refresh("start");
+    }
+
+    public get month() {
+        return this.start.getMonth();
+    }
+
+    public set month(v: number) {
+        if (this.start.getMonth() === v) {
+            return;
+        }
+        this.start.setMonth(v);
+        this.refresh("start");
+    }
+
+    private mStart: Date = (new Date());
+    public get start(): Date {
+        return this.mStart;
+    }
+    public set start(value: Date) {
+        this.mStart = value;
+        this.refresh("year");
+        this.refresh("month");
+    }
 
     @Watch
     public get selectedDate(): any {
@@ -62,7 +92,8 @@ export default class CalendarViewModel extends AtomViewModel {
     @Watch
     public get items(): ICalendarItem[] {
         const today = new Date();
-        const startDate = new Date(this.year, this.month, 1);
+        const start = this.start;
+        const startDate = new Date(start.getFullYear(), start.getMonth(), 1);
         while (startDate.getDay() !== 1) {
             startDate.setDate(startDate.getDate() - 1);
         }
@@ -77,18 +108,27 @@ export default class CalendarViewModel extends AtomViewModel {
                 type: null,
                 value: cd,
                 isToday: compareDate(cd, today),
-                isOtherMonth: this.month !== cd.getMonth(),
+                isOtherMonth: start.getMonth() !== cd.getMonth(),
                 isWeekend: (cd.getDay() === 0 || cd.getDay() === 6)
             });
         }
+        const o = this.owner;
+        o.element.dispatchEvent(new CustomEvent("refresh", { detail: { year: y, month: m } }));
+        o.currentDate = startDate;
         return a;
     }
 
     public changeMonth(step: number): void {
-        const d = new Date(this.year, this.month);
-        d.setMonth(d.getMonth() + step);
-        this.year = d.getFullYear();
-        this.month = d.getMonth();
+        const s = new Date(this.start.getFullYear(), this.start.getMonth(), 1);
+        const start = this.year + this.owner.yearStart;
+        const end = this.year + this.owner.yearEnd;
+        s.setMonth(s.getMonth() + step);
+        const sy = s.getFullYear();
+        if (sy < start || sy > end) {
+            return;
+        }
+        this.start = s;
+        this.refresh("start");
     }
 
     public dateClicked(item: ICalendarItem): void {

@@ -4,7 +4,7 @@
     import SRCalendar from "./res/SRCalendar";
 </script>
 <div
-    @properties=" selectedDate: Date = null, yearStart:any = -10, yearEnd: any = 10, enableFunc: any = null, currentMonth: any, itemTemplate: any"
+    @properties=" selectedDate: Date = null, yearStart:any = -10, yearEnd: any = 10, enableFunc: any = null, currentDate: any, itemTemplate: any"
     @inject=" srCalendar: SRCalendar "
     local-view-model="{ this.resolve(CalendarViewModel, 'owner') }" 
     default-style="{ AtomCalendarStyle }" 
