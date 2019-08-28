@@ -113,7 +113,12 @@ export default class CalendarViewModel extends AtomViewModel {
             });
         }
         const o = this.owner;
-        o.element.dispatchEvent(new CustomEvent("refresh", { detail: { year: y, month: m } }));
+        o.element.dispatchEvent(new CustomEvent("refresh", {
+            detail: {
+                year: start.getFullYear(),
+                month: start.getMonth()
+            }
+        }));
         o.currentDate = startDate;
         return a;
     }
