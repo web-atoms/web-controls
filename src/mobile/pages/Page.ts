@@ -13,6 +13,9 @@ export default class Page extends AtomControl {
     @BindableProperty
     public commandTemplate: any;
 
+    @BindableProperty
+    public tabsTemplate: any;
+
     constructor(app: App, e?: HTMLElement) {
         super(app, e || document.createElement("div"));
     }

@@ -34,6 +34,13 @@ export default class AtomPageFrameStyle extends AtomStyle {
 
                 " .page-presenter": {
                     marginTop: "25px"
+                },
+
+                " .tabs": {
+                    position: "fixed",
+                    bottom: 0,
+                    left: 0,
+                    right: 0
                 }
             }
         };

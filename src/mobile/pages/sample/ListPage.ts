@@ -22,7 +22,7 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 			
 			this.viewModel =  this.resolve(ListPageViewModel) ;
 			
-			this.commandTemplate = ListPage_commandTemplate_1_6Creator(this);
+			this.commandTemplate = ListPage_commandTemplate_1_9Creator(this);
 			
 			const e1 = document.createTextNode("\r\n    \r\n    This is a list page;\r\n    ");
 			this.element.appendChild(e1);
@@ -31,15 +31,15 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 			
 			this.append(e2);
 			
-			this.setPrimitiveValue(e2, "eventClick",  () => this.app.broadcast('root-page', '@web-atoms/web-controls/dist/mobile/pages/sample/DetailPage?canGoBack=true') );
+			this.setPrimitiveValue(e2, "eventClick",  () => this.viewModel.openDetail() );
 			
 			const e3 = document.createTextNode("Open Detail Page");
 			e2.appendChild(e3);
 		}
 	}
 	
-	function ListPage_commandTemplate_1_6Creator(__creator) {
-		return class ListPage_commandTemplate_1_6 extends AtomControl {
+	function ListPage_commandTemplate_1_9Creator(__creator) {
+		return class ListPage_commandTemplate_1_9 extends AtomControl {
 			
 			constructor(app: any, e?: any) {
 				super(app, e || document.createElement("div"));

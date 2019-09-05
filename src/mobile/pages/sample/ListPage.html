@@ -13,6 +13,6 @@
     
     This is a list page;
     <button 
-        event-click="{ () => this.app.broadcast('root-page', '@web-atoms/web-controls/dist/mobile/pages/sample/DetailPage?canGoBack=true') }"
+        event-click="{ () => this.viewModel.openDetail() }"
         >Open Detail Page</button>
 </Page.div>

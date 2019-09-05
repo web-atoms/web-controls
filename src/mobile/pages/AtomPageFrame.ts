@@ -21,14 +21,24 @@ export default class AtomPageFrame extends AtomFrame {
 
     public titleTemplate: any = TitleTemplate;
 
+    @BindableProperty
+    public tabsTemplate: any;
+
+    private tabs: AtomControl;
+
+    private tabsPresenter: HTMLElement;
+
     private created: boolean = false;
 
     private frame: AtomPageFrameTemplate;
 
     private previousCommands: AtomControl = null;
 
+    private previousTabs: AtomControl = null;
+
     public preCreate(): void {
         super.preCreate();
+        this.tabsTemplate = null;
         this.name = "root";
         this.runAfterInit(() => {
             this.saveScrollPosition = true;
@@ -36,7 +46,6 @@ export default class AtomPageFrame extends AtomFrame {
         this.localViewModel = this.resolve(PageFrameViewModel, () => ({
             owner: this
         }));
-
     }
 
     public clearStack(): void {
@@ -63,6 +72,18 @@ export default class AtomPageFrame extends AtomFrame {
 
         this.pagePresenter = this.frame.pagePresenter;
 
+        this.tabsPresenter = this.frame.tabsPresenter;
+
+        this.frame.bind(this.frame.element, "tabs", [["this", "previousTabs"]], false, null, this);
+
+        this.created = true;
+
+        if (this.tabs) {
+            this.tabsPresenter.innerHTML = "";
+            this.tabsPresenter.appendChild(this.tabs.element);
+            this.previousTabs = this.tabs;
+        }
+
     }
 
     public push(ctrl: AtomControl): void {
@@ -77,8 +98,14 @@ export default class AtomPageFrame extends AtomFrame {
     }
 
     public onPropertyChanged(name: keyof AtomPageFrame): void {
-        if (name === "current") {
-            this.bindCommands(this.current as Page);
+        switch (name) {
+            case "current":
+                this.bindCommands(this.current as Page);
+                this.bindTabs(this.current as Page);
+                break;
+            case "tabsTemplate":
+                this.createTabs();
+                break;
         }
     }
 
@@ -98,9 +125,61 @@ export default class AtomPageFrame extends AtomFrame {
         this.url = url;
     }
 
+    protected createTabs(): void {
+        if (!this.tabsTemplate) {
+            this.tabs = null;
+            this.disposeTabs();
+            return;
+        }
+        this.tabs = (new (this.tabsTemplate)(this.app));
+        this.tabs.element._logicalParent = this.element;
+    }
+
     protected setUrl(url: string): void {
         super.setUrl(url);
         this.localViewModel.url = url;
+    }
+
+    protected disposeTabs(): void {
+        if (!this.previousTabs) {
+            return;
+        }
+        const e = this.previousTabs.element;
+        this.previousTabs.dispose();
+        if (e) {
+            e.remove();
+        }
+        this.previousTabs = null;
+    }
+
+    protected bindTabs(v: Page): void {
+        if (!this.frame) {
+            return;
+        }
+
+        if (!this.tabsPresenter) {
+            return;
+        }
+
+        if (this.tabs !== this.previousTabs) {
+            this.disposeTabs();
+        }
+
+        if (!v.tabsTemplate) {
+            if (this.tabs && this.tabs !== this.previousTabs) {
+                this.tabsPresenter.innerHTML = "";
+                this.tabsPresenter.appendChild(this.tabs.element);
+                this.previousTabs = this.tabs;
+            }
+            return;
+        }
+
+        const t = this.tabs = (new (v.tabsTemplate)(this.app)) as AtomControl;
+        this.previousTabs = t;
+        t.element._logicalParent = this.element;
+        this.tabsPresenter.innerHTML = "";
+        this.tabsPresenter.appendChild(t.element);
+
     }
 
     protected bindCommands(v: Page): void {
@@ -109,11 +188,11 @@ export default class AtomPageFrame extends AtomFrame {
             return;
         }
 
-        // remove existing commands...
         if (!this.frame.commandPresenter) {
             return;
         }
 
+        // remove existing commands...
         if (this.previousCommands) {
             const e = this.previousCommands.element;
             // e is null if the control was already
@@ -122,6 +201,7 @@ export default class AtomPageFrame extends AtomFrame {
                 this.previousCommands.dispose();
                 e.remove();
             }
+            this.previousCommands = null;
         }
 
         if (!v.commandTemplate) {
@@ -131,7 +211,7 @@ export default class AtomPageFrame extends AtomFrame {
         const c: AtomControl = new (v.commandTemplate)(this.app);
         this.previousCommands = c;
         c.element._logicalParent = v.element;
-        (this.frame.commandPresenter as HTMLElement).appendChild(c.element);
+        this.frame.commandPresenter.appendChild(c.element);
     }
 
 }

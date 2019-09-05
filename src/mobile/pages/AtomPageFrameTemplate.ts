@@ -17,7 +17,13 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 		public commandPresenter: HTMLElement ;
 		
 		@BindableProperty
-		public  pagePresenter:  HTMLElement  ;
+		public  pagePresenter:  HTMLElement ;
+		
+		@BindableProperty
+		public  tabsPresenter:  HTMLElement ;
+		
+		@BindableProperty
+		public  tabs:  any  ;
 		
 		constructor(app: any, e?: any) {
 			super(app, e || document.createElement("div"));
@@ -26,6 +32,8 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 		public create(): void {
 			
 			super.create();
+			
+			this. tabs =  null ;
 			
 			const __creator = this;
 			
@@ -70,5 +78,15 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 			this.append(e5);
 			
 			this.setPrimitiveValue(e5, "class", "page-presenter" );
+			
+			const e6 = document.createElement("div");
+			
+			this.tabsPresenter = e6;
+			
+			this.append(e6);
+			
+			this.setPrimitiveValue(e6, "class", "tabs" );
+			
+			this.bind(e6, "styleDisplay",  [["this","tabs"]], false , (v1) => (v1) ? '' : 'none' , __creator);
 		}
 	}
