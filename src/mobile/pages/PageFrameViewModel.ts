@@ -1,3 +1,4 @@
+import { Atom } from "web-atoms-core/dist/Atom";
 import { AtomUri } from "web-atoms-core/dist/core/AtomUri";
 import { CancelToken } from "web-atoms-core/dist/core/types";
 import { Inject } from "web-atoms-core/dist/di/Inject";
@@ -16,6 +17,26 @@ export default class PageFrameViewModel extends AtomViewModel {
     public navigationService: NavigationService;
 
     public cancelToken: CancelToken;
+
+    private mUrl: string;
+    public get url(): string {
+        return this.mUrl;
+    }
+    public set url(value: string) {
+        if (value === this.mUrl) {
+            return;
+        }
+        this.mUrl = value;
+        this.owner.pushUrl(value);
+        this.refresh(value);
+    }
+
+    public async init(): Promise<void> {
+        if (!this.owner.name) {
+            return;
+        }
+        this.bindUrlParameter("url", this.owner.name);
+    }
 
     @Receive("root-page-go-back")
     public async iconClick(): Promise<void> {

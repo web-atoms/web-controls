@@ -29,6 +29,7 @@ export default class AtomPageFrame extends AtomFrame {
 
     public preCreate(): void {
         super.preCreate();
+        this.name = "root";
         this.runAfterInit(() => {
             this.saveScrollPosition = true;
         });
@@ -81,9 +82,30 @@ export default class AtomPageFrame extends AtomFrame {
         }
     }
 
+    public pushUrl(url: string): void {
+        if (url === this.url) {
+            return;
+        }
+        // check if we have this url in stack as last item..
+        if (this.stack.length > 0) {
+            const last = this.stack[this.stack.length];
+            if (last.url === this.url) {
+                this.popStack();
+                return;
+            }
+        }
+
+        this.url = url;
+    }
+
+    protected setUrl(url: string): void {
+        super.setUrl(url);
+        this.localViewModel.url = url;
+    }
+
     protected bindCommands(v: Page): void {
 
-        if(!this.frame) {
+        if (!this.frame) {
             return;
         }
 
