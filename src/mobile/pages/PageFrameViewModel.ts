@@ -28,7 +28,7 @@ export default class PageFrameViewModel extends AtomViewModel {
         }
         this.mUrl = value;
         this.owner.pushUrl(value);
-        this.refresh(value);
+        this.refresh("url");
     }
 
     public async init(): Promise<void> {
