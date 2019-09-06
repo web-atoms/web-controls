@@ -4,6 +4,7 @@ import { CancelToken } from "web-atoms-core/dist/core/types";
 import { Inject } from "web-atoms-core/dist/di/Inject";
 import { NavigationService } from "web-atoms-core/dist/services/NavigationService";
 import { AtomViewModel, Receive } from "web-atoms-core/dist/view-model/AtomViewModel";
+import bindUrlParameter from "web-atoms-core/dist/view-model/bindUrlParameter";
 
 export default class PageFrameViewModel extends AtomViewModel {
 
@@ -35,7 +36,7 @@ export default class PageFrameViewModel extends AtomViewModel {
         if (!this.owner.name) {
             return;
         }
-        this.bindUrlParameter("url", this.owner.name);
+        bindUrlParameter(this, "url", this.owner.name);
     }
 
     @Receive("root-page-go-back")

@@ -19,15 +19,15 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 			
 			this.setPrimitiveValue(this.element, "title", "Home Page" );
 			
-			this.commandTemplate = HomePage_commandTemplate_1_5Creator(this);
+			this.commandTemplate = HomePage_commandTemplate_1_6Creator(this);
 			
 			const e1 = document.createTextNode("\r\n    This is home page...\r\n");
 			this.element.appendChild(e1);
 		}
 	}
 	
-	function HomePage_commandTemplate_1_5Creator(__creator) {
-		return class HomePage_commandTemplate_1_5 extends AtomControl {
+	function HomePage_commandTemplate_1_6Creator(__creator) {
+		return class HomePage_commandTemplate_1_6 extends AtomControl {
 			
 			constructor(app: any, e?: any) {
 				super(app, e || document.createElement("div"));

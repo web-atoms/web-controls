@@ -1,5 +1,6 @@
 import { Atom } from "web-atoms-core/dist/Atom";
 import { AtomBinder } from "web-atoms-core/dist/core/AtomBinder";
+import { AtomBridge } from "web-atoms-core/dist/core/AtomBridge";
 import { AtomLoader } from "web-atoms-core/dist/core/AtomLoader";
 import { AtomUri } from "web-atoms-core/dist/core/AtomUri";
 import { BindableProperty } from "web-atoms-core/dist/core/BindableProperty";
@@ -78,16 +79,8 @@ export default class AtomPageFrame extends AtomFrame {
 
         this.created = true;
 
-        if (this.tabs) {
-            this.attachTabs(this.tabs);
-        }
+        this.attachTabs(this.tabs);
 
-    }
-
-    private attachTabs(t: AtomControl) {
-        this.tabsPresenter.innerHTML = "";
-        this.tabsPresenter.appendChild(this.tabs.element);
-        this.previousTabs = this.tabs;
     }
 
     public push(ctrl: AtomControl): void {
@@ -137,6 +130,7 @@ export default class AtomPageFrame extends AtomFrame {
         }
         this.tabs = (new (this.tabsTemplate)(this.app));
         this.tabs.element._logicalParent = this.element;
+        this.attachTabs(this.tabs);
     }
 
     protected setUrl(url: string): void {
@@ -165,25 +159,22 @@ export default class AtomPageFrame extends AtomFrame {
             return;
         }
 
-        if (this.tabs !== this.previousTabs) {
-            this.disposeTabs();
+        if (this.previousTabs) {
+            if (this.tabs !== this.previousTabs) {
+                this.disposeTabs();
+            }
         }
 
         if (!v.tabsTemplate) {
             if (this.tabs && this.tabs !== this.previousTabs) {
-                this.tabsPresenter.innerHTML = "";
-                this.tabsPresenter.appendChild(this.tabs.element);
-                this.previousTabs = this.tabs;
+                this.attachTabs(this.tabs);
             }
             return;
         }
 
-        const t = this.tabs = (new (v.tabsTemplate)(this.app)) as AtomControl;
-        this.previousTabs = t;
-        t.element._logicalParent = this.element;
-        this.tabsPresenter.innerHTML = "";
-        this.tabsPresenter.appendChild(t.element);
-
+        const t = (new (v.tabsTemplate)(this.app)) as AtomControl;
+        t.element._logicalParent = v.element;
+        this.attachTabs(t);
     }
 
     protected bindCommands(v: Page): void {
@@ -216,6 +207,24 @@ export default class AtomPageFrame extends AtomFrame {
         this.previousCommands = c;
         c.element._logicalParent = v.element;
         this.frame.commandPresenter.appendChild(c.element);
+    }
+
+    private attachTabs(t: AtomControl) {
+        if (!t || !t.element) {
+            return;
+        }
+        if (!this.tabsPresenter) {
+            setTimeout(() => {
+                this.attachTabs(t);
+            }, 100);
+            return;
+        }
+        this.tabsPresenter.innerHTML = "";
+        this.tabsPresenter.append(t.element);
+        this.previousTabs = t;
+        AtomBridge.instance.refreshInherited(t, "data");
+        AtomBridge.instance.refreshInherited(t, "viewModel");
+        AtomBridge.instance.refreshInherited(t, "localViewModel");
     }
 
 }
