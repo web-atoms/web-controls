@@ -79,11 +79,15 @@ export default class AtomPageFrame extends AtomFrame {
         this.created = true;
 
         if (this.tabs) {
-            this.tabsPresenter.innerHTML = "";
-            this.tabsPresenter.appendChild(this.tabs.element);
-            this.previousTabs = this.tabs;
+            this.attachTabs(this.tabs);
         }
 
+    }
+
+    private attachTabs(t: AtomControl) {
+        this.tabsPresenter.innerHTML = "";
+        this.tabsPresenter.appendChild(this.tabs.element);
+        this.previousTabs = this.tabs;
     }
 
     public push(ctrl: AtomControl): void {

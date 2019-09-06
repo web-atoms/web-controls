@@ -1,4 +1,5 @@
 import { AtomBinder } from "web-atoms-core/dist/core/AtomBinder";
+import { AtomBridge } from "web-atoms-core/dist/core/AtomBridge";
 import { BindableProperty } from "web-atoms-core/dist/core/BindableProperty";
 import { IClassOf } from "web-atoms-core/dist/core/types";
 import { AtomControl } from "web-atoms-core/dist/web/controls/AtomControl";
@@ -41,9 +42,9 @@ export default class AtomForm extends AtomControl {
             this.element.classList.add(this.controlStyle.root.className);
 
             this.app.callLater(() => {
-                this.refreshInherited("viewModel", (a) => (a as any).mViewModel === undefined);
-                this.refreshInherited("localViewModel", (a) => (a as any).mLocalViewModel === undefined);
-                this.refreshInherited("data", (a) => (a as any).mData === undefined);
+                AtomBridge.instance.refreshInherited(this, "viewModel");
+                AtomBridge.instance.refreshInherited(this, "localViewModel");
+                AtomBridge.instance.refreshInherited(this, "data");
             });
 
             this.watchKeyInput();
