@@ -33,6 +33,7 @@ export default class PageFrameViewModel extends AtomViewModel {
     }
 
     public async init(): Promise<void> {
+        await Atom.delay(1);
         if (!this.owner.name) {
             return;
         }
