@@ -7,21 +7,11 @@ import { AtomPopupButtonStyle } from "./AtomPopupButtonStyle";
 
 export default class AtomPopupButton extends AtomPageLink {
 
-    public popupTemplate: any;
-
-    public popupParameters: any;
-
     public preCreate(): void {
 
         super.preCreate();
 
         this.defaultControlStyle = AtomPopupButtonStyle;
-    }
-
-    protected openPopup(): Promise<void> {
-        this.page = this.page || this.popupTemplate;
-        this.parameters = this.parameters || this.popupParameters;
-        return super.openPopup();
     }
 
 }

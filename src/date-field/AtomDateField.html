@@ -9,7 +9,7 @@
     atom-text="[$this.selectedDate ? this.srCalendar.toShortDate($this.selectedDate) : 'Select Date']"
     event-result="{ (e) => this.selectedDate = e.detail }">
     <AtomCalendar
-        template="popupTemplate"
+        template="page"
         selected-date="$[this.selectedDate]"
         year-start="[$this.yearStart]"
         year-end="[$this.yearEnd]"
