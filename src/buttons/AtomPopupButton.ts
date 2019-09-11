@@ -19,8 +19,8 @@ export default class AtomPopupButton extends AtomPageLink {
     }
 
     protected openPopup(): Promise<void> {
-        this.page = this.popupTemplate;
-        this.parameters = this.popupParameters;
+        this.page = this.page || this.popupTemplate;
+        this.parameters = this.parameters || this.popupParameters;
         return super.openPopup();
     }
 
