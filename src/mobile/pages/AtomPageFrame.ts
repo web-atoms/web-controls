@@ -16,11 +16,11 @@ import TitleTemplate from "./TitleTemplate";
 export default class AtomPageFrame extends AtomFrame {
 
     @BindableProperty
-    public menuUrl: string = null;
+    public menuUrl: string;
 
-    public frameTemplate: any = AtomPageFrameTemplate;
+    public frameTemplate: any;
 
-    public titleTemplate: any = TitleTemplate;
+    public titleTemplate: any;
 
     @BindableProperty
     public tabsTemplate: any;
@@ -33,13 +33,20 @@ export default class AtomPageFrame extends AtomFrame {
 
     private frame: AtomPageFrameTemplate;
 
-    private previousCommands: AtomControl = null;
+    private previousCommands: AtomControl;
 
-    private previousTabs: AtomControl = null;
+    private previousTabs: AtomControl;
 
     public preCreate(): void {
         super.preCreate();
+        this.menuUrl = null;
         this.tabsTemplate = null;
+        this.frameTemplate = AtomPageFrameTemplate;
+        this.titleTemplate = TitleTemplate;
+        this.created = false;
+        this.previousCommands = null;
+        this.previousTabs = null;
+
         this.name = "root";
         this.runAfterInit(() => {
             this.saveScrollPosition = true;
