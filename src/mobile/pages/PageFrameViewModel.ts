@@ -60,6 +60,10 @@ export default class PageFrameViewModel extends AtomViewModel {
             return;
         }
 
+        if (!this.owner.menuUrl) {
+            return;
+        }
+
         this.cancelToken = new CancelToken();
 
         // not awaiting on this promise because
