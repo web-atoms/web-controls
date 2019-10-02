@@ -31,7 +31,7 @@ export default class AtomCalendarStyle extends AtomStyle {
                             textAlign: "center",
                             borderRadius : 0,
                             backgroundColor: Colors.rgba(232, 232, 232),
-                            width : "calc(100%/7)",
+                            width : "14%",
                             paddingTop: "1%",
                             paddingBottom: "1%"
                         }
@@ -42,7 +42,7 @@ export default class AtomCalendarStyle extends AtomStyle {
                     marginBottom: "0.5%",
                     subclasses: {
                         " > div" : {
-                            width: "calc(100%/7)",
+                            width: "14%",
                             minHeight: "28px",
                             display: "inline-block",
                             borderRadius: "50%",
