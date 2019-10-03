@@ -6,7 +6,10 @@ import {BindableProperty} from "web-atoms-core/dist/core/BindableProperty";
 	    import SRCalendar from "../calendar/res/SRCalendar";
 	
 	
+	declare var UMD: any;
+	const __moduleName = this.filename;
 	export default class AtomDateField extends AtomPopupButton {
+		public static readonly _$_url = __moduleName ;
 		
 		protected srCalendar:  SRCalendar;
 		
