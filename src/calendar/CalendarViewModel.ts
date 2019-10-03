@@ -82,15 +82,14 @@ export default class CalendarViewModel extends AtomViewModel {
         const today = DateTime.today;
         const start = this.start;
         let startDate = new DateTime(start.year, start.month, 1);
-        while (startDate.day !== 1) {
+        while (startDate.dayOfWeek !== 1) {
             startDate = startDate.add(-1);
         }
         const a = [];
         const y = startDate.year;
         const m = startDate.month;
         for (let index = 0; index < 42; index++) {
-            const d = index + startDate.day;
-            const cd = new DateTime(y, m, d);
+            const cd = startDate.add(index);
             a.push({
                 label: cd.day + "",
                 type: null,
