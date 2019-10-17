@@ -120,7 +120,7 @@ export default class AtomPageFrame extends AtomFrame {
         // check if we have this url in stack as last item..
         if (this.stack.length > 0) {
             const last = this.stack[this.stack.length - 1];
-            if (last.url === this.url) {
+            if (last.url === url) {
                 this.popStack();
                 return;
             }
