@@ -54,7 +54,7 @@ export default class AtomPageFrame extends AtomFrame {
         this.localViewModel = this.resolve(PageFrameViewModel, () => ({
             owner: this
         }));
-        this.bindEvent(window as any, "popstate", () => {
+        this.bindEvent(window as any, "popstate", (e) => {
             this.popStack(false);
         });
     }
