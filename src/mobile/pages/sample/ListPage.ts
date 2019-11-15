@@ -25,7 +25,7 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 			
 			this.viewModel =  this.resolve(ListPageViewModel) ;
 			
-			this.commandTemplate = ListPage_commandTemplate_1_7Creator(this);
+			this.commandTemplate = ListPage_commandTemplate_1_8Creator(this);
 			
 			const e1 = document.createTextNode("\r\n    \r\n    This is a list page;\r\n    ");
 			this.element.appendChild(e1);
@@ -41,8 +41,8 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 		}
 	}
 	
-	function ListPage_commandTemplate_1_7Creator(__creator) {
-		return class ListPage_commandTemplate_1_7 extends AtomControl {
+	function ListPage_commandTemplate_1_8Creator(__creator) {
+		return class ListPage_commandTemplate_1_8 extends AtomControl {
 			
 			constructor(app: any, e?: any) {
 				super(app, e || document.createElement("div"));

@@ -12,7 +12,8 @@
   "dateField": {
     "AtomDateField": "@web-atoms/web-controls/dist/date-field/AtomDateField",
     "test": {
-      "DateFieldTest": "@web-atoms/web-controls/dist/date-field/test/DateFieldTest"
+      "DateFieldTest": "@web-atoms/web-controls/dist/date-field/test/DateFieldTest",
+      "PopupTest": "@web-atoms/web-controls/dist/date-field/test/PopupTest"
     }
   },
   "form": {
