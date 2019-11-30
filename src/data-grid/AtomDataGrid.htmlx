@@ -1,0 +1,10 @@
+<script>
+    import AtomDataGridViewModel from "./AtomDataGridViewModel";
+    import GridTemplate from "./GridTemplate"; 
+</script>
+<AtomItemsControl.table
+    @properties=" columns: any[] = null "
+    local-view-model="{ this.resolve(AtomDataGridViewModel, 'owner') }"
+    item-template="{ GridTemplate(this, 'dataTemplate') }">
+    <tbody presenter="itemsPresenter"></tbody>
+</AtomItemsControl.table>
