@@ -6,8 +6,14 @@ export default class AtomDataGridStyle extends AtomStyle {
 
     public get root(): IStyleDeclaration {
         return {
+            position: "absolute",
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            overflow: "auto",
             subclasses: {
-                " > thead": {
+                " > table > thead": {
                     subclasses: {
                         " > tr": {
                             backgroundColor: Colors.lightGrey
@@ -17,7 +23,7 @@ export default class AtomDataGridStyle extends AtomStyle {
                         }
                     }
                 },
-                " > tbody": {
+                " > table > tbody": {
                     subclasses: {
                         " > tr": {
                             backgroundColor: Colors.white

@@ -51,12 +51,12 @@ import {BindableProperty} from "web-atoms-core/dist/core/BindableProperty";
 			
 			this.setPrimitiveValue(this.element, "eventResult",  (e) => this.selectedDate = e.detail );
 			
-			this.page = AtomDateField_page_1_5Creator(this);
+			this.page = AtomDateField_page_1_6Creator(this);
 		}
 	}
 	
-	function AtomDateField_page_1_5Creator(__creator) {
-		return class AtomDateField_page_1_5 extends AtomCalendar {
+	function AtomDateField_page_1_6Creator(__creator) {
+		return class AtomDateField_page_1_6 extends AtomCalendar {
 			
 			public create(): void {
 				

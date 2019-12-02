@@ -25,14 +25,14 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 			
 			e1.setPrimitiveValue(e1.element, "text", "Add New" );
 			
-			e1.page = PopupTest_page_1_6Creator(this);
+			e1.page = PopupTest_page_1_7Creator(this);
 			
 			this.append(e1);
 		}
 	}
 	
-	function PopupTest_page_1_6Creator(__creator) {
-		return class PopupTest_page_1_6 extends AtomControl {
+	function PopupTest_page_1_7Creator(__creator) {
+		return class PopupTest_page_1_7 extends AtomControl {
 			
 			constructor(app: any, e?: any) {
 				super(app, e || document.createElement("div"));

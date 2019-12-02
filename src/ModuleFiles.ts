@@ -13,9 +13,7 @@
     "AtomColumn": "@web-atoms/web-controls/dist/data-grid/AtomColumn",
     "test": {
       "GridTest": "@web-atoms/web-controls/dist/data-grid/test/GridTest"
-    },
-    "Grid": "@web-atoms/web-controls/dist/data-grid/Grid",
-    "AtomDataGrid": "@web-atoms/web-controls/dist/data-grid/AtomDataGrid"
+    }
   },
   "dateField": {
     "AtomDateField": "@web-atoms/web-controls/dist/date-field/AtomDateField",

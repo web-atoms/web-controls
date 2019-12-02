@@ -1,6 +1,5 @@
 // tslint:disable
 import {BindableProperty} from "web-atoms-core/dist/core/BindableProperty";
-import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 import {AtomGridView} from "web-atoms-core/dist/web/controls/AtomGridView";
 	
 	    import GridTestViewModel from "./GridTestViewModel";
@@ -29,8 +28,6 @@ import {AtomGridView} from "web-atoms-core/dist/web/controls/AtomGridView";
 			e1.setPrimitiveValue(e1.element, "row", "1" );
 			
 			e1.setPrimitiveValue(e1.element, "column", "1" );
-			
-			e1.setPrimitiveValue(e1.element, "uiVirtualize",  true );
 			
 			e1.setPrimitiveValue(e1.element, "items",  this.viewModel.list );
 			

@@ -15,7 +15,7 @@ export default class AtomDataGrid extends AtomItemsControl {
     public  columns: any[]  ;
 
     constructor(app: any, e?: any) {
-        super(app, e || document.createElement("table"));
+        super(app, e || document.createElement("div"));
     }
 
     public append(e): any {
@@ -42,16 +42,20 @@ export default class AtomDataGrid extends AtomItemsControl {
 
             this.itemTemplate = GridTemplate(this, "dataTemplate", "td");
 
+            const table = document.createElement("table");
+
+            this.element.append(table);
+
             const headerTemplate = GridTemplate(this, "headerTemplate", "th");
             const headRow = new (headerTemplate)(this.app, document.createElement("tr"));
             headRow.data = this;
             const head = document.createElement("thead");
             head.appendChild(headRow.element);
-            this.append(head);
+            table.appendChild(head);
 
             const body = document.createElement("tbody");
             this.itemsPresenter = body;
-            this.append(body);
+            table.appendChild(body);
         });
     }
 }

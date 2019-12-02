@@ -68,14 +68,14 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 			
 			const __creator = this;
 			
-			this.headerTemplate = AtomColumn_headerTemplate_1_18Creator(this);
+			this.headerTemplate = AtomColumn_headerTemplate_1_4Creator(this);
 			
-			this.dataTemplate = AtomColumn_dataTemplate_2_19Creator(this);
+			this.dataTemplate = AtomColumn_dataTemplate_2_5Creator(this);
 		}
 	}
 	
-	function AtomColumn_headerTemplate_1_18Creator(__creator) {
-		return class AtomColumn_headerTemplate_1_18 extends AtomControl {
+	function AtomColumn_headerTemplate_1_4Creator(__creator) {
+		return class AtomColumn_headerTemplate_1_4 extends AtomControl {
 			
 			constructor(app: any, e?: any) {
 				super(app, e || document.createElement("span"));
@@ -90,8 +90,8 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 		}
 	}
 	
-	function AtomColumn_dataTemplate_2_19Creator(__creator) {
-		return class AtomColumn_dataTemplate_2_19 extends AtomControl {
+	function AtomColumn_dataTemplate_2_5Creator(__creator) {
+		return class AtomColumn_dataTemplate_2_5 extends AtomControl {
 			
 			constructor(app: any, e?: any) {
 				super(app, e || document.createElement("span"));

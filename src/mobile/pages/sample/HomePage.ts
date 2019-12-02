@@ -22,15 +22,15 @@ import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
 			
 			this.setPrimitiveValue(this.element, "title", "Home Page" );
 			
-			this.commandTemplate = HomePage_commandTemplate_1_8Creator(this);
+			this.commandTemplate = HomePage_commandTemplate_1_9Creator(this);
 			
 			const e1 = document.createTextNode("\r\n    This is home page...\r\n");
 			this.element.appendChild(e1);
 		}
 	}
 	
-	function HomePage_commandTemplate_1_8Creator(__creator) {
-		return class HomePage_commandTemplate_1_8 extends AtomControl {
+	function HomePage_commandTemplate_1_9Creator(__creator) {
+		return class HomePage_commandTemplate_1_9 extends AtomControl {
 			
 			constructor(app: any, e?: any) {
 				super(app, e || document.createElement("div"));
