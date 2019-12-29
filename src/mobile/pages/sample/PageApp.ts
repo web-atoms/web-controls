@@ -1,5 +1,5 @@
 // tslint:disable
-import {BindableProperty} from "web-atoms-core/dist/core/BindableProperty";
+import {BindableProperty} from "@web-atoms/core/dist/core/BindableProperty";
 	
 	    import AtomPageFrame from "../AtomPageFrame";
 	

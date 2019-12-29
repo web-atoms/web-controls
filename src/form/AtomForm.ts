@@ -1,14 +1,17 @@
-import { AtomBinder } from "web-atoms-core/dist/core/AtomBinder";
-import { AtomBridge } from "web-atoms-core/dist/core/AtomBridge";
-import { BindableProperty } from "web-atoms-core/dist/core/BindableProperty";
-import { IClassOf } from "web-atoms-core/dist/core/types";
-import { AtomControl } from "web-atoms-core/dist/web/controls/AtomControl";
+import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder";
+import { AtomBridge } from "@web-atoms/core/dist/core/AtomBridge";
+import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
+import { IClassOf } from "@web-atoms/core/dist/core/types";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import AtomField from "./AtomField";
 import AtomFieldTemplate from "./AtomFieldTemplate";
 import AtomFormStyle from "./AtomFormStyle";
 import DefaultFieldTemplate from "./DefaultFieldTemplate";
 
 export default class AtomForm extends AtomControl {
+
+    /** Submit event fired when enter was pressed on last input on mobile (Done button event) */
+    public eventSubmit: () => void;
 
     public fieldTemplate: IClassOf<AtomFieldTemplate>;
 

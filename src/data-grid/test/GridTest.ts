@@ -1,6 +1,6 @@
 // tslint:disable
-import {BindableProperty} from "web-atoms-core/dist/core/BindableProperty";
-import {AtomGridView} from "web-atoms-core/dist/web/controls/AtomGridView";
+import {BindableProperty} from "@web-atoms/core/dist/core/BindableProperty";
+import {AtomGridView} from "@web-atoms/core/dist/web/controls/AtomGridView";
 	
 	    import GridTestViewModel from "./GridTestViewModel";
 	    import AtomDataGrid from "../AtomDataGrid";

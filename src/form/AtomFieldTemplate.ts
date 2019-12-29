@@ -1,4 +1,4 @@
-import { AtomControl } from "web-atoms-core/dist/web/controls/AtomControl";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import AtomField from "./AtomField";
 
 export default class AtomFieldTemplate extends AtomControl {

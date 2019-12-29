@@ -1,6 +1,6 @@
 // tslint:disable
-import {BindableProperty} from "web-atoms-core/dist/core/BindableProperty";
-import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
+import {BindableProperty} from "@web-atoms/core/dist/core/BindableProperty";
+import {AtomControl} from "@web-atoms/core/dist/web/controls/AtomControl";
 	// tslint:disable
 	
 	declare var UMD: any;

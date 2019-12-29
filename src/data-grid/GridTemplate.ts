@@ -1,7 +1,7 @@
-import { App } from "web-atoms-core/dist/App";
-import { AtomWatcher } from "web-atoms-core/dist/core/AtomWatcher";
-import { IClassOf, IDisposable } from "web-atoms-core/dist/core/types";
-import { AtomControl } from "web-atoms-core/dist/web/controls/AtomControl";
+import { App } from "@web-atoms/core/dist/App";
+import { AtomWatcher } from "@web-atoms/core/dist/core/AtomWatcher";
+import { IClassOf, IDisposable } from "@web-atoms/core/dist/core/types";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import AtomColumn from "./AtomColumn";
 
 interface IDataGrid {

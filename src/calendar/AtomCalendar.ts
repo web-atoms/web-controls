@@ -1,8 +1,8 @@
 // tslint:disable
-import {BindableProperty} from "web-atoms-core/dist/core/BindableProperty";
-import {AtomComboBox} from "web-atoms-core/dist/web/controls/AtomComboBox";
-import {AtomItemsControl} from "web-atoms-core/dist/web/controls/AtomItemsControl";
-import {AtomControl} from "web-atoms-core/dist/web/controls/AtomControl";
+import {BindableProperty} from "@web-atoms/core/dist/core/BindableProperty";
+import {AtomComboBox} from "@web-atoms/core/dist/web/controls/AtomComboBox";
+import {AtomItemsControl} from "@web-atoms/core/dist/web/controls/AtomItemsControl";
+import {AtomControl} from "@web-atoms/core/dist/web/controls/AtomControl";
 	
 	    import CalendarViewModel from "./CalendarViewModel";
 	    import AtomCalendarStyle from "./AtomCalendarStyle";
