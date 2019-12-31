@@ -8,7 +8,9 @@ export default class TitleTemplate extends AtomControl {
 		this.render(
 		<span
 			text={Bind.oneWay(
-				() => this.localViewModel.owner.current.title
+				() => (this.localViewModel.owner
+					&& this.localViewModel.owner.current
+					? this.localViewModel.owner.current.title : undefined)
 					|| this.localViewModel.title)}
 			></span>);
 	}

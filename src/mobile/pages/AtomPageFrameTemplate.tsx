@@ -33,7 +33,7 @@ export default class AtomPageFrameTemplate extends AtomControl {
 			<div class="title-bar">
 				<span
 					class={Bind.oneWay(() => `icon fas ${this.localViewModel.canGoBack ? "fa-arrow-left" : "fa-bars" }`)}
-					eventClick={Bind.oneTime(() => this.localViewModel.iconClick())}></span>
+					eventClick={Bind.event(() => this.localViewModel.iconClick())}></span>
 				<div
 					class="title"
 					titlePresenter={Bind.presenter}></div>

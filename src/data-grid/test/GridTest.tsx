@@ -4,16 +4,12 @@ import XNode from "@web-atoms/core/dist/core/XNode"
 import {BindableProperty} from "@web-atoms/core/dist/core/BindableProperty";
 import {AtomGridView} from "@web-atoms/core/dist/web/controls/AtomGridView";
 
-    import GridTestViewModel from "./GridTestViewModel";
-
-    import AtomDataGrid from "../AtomDataGrid";
-
+    import GridTestViewModel from "./GridTestViewModel";
+    import AtomDataGrid from "../AtomDataGrid";
 
 
-export default class GridTest extends AtomGridView {
-	
-	public create(): void {
-		this.viewModel =  this.resolve(GridTestViewModel) ;
+export default class GridTest extends AtomGridView {	
+	public create(): void {		this.viewModel =  this.resolve(GridTestViewModel) ;
 
 		this.render(
 		<div
@@ -22,16 +18,9 @@ export default class GridTest extends AtomGridView {
 			<AtomDataGrid
 				row="1"
 				column="1"
-				items={Bind.oneTime(() => this.viewModel.list)}>
-			</AtomDataGrid>
+				items={Bind.oneTime(() => this.viewModel.list)}>			</AtomDataGrid>
 			<div
-				column="1"
-				row="2">
+				rows="2">
 				<span>
-					Footer
-				</span>
-			</div>
-		</div>
-		);
-	}
-}
+					Footer				</span>			</div>		</div>
+		);	}}
