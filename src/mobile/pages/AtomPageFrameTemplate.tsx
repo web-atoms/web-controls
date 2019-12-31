@@ -1,8 +1,8 @@
+import Bind from "@web-atoms/core/dist/core/Bind";
 import {BindableProperty} from "@web-atoms/core/dist/core/BindableProperty";
+import XNode from "@web-atoms/core/dist/core/XNode";
 import {AtomControl} from "@web-atoms/core/dist/web/controls/AtomControl";
 import AtomPageFrameStyle, { FrameStyle } from "./AtomPageFrameStyle";
-import XNode from "@web-atoms/core/dist/core/xnode/XNode";
-import Bind from "@web-atoms/core/dist/core/xnode/Bind";
 
 export default class AtomPageFrameTemplate extends AtomControl {
 

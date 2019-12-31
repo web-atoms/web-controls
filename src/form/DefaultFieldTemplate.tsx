@@ -1,5 +1,5 @@
-import Bind from "@web-atoms/core/dist/core/xnode/Bind";
-import XNode from "@web-atoms/core/dist/core/xnode/XNode";
+import Bind from "@web-atoms/core/dist/core/Bind";
+import XNode from "@web-atoms/core/dist/core/XNode";
 import AtomFieldTemplate from "./AtomFieldTemplate";
 
 export default class DefaultFieldTemplate extends AtomFieldTemplate {

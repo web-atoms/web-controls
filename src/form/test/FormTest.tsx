@@ -1,5 +1,5 @@
-import Bind from "@web-atoms/core/dist/core/xnode/Bind";
-import XNode from "@web-atoms/core/dist/core/xnode/XNode";
+import Bind from "@web-atoms/core/dist/core/Bind";
+import XNode from "@web-atoms/core/dist/core/XNode";
 import {AtomControl} from "@web-atoms/core/dist/web/controls/AtomControl";
 import setupBridge from "../../setupBridge";
 import AtomField from "../AtomField";

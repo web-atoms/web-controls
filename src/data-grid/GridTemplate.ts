@@ -28,6 +28,7 @@ export default function GridTemplate(
         public preCreate(): void {
             this.dataGrid = owner;
             this.row = null;
+            this.data = null;
             this.bind(this.element,
                 "none",
                 [["this", "data"], ["this", "dataGrid", "columns"]], false,

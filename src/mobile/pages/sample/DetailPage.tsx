@@ -1,4 +1,4 @@
-import XNode from "@web-atoms/core/dist/core/xnode/XNode";
+import XNode from "@web-atoms/core/dist/core/XNode";
 import {AtomControl} from "@web-atoms/core/dist/web/controls/AtomControl";
 import Page from "../Page";
 
