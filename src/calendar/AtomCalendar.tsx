@@ -6,13 +6,21 @@ import {AtomComboBox} from "@web-atoms/core/dist/web/controls/AtomComboBox";
 import {AtomItemsControl} from "@web-atoms/core/dist/web/controls/AtomItemsControl";
 import {AtomControl} from "@web-atoms/core/dist/web/controls/AtomControl";
 
-    import CalendarViewModel from "./CalendarViewModel";
-    import AtomCalendarStyle from "./AtomCalendarStyle";
-    import SRCalendar from "./res/SRCalendar";
+    import CalendarViewModel from "./CalendarViewModel";
+
+    import AtomCalendarStyle from "./AtomCalendarStyle";
+
+    import SRCalendar from "./res/SRCalendar";
 
 
-export default class AtomCalendar extends AtomControl {	
-	constructor(app: any, e?: any) {		super(app, e || document.createElement("div"));	}
+
+export default class AtomCalendar extends AtomControl {
+
+	public static itemTemplate = XNode.prepare("itemTemplate", true, true);
+	
+	constructor(app: any, e?: any) {
+		super(app, e || document.createElement("div"));
+	}
 
 	protected srCalendar: SRCalendar;
 
@@ -34,7 +42,8 @@ export default class AtomCalendar extends AtomControl {
 	@BindableProperty
 	public itemTemplate: any ;
 
-	public create(): void {		
+	public create(): void {
+		
 		this.srCalendar = this.app.resolve(SRCalendar);
 		this.localViewModel =  this.resolve(CalendarViewModel, 'owner') ;
 		this.defaultControlStyle = AtomCalendarStyle;
@@ -52,7 +61,8 @@ export default class AtomCalendar extends AtomControl {
 					eventClick={Bind.event((x)=> (x.localViewModel).changeMonth(-1))}
 					class="fas fa-caret-left"
 					title="Previous Month"
-					style="margin-right: 15px; font-size: 120%; cursor: pointer; padding:0 10px 0 10px;">				</i>
+					style="margin-right: 15px; font-size: 120%; cursor: pointer; padding:0 10px 0 10px;">
+				</i>
 				<AtomComboBox
 					valuePath="value"
 					value={Bind.twoWays((x) => x.localViewModel.year)}
@@ -60,7 +70,10 @@ export default class AtomCalendar extends AtomControl {
 					for="select">
 					<AtomComboBox.itemTemplate>
 						<option
-							text={Bind.oneTime((x) => x.data.label)}>						</option>					</AtomComboBox.itemTemplate>				</AtomComboBox>
+							text={Bind.oneTime((x) => x.data.label)}>
+						</option>
+					</AtomComboBox.itemTemplate>
+				</AtomComboBox>
 				<AtomComboBox
 					valuePath="value"
 					value={Bind.twoWays((x) => x.localViewModel.month)}
@@ -68,21 +81,28 @@ export default class AtomCalendar extends AtomControl {
 					for="select">
 					<AtomComboBox.itemTemplate>
 						<option
-							text={Bind.oneTime((x) => x.data.label)}>						</option>					</AtomComboBox.itemTemplate>				</AtomComboBox>
+							text={Bind.oneTime((x) => x.data.label)}>
+						</option>
+					</AtomComboBox.itemTemplate>
+				</AtomComboBox>
 				<i
 					eventClick={Bind.event((x)=> (x.localViewModel).changeMonth(1))}
 					class="fas fa-caret-right"
 					title="Next Month"
-					style="margin-left: 15px; font-size: 120%; cursor: pointer; padding:0 10px 0 10px;">				</i>			</div>
+					style="margin-left: 15px; font-size: 120%; cursor: pointer; padding:0 10px 0 10px;">
+				</i>
+			</div>
 			<AtomItemsControl
 				items={Bind.oneTime(() => this.srCalendar.weekDays)}
 				class="week-days"
-				for="div">			</AtomItemsControl>
+				for="div">
+			</AtomItemsControl>
 			<AtomItemsControl
 				class="month-days"
 				itemTemplate={Bind.oneWay(() => this.itemTemplate)}
 				items={Bind.oneWay((x) => x.localViewModel.items)}
-				for="div">			</AtomItemsControl>
+				for="div">
+			</AtomItemsControl>
 			<div
 				template="itemTemplate"
 				eventClick={Bind.event((x)=> (x.localViewModel).dateClicked((x.data)))}>
@@ -95,5 +115,10 @@ export default class AtomCalendar extends AtomControl {
                 'is-weekend': x.data.isWeekend,
                 'is-selected': x.localViewModel.selectedDate == x.data.value,
                 'is-disabled': x.localViewModel.enableFunc ? x.localViewModel.enableFunc(x.data) : 0
-            }))}>				</div>			</div>		</div>
-		);	}}
+            }))}>
+				</div>
+			</div>
+		</div>
+		);
+	}
+}
