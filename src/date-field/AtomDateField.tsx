@@ -12,6 +12,8 @@ import {BindableProperty} from "@web-atoms/core/dist/core/BindableProperty";
 
 
 export default class AtomDateField extends AtomPopupButton {
+
+	public static itemTemplate = XNode.prepare("itemTemplate", true, true);
 	
 	protected srCalendar: SRCalendar;
 
