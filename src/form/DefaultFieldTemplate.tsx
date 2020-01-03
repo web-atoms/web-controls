@@ -13,13 +13,13 @@ export default class DefaultFieldTemplate extends AtomFieldTemplate {
 				"field-hidden": !this.field.visible
 			}))}>
 			<label
-				labelPresenter={Bind.presenter}
+				presenter={Bind.presenter("labelPresenter")}
 				class="label"
 				text={Bind.oneWay(() => this.field.label)}/>
 			<span
 				class="required"
 				styleDisplay={Bind.oneTime(() => this.field.required ? "" : "none")}>*</span>
-			<div contentPresenter={Bind.presenter}></div>
+			<div presenter={Bind.presenter("contentPresenter")}></div>
 			<span
 				class="error"
 				styleDisplay={Bind.oneWay(() => this.field.hasError ? "" : "none")}

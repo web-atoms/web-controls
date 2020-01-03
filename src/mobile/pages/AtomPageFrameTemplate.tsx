@@ -36,20 +36,20 @@ export default class AtomPageFrameTemplate extends AtomControl {
 					eventClick={Bind.event(() => this.localViewModel.iconClick())}></span>
 				<div
 					class="title"
-					titlePresenter={Bind.presenter}></div>
+					presenter={Bind.presenter("titlePresenter")}></div>
 				<div
 					class="commands"
-					commandPresenter={Bind.presenter}></div>
+					presenter={Bind.presenter("commandPresenter")}></div>
 			</div>
 
 			<div
 				class="page-presenter"
-				pagePresenter={Bind.presenter}></div>
+				presenter={Bind.presenter("pagePresenter")}></div>
 
 			<div
 				class="tabs"
 				styleDisplay={Bind.oneWay(() => this.tabs ? "" : "none")}
-				tabsPresenter={Bind.presenter}></div>
+				presenter={Bind.presenter("tabsPresenter")}></div>
 		</div>
 		);
 	}
