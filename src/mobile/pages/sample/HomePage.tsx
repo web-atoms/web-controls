@@ -12,10 +12,11 @@ export default class HomePage extends Page {
 		<div
 			title="Home Page"
 			for="div">
-			<div
-				template="commandTemplate">
-				<span
-					class="fas fa-question-circle">				</span>			</div>
+			<Page.commandTemplate>
+				<div
+					template="commandTemplate">
+					<span
+						class="fas fa-question-circle">					</span>				</div>			</Page.commandTemplate>
 
 			    This is home page...
 					</div>

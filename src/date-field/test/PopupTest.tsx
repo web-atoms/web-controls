@@ -17,11 +17,12 @@ export default class PopupTest extends AtomControl {
 			<AtomPageLink
 				text="Add New"
 				for="button">
-				<div
-					template="page">
-					<div>
+				<AtomPageLink.page>
+					<div
+						template="page">
+						<div>
 
-						                Select Date
-						            					</div>
-					<AtomDateField>					</AtomDateField>				</div>			</AtomPageLink>		</div>
+							                Select Date
+							            						</div>
+						<AtomDateField>						</AtomDateField>					</div>				</AtomPageLink.page>			</AtomPageLink>		</div>
 		);	}}

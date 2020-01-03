@@ -1,8 +1,13 @@
 import { App } from "@web-atoms/core/dist/App";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
+import XNode from "@web-atoms/core/dist/core/XNode";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 
 export default class Page extends AtomControl {
+
+    public static commandTemplate = XNode.prepare("commandTemplate", true, true);
+
+    public static tasbTemplate = XNode.prepare("tabsTemplate", true, true);
 
     @BindableProperty
     public title: string = null;

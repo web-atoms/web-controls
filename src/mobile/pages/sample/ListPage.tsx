@@ -14,13 +14,14 @@ export default class ListPage extends Page {
 		<div
 			title="List Page"
 			for="div">
-			<div
-				template="commandTemplate">
-				<span
-					class="fas fa-filter"
-					eventClick={Bind.event((x) => this.viewModel.openFilter())}>				</span>
-				<span
-					class="fas fa-question-circle">				</span>			</div>
+			<Page.commandTemplate>
+				<div
+					template="commandTemplate">
+					<span
+						class="fas fa-filter"
+						eventClick={Bind.event((x) => this.viewModel.openFilter())}>					</span>
+					<span
+						class="fas fa-question-circle">					</span>				</div>			</Page.commandTemplate>
 
 
 			    This is a list page;

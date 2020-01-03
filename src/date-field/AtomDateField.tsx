@@ -45,15 +45,17 @@ export default class AtomDateField extends AtomPopupButton {
 		<div
 			text={Bind.oneWay(() => this.selectedDate ? this.srCalendar.toShortDate(this.selectedDate) : 'Select Date')}
 			eventResult={Bind.event((s, e) => this.selectedDate = e.detail)}>
-			<AtomCalendar
-				template="page"
-				selectedDate={Bind.twoWays(() => this.selectedDate)}
-				yearStart={Bind.oneWay(() => this.yearStart)}
-				yearEnd={Bind.oneWay(() => this.yearEnd)}
-				enableFunc={Bind.oneWay(() => this.enableFunc)}
-				itemTemplate={Bind.oneWay(() => this.itemTemplate)}
-				eventDateClicked={Bind.event((s, e) => (s.viewModel).close(e.detail.value))}>
-			</AtomCalendar>
+			<AtomPopupButton.page>
+				<AtomCalendar
+					template="page"
+					selectedDate={Bind.twoWays(() => this.selectedDate)}
+					yearStart={Bind.oneWay(() => this.yearStart)}
+					yearEnd={Bind.oneWay(() => this.yearEnd)}
+					enableFunc={Bind.oneWay(() => this.enableFunc)}
+					itemTemplate={Bind.oneWay(() => this.itemTemplate)}
+					eventDateClicked={Bind.event((s, e) => this.viewModel.close(e.detail.value))}>
+				</AtomCalendar>
+			</AtomPopupButton.page>
 		</div>
 		);
 	}
