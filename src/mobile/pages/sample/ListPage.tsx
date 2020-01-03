@@ -15,8 +15,7 @@ export default class ListPage extends Page {
 			title="List Page"
 			for="div">
 			<Page.commandTemplate>
-				<div
-					template="commandTemplate">
+				<div>
 					<span
 						class="fas fa-filter"
 						eventClick={Bind.event((x) => this.viewModel.openFilter())}>					</span>

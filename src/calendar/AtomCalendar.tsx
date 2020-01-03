@@ -60,7 +60,6 @@ export default class AtomCalendar extends AtomControl {
 					for="select">
 					<AtomComboBox.itemTemplate>
 						<option
-							template="itemTemplate"
 							text={Bind.oneTime((x) => x.data.label)}>						</option>					</AtomComboBox.itemTemplate>				</AtomComboBox>
 				<AtomComboBox
 					valuePath="value"
@@ -69,7 +68,6 @@ export default class AtomCalendar extends AtomControl {
 					for="select">
 					<AtomComboBox.itemTemplate>
 						<option
-							template="itemTemplate"
 							text={Bind.oneTime((x) => x.data.label)}>						</option>					</AtomComboBox.itemTemplate>				</AtomComboBox>
 				<i
 					eventClick={Bind.event((x)=> (x.localViewModel).changeMonth(1))}

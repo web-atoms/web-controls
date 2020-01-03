@@ -18,8 +18,7 @@ export default class PopupTest extends AtomControl {
 				text="Add New"
 				for="button">
 				<AtomPageLink.page>
-					<div
-						template="page">
+					<div>
 						<div>
 
 							                Select Date

@@ -47,7 +47,6 @@ export default class AtomDateField extends AtomPopupButton {
 			eventResult={Bind.event((s, e) => this.selectedDate = e.detail)}>
 			<AtomPopupButton.page>
 				<AtomCalendar
-					template="page"
 					selectedDate={Bind.twoWays(() => this.selectedDate)}
 					yearStart={Bind.oneWay(() => this.yearStart)}
 					yearEnd={Bind.oneWay(() => this.yearEnd)}
