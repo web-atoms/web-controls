@@ -13,6 +13,8 @@ export default class AtomFieldTemplate extends AtomControl {
 
     protected preCreate(): void {
         super.preCreate();
+        this.contentPresenter = null;
+        this.labelPresenter = null;
         this.runAfterInit(() => {
             this.contentPresenter.appendChild(this.field.element);
 
