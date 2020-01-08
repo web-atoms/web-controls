@@ -7,7 +7,7 @@ export default class Page extends AtomControl {
 
     public static commandTemplate = XNode.prepare("commandTemplate", true, true);
 
-    public static tasbTemplate = XNode.prepare("tabsTemplate", true, true);
+    public static tabsTemplate = XNode.prepare("tabsTemplate", true, true);
 
     @BindableProperty
     public title: string = null;
