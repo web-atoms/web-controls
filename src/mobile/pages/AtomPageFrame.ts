@@ -4,6 +4,7 @@ import { AtomBridge } from "@web-atoms/core/dist/core/AtomBridge";
 import { AtomLoader } from "@web-atoms/core/dist/core/AtomLoader";
 import { AtomUri } from "@web-atoms/core/dist/core/AtomUri";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
+import XNode from "@web-atoms/core/dist/core/XNode";
 import { NavigationService } from "@web-atoms/core/dist/services/NavigationService";
 import { AtomWindowViewModel } from "@web-atoms/core/dist/view-model/AtomWindowViewModel";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
@@ -14,6 +15,10 @@ import PageFrameViewModel from "./PageFrameViewModel";
 import TitleTemplate from "./TitleTemplate";
 
 export default class AtomPageFrame extends AtomFrame {
+
+    public static frameTemplate = XNode.prepare("frameTemplate", true, true);
+
+    public static titleTemplate = XNode.prepare("titleTemplate", true, true);
 
     @BindableProperty
     public menuUrl: string;
