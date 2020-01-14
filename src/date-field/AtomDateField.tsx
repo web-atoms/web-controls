@@ -54,7 +54,7 @@ export default class AtomDateField extends AtomPopupButton {
 					yearEnd={Bind.oneWay(() => this.yearEnd)}
 					enableFunc={Bind.oneWay(() => this.enableFunc)}
 					itemTemplate={Bind.oneWay(() => this.itemTemplate)}
-					eventDateClicked={Bind.event((s, e) => this.viewModel.close(e.detail.value))}>
+					eventDateClicked={Bind.event((s, e) => s.viewModel.close(e.detail.value))}>
 				</AtomCalendar>
 			</AtomPopupButton.page>
 		</div>
