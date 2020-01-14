@@ -4,6 +4,10 @@ import {AtomControl} from "@web-atoms/core/dist/web/controls/AtomControl";
 
 export default class TitleTemplate extends AtomControl {
 
+	constructor(a?: any, e?: any) {
+		super(a, e || document.createElement("span"));
+	}
+
 	public create(): void {
 		this.render(
 		<span
