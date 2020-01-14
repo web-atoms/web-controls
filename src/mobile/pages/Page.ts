@@ -9,23 +9,19 @@ export default class Page extends AtomControl {
 
     public static tabsTemplate = XNode.prepare("tabsTemplate", true, true);
 
-    @BindableProperty
-    public title: string = null;
+    public title: string;
 
-    @BindableProperty
-    public tag: string = null;
+    public tag: string;
 
-    @BindableProperty
     public commandTemplate: any;
 
-    @BindableProperty
     public tabsTemplate: any;
 
-    constructor(app: App, e?: HTMLElement) {
-        super(app, e || document.createElement("div"));
-    }
-
     public preCreate(): void {
+        this.title = null;
+        this.tag = null;
+        this.commandTemplate = null;
+        this.tabsTemplate = null;
         this.bind(this.element, "title", [["viewModel", "title"]]);
     }
 
