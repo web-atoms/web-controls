@@ -257,6 +257,7 @@ export default class AutoCompleteBox extends AtomControl {
         this.label = null;
         this.lastSearchText = null;
         this.lastValue = null;
+        this.value = null;
         this.isPopupOpen = false;
         this.valueFunc = null;
         this.itemHostTemplate = ItemHost;
