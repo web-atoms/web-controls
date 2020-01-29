@@ -252,7 +252,7 @@ export default class AutoCompleteBox extends AtomControl {
 
     protected preCreate(): void {
         this.itemTemplate = null;
-        this.items = null;
+        this.items = [];
         this.itemsSource = null;
         this.label = null;
         this.lastSearchText = null;
