@@ -50,29 +50,29 @@ export default class AutoCompleteBox extends AtomControl {
     @BindableProperty
     public label: any;
 
-    public items: any[] = [];
+    public items: any[];
 
-    public itemsSource: (fetchEvent: IFetchEvent) => Promise<any[]> | any[] = null;
+    public itemsSource: (fetchEvent: IFetchEvent) => Promise<any[]> | any[];
 
-    public valueFunc: ((item: any) => any) = null;
+    public valueFunc: ((item: any) => any);
 
-    public itemHostTemplate: IClassOf<AtomControl> = ItemHost;
+    public itemHostTemplate: IClassOf<AtomControl>;
 
-    public searchText: string = null;
+    public searchText: string;
 
-    public isPopupOpen: boolean = false;
+    public isPopupOpen: boolean;
 
-    private lastSearchText: string = null;
+    private lastSearchText: string;
 
-    private lastValue: any = null;
+    private lastValue: any;
 
     private cancelToken: CancelToken;
 
     private windowViewModel: AppComboBoxViewModel;
 
-    private created: boolean = false;
+    private created: boolean;
 
-    private isUpdating: boolean = false;
+    private isUpdating: boolean;
 
     public onPropertyChanged(name: string): void {
         switch (name) {
@@ -257,6 +257,14 @@ export default class AutoCompleteBox extends AtomControl {
         this.label = null;
         this.lastSearchText = null;
         this.lastValue = null;
+        this.isPopupOpen = false;
+        this.valueFunc = null;
+        this.itemHostTemplate = ItemHost;
+        this.searchText = null;
+        this.lastSearchText = null;
+        this.lastValue = null;
+        this.created = false;
+        this.isUpdating = false;
     }
 
     protected create(): void {
