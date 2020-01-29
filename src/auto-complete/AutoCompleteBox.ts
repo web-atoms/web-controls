@@ -99,6 +99,10 @@ export default class AutoCompleteBox extends AtomControl {
         const input = document.createElement("input");
         input.type = "search";
         input.autocomplete = "none";
+        input.style.display = "none";
+        this.app.callLater(() => {
+            input.style.display = "";
+        });
         const tc = new AtomTemplateControl(this.app);
         this.append(tc);
 
