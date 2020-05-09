@@ -1,28 +1,16 @@
-// tslint:disable
-import Bind from "@web-atoms/core/dist/core/Bind"
-import XNode from "@web-atoms/core/dist/core/XNode"
+import Bind from "@web-atoms/core/dist/core/Bind";
 import {BindableProperty} from "@web-atoms/core/dist/core/BindableProperty";
+import XNode from "@web-atoms/core/dist/core/XNode";
 import {AtomComboBox} from "@web-atoms/core/dist/web/controls/AtomComboBox";
-import {AtomItemsControl} from "@web-atoms/core/dist/web/controls/AtomItemsControl";
 import {AtomControl} from "@web-atoms/core/dist/web/controls/AtomControl";
-
-    import CalendarViewModel from "./CalendarViewModel";
-
-    import AtomCalendarStyle from "./AtomCalendarStyle";
-
-    import SRCalendar from "./res/SRCalendar";
-
-
+import {AtomItemsControl} from "@web-atoms/core/dist/web/controls/AtomItemsControl";
+import AtomCalendarStyle from "./AtomCalendarStyle";
+import CalendarViewModel from "./CalendarViewModel";
+import SRCalendar from "./res/SRCalendar";
 
 export default class AtomCalendar extends AtomControl {
 
 	public static itemTemplate = XNode.prepare("itemTemplate", true, true);
-	
-	constructor(app: any, e?: any) {
-		super(app, e || document.createElement("div"));
-	}
-
-	protected srCalendar: SRCalendar;
 
 	@BindableProperty
 	public selectedDate: Date ;
@@ -42,10 +30,18 @@ export default class AtomCalendar extends AtomControl {
 	@BindableProperty
 	public itemTemplate: any ;
 
+	public localViewModel: CalendarViewModel;
+
+	protected srCalendar: SRCalendar;
+
+	constructor(app: any, e?: any) {
+		super(app, e || document.createElement("div"));
+	}
+
 	public create(): void {
-		
+
 		this.srCalendar = this.app.resolve(SRCalendar);
-		this.localViewModel =  this.resolve(CalendarViewModel, 'owner') ;
+		this.localViewModel =  this.resolve(CalendarViewModel, "owner") ;
 		this.defaultControlStyle = AtomCalendarStyle;
 
 		this.selectedDate = null;
@@ -58,15 +54,15 @@ export default class AtomCalendar extends AtomControl {
 			<div
 				class="header">
 				<i
-					eventClick={Bind.event((x)=> (x.localViewModel).changeMonth(-1))}
+					eventClick={Bind.event(() => this.localViewModel.changeMonth(-1))}
 					class="fas fa-caret-left"
 					title="Previous Month"
 					style="margin-right: 15px; font-size: 120%; cursor: pointer; padding:0 10px 0 10px;">
 				</i>
 				<AtomComboBox
 					valuePath="value"
-					value={Bind.twoWays((x) => x.localViewModel.year)}
-					items={Bind.oneWay((x) => x.localViewModel.yearList)}
+					value={Bind.twoWays(() => this.localViewModel.year)}
+					items={Bind.oneWay(() => this.localViewModel.yearList)}
 					for="select">
 					<AtomComboBox.itemTemplate>
 						<option
@@ -76,7 +72,7 @@ export default class AtomCalendar extends AtomControl {
 				</AtomComboBox>
 				<AtomComboBox
 					valuePath="value"
-					value={Bind.twoWays((x) => x.localViewModel.month)}
+					value={Bind.twoWays(() => this.localViewModel.month)}
 					items={Bind.oneTime(() => this.srCalendar.monthList)}
 					for="select">
 					<AtomComboBox.itemTemplate>
@@ -86,7 +82,7 @@ export default class AtomCalendar extends AtomControl {
 					</AtomComboBox.itemTemplate>
 				</AtomComboBox>
 				<i
-					eventClick={Bind.event((x)=> (x.localViewModel).changeMonth(1))}
+					eventClick={Bind.event(() => this.localViewModel.changeMonth(1))}
 					class="fas fa-caret-right"
 					title="Next Month"
 					style="margin-left: 15px; font-size: 120%; cursor: pointer; padding:0 10px 0 10px;">
@@ -100,21 +96,22 @@ export default class AtomCalendar extends AtomControl {
 			<AtomItemsControl
 				class="month-days"
 				itemTemplate={Bind.oneWay(() => this.itemTemplate)}
-				items={Bind.oneWay((x) => x.localViewModel.items)}
+				items={Bind.oneWay(() => this.localViewModel.items)}
 				for="div">
 			</AtomItemsControl>
 			<div
 				template="itemTemplate"
-				eventClick={Bind.event((x)=> (x.localViewModel).dateClicked((x.data)))}>
+				eventClick={Bind.event((x) => this.localViewModel.dateClicked((x.data)))}>
 				<div
 					text={Bind.oneTime((x) => x.data.label)}
 					class={Bind.oneWay((x) => ({
-                'date-css': 1,
-                'is-other-month': x.data.isOtherMonth,
-                'is-today': x.data.isToday,
-                'is-weekend': x.data.isWeekend,
-                'is-selected': x.localViewModel.selectedDate == x.data.value,
-                'is-disabled': x.localViewModel.enableFunc ? x.localViewModel.enableFunc(x.data) : 0
+                "date-css": 1,
+                "is-other-month": x.data.isOtherMonth,
+                "is-today": x.data.isToday,
+                "is-weekend": x.data.isWeekend,
+                // tslint:disable-next-line: triple-equals
+                "is-selected": this.localViewModel.selectedDate == x.data.value,
+                "is-disabled": this.localViewModel.enableFunc ? this.localViewModel.enableFunc(x.data) : 0
             }))}>
 				</div>
 			</div>
