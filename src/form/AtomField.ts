@@ -1,7 +1,7 @@
-import { AtomBinder } from "web-atoms-core/dist/core/AtomBinder";
-import { BindableProperty } from "web-atoms-core/dist/core/BindableProperty";
-import { NavigationService } from "web-atoms-core/dist/services/NavigationService";
-import { AtomControl } from "web-atoms-core/dist/web/controls/AtomControl";
+import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder";
+import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
+import { NavigationService } from "@web-atoms/core/dist/services/NavigationService";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 export { default as HP } from "./HelpPopup";
 
 export default class AtomField extends AtomControl {

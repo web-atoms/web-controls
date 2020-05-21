@@ -1,5 +1,5 @@
+import { AtomViewModel, Watch } from "@web-atoms/core/dist/view-model/AtomViewModel";
 import DateTime from "@web-atoms/date-time/dist/DateTime";
-import { AtomViewModel, Watch } from "web-atoms-core/dist/view-model/AtomViewModel";
 
 export interface ILabelValue {
     label?: string;

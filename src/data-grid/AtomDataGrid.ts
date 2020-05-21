@@ -1,5 +1,5 @@
-import {BindableProperty} from "web-atoms-core/dist/core/BindableProperty";
-import {AtomItemsControl} from "web-atoms-core/dist/web/controls/AtomItemsControl";
+import {BindableProperty} from "@web-atoms/core/dist/core/BindableProperty";
+import {AtomItemsControl} from "@web-atoms/core/dist/web/controls/AtomItemsControl";
 import AtomColumn from "./AtomColumn";
 import AtomDataGridStyle from "./AtomDataGridStyle";
 import AtomDataGridViewModel from "./AtomDataGridViewModel";

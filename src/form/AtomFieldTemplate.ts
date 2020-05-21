@@ -1,4 +1,4 @@
-import { AtomControl } from "web-atoms-core/dist/web/controls/AtomControl";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import AtomField from "./AtomField";
 
 export default class AtomFieldTemplate extends AtomControl {
@@ -13,6 +13,8 @@ export default class AtomFieldTemplate extends AtomControl {
 
     protected preCreate(): void {
         super.preCreate();
+        this.contentPresenter = null;
+        this.labelPresenter = null;
         this.runAfterInit(() => {
             this.contentPresenter.appendChild(this.field.element);
 

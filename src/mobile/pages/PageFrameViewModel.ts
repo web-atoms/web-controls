@@ -1,11 +1,11 @@
-import { Atom } from "web-atoms-core/dist/Atom";
-import { AtomBinder } from "web-atoms-core/dist/core/AtomBinder";
-import { AtomUri } from "web-atoms-core/dist/core/AtomUri";
-import { CancelToken } from "web-atoms-core/dist/core/types";
-import { Inject } from "web-atoms-core/dist/di/Inject";
-import { NavigationService } from "web-atoms-core/dist/services/NavigationService";
-import { AtomViewModel, Receive, Watch } from "web-atoms-core/dist/view-model/AtomViewModel";
-import bindUrlParameter from "web-atoms-core/dist/view-model/bindUrlParameter";
+import { Atom } from "@web-atoms/core/dist/Atom";
+import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder";
+import { AtomUri } from "@web-atoms/core/dist/core/AtomUri";
+import { CancelToken } from "@web-atoms/core/dist/core/types";
+import { Inject } from "@web-atoms/core/dist/di/Inject";
+import { NavigationService } from "@web-atoms/core/dist/services/NavigationService";
+import { AtomViewModel, Receive, Watch } from "@web-atoms/core/dist/view-model/AtomViewModel";
+import bindUrlParameter from "@web-atoms/core/dist/view-model/bindUrlParameter";
 
 export default class PageFrameViewModel extends AtomViewModel {
 

@@ -4,11 +4,14 @@
         "module":"umd",
         "sourceMap": true,
         "declaration": true,
+        "declarationMap": true,
         "moduleResolution": "node",
         "outDir": "dist",
         "downlevelIteration": false,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
+        "jsx": "react",
+        "jsxFactory": "XNode.create",
         "lib": [
             "es6",
             "dom"
