@@ -1,4 +1,5 @@
 import { Atom } from "@web-atoms/core/dist/Atom";
+import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import { CancelToken, IClassOf } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
@@ -34,12 +35,10 @@ export default class AutoCompleteBox extends AtomControl {
 
     public itemTemplate: IClassOf<AtomControl>;
 
-    @BindableProperty
     public selectedItem: any;
 
     public previousItem: any;
 
-    @BindableProperty
     public value: any;
 
     /**
@@ -47,7 +46,6 @@ export default class AutoCompleteBox extends AtomControl {
      * @type {*}
      * @memberof AutoCompleteBox
      */
-    @BindableProperty
     public label: any;
 
     public items: any[];
@@ -96,55 +94,76 @@ export default class AutoCompleteBox extends AtomControl {
             return;
         }
 
-        const input = document.createElement("input");
-        input.type = "search";
-        input.autocomplete = "none";
-        input.style.display = "none";
-        this.app.callLater(() => {
-            input.style.display = "";
-        });
-        const tc = new AtomTemplateControl(this.app);
-        this.append(tc);
-
-        this.element.appendChild(input);
-
-        this.bind(this.element,
-            "styleClass",
-            [["this", "isPopupOpen"], ["this", "value"]], false, (v, v1) => ({
-            [this.controlStyle.root.className]: true,
-            "popup-open": v || !v1
-        }), this);
-
-        tc.bind(tc.element, "contentTemplate", [["this", "itemTemplate"]], false, null, this);
-        tc.bind(tc.element, "data", [["this", "selectedItem"]], false, null, this);
-
         const openPopup = () => this.app.runAsync( async () => {
             await Atom.delay(200);
             await this.openPopup(true);
-        });
-
-        this.bindEvent(input, "focus", openPopup);
-        this.bindEvent(input, "click", openPopup);
-
-        this.bind(input, "value", [["this", "searchText"]], ["keyup", "keypress", "keydown"] , null, this);
-        this.bind(input, "placeholder", [["this", "label"]], null, null, this);
-        this.bindEvent(input, "blur", () => {
-            setTimeout(() => {
-                this.cancelToken?.cancel();
-            }, 100);
         });
 
         const keyEvent = (e: KeyboardEvent) => {
             this.onKey(e);
         };
 
-        // this.bindEvent(input, "keyup", keyEvent);
-        // this.bindEvent(input, "keydown", keyEvent);
-        this.bindEvent(input, "keydown", keyEvent);
+        this.render(<div
+            styleClass={Bind.oneWay(() => ({
+                [this.controlStyle.name]: 1,
+                "popup-open": this.isPopupOpen || !this.value
+            }))}>
+            <input
+                type="search"
+                autocomplete="none"
+                eventFocus={openPopup}
+                eventClick={openPopup}
+                value={Bind.twoWays(() => this.searchText, ["keyup", "keypress", "keydown"])}
+                placeholder={Bind.oneWay(() => this.label)}
+                eventKeyDown={keyEvent}
+                eventBlur={() => setTimeout(() => this.cancelToken?.cancel(), 100)}/>
+            <AtomTemplateControl
+                class="item-template"
+                contentTemplate={Bind.oneWay(() => this.itemTemplate)}
+                data={Bind.oneWay(() => this.selectedItem)}
+                />
+        </div>);
 
-        this.runAfterInit(() => {
-            this.setPrimitiveValue(tc.element, "styleClass", this.controlStyle.itemTemplate);
-        });
+        // const input = document.createElement("input");
+        // input.type = "search";
+        // input.autocomplete = "none";
+        // input.style.display = "none";
+        // this.app.callLater(() => {
+        //     input.style.display = "";
+        // });
+        // const tc = new AtomTemplateControl(this.app);
+        // this.append(tc);
+
+        // this.element.appendChild(input);
+
+        // this.bind(this.element,
+        //     "styleClass",
+        //     [["this", "isPopupOpen"], ["this", "value"]], false, (v, v1) => ({
+        //     [this.controlStyle.root.className]: true,
+        //     "popup-open": v || !v1
+        // }), this);
+
+        // tc.bind(tc.element, "contentTemplate", [["this", "itemTemplate"]], false, null, this);
+        // tc.bind(tc.element, "data", [["this", "selectedItem"]], false, null, this);
+
+        // this.bindEvent(input, "focus", openPopup);
+        // this.bindEvent(input, "click", openPopup);
+
+        // this.bind(input, "value", [["this", "searchText"]], ["keyup", "keypress", "keydown"] , null, this);
+        // this.bind(input, "placeholder", [["this", "label"]], null, null, this);
+        // this.bindEvent(input, "blur", () => {
+        //     setTimeout(() => {
+        //         this.cancelToken?.cancel();
+        //     }, 100);
+        // });
+
+        // // this.bindEvent(input, "keyup", keyEvent);
+        // // this.bindEvent(input, "keydown", keyEvent);
+        // this.bindEvent(input, "keydown", keyEvent);
+
+        // this.runAfterInit(() => {
+        //     this.setPrimitiveValue(tc.element, "styleClass", this.controlStyle.itemTemplate);
+        // });
     }
 
     protected onSearchTextChanged(force: boolean = false): void {
@@ -253,6 +272,7 @@ export default class AutoCompleteBox extends AtomControl {
     protected preCreate(): void {
         this.itemTemplate = null;
         this.items = [];
+        this.selectedItem = null;
         this.itemsSource = null;
         this.label = null;
         this.lastSearchText = null;
@@ -266,12 +286,11 @@ export default class AutoCompleteBox extends AtomControl {
         this.lastValue = null;
         this.created = false;
         this.isUpdating = false;
-    }
-
-    protected create(): void {
-
         this.defaultControlStyle = AutoCompleteBoxStyle;
     }
+
+    // tslint:disable-next-line: no-empty
+    protected create(): void { }
 
     protected onKey(e: KeyboardEvent): void {
         if (!this.isPopupOpen) {

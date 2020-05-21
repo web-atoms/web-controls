@@ -6,29 +6,21 @@ export { default as HP } from "./HelpPopup";
 
 export default class AtomField extends AtomControl {
 
-    @BindableProperty
-    public label: string = null;
+    public label: string;
 
-    @BindableProperty
-    public error: string = null;
+    public error: string;
 
-    @BindableProperty
-    public helpText: string = null;
+    public helpText: string;
 
-    @BindableProperty
-    public helpLink: string = null;
+    public helpLink: string;
 
-    @BindableProperty
-    public helpIcon: string = null;
+    public helpIcon: string;
 
-    @BindableProperty
-    public required: boolean = false;
+    public required: boolean;
 
-    @BindableProperty
-    public visible: boolean = true;
+    public visible: boolean;
 
-    @BindableProperty
-    public fieldClass: string = "";
+    public fieldClass: string;
 
     public get hasError(): boolean {
         return this.error ? true : false;
@@ -65,6 +57,17 @@ export default class AtomField extends AtomControl {
             // else
             await n.openPage(this.helpLink);
         }
+    }
+
+    protected preCreate() {
+        this.label = null;
+        this.error = null;
+        this.helpText = null;
+        this.helpLink = null;
+        this.helpIcon = null;
+        this.required = false;
+        this.visible = true;
+        this.fieldClass = "";
     }
 
 }

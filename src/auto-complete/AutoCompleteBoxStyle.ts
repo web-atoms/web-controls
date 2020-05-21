@@ -17,6 +17,10 @@ export default class AutoCompleteBoxStyle extends AtomStyle {
             borderRadius: "3px",
             webkitBorderRadius: "3px",
             subclasses: {
+                ".popup": this.popup,
+                " .item": this.item,
+                " .selected-item": this.selectedItem,
+                " .item-template": this.itemTemplate,
                 " > input[type=search]": {
                     ... StyleBuilder.newStyle.absolute(0, 0).toStyle(),
                     opacity: "0",

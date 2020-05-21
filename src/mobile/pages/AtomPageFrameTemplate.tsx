@@ -29,7 +29,7 @@ export default class AtomPageFrameTemplate extends AtomControl {
 		this.defaultControlStyle = AtomPageFrameStyle;
 
 		this.render(
-		<div class={this.controlStyle.root.className}>
+		<div class={this.controlStyle.name}>
 			<div class="title-bar">
 				<span
 					class={Bind.oneWay(() => `icon fas ${this.localViewModel.canGoBack ? "fa-arrow-left" : "fa-bars" }`)}
