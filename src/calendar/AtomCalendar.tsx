@@ -40,7 +40,7 @@ export default class AtomCalendar extends AtomControl {
 		this.enableFunc = null;
 		this.render(
 		<div
-			styleClass={Bind.oneWay(() => this.controlStyle.root)}>
+			styleClass={Bind.oneWay(() => this.controlStyle.name)}>
 			<div
 				class="header">
 				<i
