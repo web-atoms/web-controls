@@ -15,7 +15,7 @@ export default class ItemHost extends AtomControl {
 
 		this.render(
 		<div
-			styleClass={Bind.oneTime((x) => this.viewModel.comboBox.controlStyle.name + " popup")}
+			styleClass={Bind.oneTime((x) => this.viewModel.comboBox.controlStyle.name)}
 			styleDisplay={Bind.oneWay((x) => x.viewModel.comboBox.items.length ? "" : "none")}>
 			<AtomItemsControl
 				items={Bind.oneWay((x) => x.viewModel.comboBox.items)}>
