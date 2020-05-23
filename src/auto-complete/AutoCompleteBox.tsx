@@ -166,6 +166,11 @@ export default class AutoCompleteBox extends AtomControl {
         // });
     }
 
+    public hasProperty(name: string): boolean {
+        if (/^(data|selectedItem|itemTemplate|isPopupOpen|value)$/.test(name)) { return true; }
+        return super.hasProperty(name);
+    }
+
     protected onSearchTextChanged(force: boolean = false): void {
 
         if (this.isUpdating) {
@@ -272,7 +277,6 @@ export default class AutoCompleteBox extends AtomControl {
     protected preCreate(): void {
         this.itemTemplate = null;
         this.items = [];
-        this.selectedItem = null;
         this.itemsSource = null;
         this.label = null;
         this.lastSearchText = null;
