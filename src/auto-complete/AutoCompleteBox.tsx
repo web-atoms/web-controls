@@ -167,7 +167,9 @@ export default class AutoCompleteBox extends AtomControl {
     }
 
     public hasProperty(name: string): boolean {
-        if (/^(data|selectedItem|itemTemplate|isPopupOpen|value)$/.test(name)) { return true; }
+        if (/^(data|selectedItem|itemTemplate|isPopupOpen|value|localViewModel|viewModel)$/.test(name)) {
+            return true;
+        }
         return super.hasProperty(name);
     }
 
