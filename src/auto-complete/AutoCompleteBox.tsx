@@ -35,10 +35,12 @@ export default class AutoCompleteBox extends AtomControl {
 
     public itemTemplate: IClassOf<AtomControl>;
 
+    @BindableProperty
     public selectedItem: any;
 
     public previousItem: any;
 
+    @BindableProperty
     public value: any;
 
     /**
