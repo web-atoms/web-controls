@@ -5,13 +5,14 @@ import {BindableProperty} from "@web-atoms/core/dist/core/BindableProperty";
 import {AtomPageLink} from "@web-atoms/core/dist/web/controls/AtomPageLink";
 import {AtomControl} from "@web-atoms/core/dist/web/controls/AtomControl";
 
-    import AtomDateField from "../AtomDateField";
+    import AtomDateField from "../AtomDateField";
 
 
-export default class PopupTest extends AtomControl {	
-	constructor(app: any, e?: any) {		super(app, e || document.createElement("div"));	}
 
-	public create(): void {		
+export default class PopupTest extends AtomControl {
+	
+	public create(): void {
+		
 		this.render(
 		<div>
 			<AtomPageLink
@@ -19,9 +20,12 @@ export default class PopupTest extends AtomControl {
 				for="button">
 				<AtomPageLink.page>
 					<div>
-						<div>
-
-							                Select Date
-							            						</div>
-						<AtomDateField>						</AtomDateField>					</div>				</AtomPageLink.page>			</AtomPageLink>		</div>
-		);	}}
+						<div>Select Date</div>
+						<AtomDateField/>
+					</div>
+				</AtomPageLink.page>
+			</AtomPageLink>
+		</div>
+		);
+	}
+}

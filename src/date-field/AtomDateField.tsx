@@ -17,22 +17,16 @@ export default class AtomDateField extends AtomPopupButton {
 	
 	protected srCalendar: SRCalendar;
 
-	@BindableProperty
 	public selectedDate: Date ;
 
-	@BindableProperty
 	public yearStart: any ;
 
-	@BindableProperty
 	public yearEnd: any ;
 
-	@BindableProperty
 	public enableFunc: any ;
 
-	@BindableProperty
 	public currentMonth: any ;
 
-	@BindableProperty
 	public itemTemplate: any ;
 
 	public create(): void {
@@ -53,11 +47,21 @@ export default class AtomDateField extends AtomPopupButton {
 					yearStart={Bind.oneWay(() => this.yearStart)}
 					yearEnd={Bind.oneWay(() => this.yearEnd)}
 					enableFunc={Bind.oneWay(() => this.enableFunc)}
-					itemTemplate={Bind.oneWay(() => this.itemTemplate)}
+					itemTemplate={Bind.oneWay(() => this.itemTemplate || undefined)}
 					eventDateClicked={Bind.event((s, e) => s.viewModel.close(e.detail.value))}>
 				</AtomCalendar>
 			</AtomPopupButton.page>
 		</div>
 		);
+	}
+
+	public preCreate() {
+		super.preCreate();
+		this.selectedDate = null;
+		this.yearStart = null;
+		this.yearEnd = null;
+		this.enableFunc = null;
+		this.currentMonth = null;
+		this.itemTemplate = null;
 	}
 }

@@ -12,31 +12,21 @@ export default class AtomCalendar extends AtomControl {
 
 	public static itemTemplate = XNode.prepare("itemTemplate", true, true);
 
-	@BindableProperty
 	public selectedDate: Date ;
 
-	@BindableProperty
 	public yearStart: any ;
 
-	@BindableProperty
 	public yearEnd: any ;
 
-	@BindableProperty
 	public enableFunc: any ;
 
-	@BindableProperty
 	public currentDate: any ;
 
-	@BindableProperty
 	public itemTemplate: any ;
 
 	public localViewModel: CalendarViewModel;
 
 	protected srCalendar: SRCalendar;
-
-	constructor(app: any, e?: any) {
-		super(app, e || document.createElement("div"));
-	}
 
 	public create(): void {
 
@@ -50,7 +40,7 @@ export default class AtomCalendar extends AtomControl {
 		this.enableFunc = null;
 		this.render(
 		<div
-			styleClass={Bind.oneWay(() => this.controlStyle.root)}>
+			styleClass={Bind.oneWay(() => this.controlStyle.name)}>
 			<div
 				class="header">
 				<i
@@ -117,5 +107,14 @@ export default class AtomCalendar extends AtomControl {
 			</div>
 		</div>
 		);
+	}
+
+	protected preCreate() {
+		this.selectedDate = null;
+		this.yearStart = null;
+		this.yearStart = null;
+		this.enableFunc = null;
+		this.currentDate = null;
+		this.itemTemplate = null;
 	}
 }

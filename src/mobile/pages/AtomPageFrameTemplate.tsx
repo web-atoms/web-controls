@@ -6,22 +6,16 @@ import AtomPageFrameStyle, { FrameStyle } from "./AtomPageFrameStyle";
 
 export default class AtomPageFrameTemplate extends AtomControl {
 
-	@BindableProperty
 	public  url: string;
 
-	@BindableProperty
 	public titlePresenter: HTMLElement ;
 
-	@BindableProperty
 	public commandPresenter: HTMLElement ;
 
-	@BindableProperty
 	public  pagePresenter: HTMLElement ;
 
-	@BindableProperty
 	public  tabsPresenter: HTMLElement ;
 
-	@BindableProperty
 	public  tabs: any  ;
 
 	public create(): void {
@@ -29,7 +23,7 @@ export default class AtomPageFrameTemplate extends AtomControl {
 		this.defaultControlStyle = AtomPageFrameStyle;
 
 		this.render(
-		<div class={this.controlStyle.root.className}>
+		<div class={this.controlStyle.name}>
 			<div class="title-bar">
 				<span
 					class={Bind.oneWay(() => `icon fas ${this.localViewModel.canGoBack ? "fa-arrow-left" : "fa-bars" }`)}
@@ -52,5 +46,14 @@ export default class AtomPageFrameTemplate extends AtomControl {
 				presenter={Bind.presenter("tabsPresenter")}></div>
 		</div>
 		);
+	}
+
+	protected preCreate() {
+		this.url = null;
+		this.titlePresenter = null;
+		this.commandPresenter = null;
+		this.pagePresenter = null;
+		this.tabsPresenter = null;
+		this.tabs = null;
 	}
 }

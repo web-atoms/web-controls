@@ -7,8 +7,7 @@
             "label": "All Build",
             "dependsOn":[
                 "TypeScript Build Watch",
-                "Web Atoms Dev Server",
-                "Component Compiler"
+                "Web Atoms Dev Server"
             ],
             "problemMatcher": [],
             "group": {
@@ -27,6 +26,15 @@
             "command": "node",
             "args": [
                 "${env:APPDATA}/npm/node_modules/@web-atoms/dev-server/index.js",
+                "https://v2018-test.800casting.com"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Web Atoms Dev Server Alpha",
+            "command": "node",
+            "args": [
+                "D:\\git\\akash\\github\\web-atoms\\dev-server\\index.js",
                 "https://v2018-test.800casting.com"
             ],
             "problemMatcher": []

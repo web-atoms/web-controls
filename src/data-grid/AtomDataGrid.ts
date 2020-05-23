@@ -33,7 +33,7 @@ export default class AtomDataGrid extends AtomItemsControl {
         this.defaultControlStyle = AtomDataGridStyle;
 
         this.runAfterInit(() => {
-            this.element.className = this.controlStyle.root.className;
+            this.element.className = this.controlStyle.name;
         });
 
         this.localViewModel =  this.resolve(AtomDataGridViewModel, "owner") ;

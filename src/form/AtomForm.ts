@@ -42,7 +42,7 @@ export default class AtomForm extends AtomControl {
         this.defaultControlStyle = AtomFormStyle;
         this.fieldTemplate = DefaultFieldTemplate;
         this.runAfterInit(() => {
-            this.element.classList.add(this.controlStyle.root.className);
+            this.element.classList.add(this.controlStyle.name);
 
             this.app.callLater(() => {
                 AtomBridge.instance.refreshInherited(this, "viewModel");
