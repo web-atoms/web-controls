@@ -8,6 +8,9 @@ import AtomCalendarStyle from "./AtomCalendarStyle";
 import CalendarViewModel from "./CalendarViewModel";
 import SRCalendar from "./res/SRCalendar";
 
+const BindCalendar = Bind
+	.forLocalViewModel<CalendarViewModel>();
+
 export default class AtomCalendar extends AtomControl {
 
 	public static itemTemplate = XNode.prepare("itemTemplate", true, true);
@@ -39,8 +42,25 @@ export default class AtomCalendar extends AtomControl {
 		this.yearEnd = 10;
 		this.enableFunc = null;
 		this.render(
-		<div
+		<AtomCalendar
 			styleClass={Bind.oneWay(() => this.controlStyle.name)}>
+			<AtomCalendar.itemTemplate>
+				<div
+					eventClick={BindCalendar.event((x) => x.localViewModel.dateClicked((x.data)))}>
+					<div
+						text={BindCalendar.oneTime((x) => x.data.label)}
+						class={BindCalendar.oneWay((x) => ({
+						"date-css": 1,
+						"is-other-month": x.data.isOtherMonth,
+						"is-today": x.data.isToday,
+						"is-weekend": x.data.isWeekend,
+						// tslint:disable-next-line: triple-equals
+						"is-selected": x.localViewModel.selectedDate == x.data.value,
+						"is-disabled": x.localViewModel.enableFunc ? x.localViewModel.enableFunc(x.data) : 0
+						}))}>
+					</div>
+				</div>
+			</AtomCalendar.itemTemplate>
 			<div
 				class="header">
 				<i
@@ -89,23 +109,7 @@ export default class AtomCalendar extends AtomControl {
 				items={Bind.oneWay(() => this.localViewModel.items)}
 				for="div">
 			</AtomItemsControl>
-			<div
-				template="itemTemplate"
-				eventClick={Bind.event((x) => this.localViewModel.dateClicked((x.data)))}>
-				<div
-					text={Bind.oneTime((x) => x.data.label)}
-					class={Bind.oneWay((x) => ({
-                "date-css": 1,
-                "is-other-month": x.data.isOtherMonth,
-                "is-today": x.data.isToday,
-                "is-weekend": x.data.isWeekend,
-                // tslint:disable-next-line: triple-equals
-                "is-selected": this.localViewModel.selectedDate == x.data.value,
-                "is-disabled": this.localViewModel.enableFunc ? this.localViewModel.enableFunc(x.data) : 0
-            }))}>
-				</div>
-			</div>
-		</div>
+		</AtomCalendar>
 		);
 	}
 
