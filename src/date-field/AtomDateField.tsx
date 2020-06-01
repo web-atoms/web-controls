@@ -1,21 +1,13 @@
-// tslint:disable
-import Bind from "@web-atoms/core/dist/core/Bind"
-import XNode from "@web-atoms/core/dist/core/XNode"
+import Bind from "@web-atoms/core/dist/core/Bind";
 import {BindableProperty} from "@web-atoms/core/dist/core/BindableProperty";
-
-    import AtomPopupButton from "../buttons/AtomPopupButton";
-
-    import AtomCalendar from "../calendar/AtomCalendar";
-
-    import SRCalendar from "../calendar/res/SRCalendar";
-
-
+import XNode from "@web-atoms/core/dist/core/XNode";
+import AtomPopupButton from "../buttons/AtomPopupButton";
+import AtomCalendar from "../calendar/AtomCalendar";
+import SRCalendar from "../calendar/res/SRCalendar";
 
 export default class AtomDateField extends AtomPopupButton {
 
 	public static itemTemplate = XNode.prepare("itemTemplate", true, true);
-	
-	protected srCalendar: SRCalendar;
 
 	public selectedDate: Date ;
 
@@ -29,8 +21,10 @@ export default class AtomDateField extends AtomPopupButton {
 
 	public itemTemplate: any ;
 
+	protected srCalendar: SRCalendar;
+
 	public create(): void {
-		
+
 		this.srCalendar = this.app.resolve(SRCalendar);
 
 		this.selectedDate = null;
@@ -39,7 +33,7 @@ export default class AtomDateField extends AtomPopupButton {
 		this.enableFunc = null;
 		this.render(
 		<div
-			text={Bind.oneWay(() => this.selectedDate ? this.srCalendar.toShortDate(this.selectedDate) : 'Select Date')}
+			text={Bind.oneWay(() => this.selectedDate ? this.srCalendar.toShortDate(this.selectedDate) : "Select Date")}
 			eventResult={Bind.event((s, e) => this.selectedDate = e.detail)}>
 			<AtomPopupButton.page>
 				<AtomCalendar
