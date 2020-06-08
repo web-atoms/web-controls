@@ -56,7 +56,7 @@ export default class AtomCalendar extends AtomControl {
 						"is-weekend": x.data.isWeekend,
 						// tslint:disable-next-line: triple-equals
 						"is-selected": x.localViewModel.selectedDate == x.data.value,
-						"is-disabled": x.localViewModel.enableFunc ? x.localViewModel.enableFunc(x.data) : 0
+						"is-disabled": x.localViewModel.enableFunc ? 0 : x.localViewModel.enableFunc(x.data)
 						}))}>
 					</div>
 				</div>
