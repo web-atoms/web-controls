@@ -17,7 +17,7 @@ export default class AtomCalendarStyle extends AtomStyle {
             ... existing,
             subclasses: {
                 ... existing.subclasses,
-                " .disabled ": {
+                " .is-disabled ": {
                     textDecoration: "line-through"
                 },
                 " .week-days": {
