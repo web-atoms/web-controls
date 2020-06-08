@@ -15,6 +15,7 @@ export default class AtomCalendarStyle extends AtomStyle {
 
         return {
             ... existing,
+            backgroundColor: Colors.white,
             subclasses: {
                 ... existing.subclasses,
                 " .is-disabled ": {
