@@ -2,8 +2,8 @@ import Bind from "@web-atoms/core/dist/core/Bind";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import {AtomControl} from "@web-atoms/core/dist/web/controls/AtomControl";
 import setupBridge from "../../setupBridge";
-import AtomField from "../AtomField";
-import AtomForm from "../AtomForm";
+import AtomField from "../../form/AtomField";
+import AtomForm from "../../form/AtomForm";
 import FormViewModel from "./FormViewModel";
 
 export default class FormTest extends AtomControl {
