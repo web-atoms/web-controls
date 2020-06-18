@@ -6,6 +6,8 @@ export default class AtomSwitchStyle extends AtomStyle {
 
     public get root(): IStyleDeclaration {
         return {
+            marginLeft: "5px",
+            marginRight: "5px",
             subclasses: {
                 ".switch": this.switch,
                 " .slider": this.slider
