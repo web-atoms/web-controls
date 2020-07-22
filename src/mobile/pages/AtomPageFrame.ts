@@ -137,14 +137,14 @@ export default class AtomPageFrame extends AtomFrame {
         this.url = url;
     }
 
-    public popStack(windowClosed?: boolean): void {
-        // check if top history location is different after popping stack
-        if (this.keepStack && windowClosed) {
-            history.back();
-            return;
-        }
-        return super.popStack(windowClosed);
-    }
+    // public popStack(windowClosed?: boolean): void {
+    //     // check if top history location is different after popping stack
+    //     if (this.keepStack && windowClosed) {
+    //         history.back();
+    //         return;
+    //     }
+    //     return super.popStack(windowClosed);
+    // }
 
     protected createTabs(): void {
         if (!this.tabsTemplate) {
