@@ -6,4 +6,9 @@ export default class AppComboBoxViewModel extends AtomWindowViewModel {
 
     public comboBox: AutoCompleteBox;
 
+    public init(): Promise<void> {
+        (this.comboBox as any).windowViewModel = this;
+        return super.init();
+    }
+
 }

@@ -6,6 +6,7 @@ import { Inject } from "@web-atoms/core/dist/di/Inject";
 import { NavigationService } from "@web-atoms/core/dist/services/NavigationService";
 import { AtomViewModel, Receive, Watch } from "@web-atoms/core/dist/view-model/AtomViewModel";
 import bindUrlParameter from "@web-atoms/core/dist/view-model/bindUrlParameter";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 
 export default class PageFrameViewModel extends AtomViewModel {
 
@@ -36,6 +37,12 @@ export default class PageFrameViewModel extends AtomViewModel {
         }
         this.mUrl = value;
         this.owner.pushUrl(value);
+
+        if  (this.app.url.hash.url !== value) {
+            this.app.url.hash.url = value;
+            history.pushState({}, document.title, this.app.url.toString());
+        }
+
         this.refresh("url");
     }
 
@@ -44,7 +51,24 @@ export default class PageFrameViewModel extends AtomViewModel {
         if (!this.owner.name) {
             return;
         }
-        bindUrlParameter(this, "url", this.owner.name);
+        // bindUrlParameter(this, "url", this.owner.name);
+
+        if (this.owner.url) {
+            this.app.url.hash.url = this.owner.url;
+            this.mUrl = this.owner.url;
+            history.pushState({}, document.title, this.app.url.toString());
+        } else {
+            const url = this.app.url ? (this.app.url.query.url  || this.app.url.query.url) : null;
+            if (url) {
+                this.url = url.toString();
+            }
+        }
+
+        // watch for window popstate...
+        (this.owner as AtomControl).bindEvent(
+            window as any,
+            "popstate",
+            () => this.onPopState());
     }
 
     @Receive("root-page-go-back")
@@ -80,6 +104,24 @@ export default class PageFrameViewModel extends AtomViewModel {
         this.navigationService.openPage(this.owner.menuUrl, null, { cancelToken: this.cancelToken })
             .then(() => this.cancelToken = null)
             .catch(() => this.cancelToken = null);
+    }
+
+    private onPopState() {
+        // do nothing if the top is same...
+
+        this.app.url = new AtomUri(location.href);
+        const url = this.app.url.hash.url || this.app.url.query.url;
+        if (url === this.mUrl) {
+            return;
+        }
+
+        const stack = this.owner.stack;
+        if (stack.length && stack[stack.length - 1].url === url) {
+            this.owner.backCommand();
+            return;
+        }
+
+        this.owner.url = url;
     }
 
 }

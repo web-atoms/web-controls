@@ -35,10 +35,12 @@ export default class AutoCompleteBox extends AtomControl {
 
     public itemTemplate: IClassOf<AtomControl>;
 
+    @BindableProperty
     public selectedItem: any;
 
     public previousItem: any;
 
+    @BindableProperty
     public value: any;
 
     /**
@@ -99,10 +101,6 @@ export default class AutoCompleteBox extends AtomControl {
             await this.openPopup(true);
         });
 
-        const keyEvent = (e: KeyboardEvent) => {
-            this.onKey(e);
-        };
-
         this.render(<div
             styleClass={Bind.oneWay(() => ({
                 [this.controlStyle.name]: 1,
@@ -115,7 +113,7 @@ export default class AutoCompleteBox extends AtomControl {
                 eventClick={openPopup}
                 value={Bind.twoWays(() => this.searchText, ["keyup", "keypress", "keydown"])}
                 placeholder={Bind.oneWay(() => this.label)}
-                eventKeyDown={keyEvent}
+                eventKeydown={(e) => this.onKey(e)}
                 eventBlur={() => setTimeout(() => this.cancelToken?.cancel(), 100)}/>
             <AtomTemplateControl
                 class="item-template"
@@ -124,46 +122,13 @@ export default class AutoCompleteBox extends AtomControl {
                 />
         </div>);
 
-        // const input = document.createElement("input");
-        // input.type = "search";
-        // input.autocomplete = "none";
-        // input.style.display = "none";
-        // this.app.callLater(() => {
-        //     input.style.display = "";
-        // });
-        // const tc = new AtomTemplateControl(this.app);
-        // this.append(tc);
+    }
 
-        // this.element.appendChild(input);
-
-        // this.bind(this.element,
-        //     "styleClass",
-        //     [["this", "isPopupOpen"], ["this", "value"]], false, (v, v1) => ({
-        //     [this.controlStyle.root.className]: true,
-        //     "popup-open": v || !v1
-        // }), this);
-
-        // tc.bind(tc.element, "contentTemplate", [["this", "itemTemplate"]], false, null, this);
-        // tc.bind(tc.element, "data", [["this", "selectedItem"]], false, null, this);
-
-        // this.bindEvent(input, "focus", openPopup);
-        // this.bindEvent(input, "click", openPopup);
-
-        // this.bind(input, "value", [["this", "searchText"]], ["keyup", "keypress", "keydown"] , null, this);
-        // this.bind(input, "placeholder", [["this", "label"]], null, null, this);
-        // this.bindEvent(input, "blur", () => {
-        //     setTimeout(() => {
-        //         this.cancelToken?.cancel();
-        //     }, 100);
-        // });
-
-        // // this.bindEvent(input, "keyup", keyEvent);
-        // // this.bindEvent(input, "keydown", keyEvent);
-        // this.bindEvent(input, "keydown", keyEvent);
-
-        // this.runAfterInit(() => {
-        //     this.setPrimitiveValue(tc.element, "styleClass", this.controlStyle.itemTemplate);
-        // });
+    public hasProperty(name: string): boolean {
+        if (/^(data|selectedItem|itemTemplate|isPopupOpen|value|localViewModel|viewModel)$/.test(name)) {
+            return true;
+        }
+        return super.hasProperty(name);
     }
 
     protected onSearchTextChanged(force: boolean = false): void {
@@ -272,7 +237,6 @@ export default class AutoCompleteBox extends AtomControl {
     protected preCreate(): void {
         this.itemTemplate = null;
         this.items = [];
-        this.selectedItem = null;
         this.itemsSource = null;
         this.label = null;
         this.lastSearchText = null;

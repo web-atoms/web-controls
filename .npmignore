@@ -1,1 +1,10 @@
 node_modules/
+.vscode
+.github
+src/tests
+dist/tests
+generated-cert-1
+tsconfig.json
+waconfig.json
+tslint.json
+package-lock.json

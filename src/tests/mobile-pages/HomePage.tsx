@@ -3,11 +3,14 @@ import Bind from "@web-atoms/core/dist/core/Bind"
 import XNode from "@web-atoms/core/dist/core/XNode"
 import {BindableProperty} from "@web-atoms/core/dist/core/BindableProperty";
 
-    import Page from "../Page";
+    import Page from "../../mobile/pages/Page";
 
 
-export default class HomePage extends Page {	
-	public create(): void {		
+
+export default class HomePage extends Page {
+	
+	public create(): void {
+		
 		this.render(
 		<div
 			title="Home Page"
@@ -15,8 +18,15 @@ export default class HomePage extends Page {
 			<Page.commandTemplate>
 				<div>
 					<span
-						class="fas fa-question-circle">					</span>				</div>			</Page.commandTemplate>
+						class="fas fa-question-circle">
+					</span>
+				</div>
+			</Page.commandTemplate>
 
-			    This is home page...
-					</div>
-		);	}}
+			    This is home page...
+
+			
+		</div>
+		);
+	}
+}

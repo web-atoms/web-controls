@@ -15,18 +15,18 @@ export default class ItemHost extends AtomControl {
 
 		this.render(
 		<div
-			styleClass={Bind.oneTime((x) => this.viewModel.comboBox.controlStyle.name + " popup")}
-			styleDisplay={Bind.oneWay((x) => x.viewModel.comboBox.items.length ? "" : "none")}>
+			styleClass={Bind.oneTime((x) => this.viewModel.comboBox.controlStyle.name)}
+			styleDisplay={Bind.oneWay(() => this.viewModel.comboBox.items.length ? "" : "none")}>
 			<AtomItemsControl
-				items={Bind.oneWay((x) => x.viewModel.comboBox.items)}>
+				items={Bind.oneWay(() => this.viewModel.comboBox.items)}>
 				<AtomItemsControl.itemTemplate>
 					<AtomTemplateControl
 						styleClass={Bind.oneWay((x) => ({
-							"item": x.data !== x.viewModel.comboBox.selectedItem,
-							"selected-item": x.data === x.viewModel.comboBox.selectedItem
+							"item": x.data !== this.viewModel.comboBox.selectedItem,
+							"selected-item": x.data === this.viewModel.comboBox.selectedItem
             			}))}
-						eventClick={Bind.event((x) => (x.viewModel).close((x.data)))}
-						contentTemplate={Bind.oneTime((x) => x.viewModel.comboBox.itemTemplate)}
+						eventClick={Bind.event((x) => this.viewModel.close((x.data)))}
+						contentTemplate={Bind.oneTime(() => this.viewModel.comboBox.itemTemplate)}
 						for="div">
 					</AtomTemplateControl>
 				</AtomItemsControl.itemTemplate>
