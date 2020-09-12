@@ -13,8 +13,8 @@ export default class PageApp extends AtomPageFrame {
 		
 		this.render(
 		<div
-			url="@web-atoms/web-controls/dist/mobile/pages/sample/HomePage"
-			menuUrl="@web-atoms/web-controls/dist/mobile/pages/sample/MenuPage">
+			url="@web-atoms/web-controls/dist/tests/mobile-pages/HomePage"
+			menuUrl="@web-atoms/web-controls/dist/tests/mobile-pages/MenuPage">
 		</div>
 		);
 	}

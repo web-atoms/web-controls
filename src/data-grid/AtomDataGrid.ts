@@ -6,7 +6,7 @@ import AtomDataGridViewModel from "./AtomDataGridViewModel";
 import GridTemplate from "./GridTemplate";
 
 declare var UMD: any;
-const moduleName = this.filename;
+const moduleName = globalThis.filename;
 export default class AtomDataGrid extends AtomItemsControl {
     // tslint:disable-next-line: variable-name
     public static readonly _$_url = moduleName ;
