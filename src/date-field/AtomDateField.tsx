@@ -6,7 +6,7 @@ import AtomCalendar from "../calendar/AtomCalendar";
 import SRCalendar from "../calendar/res/SRCalendar";
 
 const shortDate = {
-	yera: "numeric",
+	year: "numeric",
 	month: "short",
 	day: "numeric"
 };
