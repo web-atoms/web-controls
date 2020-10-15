@@ -21,6 +21,8 @@ export default class AtomDateField extends AtomPopupButton {
 
 	public itemTemplate: any ;
 
+	public placeholder: string;
+
 	protected srCalendar: SRCalendar;
 
 	public create(): void {
@@ -31,9 +33,10 @@ export default class AtomDateField extends AtomPopupButton {
 		this.yearStart = -10;
 		this.yearEnd = 10;
 		this.enableFunc = null;
+		this.placeholder = "Select Date";
 		this.render(
 		<div
-			text={Bind.oneWay(() => this.selectedDate ? this.srCalendar.toShortDate(this.selectedDate) : "Select Date")}
+			text={Bind.oneWay(() => this.selectedDate ? this.srCalendar.toShortDate(this.selectedDate) : this.placeholder)}
 			eventResult={Bind.event((s, e) => this.selectedDate = e.detail)}>
 			<AtomPopupButton.page>
 				<AtomCalendar
