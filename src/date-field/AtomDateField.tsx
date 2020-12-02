@@ -5,6 +5,12 @@ import AtomPopupButton from "../buttons/AtomPopupButton";
 import AtomCalendar from "../calendar/AtomCalendar";
 import SRCalendar from "../calendar/res/SRCalendar";
 
+const shortDate = {
+	year: "numeric",
+	month: "short",
+	day: "numeric"
+};
+
 export default class AtomDateField extends AtomPopupButton {
 
 	public static itemTemplate = XNode.prepare("itemTemplate", true, true);
@@ -21,19 +27,37 @@ export default class AtomDateField extends AtomPopupButton {
 
 	public itemTemplate: any ;
 
+	public placeholder: string;
+
+	public labelFunc: any;
+
+	public locale: any;
+
+	public localeOptions: any;
+
 	protected srCalendar: SRCalendar;
 
 	public create(): void {
 
-		this.srCalendar = this.app.resolve(SRCalendar);
+		const srCalendar = this.app.resolve(SRCalendar);
 
 		this.selectedDate = null;
 		this.yearStart = -10;
 		this.yearEnd = 10;
 		this.enableFunc = null;
+		this.labelFunc = null;
+		this.locale = "en-US";
+		this.localeOptions = shortDate;
+		this.placeholder = "Select Date";
 		this.render(
 		<div
-			text={Bind.oneWay(() => this.selectedDate ? this.srCalendar.toShortDate(this.selectedDate) : "Select Date")}
+			text={Bind.oneWay(() => this.selectedDate
+				? (this.labelFunc
+					? this.labelFunc(this.selectedDate)
+					: (this.selectedDate.toLocaleDateString
+						? this.selectedDate.toLocaleDateString(this.locale, this.localeOptions)
+						: srCalendar.toShortDate(this.selectedDate)))
+				: this.placeholder)}
 			eventResult={Bind.event((s, e) => this.selectedDate = e.detail)}>
 			<AtomPopupButton.page>
 				<AtomCalendar
