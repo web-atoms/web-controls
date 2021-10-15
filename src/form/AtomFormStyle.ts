@@ -35,7 +35,8 @@ export default class AtomFormStyle extends AtomStyle {
                     fontSize: "70%"
                 },
                 " > .label": {
-                    fontSize: "70%"
+                    fontSize: "70%",
+                    verticalAlign: "top",
                 },
                 " > .required": {
                     fontSize: "70%",
