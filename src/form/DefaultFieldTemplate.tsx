@@ -18,7 +18,7 @@ export default class DefaultFieldTemplate extends AtomFieldTemplate {
 				text={Bind.oneWay(() => this.field.label)}/>
 			<span
 				class="required"
-				styleDisplay={Bind.oneTime(() => this.field.required ? "" : "none")}>*</span>
+				styleVisibility={Bind.oneTime(() => this.field.required ? "visible" : "hidden")}>*</span>
 			<div presenter={Bind.presenter("contentPresenter")}
 				class="presenter"></div>
 			<span
