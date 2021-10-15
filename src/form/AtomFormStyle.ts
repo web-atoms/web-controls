@@ -40,7 +40,8 @@ export default class AtomFormStyle extends AtomStyle {
                 },
                 " > .required": {
                     fontSize: "70%",
-                    color: Colors.red
+                    color: Colors.red,
+                    verticalAlign: "top",
                 },
                 " > .presenter": {
                     display: "block",
