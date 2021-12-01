@@ -1,11 +1,11 @@
 import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder";
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
+import { IClassOf } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import { NavigationService } from "@web-atoms/core/dist/services/NavigationService";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { AtomContentControl } from "@web-atoms/core/dist/web/controls/AtomContentControl";
-import { IClassOf } from "@web-atoms/core/dist/core/types";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 export { default as HP } from "./HelpPopup";
 
 let inputID = 0;
@@ -148,7 +148,7 @@ class AtomFieldControl extends AtomControl {
 }
 
 export interface IFieldAttributes {
-    label;
+    label?;
     error?;
     helpText?;
     helpLink?;
@@ -169,7 +169,7 @@ export default function AtomField({
     visible = true,
     fieldClass = null,
     baseClass: controlClass = AtomFieldControl
-}: IFieldAttributes, child: XNode) {
+}: IFieldAttributes,              child: XNode) {
     const ControlClass = controlClass;
     return <ControlClass
         label={label}
