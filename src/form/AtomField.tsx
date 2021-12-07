@@ -157,29 +157,15 @@ export interface IFieldAttributes {
     visible?;
     fieldClass?;
     baseClass?: IClassOf<AtomFieldControl>;
+    [key: string]: any;
 }
 
-export default function AtomField({
-    label,
-    error,
-    helpText,
-    helpLink,
-    helpIcon,
-    required,
-    visible = true,
-    fieldClass = null,
-    baseClass: controlClass = AtomFieldControl
-}: IFieldAttributes,              child: XNode) {
-    const ControlClass = controlClass;
+export default function AtomField( attributes: IFieldAttributes, child: XNode) {
+    const ControlClass = attributes.baseClass ?? AtomFieldControl;
+    attributes.visible ??= true;
+    attributes.fieldClass ??= null;
     return <ControlClass
-        label={label}
-        error={error}
-        helpIcon={helpIcon}
-        helpLink={helpLink}
-        helpText={helpText}
-        required={required}
-        visible={visible}
-        fieldClass={fieldClass}
+        { ... attributes}
         content={child}
         />;
 }
