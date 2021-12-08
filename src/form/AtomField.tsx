@@ -71,21 +71,27 @@ class AtomFieldControl extends AtomControl {
                     return;
                 }
                 this.removeAllChildren(this.contentPresenter);
-                const e = this.content?.element ?? this.content as HTMLElement;
-                if (!e) {
+                const content = this.content;
+                if (!content) {
                     return;
                 }
-                if (typeof e === "string") {
-                    this.contentPresenter.appendChild(document.createTextNode(e));
-                    return;
-                }
-                this.contentPresenter.appendChild(e);
-                const input = e.tagName === "INPUT" ? e : e.getElementsByTagName("input")[0];
-                if (input) {
-                    if (!input.id) {
-                        input.id = `__ID__formElementInput${inputID++}`;
+                for (const iterator of content) {
+                    const e = iterator?.element ?? iterator as HTMLElement;
+                    if (!e) {
+                        continue;
                     }
-                    this.htmlFor = input.id;
+                    if (typeof e === "string") {
+                        this.contentPresenter.appendChild(document.createTextNode(e));
+                        return;
+                    }
+                    this.contentPresenter.appendChild(e);
+                    const input = e.tagName === "INPUT" ? e : e.getElementsByTagName("input")[0];
+                    if (input) {
+                        if (!input.id) {
+                            input.id = `__ID__formElementInput${inputID++}`;
+                        }
+                        this.htmlFor = input.id;
+                    }
                 }
                 break;
         }
@@ -160,12 +166,12 @@ export interface IFieldAttributes {
     [key: string]: any;
 }
 
-export default function AtomField( attributes: IFieldAttributes, child: XNode) {
+export default function AtomField( attributes: IFieldAttributes, ... children: XNode[]) {
     const ControlClass = attributes.baseClass ?? AtomFieldControl;
     attributes.visible ??= true;
     attributes.fieldClass ??= null;
     return <ControlClass
         { ... attributes}
-        content={child}
+        content={children}
         />;
 }
