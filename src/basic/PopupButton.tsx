@@ -92,7 +92,10 @@ export default function PopupButton(
 
         menu.addEventListener("click", dispose);
 
-        popup.registerDisposable(() => menu.removeEventListener("click", dispose));
+        popup.registerDisposable(() => {
+            menu.removeEventListener("click", dispose);
+            popup = null;
+        });
     }
 
     if (label) {
