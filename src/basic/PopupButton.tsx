@@ -65,7 +65,7 @@ export default function PopupButton(
     label,
     ... others
 }: IPopupButton,
-... menus: IMenuItem[]) {
+... menus: Array<IMenuItem | XNode>) {
 
     let popup: IPopup = null;
     function openPopup(s: AtomControl, e: Event) {
