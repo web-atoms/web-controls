@@ -1,16 +1,10 @@
 import Bind from "@web-atoms/core/dist/core/Bind";
-import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import Colors from "@web-atoms/core/dist/core/Colors";
-import { IDisposable } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { AtomItemsControl } from "@web-atoms/core/dist/web/controls/AtomItemsControl";
-import PopupService from "@web-atoms/core/dist/web/services/PopupService";
+import PopupService, { IPopup } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
-import combineClasses from "./combineClasses";
-import Button from "./Button";
-import IElement from "./IElement";
 
 const menuCss = CSS(StyleRule()
     .child(StyleRule(".menu")
@@ -31,6 +25,12 @@ export interface IMenuItem {
     [key: string]: any;
 }
 
+export interface IPopupButton {
+    icon?: string;
+    label?: string;
+    [key: string]: any;
+}
+
 export function MenuItem({
     label,
     icon,
@@ -43,6 +43,7 @@ export function MenuItem({
     if (label) {
         return <div class="menu" eventClick={eventClick} { ... others }>
             <i class={icon}/>
+            <span>{label}</span>
         </div>;
     }
     return <div class="menu" eventClick={eventClick} { ... others }>
@@ -50,97 +51,64 @@ export function MenuItem({
     </div>;
 }
 
-export class MenuItemTemplate extends AtomControl {
+const iconLabelCss = CSS(
+    StyleRule(".label")
+        .display("inline-flex")
+        .child(StyleRule("span")
+            .flexStretch()
+        )
+);
 
-    public data: IMenuItem;
+export default function PopupButton(
+{
+    icon,
+    label,
+    ... others
+}: IPopupButton,
+... menus: IMenuItem[]) {
 
-    public create() {
-        this.render(<div
-            class="menu"
-            eventClick={Bind.event(() => this.app.runAsync(() => this.data.eventClick()))}
-            >
-            <i
-                styleDisplay={Bind.oneWay(() => this.data.icon ? "" : "none")}
-                class={Bind.oneWay(() => this.data.icon)}/>
-            <span
-                styleDisplay={Bind.oneWay(() => this.data.label ? "" : "none")}
-                text={Bind.oneWay(() => this.data.label)}></span>
-        </div>);
-    }
-}
-
-class PopupMenuButton extends AtomControl {
-
-    @BindableProperty
-    public subClass: string;
-
-    @BindableProperty
-    public icon: string;
-
-    @BindableProperty
-    public text: string;
-
-    @BindableProperty
-    public menus: IMenuItem[];
-
-    private popup: IDisposable;
-
-    constructor(app, e) {
-        super(app, e ?? document.createElement("button"));
-    }
-
-    public preCreate() {
-        super.preCreate();
-        this.popup = null;
-        this.text = null;
-        this.icon = null;
-        this.subClass = null;
-        this.render(<button
-            class={Bind.oneWay(() => combineClasses(Button.className, this.popup ? "pressed" : null, this.subClass))}
-            eventClick={Bind.event(() => this.openPopup())}>
-            <label class="label">
-                <i class={Bind.oneWay(() => this.icon)}/>
-                <span
-                    styleDisplay={Bind.oneWay(() => this.text ? "" : "none")}
-                    text={Bind.oneWay(() => this.text)}/>
-            </label>
-        </button>);
-    }
-
-    private openPopup() {
-        if (this.popup) {
-            this.popup.dispose();
+    let popup: IPopup = null;
+    function openPopup(s: AtomControl, e: Event) {
+        const button = e.currentTarget as HTMLElement;
+        if (popup) {
+            button.classList.remove("pressed");
+            popup.dispose();
+            popup = null;
             return;
         }
 
-        const menus = this.menus;
+        const menu = document.createElement("div");
+        (s as any).render(<div class={menuCss}>
+            { ... menus}
+        </div>, menu);
 
-        class Popup extends AtomControl {
-            protected create(): void {
-                this.render(<div class={menuCss}>
-                    { ... menus}
-                </div>);
-            }
-        }
-        const items = new Popup(this.app, document.createElement("div"));
-        items.registerDisposable({
-            dispose: () => {
-                this.popup = null;
-            }
-        });
-        items.bindEvent(items.element, "click", () => {
-            setTimeout(() => {
-            this.openPopup();
-            }, 100);
-        });
-        const popupService = this.app.resolve(PopupService);
-        this.popup = popupService.show(this.element, items);
+        const ps = (s as any).resolve(PopupService) as PopupService;
+        popup = ps.show(button, menu);
+
+        const dispose = () => {
+            popup?.dispose();
+            popup = null;
+        };
+
+        menu.addEventListener("click", dispose);
+
+        popup.registerDisposable(() => menu.removeEventListener("click", dispose));
     }
-}
 
-export default function PopupButton( props: IElement,  ... menus: IMenuItem[]) {
-    return <PopupMenuButton
-        { ... props }
-        menus={menus}
-        />;
+    if (label) {
+        return <button
+            { ... others }
+            eventClick={Bind.event((s, e) => openPopup(s as AtomControl, e))}>
+            <label class={iconLabelCss}>
+                <i class={icon}/>
+                <span>{label}</span>
+            </label>
+        </button>;
+    }
+
+    return <button
+        { ... others }
+        eventClick={Bind.event((s, e) => openPopup(s as AtomControl, e))}>
+        <i class={icon}/>
+    </button>;
 }
