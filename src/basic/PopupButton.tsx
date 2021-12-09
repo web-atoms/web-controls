@@ -28,18 +28,26 @@ export interface IMenuItem {
     eventClick?: any;
     href?: string;
     target?: string;
+    [key: string]: any;
 }
 
-export function MenuItem(menu: IMenuItem) {
+export function MenuItem({
+    label,
+    icon,
+    eventClick,
+    href,
+    target,
+    ... others
+}: IMenuItem) {
 
-    // removing undefined.. as binding will ignore undefined
-
-    menu.label ??= null;
-    menu.icon ??= null;
-    menu.eventClick ??= null;
-    menu.href ??= null;
-    menu.target ??= null;
-    return menu;
+    if (label) {
+        return <div class="menu" eventClick={eventClick} { ... others }>
+            <i class={icon}/>
+        </div>;
+    }
+    return <div class="menu" eventClick={eventClick} { ... others }>
+        <i class={icon}/>
+    </div>;
 }
 
 export class MenuItemTemplate extends AtomControl {
@@ -105,10 +113,16 @@ class PopupMenuButton extends AtomControl {
             return;
         }
 
-        const items = new AtomItemsControl(this.app, document.createElement("div"));
-        items.element.classList.add(menuCss);
-        items.itemTemplate = MenuItemTemplate;
-        items.items = this.menus;
+        const menus = this.menus;
+
+        class Popup extends AtomControl {
+            protected create(): void {
+                this.render(<div class={menuCss}>
+                    { ... menus}
+                </div>);
+            }
+        }
+        const items = new Popup(this.app, document.createElement("div"));
         items.registerDisposable({
             dispose: () => {
                 this.popup = null;
