@@ -72,8 +72,8 @@ export default function PopupButton(
     let popup: IPopup = null;
     function openPopup(s: AtomControl, e: Event) {
         const button = e.currentTarget as HTMLElement;
+        button.classList.add("pressed");
         if (popup) {
-            button.classList.remove("pressed");
             popup.dispose();
             popup = null;
             return;
@@ -100,6 +100,7 @@ export default function PopupButton(
         menu.addEventListener("click", dispose);
 
         popup.registerDisposable(() => {
+            button.classList.remove("pressed");
             menu.removeEventListener("click", dispose);
             popup = null;
         });

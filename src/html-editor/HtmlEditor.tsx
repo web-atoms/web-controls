@@ -6,6 +6,7 @@ import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import AddImage from "./commands/AddImage";
+import AddLink from "./commands/AddLink";
 import Align from "./commands/Align";
 import Bold from "./commands/Bold";
 import ChangeColor from "./commands/ChangeColor";
@@ -192,6 +193,7 @@ export default function HtmlEditor(
                 <Separator/>
                 <AddImage eventInsertHtml={insertImage}/>
                 <Separator/>
+                <AddLink/>
                 <Unlink/>
                 <RemoveFormat/>
             </Toolbar>
