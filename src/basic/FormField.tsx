@@ -10,6 +10,14 @@ export interface IFormField {
 }
 
 const css = CSS(StyleRule()
+    .child(StyleRule(".error")
+        .padding(5)
+        .backgroundColor(Colors.red)
+        .color(Colors.white)
+        .and(StyleRule(":empty")
+            .display("none")
+        )
+    )
     .child(StyleRule(".label")
         .child(StyleRule(".true")
             .visibility("visible")
@@ -24,7 +32,8 @@ const css = CSS(StyleRule()
 export default function FormField(
     {
         label,
-        required
+        required,
+        error
     }: IFormField,
     node: XNode) {
     return <div class={css}>
@@ -33,5 +42,6 @@ export default function FormField(
             <span class="required" styleClass={required} text="*" />
         </div>
         { node }
+        <div class="error" text={error}/>
     </div>;
 }
