@@ -39,9 +39,6 @@ export default class AtomField extends AtomControl {
     @BindableProperty
     public fieldClass: string;
 
-    @BindableProperty
-    public content: any;
-
     public get hasError(): boolean {
         return this.error ? true : false;
     }
@@ -56,45 +53,13 @@ export default class AtomField extends AtomControl {
     @BindableProperty
     protected htmlFor: any;
 
-    private fieldCreated: boolean = false;
+    private fieldCreated;
 
     public onPropertyChanged(name: keyof AtomField): void {
         switch (name) {
-            case "error":
-                AtomBinder.refreshValue(this, "hasError");
-                break;
             case "helpLink":
             case "helpText":
                 AtomBinder.refreshValue(this, "hasHelp");
-                break;
-            case "content":
-                if (!this.contentPresenter) {
-                    setTimeout(() => this.onPropertyChanged(name), 100);
-                    return;
-                }
-                this.removeAllChildren(this.contentPresenter);
-                const content = this.content;
-                if (!content) {
-                    return;
-                }
-                for (const iterator of content) {
-                    const e = iterator?.element ?? iterator as HTMLElement;
-                    if (!e) {
-                        continue;
-                    }
-                    if (typeof e === "string") {
-                        this.contentPresenter.appendChild(document.createTextNode(e));
-                        return;
-                    }
-                    this.contentPresenter.appendChild(e);
-                    const input = e.tagName === "INPUT" ? e : e.getElementsByTagName("input")[0];
-                    if (input) {
-                        if (!input.id) {
-                            input.id = `__ID__formElementInput${inputID++}`;
-                        }
-                        this.htmlFor = input.id;
-                    }
-                }
                 break;
         }
     }
@@ -125,6 +90,7 @@ export default class AtomField extends AtomControl {
         this.required = false;
         this.visible = true;
         this.fieldClass = "";
+        this.fieldCreated = false;
     }
 
     protected render(node: XNode, e?: any, creator?: any): void {
@@ -133,6 +99,7 @@ export default class AtomField extends AtomControl {
         }
         this.fieldCreated = true;
         super.render(<div
+            { ... node.attributes}
 			class={Bind.oneWay(() => ({
 				"form-field": 1,
 				[this.fieldClass]: this.fieldClass,
@@ -148,7 +115,7 @@ export default class AtomField extends AtomControl {
 				styleVisibility={Bind.oneTime(() => this.required ? "visible" : "hidden")}>*</span>
 			<div
 				class="presenter">
-                    {node}
+                    {... node.children as any[]}
                 </div>
 			<span
 				class="error"
