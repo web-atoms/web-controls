@@ -35,7 +35,9 @@ function insert(callback: (s: HtmlEditorControl, e: Event) => Promise<string> | 
                 r = await r;
             }
         }
-        s.executeCommand(command ?? "insertHTML", false, r as string);
+        if (r) {
+            s.executeCommand(command ?? "insertHTML", false, r as string);
+        }
     };
 }
 

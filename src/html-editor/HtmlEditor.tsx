@@ -1,3 +1,4 @@
+import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder";
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import Colors from "@web-atoms/core/dist/core/Colors";
@@ -20,6 +21,7 @@ import Italic from "./commands/Italic";
 import NumberedList from "./commands/NumberedList";
 import RemoveFormat from "./commands/RemoveFormat";
 import Separator from "./commands/Separator";
+import Source from "./commands/Source";
 import StrikeThrough from "./commands/StrikeThrough";
 import Underline from "./commands/Underline";
 import Unlink from "./commands/Unlink";
@@ -31,6 +33,12 @@ link.rel = "stylesheet";
 document.head.appendChild(link);
 
 const css = CSS(StyleRule()
+    .display("flex")
+    .flexDirection("column")
+    .minHeight(500)
+    .child(StyleRule("iframe")
+        .flexBasis("100%")
+    )
     .nested(StyleRule(".toolbar")
         .display("flex")
         .child(StyleRule(".command")
@@ -71,6 +79,19 @@ export class HtmlEditorControl extends AtomControl {
     public version: number;
 
     public editor: HTMLDivElement;
+
+    public get htmlContent(): string {
+        try {
+            return this.editor.innerHTML;
+        } catch (ex) {
+            console.warn(ex);
+        }
+    }
+
+    public set htmlContent(v: string) {
+        this.editor.innerHTML = v;
+        AtomBinder.refreshValue(this, "htmlContent");
+    }
 
     private editorWindow: Window;
 
@@ -137,15 +158,25 @@ export class HtmlEditorControl extends AtomControl {
         doc.writeln(`<div id="editor"><p>&nbsp;</p></div>`);
         doc.close();
         const style = doc.createElement("style");
-        style.textContent = `body { font-family: arial,sans-serif}`;
+        style.textContent = `body {
+            font-family: arial,sans-serif
+        }
+        #editor {
+            min-height: 500px;
+        }
+        `;
         doc.head.appendChild(style);
         this.editor = doc.getElementById("editor") as HTMLDivElement;
         this.editor.contentEditable = "true";
         doc.execCommand("styleWithCSS");
-        const updateVersion = () => setTimeout(() => this.version++, 1);
+        const updateVersion = () => setTimeout(() => {
+            this.version++;
+            AtomBinder.refreshValue(this, "htmlContent");
+        }, 1);
         this.editor.addEventListener("click", updateVersion);
         this.editor.addEventListener("keydown", updateVersion);
         this.editor.addEventListener("keypress", updateVersion);
+        this.editor.addEventListener("input", updateVersion);
         this.editorWindow = frame.contentWindow;
         this.editorDocument = doc;
 
@@ -154,6 +185,7 @@ export class HtmlEditorControl extends AtomControl {
                 this.editor.removeEventListener("click", updateVersion);
                 this.editor.removeEventListener("keydown", updateVersion);
                 this.editor.removeEventListener("keypress", updateVersion);
+                this.editor.removeEventListener("input", updateVersion);
             }
         });
     }
@@ -196,6 +228,8 @@ export default function HtmlEditor(
                 <AddLink/>
                 <Unlink/>
                 <RemoveFormat/>
+                <Separator/>
+                <Source/>
             </Toolbar>
             <iframe class="editor-frame"/>
         </HtmlEditorControl>;
