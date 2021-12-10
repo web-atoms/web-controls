@@ -74,8 +74,7 @@ class LinkDialog extends PopupWindow {
 }
 
 function showDialog(s: HtmlEditorControl, e: Event): Promise<string> {
-    const popupService = s.app.resolve(PopupService);
-    return popupService.showWindow(s.element, LinkDialog);
+    return PopupService.showWindow(s.element, LinkDialog);
 }
 
 export default function AddLink({

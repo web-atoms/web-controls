@@ -84,13 +84,12 @@ export default function PopupButton(
             { ... menus}
         </div>, menu);
 
-        const ps = (s as any).resolve(PopupService) as PopupService;
         const options: IPopupOptions = showAsDialog
             ? {
                 alignment: "centerOfScreen"
             }
             : null;
-        popup = ps.show(button, menu, options);
+        popup = PopupService.show(button, menu, options);
 
         const dispose = () => {
             popup?.dispose();

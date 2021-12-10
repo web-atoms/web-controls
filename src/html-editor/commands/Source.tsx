@@ -9,13 +9,12 @@ import CommandButton from "./CommandButton";
 
 const css = CSS(StyleRule()
     .child(StyleRule("textarea")
-        .minHeight(800)
-        .minWidth(800)
+        .minHeight(500)
+        .minWidth(700)
     )
 );
 
 async function showDialog(s: HtmlEditorControl, e: Event): Promise<string> {
-    const popupService = s.app.resolve(PopupService);
 
     class SourceDialog extends PopupWindow {
 
@@ -36,7 +35,7 @@ async function showDialog(s: HtmlEditorControl, e: Event): Promise<string> {
 
     }
 
-    const result = await popupService.showWindow(s.element, SourceDialog);
+    const result = await PopupService.showWindow(s.element, SourceDialog);
     s.htmlContent = result as string;
     return null;
 }
