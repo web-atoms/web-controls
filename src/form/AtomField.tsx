@@ -10,7 +10,7 @@ export { default as HP } from "./HelpPopup";
 
 let inputID = 0;
 
-class AtomFieldControl extends AtomControl {
+class AtomField extends AtomControl {
 
     @BindableProperty
     public icon: string;
@@ -56,7 +56,9 @@ class AtomFieldControl extends AtomControl {
     @BindableProperty
     protected htmlFor: any;
 
-    public onPropertyChanged(name: keyof AtomFieldControl): void {
+    private fieldCreated: boolean = false;
+
+    public onPropertyChanged(name: keyof AtomField): void {
         switch (name) {
             case "error":
                 AtomBinder.refreshValue(this, "hasError");
@@ -123,8 +125,14 @@ class AtomFieldControl extends AtomControl {
         this.required = false;
         this.visible = true;
         this.fieldClass = "";
-        this.contentPresenter = null;
-        this.render(<div
+    }
+
+    protected render(node: XNode, e?: any, creator?: any): void {
+        if (this.fieldCreated) {
+            return super.render(node, e, creator);
+        }
+        this.fieldCreated = true;
+        super.render(<div
 			class={Bind.oneWay(() => ({
 				"form-field": 1,
 				[this.fieldClass]: this.fieldClass,
@@ -138,40 +146,15 @@ class AtomFieldControl extends AtomControl {
 			<span
 				class="required"
 				styleVisibility={Bind.oneTime(() => this.required ? "visible" : "hidden")}>*</span>
-			<div presenter={Bind.presenter("contentPresenter")}
-				class="presenter"></div>
+			<div
+				class="presenter">
+                    {node}
+                </div>
 			<span
 				class="error"
 				styleDisplay={Bind.oneWay(() => this.error ? "" : "none")}
 				text={Bind.oneWay(() => this.error)}></span>
 		</div>);
-
-        if (this.content) {
-            this.onPropertyChanged("content");
-        }
     }
 
-}
-
-export interface IFieldAttributes {
-    label?;
-    error?;
-    helpText?;
-    helpLink?;
-    helpIcon?;
-    required?;
-    visible?;
-    fieldClass?;
-    baseClass?: IClassOf<AtomFieldControl>;
-    [key: string]: any;
-}
-
-export default function AtomField( attributes: IFieldAttributes, ... children: XNode[]) {
-    const ControlClass = attributes.baseClass ?? AtomFieldControl;
-    attributes.visible ??= true;
-    attributes.fieldClass ??= null;
-    return <ControlClass
-        { ... attributes}
-        content={children}
-        />;
 }
