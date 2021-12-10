@@ -1,9 +1,10 @@
 import Bind from "@web-atoms/core/dist/core/Bind";
+import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import { CancelToken } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomToggleButtonBar } from "@web-atoms/core/dist/web/controls/AtomToggleButtonBar";
-import PopupService from "@web-atoms/core/dist/web/services/PopupService";
+import PopupService, { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import type { HtmlEditorControl } from "../HtmlEditor";
 import CommandButton, { notSet } from "./CommandButton";
@@ -27,48 +28,46 @@ const linkTypes = [
     }
 ];
 
-const vm = {
-    selectedType: "web-page",
-    link: ""
-};
-
 const linkDialogCss = CSS(StyleRule()
     .display("flex")
-    .flexDirection("row")
+    .flexDirection("column")
+    .gap(5)
 );
 
-async function showDialog(s: HtmlEditorControl, e: Event) {
-    const popupService = s.app.resolve(PopupService);
+class LinkDialog extends PopupWindow {
 
-    vm.link = "";
-    vm.selectedType = "web-page";
-    let resolved = false;
-    const cancelToken = new CancelToken();
-    await popupService.showWindow(s.element, {
-        parameters: vm,
-        cancelToken
-    }, <div class={linkDialogCss}>
-        <AtomToggleButtonBar
-            items={linkTypes}
-            value={Bind.twoWays((x) => x.viewModel.selectedType)}/>
-        <input value={Bind.twoWaysImmediate((x) => x.viewModel.link)}/>
-        <button
-            text="Add"
-            eventClick={Bind.event((x) =>
-            setTimeout(() => {
-                resolved = true;
-                cancelToken.cancel();
-            }, 1)
-        )} />
-    </div>);
+    @BindableProperty
+    public link: string;
 
-    switch (vm.selectedType) {
-        case "web-page":
-        case "phone":
-        case "email":
-        case "anchor":
-            return vm.link;
+    @BindableProperty
+    public type: string;
+
+    protected create(): void {
+        this.type = "web-page";
+        this.title = "Create Link";
+        this.render(<div class={linkDialogCss}>
+            <AtomToggleButtonBar
+                items={linkTypes}
+                value={Bind.twoWays(() => this.type)}/>
+            <input
+                placeholder="https://..."
+                value={Bind.twoWaysImmediate(() => this.link)}/>
+            <div class="command-bar">
+                <button
+                    text="Add"
+                    eventClick={Bind.event((x) =>
+                    setTimeout(() => {
+                        this.viewModel.close(this.link);
+                    }, 1)
+                )} />
+            </div>
+        </div>);
     }
+}
+
+function showDialog(s: HtmlEditorControl, e: Event): Promise<string> {
+    const popupService = s.app.resolve(PopupService);
+    return popupService.showWindow(s.element, LinkDialog);
 }
 
 export default function AddLink({
