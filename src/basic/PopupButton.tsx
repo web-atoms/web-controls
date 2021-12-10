@@ -3,7 +3,7 @@ import Colors from "@web-atoms/core/dist/core/Colors";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import PopupService, { IPopup } from "@web-atoms/core/dist/web/services/PopupService";
+import PopupService, { IPopup, IPopupOptions } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
 const menuCss = CSS(StyleRule()
@@ -28,6 +28,7 @@ export interface IMenuItem {
 export interface IPopupButton {
     icon?: string;
     label?: string;
+    showAsDialog?: boolean;
     [key: string]: any;
 }
 
@@ -63,6 +64,7 @@ export default function PopupButton(
 {
     icon,
     label,
+    showAsDialog,
     ... others
 }: IPopupButton,
 ... menus: Array<IMenuItem | XNode>) {
@@ -83,7 +85,12 @@ export default function PopupButton(
         </div>, menu);
 
         const ps = (s as any).resolve(PopupService) as PopupService;
-        popup = ps.show(button, menu);
+        const options: IPopupOptions = showAsDialog
+            ? {
+                alignment: "centerOfScreen"
+            }
+            : null;
+        popup = ps.show(button, menu, options);
 
         const dispose = () => {
             popup?.dispose();
