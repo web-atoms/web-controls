@@ -10,7 +10,7 @@ export { default as HP } from "./HelpPopup";
 
 let inputID = 0;
 
-class AtomField extends AtomControl {
+export default class AtomField extends AtomControl {
 
     @BindableProperty
     public icon: string;
