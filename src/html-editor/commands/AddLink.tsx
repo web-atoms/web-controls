@@ -6,6 +6,7 @@ import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomToggleButtonBar } from "@web-atoms/core/dist/web/controls/AtomToggleButtonBar";
 import PopupService, { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
+import FormField from "../../basic/FormField";
 import type { HtmlEditorControl } from "../HtmlEditor";
 import CommandButton, { notSet } from "./CommandButton";
 
@@ -46,22 +47,29 @@ class LinkDialog extends PopupWindow {
         this.type = "web-page";
         this.title = "Create Link";
         this.render(<div class={linkDialogCss}>
-            <AtomToggleButtonBar
-                items={linkTypes}
-                value={Bind.twoWays(() => this.type)}/>
-            <input
-                placeholder="https://..."
-                value={Bind.twoWaysImmediate(() => this.link)}/>
+            <FormField label="Type">
+                <AtomToggleButtonBar
+                    items={linkTypes}
+                    value={Bind.twoWays(() => this.type)}/>
+            </FormField>
+            <FormField label="Link" required={true}>
+                <input
+                    placeholder="https://..."
+                    value={Bind.twoWaysImmediate(() => this.link)}/>
+            </FormField>
             <div class="command-bar">
                 <button
                     text="Add"
-                    eventClick={Bind.event((x) =>
-                    setTimeout(() => {
-                        this.viewModel.close(this.link);
-                    }, 1)
-                )} />
+                    eventClick={Bind.event(() => this.viewModel.close(this.toLink(this.link)))} />
             </div>
         </div>);
+    }
+
+    private toLink(link: string): string {
+        switch (this.type) {
+            case "web-page":
+                return /^(http|https)\:\/\//.test(link) ? link : "";
+        }
     }
 }
 
