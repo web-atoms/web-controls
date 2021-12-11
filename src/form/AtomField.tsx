@@ -117,6 +117,14 @@ export default class AtomField extends AtomControl {
 				styleDisplay={Bind.oneWay(() => this.error ? "" : "none")}
 				text={Bind.oneWay(() => this.error)}></span>
 		</div>);
+
+        const first = this.element.getElementsByTagName("input")[0];
+        if (first) {
+            if (!first.id) {
+                first.id = `webAtomsFormFieldInputNumber${inputID++}`;
+            }
+            this.htmlFor = first.id;
+        }
     }
 
 }
