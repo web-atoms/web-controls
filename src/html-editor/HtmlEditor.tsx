@@ -186,7 +186,7 @@ export default class HtmlEditor extends AtomControl {
 
         const script = doc.createElement("script");
         script.textContent = `document.body.addEventListener("click", ${preventLinkClick.toString()});`;
-        doc.head.appendChild(script);
+        doc.body.appendChild(script);
 
         this.editor = doc.getElementById("editor") as HTMLDivElement;
         this.editor.contentEditable = "true";
