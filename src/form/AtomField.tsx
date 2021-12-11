@@ -53,8 +53,6 @@ export default class AtomField extends AtomControl {
     @BindableProperty
     protected htmlFor: any;
 
-    private fieldCreated;
-
     public onPropertyChanged(name: keyof AtomField): void {
         switch (name) {
             case "helpLink":
@@ -90,14 +88,11 @@ export default class AtomField extends AtomControl {
         this.required = false;
         this.visible = true;
         this.fieldClass = "";
-        this.fieldCreated = false;
     }
 
     protected render(node: XNode, e?: any, creator?: any): void {
-        if (this.fieldCreated) {
-            return super.render(node, e, creator);
-        }
-        this.fieldCreated = true;
+        // following line will prevent stack overflow
+        this.render = super.render;
         super.render(<div
             { ... node.attributes}
 			class={Bind.oneWay(() => ({

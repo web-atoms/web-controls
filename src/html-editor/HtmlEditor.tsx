@@ -102,8 +102,6 @@ export default class HtmlEditor extends AtomControl {
 
     private editorDocument: Document;
 
-    private editorCreated: boolean;
-
     public insertImage(s: HtmlEditor, e: Event) {
         return showImageDialog(s, e);
     }
@@ -211,10 +209,8 @@ export default class HtmlEditor extends AtomControl {
     }
 
     protected render(node: XNode, e?: any, creator?: any): void {
-        if (this.editorCreated) {
-            return super.render(node, e, creator);
-        }
-        this.editorCreated = true;
+        // following line will prevent stack overflow
+        this.render = super.render;
         if (!node.children || node.children.length === 0 ) {
             node.children[0] = <Toolbar>
             <Bold/>
