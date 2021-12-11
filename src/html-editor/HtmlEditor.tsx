@@ -68,10 +68,19 @@ export function Toolbar(a: any, ... nodes: XNode[]) {
 }
 
 function preventLinkClick(e: Event) {
-    const target = e.target as HTMLElement;
-    if (target.tagName === "A" && !target.isContentEditable) {
-        e.preventDefault();
-        return false;
+    let target = e.target as HTMLElement;
+    while (target) {
+        if (target.isContentEditable) {
+            break;
+        }
+        if (target.tagName === "A") {
+            if (!target.isContentEditable) {
+                e.preventDefault();
+                return false;
+            }
+            break;
+        }
+        target = target.parentElement;
     }
 }
 
