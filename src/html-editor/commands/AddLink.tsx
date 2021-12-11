@@ -69,7 +69,7 @@ class LinkDialog extends PopupWindow {
     private toLink(link: string): string {
         switch (this.type) {
             case "web-page":
-                return /^(http|https)\:\/\//.test(link) ? link : "";
+                return /^(http|https)\:\/\//.test(link) ? link : `http://${link}`;
         }
     }
 }

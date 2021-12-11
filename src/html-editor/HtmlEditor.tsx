@@ -67,6 +67,14 @@ export function Toolbar(a: any, ... nodes: XNode[]) {
     </div>;
 }
 
+function preventLinkClick(e: Event) {
+    const target = e.target as HTMLElement;
+    if (target.tagName === "A" && !target.contentEditable) {
+        e.preventDefault();
+        return false;
+    }
+}
+
 export default class HtmlEditor extends AtomControl {
 
     @BindableProperty
@@ -175,9 +183,15 @@ export default class HtmlEditor extends AtomControl {
         }
         `;
         doc.head.appendChild(style);
+
+        const script = doc.createElement("script");
+        script.textContent = `document.body.addEventListener("click", ${preventLinkClick.toString()});`;
+        doc.head.appendChild(script);
+
         this.editor = doc.getElementById("editor") as HTMLDivElement;
         this.editor.contentEditable = "true";
         doc.execCommand("styleWithCSS");
+        doc.execCommand("insertBrOnReturn");
         const updateVersion = () => setTimeout(() => {
             this.version++;
             AtomBinder.refreshValue(this, "htmlContent");
