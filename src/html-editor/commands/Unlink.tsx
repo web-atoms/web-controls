@@ -1,13 +1,13 @@
-import Command from "./Command";
+import CommandButton from "./CommandButton";
+import HtmlCommands from "./HtmlCommands";
 
-export default function Unlink(cmd: any) {
-    return Command({
+export default function Unlink({
+    insertCommand = HtmlCommands.unlink
+}) {
+    return CommandButton({
         icon: "ri-link-unlink-m",
-        queryState: "unlink",
-        title: "Remove Link",
-        ... cmd,
-        command(editor) {
-            editor.executeCommand("unlink");
-        }
+        insertCommand,
+        eventInsertHtml: () => "",
+        title: "Remove Hyperlink"
     });
 }

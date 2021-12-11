@@ -48,6 +48,6 @@ export default function Source({
         icon: "ri-edit-box-fill",
         insertCommand,
         eventInsertHtml: showDialog,
-        title: "Create Hyper Link"
+        title: "Edit Source Code"
     });
 }

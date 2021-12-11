@@ -172,6 +172,9 @@ export class HtmlEditorControl extends AtomControl {
         const updateVersion = () => setTimeout(() => {
             this.version++;
             AtomBinder.refreshValue(this, "htmlContent");
+            this.element.dispatchEvent(new CustomEvent("documentUpdated", {
+                detail: doc
+            }));
         }, 1);
         this.editor.addEventListener("click", updateVersion);
         this.editor.addEventListener("keydown", updateVersion);
@@ -181,6 +184,10 @@ export class HtmlEditorControl extends AtomControl {
         this.editorDocument = doc;
 
         updateVersion();
+
+        this.element.dispatchEvent(new CustomEvent("documentCreated", {
+            detail: doc
+        }));
 
         this.registerDisposable({
             dispose: () => {
