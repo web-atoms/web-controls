@@ -69,7 +69,8 @@ export function Toolbar(a: any, ... nodes: XNode[]) {
 
 function preventLinkClick(e: Event) {
     let target = e.target as HTMLElement;
-    while (target) {
+    const body = document.body;
+    while (target && target !== body) {
         if (target.isContentEditable) {
             break;
         }
