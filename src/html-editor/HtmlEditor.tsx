@@ -75,11 +75,8 @@ function preventLinkClick(e: Event) {
             break;
         }
         if (target.tagName === "A") {
-            if (!target.isContentEditable) {
-                e.preventDefault();
-                return false;
-            }
-            break;
+            e.preventDefault();
+            return false;
         }
         target = target.parentElement;
     }
