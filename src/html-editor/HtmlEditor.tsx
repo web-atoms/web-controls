@@ -69,7 +69,7 @@ export function Toolbar(a: any, ... nodes: XNode[]) {
 
 function preventLinkClick(e: Event) {
     const target = e.target as HTMLElement;
-    if (target.tagName === "A" && !target.contentEditable) {
+    if (target.tagName === "A" && !target.isContentEditable) {
         e.preventDefault();
         return false;
     }
@@ -184,9 +184,10 @@ export default class HtmlEditor extends AtomControl {
         `;
         doc.head.appendChild(style);
 
-        const script = doc.createElement("script");
-        script.textContent = `document.body.addEventListener("click", ${preventLinkClick.toString()});`;
-        doc.body.appendChild(script);
+        // const script = doc.createElement("script");
+        // script.textContent = `document.body.addEventListener("click", ${preventLinkClick.toString()});`;
+        // doc.body.appendChild(script);
+        doc.body.addEventListener("click", preventLinkClick);
 
         this.editor = doc.getElementById("editor") as HTMLDivElement;
         this.editor.contentEditable = "true";
