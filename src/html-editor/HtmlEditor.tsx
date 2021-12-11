@@ -203,6 +203,8 @@ export class HtmlEditorControl extends AtomControl {
 export interface IHtmlEditor {
     insertImage?: (s: HtmlEditorControl, e: Event) => Promise<string> | string;
     htmlContent?: string;
+    eventDocumentCreated?: any;
+    eventDocumentUpdated?: any;
 }
 
 export default function HtmlEditor(
