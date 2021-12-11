@@ -80,9 +80,9 @@ export default class HtmlEditor extends AtomControl {
 
     public editor: HTMLDivElement;
 
-    public eventDocumentCreated: (e: CustomEvent<Document>) => void;
+    public eventDocumentCreated: (e: CustomEvent<HTMLDivElement>) => void;
 
-    public eventDocumentUpdated: (e: CustomEvent<Document>) => void;
+    public eventDocumentUpdated: (e: CustomEvent<HTMLDivElement>) => void;
 
     public get htmlContent(): string {
         try {
@@ -181,9 +181,10 @@ export default class HtmlEditor extends AtomControl {
         const updateVersion = () => setTimeout(() => {
             this.version++;
             AtomBinder.refreshValue(this, "htmlContent");
-            this.element.dispatchEvent(new CustomEvent("documentUpdated", {
-                detail: doc
+            this.element.dispatchEvent(new CustomEvent<HTMLDivElement>("documentUpdated", {
+                detail: this.editor
             }));
+            this.documentUpdated(this.editor);
         }, 1);
         this.editor.addEventListener("click", updateVersion);
         this.editor.addEventListener("keydown", updateVersion);
@@ -194,8 +195,9 @@ export default class HtmlEditor extends AtomControl {
 
         updateVersion();
 
-        this.element.dispatchEvent(new CustomEvent("documentCreated", {
-            detail: doc
+        this.documentCreated(this.editor);
+        this.element.dispatchEvent(new CustomEvent<HTMLDivElement>("documentCreated", {
+            detail: this.editor
         }));
 
         this.registerDisposable({
@@ -206,6 +208,14 @@ export default class HtmlEditor extends AtomControl {
                 this.editor.removeEventListener("input", updateVersion);
             }
         });
+    }
+
+    protected documentCreated(e: HTMLDivElement) {
+        // nothing...
+    }
+
+    protected documentUpdated(e: HTMLDivElement) {
+        // nothing...
     }
 
     protected render(node: XNode, e?: any, creator?: any): void {
