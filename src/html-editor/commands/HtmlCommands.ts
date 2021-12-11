@@ -1,19 +1,19 @@
-import type { HtmlEditorControl } from "../HtmlEditor";
+import type HtmlEditor from "../HtmlEditor";
 
 function query(name: keyof typeof HtmlCommands): IHtmlCommand {
     return {
-        canExecute(e: HtmlEditorControl): boolean {
+        canExecute(e: HtmlEditor): boolean {
             return e.queryCommandState(name);
         },
-        execute(e: HtmlEditorControl, showUI?: boolean, value?: string): boolean {
+        execute(e: HtmlEditor, showUI?: boolean, value?: string): boolean {
             return e.executeCommand(name, showUI, value);
         }
     };
 }
 
 export interface IHtmlCommand {
-    canExecute(e: HtmlEditorControl): boolean;
-    execute(e: HtmlEditorControl, showUI?: boolean, value?: string): boolean;
+    canExecute(e: HtmlEditor): boolean;
+    execute(e: HtmlEditor, showUI?: boolean, value?: string): boolean;
 }
 
 export default class HtmlCommands {

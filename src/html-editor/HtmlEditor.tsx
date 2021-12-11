@@ -6,7 +6,7 @@ import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
-import AddImage from "./commands/AddImage";
+import AddImage, { showImageDialog } from "./commands/AddImage";
 import AddLink from "./commands/AddLink";
 import Align from "./commands/Align";
 import Bold from "./commands/Bold";
@@ -67,7 +67,7 @@ export function Toolbar(a: any, ... nodes: XNode[]) {
     </div>;
 }
 
-export class HtmlEditorControl extends AtomControl {
+export default class HtmlEditor extends AtomControl {
 
     @BindableProperty
     public content: string;
@@ -80,10 +80,15 @@ export class HtmlEditorControl extends AtomControl {
 
     public editor: HTMLDivElement;
 
+    public eventDocumentCreated: (e: CustomEvent<Document>) => void;
+
+    public eventDocumentUpdated: (e: CustomEvent<Document>) => void;
+
     public get htmlContent(): string {
         try {
             return this.editor.innerHTML;
         } catch (ex) {
+            // tslint:disable-next-line: no-console
             console.warn(ex);
         }
     }
@@ -96,6 +101,12 @@ export class HtmlEditorControl extends AtomControl {
     private editorWindow: Window;
 
     private editorDocument: Document;
+
+    private editorCreated: boolean;
+
+    public insertImage(s: HtmlEditor, e: Event) {
+        return showImageDialog(s, e);
+    }
 
     public executeCommand(cmd, showUI?: boolean, value?: string): boolean {
         const r = this.editorDocument.execCommand(cmd, showUI, value);
@@ -198,26 +209,15 @@ export class HtmlEditorControl extends AtomControl {
             }
         });
     }
-}
 
-export interface IHtmlEditor {
-    insertImage?: (s: HtmlEditorControl, e: Event) => Promise<string> | string;
-    htmlContent?: string;
-    eventDocumentCreated?: any;
-    eventDocumentUpdated?: any;
-}
-
-export default function HtmlEditor(
-    {
-        insertImage,
-        ... attributes
-    }: IHtmlEditor,
-    ... nodes: XNode[]) {
-
-    if (nodes.length === 0) {
-        return <HtmlEditorControl { ... attributes}>
-            <Toolbar>
-                <Bold/>
+    protected render(node: XNode, e?: any, creator?: any): void {
+        if (this.editorCreated) {
+            return super.render(node, e, creator);
+        }
+        this.editorCreated = true;
+        if (!node.children || node.children.length === 0 ) {
+            node.children[0] = <Toolbar>
+            <Bold/>
                 <Italic/>
                 <Underline/>
                 <StrikeThrough/>
@@ -235,20 +235,18 @@ export default function HtmlEditor(
                 <IndentLess/>
                 <IndentMore/>
                 <Separator/>
-                <AddImage eventInsertHtml={insertImage}/>
+                <AddImage/>
                 <Separator/>
                 <AddLink/>
                 <Unlink/>
                 <RemoveFormat/>
                 <Separator/>
                 <Source/>
-            </Toolbar>
+            </Toolbar>;
+        }
+        super.render(<div {... node.attributes}>
+            { ... node.children as any[]}
             <iframe class="editor-frame"/>
-        </HtmlEditorControl>;
+        </div>);
     }
-
-    return <HtmlEditorControl { ... attributes}>
-        { ... nodes}
-        <iframe class="editor-frame"/>
-    </HtmlEditorControl>;
 }

@@ -3,7 +3,7 @@ import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import PopupButton from "../../basic/PopupButton";
-import type { HtmlEditorControl } from "../HtmlEditor";
+import type HtmlEditor from "../HtmlEditor";
 
 const gray = [
     "rgb(0,0,0)",
@@ -115,14 +115,14 @@ const colorSelectorCss = CSS(StyleRule("color-selector")
 function TextColor(color: string) {
     return <div
         class="color-button"
-        eventClick={Bind.event((e: HtmlEditorControl) => e.executeCommand("foreColor", false, color))}
+        eventClick={Bind.event((e: HtmlEditor) => e.executeCommand("foreColor", false, color))}
         styleBackgroundColor={color.toLowerCase()} title={color}></div>;
 }
 
 function BackgroundColor(color: string) {
     return <div
         class="color-button"
-        eventClick={Bind.event((e: HtmlEditorControl) => e.executeCommand("hiliteColor", false, color))}
+        eventClick={Bind.event((e: HtmlEditor) => e.executeCommand("hiliteColor", false, color))}
         styleBackgroundColor={color.toLowerCase()} title={color}></div>;
 }
 

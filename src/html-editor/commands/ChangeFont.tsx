@@ -4,7 +4,7 @@ import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import PopupButton from "../../basic/PopupButton";
-import type { HtmlEditorControl } from "../HtmlEditor";
+import type HtmlEditor from "../HtmlEditor";
 
 const fontMenuCSS = CSS(StyleRule()
     .padding(5)
@@ -38,8 +38,8 @@ export function FontMenu({ name, value }) {
     const cssName = value.join(" ");
     return <div
         class="menu"
-        eventClick={Bind.event((e: HtmlEditorControl) => e.executeCommand("fontName", false, cssName) )}>
-        <i class={Bind.oneWay((e: HtmlEditorControl) => ({
+        eventClick={Bind.event((e: HtmlEditor) => e.executeCommand("fontName", false, cssName) )}>
+        <i class={Bind.oneWay((e: HtmlEditor) => ({
                 "ri-check-line": 1,
                 "selected": e.getStyle("fontFamily", e.version)
                     .toLowerCase()
@@ -66,7 +66,7 @@ function selectFont(name: string) {
 export default function ChangeFont() {
     return <PopupButton
         class="command"
-        text={Bind.oneWay((e: HtmlEditorControl) => selectFont(e.getStyle("fontFamily", e.version)))}
+        text={Bind.oneWay((e: HtmlEditor) => selectFont(e.getStyle("fontFamily", e.version)))}
         title="Change Font">
         <div class={fontMenuCSS}>
             { ... fonts.map((x) => <FontMenu name={x[0]} value={x[1]}/>)}

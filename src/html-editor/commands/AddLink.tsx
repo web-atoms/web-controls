@@ -7,7 +7,7 @@ import { AtomToggleButtonBar } from "@web-atoms/core/dist/web/controls/AtomToggl
 import PopupService, { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import FormField from "../../basic/FormField";
-import type { HtmlEditorControl } from "../HtmlEditor";
+import type HtmlEditor from "../HtmlEditor";
 import CommandButton, { notSet } from "./CommandButton";
 import HtmlCommands from "./HtmlCommands";
 
@@ -74,7 +74,7 @@ class LinkDialog extends PopupWindow {
     }
 }
 
-function showDialog(s: HtmlEditorControl, e: Event): Promise<string> {
+function showDialog(s: HtmlEditor, e: Event): Promise<string> {
     return PopupService.showWindow(s.element, LinkDialog);
 }
 
