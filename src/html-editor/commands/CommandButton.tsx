@@ -1,6 +1,7 @@
 import Bind from "@web-atoms/core/dist/core/Bind";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import type { HtmlEditorControl } from "../HtmlEditor";
+import { IHtmlCommand } from "./HtmlCommands";
 
 export interface ICommandButton {
     icon?: string;
@@ -13,12 +14,17 @@ export interface ICommandButton {
     /**
      * Default is insertHTML but you can change it.
      */
-    insertCommand: any;
+    insertCommand: IHtmlCommand;
 
     /**
      * Tooltip
      */
     title?: string;
+
+    /**
+     * setup if command is disabled or not
+     */
+    disabled?: boolean;
 }
 
 export function notSet(text: string) {
@@ -27,7 +33,7 @@ export function notSet(text: string) {
     };
 }
 
-function insert(callback: (s: HtmlEditorControl, e: Event) => Promise<string> | string, command: string): any {
+function insert(callback: (s: HtmlEditorControl, e: Event) => Promise<string> | string, command: IHtmlCommand): any {
     return async (s: HtmlEditorControl, e: Event) => {
         let r = callback(s, e);
         if (typeof r !== "string") {
@@ -36,7 +42,11 @@ function insert(callback: (s: HtmlEditorControl, e: Event) => Promise<string> | 
             }
         }
         if (r) {
-            s.executeCommand(command ?? "insertHTML", false, r as string);
+            if (command) {
+                command.execute(s, false, r as string);
+            } else {
+                s.executeCommand("insertHTML", false, r as string);
+            }
         }
     };
 }
@@ -46,11 +56,18 @@ export default function CommandButton({
     label,
     eventInsertHtml,
     insertCommand,
-    title
+    title,
+    disabled
 }: ICommandButton) {
+
+    disabled ??= Bind.oneWay((x: HtmlEditorControl) => x.version
+    ? !insertCommand.canExecute(x)
+    : false);
+
     if (label) {
         return <button
             class="command"
+            disabled={disabled}
             eventClick={Bind.event(insert(eventInsertHtml, insertCommand))}
             title={title}>
             <label class="label">
@@ -62,6 +79,7 @@ export default function CommandButton({
     return <button
         title={title}
         class="command"
+        disabled={disabled}
         eventClick={Bind.event(insert(eventInsertHtml, insertCommand))}>
         <i class={icon} />
     </button>;

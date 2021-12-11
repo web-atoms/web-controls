@@ -5,6 +5,7 @@ import PopupService, { PopupWindow } from "@web-atoms/core/dist/web/services/Pop
 import FormField from "../../basic/FormField";
 import type { HtmlEditorControl } from "../HtmlEditor";
 import CommandButton, { notSet } from "./CommandButton";
+import HtmlCommands from "./HtmlCommands";
 
 class ImageDialog extends PopupWindow {
 
@@ -40,17 +41,18 @@ class ImageDialog extends PopupWindow {
     }
 }
 
-function showImageDialog(s: HtmlEditorControl, e: Event) {
-    return PopupService.showWindow(e.currentTarget as HTMLElement, ImageDialog, { title: "Add Image" });
+function showImageDialog(s: HtmlEditorControl, e: Event): Promise<string> | string {
+    return PopupService.showWindow<string>(e.currentTarget as HTMLElement, ImageDialog, { title: "Add Image" });
 }
 
 export default function AddImage({
     eventInsertHtml = showImageDialog,
-    insertCommand = "insertHTML"
+    insertCommand = HtmlCommands.insertImage
 }) {
     return CommandButton({
         icon: "ri-image-add-fill",
         insertCommand,
+        disabled: false,
         title: "Insert Image",
         eventInsertHtml
     });

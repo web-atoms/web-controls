@@ -9,6 +9,7 @@ import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import FormField from "../../basic/FormField";
 import type { HtmlEditorControl } from "../HtmlEditor";
 import CommandButton, { notSet } from "./CommandButton";
+import HtmlCommands from "./HtmlCommands";
 
 const linkTypes = [
     {
@@ -78,11 +79,12 @@ function showDialog(s: HtmlEditorControl, e: Event): Promise<string> {
 }
 
 export default function AddLink({
-    insertCommand = "createLink"
+    insertCommand = HtmlCommands.createLink
 }) {
     return CommandButton({
         icon: "ri-link-m",
         insertCommand,
+        disabled: false,
         eventInsertHtml: showDialog,
         title: "Create Hyper Link"
     });

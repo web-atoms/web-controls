@@ -6,6 +6,7 @@ import PopupService, { PopupWindow } from "@web-atoms/core/dist/web/services/Pop
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import { HtmlEditorControl } from "../HtmlEditor";
 import CommandButton from "./CommandButton";
+import HtmlCommands from "./HtmlCommands";
 
 const css = CSS(StyleRule()
     .child(StyleRule("textarea")
@@ -41,7 +42,7 @@ async function showDialog(s: HtmlEditorControl, e: Event): Promise<string> {
 }
 
 export default function Source({
-    insertCommand = "createLink"
+    insertCommand = HtmlCommands.enabled
 }) {
     return CommandButton({
         icon: "ri-edit-box-fill",

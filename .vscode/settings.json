@@ -2,8 +2,9 @@
     "terminal.integrated.shellArgs.windows": ["-ExecutionPolicy", "Bypass"],
     "cSpell.words": [
         "Chng",
-        "Muli",
         "downlevel",
+        "hilite",
+        "Muli",
         "oned",
         "postversion"
     ]

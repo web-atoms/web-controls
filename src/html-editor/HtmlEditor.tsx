@@ -180,6 +180,8 @@ export class HtmlEditorControl extends AtomControl {
         this.editorWindow = frame.contentWindow;
         this.editorDocument = doc;
 
+        updateVersion();
+
         this.registerDisposable({
             dispose: () => {
                 this.editor.removeEventListener("click", updateVersion);
@@ -193,13 +195,14 @@ export class HtmlEditorControl extends AtomControl {
 
 export interface IHtmlEditor {
     insertImage?: (s: HtmlEditorControl, e: Event) => Promise<string> | string;
+    htmlContent?: string;
 }
 
 export default function HtmlEditor(
     {
         insertImage,
         ... attributes
-    }: any,
+    }: IHtmlEditor,
     ... nodes: XNode[]) {
 
     if (nodes.length === 0) {
