@@ -67,10 +67,27 @@ export function Toolbar(a: any, ... nodes: XNode[]) {
     </div>;
 }
 
-function preventLinkClick(e: Event) {
+function preventLinkClick(e: Event, editor: HTMLElement) {
     let target = e.target as HTMLElement;
     const body = document.body;
     while (target && target !== body) {
+
+        const ds = target.dataset;
+        // tslint:disable-next-line: no-string-literal
+        const command = ds["command"];
+        if (command) {
+            // tslint:disable-next-line: no-string-literal
+            const commandParameter = ds["command-parameter"] ?? ds["commandParameter"];
+            editor.dispatchEvent(new CustomEvent<IEditorCommand>(command, {
+                bubbles: true,
+                detail: {
+                    command,
+                    commandParameter
+                }
+            }));
+            return;
+        }
+
         if (target.isContentEditable) {
             break;
         }
@@ -80,6 +97,11 @@ function preventLinkClick(e: Event) {
         }
         target = target.parentElement;
     }
+}
+
+export interface IEditorCommand {
+    command: string;
+    commandParameter: string;
 }
 
 export default class HtmlEditor extends AtomControl {
@@ -98,6 +120,8 @@ export default class HtmlEditor extends AtomControl {
     public eventDocumentCreated: (e: CustomEvent<HTMLDivElement>) => void;
 
     public eventDocumentUpdated: (e: CustomEvent<HTMLDivElement>) => void;
+
+    public eventCommand: (e: CustomEvent<IEditorCommand>) => void;
 
     public get htmlContent(): string {
         try {
@@ -194,7 +218,7 @@ export default class HtmlEditor extends AtomControl {
         // const script = doc.createElement("script");
         // script.textContent = `document.body.addEventListener("click", ${preventLinkClick.toString()});`;
         // doc.body.appendChild(script);
-        doc.body.addEventListener("click", preventLinkClick);
+        doc.body.addEventListener("click", (e) => preventLinkClick(e, this.element));
 
         this.editor = doc.getElementById("editor") as HTMLDivElement;
         this.editor.contentEditable = "true";
