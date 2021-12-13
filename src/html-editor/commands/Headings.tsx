@@ -1,14 +1,14 @@
 import Bind from "@web-atoms/core/dist/core/Bind";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import PopupButton, { MenuItem } from "../../basic/PopupButton";
-import type HtmlEditor from "../HtmlEditor";
+import type AtomHtmlEditor from "../AtomHtmlEditor";
 
 export default function Headings() {
     return <PopupButton
         class="command"
         icon="ri-heading"
         title="Apply Heading">
-        <MenuItem icon="ri-h-1" eventClick={Bind.event((e: HtmlEditor) =>
+        <MenuItem icon="ri-h-1" eventClick={Bind.event((e: AtomHtmlEditor) =>
             e.executeCommand("formatBlock", false, "H1"))}/>
         <MenuItem icon="ri-h-2" eventClick={Bind.event((e: any) =>
             e.executeCommand("formatBlock", false, "H2"))}/>

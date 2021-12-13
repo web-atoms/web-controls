@@ -21,14 +21,14 @@ import StrikeThrough from "../../html-editor/commands/StrikeThrough";
 import Underline from "../../html-editor/commands/Underline";
 import Unlink from "../../html-editor/commands/Unlink";
 import UnorderedList from "../../html-editor/commands/UnorderedList";
-import HtmlEditor, { Toolbar } from "../../html-editor/HtmlEditor";
+import AtomHtmlEditor, { Toolbar } from "../../html-editor/AtomHtmlEditor";
 
 @Pack
 export default class HtmlEditorTest extends AtomControl {
 
     protected create(): void {
         this.render(<div>
-            <HtmlEditor>
+            <AtomHtmlEditor>
                 <Toolbar>
                     <Bold/>
                     <Italic/>
@@ -58,7 +58,7 @@ export default class HtmlEditorTest extends AtomControl {
                     <Separator/>
                     <Source/>
                 </Toolbar>
-            </HtmlEditor>
+            </AtomHtmlEditor>
         </div>);
     }
 }

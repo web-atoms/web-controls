@@ -1,19 +1,19 @@
-import type HtmlEditor from "../HtmlEditor";
+import type AtomHtmlEditor from "../AtomHtmlEditor";
 
 function query(name: keyof typeof HtmlCommands): IHtmlCommand {
     return {
-        canExecute(e: HtmlEditor): boolean {
+        canExecute(e: AtomHtmlEditor): boolean {
             return e.queryCommandState(name);
         },
-        execute(e: HtmlEditor, showUI?: boolean, value?: string): boolean {
+        execute(e: AtomHtmlEditor, showUI?: boolean, value?: string): boolean {
             return e.executeCommand(name, showUI, value);
         }
     };
 }
 
 export interface IHtmlCommand {
-    canExecute(e: HtmlEditor): boolean;
-    execute(e: HtmlEditor, showUI?: boolean, value?: string): boolean;
+    canExecute(e: AtomHtmlEditor): boolean;
+    execute(e: AtomHtmlEditor, showUI?: boolean, value?: string): boolean;
 }
 
 export default class HtmlCommands {

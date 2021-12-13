@@ -4,7 +4,7 @@ import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import PopupService, { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
-import type HtmlEditor from "../HtmlEditor";
+import type AtomHtmlEditor from "../AtomHtmlEditor";
 import CommandButton from "./CommandButton";
 import HtmlCommands from "./HtmlCommands";
 
@@ -15,7 +15,7 @@ const css = CSS(StyleRule()
     )
 );
 
-async function showDialog(s: HtmlEditor, e: Event): Promise<string> {
+async function showDialog(s: AtomHtmlEditor, e: Event): Promise<string> {
 
     class SourceDialog extends PopupWindow {
 

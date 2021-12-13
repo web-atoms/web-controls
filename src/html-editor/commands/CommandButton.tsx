@@ -1,6 +1,6 @@
 import Bind from "@web-atoms/core/dist/core/Bind";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import type HtmlEditor from "../HtmlEditor";
+import type AtomHtmlEditor from "../AtomHtmlEditor";
 import { IHtmlCommand } from "./HtmlCommands";
 
 export interface ICommandButton {
@@ -33,8 +33,8 @@ export function notSet(text: string) {
     };
 }
 
-function insert(callback: (s: HtmlEditor, e: Event) => Promise<string> | string, command: IHtmlCommand): any {
-    return async (s: HtmlEditor, e: Event) => {
+function insert(callback: (s: AtomHtmlEditor, e: Event) => Promise<string> | string, command: IHtmlCommand): any {
+    return async (s: AtomHtmlEditor, e: Event) => {
         let r = callback(s, e);
         if (typeof r !== "string") {
             if (r.then) {
@@ -60,7 +60,7 @@ export default function CommandButton({
     disabled
 }: ICommandButton) {
 
-    disabled ??= Bind.oneWay((x: HtmlEditor) => x.version
+    disabled ??= Bind.oneWay((x: AtomHtmlEditor) => x.version
     ? !insertCommand.canExecute(x)
     : false);
 

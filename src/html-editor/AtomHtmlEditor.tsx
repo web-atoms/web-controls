@@ -73,14 +73,12 @@ function preventLinkClick(e: Event, editor: HTMLElement) {
     while (target && target !== body) {
 
         const ds = target.dataset;
-        // tslint:disable-next-line: no-string-literal
-        const command = ds["command"];
+
+        const command = ds.command;
         if (command) {
-            // tslint:disable-next-line: no-string-literal
-            let commandParameter = ds["command-parameter"] ?? ds["commandParameter"];
+            let commandParameter = ds.commandParameter;
             if (!commandParameter) {
-                // tslint:disable-next-line: no-string-literal
-                commandParameter = ds["command-parameters"] ?? ds["commandParameters"];
+                commandParameter = ds.commandParameters;
                 if (commandParameter) {
                     commandParameter = JSON.parse(commandParameter);
                 }
@@ -105,6 +103,20 @@ function preventLinkClick(e: Event, editor: HTMLElement) {
             return;
         }
 
+        const click = ds.click;
+        if (click) {
+            editor.dispatchEvent(new CustomEvent("click", {
+                bubbles: true
+            }));
+
+            editor.dispatchEvent(new CustomEvent("htmlEditorClick", {
+                detail: {
+                    target,
+                    command: click
+                }
+            }));
+        }
+
         if (target.isContentEditable) {
             break;
         }
@@ -125,7 +137,7 @@ export interface IEditorCommand {
     commandParameter: string;
 }
 
-export default class HtmlEditor extends AtomControl {
+export default class AtomHtmlEditor extends AtomControl {
 
     @BindableProperty
     public content: string;
@@ -162,7 +174,7 @@ export default class HtmlEditor extends AtomControl {
 
     private editorDocument: Document;
 
-    public insertImage(s: HtmlEditor, e: Event) {
+    public insertImage(s: AtomHtmlEditor, e: Event) {
         return showImageDialog(s, e);
     }
 

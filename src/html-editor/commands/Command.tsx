@@ -1,6 +1,6 @@
 import Bind from "@web-atoms/core/dist/core/Bind";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import type HtmlEditor from "../HtmlEditor";
+import type AtomHtmlEditor from "../AtomHtmlEditor";
 
 export interface ICommand {
     label?: string;
@@ -8,8 +8,8 @@ export interface ICommand {
     queryState?: string;
     enabled?: boolean;
     title?: string;
-    command?: (editor: HtmlEditor) => void;
-    query?: (editor: HtmlEditor) => boolean;
+    command?: (editor: AtomHtmlEditor) => void;
+    query?: (editor: AtomHtmlEditor) => boolean;
 }
 
 export default function Command({
@@ -22,8 +22,8 @@ export default function Command({
 }: ICommand) {
     if (label) {
         return <div
-            eventClick={Bind.event((e) => command(e as HtmlEditor))}
-            styleClass={Bind.oneWay((e: HtmlEditor) => ({
+            eventClick={Bind.event((e) => command(e as AtomHtmlEditor))}
+            styleClass={Bind.oneWay((e: AtomHtmlEditor) => ({
                 command: e.version,
                 pressed: !e.queryCommandState(queryState)
             }))}
@@ -33,8 +33,8 @@ export default function Command({
         </div>;
     }
     return <div
-        eventClick={Bind.event((e) => command(e as HtmlEditor))}
-        styleClass={Bind.oneWay((e: HtmlEditor) => ({
+        eventClick={Bind.event((e) => command(e as AtomHtmlEditor))}
+        styleClass={Bind.oneWay((e: AtomHtmlEditor) => ({
             command: e.version,
             pressed: e.queryCommandState(queryState)
         }))}

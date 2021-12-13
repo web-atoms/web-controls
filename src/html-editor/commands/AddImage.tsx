@@ -3,7 +3,7 @@ import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import PopupService, { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import FormField from "../../basic/FormField";
-import type HtmlEditor from "../HtmlEditor";
+import type AtomHtmlEditor from "../AtomHtmlEditor";
 import CommandButton, { notSet } from "./CommandButton";
 import HtmlCommands from "./HtmlCommands";
 
@@ -41,12 +41,12 @@ class ImageDialog extends PopupWindow {
     }
 }
 
-export function showImageDialog(s: HtmlEditor, e: Event): Promise<string> | string {
+export function showImageDialog(s: AtomHtmlEditor, e: Event): Promise<string> | string {
     return PopupService.showWindow<string>(e.currentTarget as HTMLElement, ImageDialog, { title: "Add Image" });
 }
 
 export default function AddImage({
-    eventInsertHtml = (s: HtmlEditor, e: Event) => s.insertImage(s, e),
+    eventInsertHtml = (s: AtomHtmlEditor, e: Event) => s.insertImage(s, e),
     insertCommand = HtmlCommands.insertImage
 }) {
     return CommandButton({
