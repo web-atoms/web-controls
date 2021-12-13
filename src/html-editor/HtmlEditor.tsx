@@ -93,6 +93,7 @@ function preventLinkClick(e: Event, editor: HTMLElement) {
                     commandParameter
                 }
             }));
+            e.preventDefault();
             return;
         }
 
