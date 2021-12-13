@@ -85,6 +85,13 @@ function preventLinkClick(e: Event, editor: HTMLElement) {
                     commandParameter = JSON.parse(commandParameter);
                 }
             }
+
+            // this will force currentTarget/lastTarget to be updated
+            // in navigation and popup service
+            editor.dispatchEvent(new CustomEvent("click", {
+                bubbles: true
+            }));
+
             editor.dispatchEvent(new CustomEvent<IEditorCommand>("command", {
                 bubbles: true,
                 detail: {
@@ -93,9 +100,7 @@ function preventLinkClick(e: Event, editor: HTMLElement) {
                     commandParameter
                 }
             }));
-            editor.dispatchEvent(new CustomEvent("click", {
-                bubbles: true
-            }));
+
             e.preventDefault();
             return;
         }
