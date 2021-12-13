@@ -77,7 +77,14 @@ function preventLinkClick(e: Event, editor: HTMLElement) {
         const command = ds["command"];
         if (command) {
             // tslint:disable-next-line: no-string-literal
-            const commandParameter = ds["command-parameter"] ?? ds["commandParameter"];
+            let commandParameter = ds["command-parameter"] ?? ds["commandParameter"];
+            if (!commandParameter) {
+                // tslint:disable-next-line: no-string-literal
+                commandParameter = ds["command-parameters"] ?? ds["commandParameters"];
+                if (commandParameter) {
+                    commandParameter = JSON.parse(commandParameter);
+                }
+            }
             editor.dispatchEvent(new CustomEvent<IEditorCommand>(command, {
                 bubbles: true,
                 detail: {
