@@ -93,6 +93,7 @@ function preventLinkClick(e: Event, editor: HTMLElement) {
                     commandParameter
                 }
             }));
+            editor.dispatchEvent(new CustomEvent("click", {}));
             e.preventDefault();
             return;
         }
@@ -101,6 +102,7 @@ function preventLinkClick(e: Event, editor: HTMLElement) {
             break;
         }
         if (target.tagName === "A") {
+            editor.dispatchEvent(new CustomEvent("click", {}));
             e.preventDefault();
             return false;
         }
