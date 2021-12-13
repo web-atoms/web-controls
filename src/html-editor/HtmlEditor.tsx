@@ -85,7 +85,7 @@ function preventLinkClick(e: Event, editor: HTMLElement) {
                     commandParameter = JSON.parse(commandParameter);
                 }
             }
-            editor.dispatchEvent(new CustomEvent<IEditorCommand>(command, {
+            editor.dispatchEvent(new CustomEvent<IEditorCommand>("command", {
                 bubbles: true,
                 detail: {
                     target,
