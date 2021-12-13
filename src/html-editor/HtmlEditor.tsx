@@ -93,7 +93,9 @@ function preventLinkClick(e: Event, editor: HTMLElement) {
                     commandParameter
                 }
             }));
-            editor.dispatchEvent(new CustomEvent("click", {}));
+            editor.dispatchEvent(new CustomEvent("click", {
+                bubbles: true
+            }));
             e.preventDefault();
             return;
         }
@@ -102,7 +104,9 @@ function preventLinkClick(e: Event, editor: HTMLElement) {
             break;
         }
         if (target.tagName === "A") {
-            editor.dispatchEvent(new CustomEvent("click", {}));
+            editor.dispatchEvent(new CustomEvent("click", {
+                bubbles: true
+            }));
             e.preventDefault();
             return false;
         }
