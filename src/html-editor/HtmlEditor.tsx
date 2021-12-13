@@ -88,6 +88,7 @@ function preventLinkClick(e: Event, editor: HTMLElement) {
             editor.dispatchEvent(new CustomEvent<IEditorCommand>(command, {
                 bubbles: true,
                 detail: {
+                    target,
                     command,
                     commandParameter
                 }
@@ -107,6 +108,7 @@ function preventLinkClick(e: Event, editor: HTMLElement) {
 }
 
 export interface IEditorCommand {
+    target: HTMLElement;
     command: string;
     commandParameter: string;
 }
