@@ -204,6 +204,7 @@ export default class AtomHtmlEditor extends AtomControl {
             this.setup();
         });
         this.element.classList.add(css);
+        this.element.classList.add("html-editor");
     }
 
     protected onPasteEvent(e: ClipboardEvent) {
