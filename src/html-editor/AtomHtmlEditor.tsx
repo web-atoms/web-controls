@@ -237,10 +237,8 @@ export default class AtomHtmlEditor extends AtomControl {
         const frame = this.element.getElementsByTagName("iframe")[0] as HTMLIFrameElement;
         const doc = frame.contentWindow.document;
         doc.open();
-        const baseUrl = doc.createElement("base");
-        baseUrl.href = `${location.protocol}//${location.host}`;
-        doc.head.appendChild(baseUrl);
-        doc.writeln(`<div id="editor"><p>&nbsp;</p></div>`);
+        const baseUrl = `${location.protocol}//${location.host}`;
+        doc.writeln(`<base href="${baseUrl}"></base><div id="editor"><p>&nbsp;</p></div>`);
         doc.close();
         const style = doc.createElement("style");
         style.textContent = `body {
