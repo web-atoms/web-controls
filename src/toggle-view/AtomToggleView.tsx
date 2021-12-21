@@ -1,5 +1,6 @@
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
+import Colors from "@web-atoms/core/dist/core/Colors";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
@@ -10,7 +11,9 @@ export interface IToggleView {
     icon?: string;
 }
 
-const translate = (n: number) => `( -${n * 100} 0)`;
+const translate = (i: number, selected: number) => i < selected
+    ? "transform( -100%, 0)"
+    : "transform( 100%, 0)";
 
 export function ToggleView(
     {
@@ -20,6 +23,7 @@ export function ToggleView(
     node: XNode) {
     return <div>
         <div>
+            <i class={icon}/>
             <label text={label}/>
         </div>
         <div>
@@ -28,13 +32,49 @@ export function ToggleView(
     </div>;
 }
 
-const css = CSS(StyleRule()
-    .verticalFlexLayout()
+const css = CSS(StyleRule("toggle-view")
+    .flexStretch()
+    .verticalFlexLayout({ alignItems: "stretch"})
     .child(StyleRule(".toolbar")
         .flexLayout({ gap: 0})
+        .alignSelf("center")
+        .child(StyleRule(".item")
+            .flexLayout({ inline: true })
+            .border("solid 1px lightgray")
+            .padding(5)
+            .child(StyleRule("label")
+                .whiteSpace("nowrap")
+            )
+            .and(StyleRule(".selected")
+                .backgroundColor(Colors.darkBlue)
+                .color(Colors.white)
+            )
+            .and(StyleRule(":first-child")
+                .borderTopLeftRadius(10)
+                .borderBottomLeftRadius(10)
+            ).and(StyleRule(":last-child")
+                .borderTopRightRadius(10)
+                .borderBottomRightRadius(10)
+            )
+        )
     )
     .child(StyleRule(".presenter")
         .flexStretch()
+        .position("relative")
+        .overflow("hidden")
+        .child(StyleRule("*")
+            .absolutePosition({top: 0, left: 0, right: 0, bottom: 0})
+            .transition("transform 1s")
+        )
+        .child(StyleRule(".left")
+            .transform("translate(-100%, 0)" as any)
+        )
+        .child(StyleRule(".right")
+            .transform("translate(100%, 0)" as any)
+        )
+        .child(StyleRule(".selected")
+            .transform("translate(0, 0)" as any)
+        )
     )
 );
 
@@ -69,11 +109,17 @@ export default class AtomToggleView extends AtomControl {
                 item: 1,
                 selected: i === this.selectedIndex
             }) );
-            view.attributes.styleTransform = Bind.oneWay(() => i !== this.selectedIndex
-                ? translate(index)
-                : "" );
-            this.render(label, toolbar, this);
-            this.render(view, presenter, this);
+            view.attributes.styleClass = Bind.oneWay(() => ({
+                left: i < this.selectedIndex,
+                right: i > this.selectedIndex,
+                selected: i === this.selectedIndex
+            }));
+            const l = document.createElement("div");
+            toolbar.appendChild(l);
+            this.render(label, l, this);
+            const p = document.createElement("div");
+            presenter.appendChild(p);
+            this.render(view, p, this);
             index++;
         }
     }
