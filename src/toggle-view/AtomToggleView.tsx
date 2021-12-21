@@ -16,13 +16,13 @@ export function ToggleView(
     {
         icon,
         label
-    },
+    }: IToggleView,
     node: XNode) {
     return <div>
         <div>
-            <label/>
+            <label text={label}/>
         </div>
-        <div styleTransform={Bind.oneWay((x: AtomToggleView) => translate(x.selectedIndex))}>
+        <div>
             {node}
         </div>
     </div>;
@@ -58,10 +58,23 @@ export default class AtomToggleView extends AtomControl {
         const toolbar = this.element.getElementsByClassName("toolbar")[0];
         const presenter = this.element.getElementsByClassName("presenter")[0];
 
+        let index = 0;
         for (const iterator of node.children) {
             const { 0: label, 1: view} = iterator.children;
+            const i = index++;
+            label.attributes ??= {};
+            view.attributes ??= {};
+            label.attributes.eventClick = Bind.event(() => this.selectedIndex = i);
+            label.attributes.styleClass = Bind.oneWay(() => ({
+                item: 1,
+                selected: i === this.selectedIndex
+            }) );
+            view.attributes.styleTransform = Bind.oneWay(() => i !== this.selectedIndex
+                ? translate(index)
+                : "" );
             this.render(label, toolbar, this);
             this.render(view, presenter, this);
+            index++;
         }
     }
 
