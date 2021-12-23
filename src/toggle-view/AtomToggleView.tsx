@@ -65,6 +65,7 @@ const css = CSS(StyleRule("toggle-view")
         .child(StyleRule("*")
             .absolutePosition({top: 0, left: 0, right: 0, bottom: 0})
             .transition("transform 0.3s")
+            .overflow("auto")
         )
         .child(StyleRule(".left")
             .transform("translate(-100%, 0)" as any)
@@ -90,7 +91,7 @@ export default class AtomToggleView extends AtomControl {
     protected render(node: XNode, e?: any, creator?: any): void {
         this.render = super.render;
 
-        super.render(<div class={css} { ... node.attributes}>
+        super.render(<div class={`atom-toggle-view ${css}`} { ... node.attributes}>
             <div class="toolbar"></div>
             <div class="presenter"></div>
         </div>);
