@@ -7,6 +7,7 @@ export interface IFormField {
     label: string;
     required?: boolean;
     error?: string;
+    class?: string;
 }
 
 const css = CSS(StyleRule()
@@ -33,10 +34,11 @@ export default function FormField(
     {
         label,
         required,
-        error
+        error,
+        class: className
     }: IFormField,
     node: XNode) {
-    return <div class={css}>
+    return <div class={`form-field ${css}`} styleClass={className}>
         <div class="label">
             <label text={label}/>
             <span class="required" styleClass={required} text="*" />
