@@ -5,7 +5,7 @@ import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import FormField from "./FormField";
 
 const css = CSS(StyleRule("form")
-    .toggle(".show-errors .field-error", " .field-error")
+    .toggle(".show-errors .field-error", " .field-error:not(:empty)")
 );
 
 export interface ISubmitButton {
