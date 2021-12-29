@@ -38,14 +38,13 @@ function checkValidity(e: MouseEvent) {
         const all = Array.from(form.getElementsByClassName("field-error"));
         for (const iterator of all) {
             if (iterator.textContent) {
-                alert("Please fix all validations");
+                alert(form.dataset?.errorMessage ?? "Please fix all validations");
                 return;
             }
         }
         button.dispatchEvent(new CustomEvent("submit"));
     }, 100);
 }
-
 
 export interface IForm {
     class?: any;
