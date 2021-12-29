@@ -1,3 +1,4 @@
+import Bind from "@web-atoms/core/dist/core/Bind";
 import Colors from "@web-atoms/core/dist/core/Colors";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
@@ -12,7 +13,7 @@ export interface IFormField {
 }
 
 const css = CSS(StyleRule()
-    .child(StyleRule(".error")
+    .child(StyleRule(".field-error")
         .padding(5)
         .backgroundColor(Colors.red)
         .color(Colors.white)
@@ -46,6 +47,6 @@ export default function FormField(
             <span class="required" styleClass={required} text="*" />
         </div>
         { node }
-        <div class="error" text={error}/>
+        <div class="field-error" text={error}/>
     </div>;
 }
