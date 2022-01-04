@@ -18,11 +18,13 @@ export default class BasicForm extends AtomControl {
             <Form>
                 <FormField
                     label="First name:"
+                    required={true}
                     error={Bind.oneWay(() => this.data.firstName ? "" : "First name is required")}>
                     <input value={Bind.twoWaysImmediate(() => this.data.firstName)}/>
                 </FormField>
                 <FormField
                     label="Last name:"
+                    required={true}
                     error={Bind.oneWay(() => this.data.lastName ? "" : "Last name is required")}>
                     <input value={Bind.twoWaysImmediate(() => this.data.lastName)}/>
                 </FormField>

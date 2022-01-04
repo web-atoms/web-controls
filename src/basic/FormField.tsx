@@ -33,18 +33,17 @@ const css = CSS(StyleRule()
             .visibility("hidden")
         )
     )
-);
+, "div[data-wa-form-field=wa-form-field]");
 
 export default function FormField(
     {
         label,
         required,
         error,
-        class: className,
         ... others
     }: IFormField,
     node: XNode) {
-    return <div class={`form-field ${css}`} styleClass={className} { ... others }>
+    return <div data-wa-form-field="wa-form-field" { ... others }>
         <div class="label">
             <label text={label}/>
             <span class="required" styleClass={required} text="*" />

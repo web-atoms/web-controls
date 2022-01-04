@@ -4,9 +4,10 @@ import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import FormField from "./FormField";
 
-const css = CSS(StyleRule("form")
-    .toggle(".show-errors .field-error", " .field-error:not(:empty)")
-);
+const css = CSS(StyleRule()
+    .displayNone(" .field-error:empty")
+    .displayNone(":not([data-wa-show-errors=yes]) .field-error:not(:empty)")
+, "*[data-wa-form=wa-form]");
 
 export interface ISubmitButton {
     eventClick: any;
@@ -16,22 +17,21 @@ export interface ISubmitButton {
 
 export function SubmitButton(
     { eventClick,
-        class: className,
         ... others}: ISubmitButton,
     ... nodes: XNode[]) {
     return <button
-        class={className ? `submit-button ${className}` : "submit-button"}
+        data-wa-form-action="submit"
         eventSubmit={eventClick} { ... others }>{ ... nodes}</button>;
 }
 
 function checkValidity(e: MouseEvent) {
     const form = e.currentTarget as HTMLFormElement;
     const button = e.target as HTMLElement;
-    if (!button.classList.contains("submit-button")) {
+    if (!button.dataset.waFormAction) {
         return;
     }
-    if (!form.classList.contains("show-errors")) {
-        form.classList.add("show-errors");
+    if (!form.dataset.waShowErrors) {
+        form.dataset.waShowErrors = "yes";
     }
 
     setTimeout(() => {
@@ -52,13 +52,10 @@ export interface IForm {
 }
 
 export default function Form(
-    {
-        class: className,
-        ... a
-    }: IForm,
+    a: IForm,
     ... nodes: XNode[]) {
     return <form
-        class={className ? `${css} ${className}` : css}
+        data-wa-form="wa-form"
         { ... a}
         eventClick={(e) => checkValidity(e)}>
         { ... nodes}
