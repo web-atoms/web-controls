@@ -11,10 +11,6 @@ export interface IToggleView {
     icon?: string;
 }
 
-const translate = (i: number, selected: number) => i < selected
-    ? "transform( -100%, 0)"
-    : "transform( 100%, 0)";
-
 export function ToggleView(
     {
         icon,
@@ -32,7 +28,7 @@ export function ToggleView(
     </div>;
 }
 
-const css = CSS(StyleRule("toggle-view")
+const css = CSS(StyleRule()
     .flexStretch()
     .verticalFlexLayout({ alignItems: "stretch"})
     .child(StyleRule(".toolbar")
@@ -79,7 +75,7 @@ const css = CSS(StyleRule("toggle-view")
             .transform("translate(0, 0)" as any)
         )
     )
-);
+, "div[data-wa-toggle-view=wa-toggle-view]");
 
 export default class AtomToggleView extends AtomControl {
 
@@ -93,7 +89,9 @@ export default class AtomToggleView extends AtomControl {
     protected render(node: XNode, e?: any, creator?: any): void {
         this.render = super.render;
 
-        super.render(<div class={`atom-toggle-view ${css}`} { ... node.attributes}>
+        super.render(<div
+            data-wa-toggle-view="wa-toggle-view"
+            { ... node.attributes}>
             <div class="toolbar"></div>
             <div class="presenter"></div>
         </div>);
