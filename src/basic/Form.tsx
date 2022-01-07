@@ -74,7 +74,10 @@ function checkValidity(e: MouseEvent) {
     if (!button) {
         return;
     }
-    e.preventDefault();
+    if (button.tagName === "button" && e.type !== "submit") {
+        // as submit will be followed, we whould ignore this only if the tag is button
+        return;
+    }
     if (action === "cancel") {
         form.dataset.waShowErrors = "";
         return;
