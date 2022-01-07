@@ -15,6 +15,34 @@ export interface ISubmitButton {
     [key: string]: any;
 }
 
+export interface ISubmitAction {
+    action: "submit";
+    eventClick: any;
+}
+
+export interface ICancelAction {
+    action: "cancel";
+}
+
+export type IFormAction = ISubmitAction | ICancelAction;
+
+/**
+ * This is just a decorator, you must have a child button for this to work
+ * @param action submit | cancel
+ * @param node child node where action will be applied
+ * @returns XNode
+ */
+export function FormAction(action: IFormAction, node: XNode) {
+    const attributes = node.attributes ??= {};
+    attributes["data-wa-form-action"] = action.action;
+    if (action.action === "submit") {
+        attributes.eventSubmit = action.eventClick;
+    }
+    return <div>
+        { node }
+    </div>;
+}
+
 export function SubmitButton(
     { eventClick,
         ... others}: ISubmitButton,
@@ -24,10 +52,26 @@ export function SubmitButton(
         eventSubmit={eventClick} { ... others }>{ ... nodes}</button>;
 }
 
+function findSubmitAction(e: MouseEvent) {
+    let button = e.target as HTMLElement;
+    while (button) {
+        const action = button.dataset.waFormAction;
+        if (/submit|cancel/i.test(action)) {
+            return { button, action };
+        }
+        button = button.parentElement;
+    }
+    return { button };
+}
+
 function checkValidity(e: MouseEvent) {
     const form = e.currentTarget as HTMLFormElement;
-    const button = e.target as HTMLElement;
-    if (!button.dataset.waFormAction) {
+    const { button, action } = findSubmitAction(e);
+    if (!button) {
+        return;
+    }
+    if (action === "cancel") {
+        form.dataset.waShowErrors = "";
         return;
     }
     if (!form.dataset.waShowErrors) {
