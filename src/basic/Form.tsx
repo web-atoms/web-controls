@@ -46,14 +46,42 @@ function checkValidity(e: MouseEvent) {
     }, 100);
 }
 
+function moveNext(e: KeyboardEvent) {
+    if (!/enter|submit|return/i.test(e.key)) {
+        return;
+    }
+    const element = e.target as HTMLElement;
+    if (!element.tagName) {
+        return;
+    }
+    if (element.dataset.waFormAction === "submit") {
+        element.dispatchEvent(new MouseEvent("click"));
+        return;
+    }
+    if (/input/i.test(element.tagName)) {
+        e.preventDefault();
+        element.dispatchEvent(new KeyboardEvent("keypress", {
+            key: "tab"
+        }));
+    }
+}
+
 export interface IForm {
     class?: any;
+    /**
+     * By default it is true, when user presses enter button on an input
+     * the focus will move on to the next input element
+     */
+    focusNextOnEnter?: boolean;
     [key: string]: any;
 }
 
 export default function Form(
     a: IForm,
     ... nodes: XNode[]) {
+    if (a.focusNextOnEnter !== false) {
+        a.eventKeypress = moveNext;
+    }
     return <form
         data-wa-form="wa-form"
         { ... a}
