@@ -74,10 +74,7 @@ function checkValidity(e: MouseEvent) {
     if (!button) {
         return;
     }
-    if (button.tagName === "button") {
-        // submit will be followed...
-        return;
-    }
+    e.preventDefault();
     if (action === "cancel") {
         form.dataset.waShowErrors = "";
         return;
