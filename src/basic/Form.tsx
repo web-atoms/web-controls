@@ -86,7 +86,7 @@ function checkValidity(e: MouseEvent) {
                 return;
             }
         }
-        button.dispatchEvent(new CustomEvent("submit"));
+        button.dispatchEvent(new CustomEvent("submit", { bubbles: false }));
     }, 100);
 }
 
