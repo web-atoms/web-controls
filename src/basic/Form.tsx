@@ -52,8 +52,12 @@ export function SubmitButton(
         eventSubmit={eventClick} { ... others }>{ ... nodes}</button>;
 }
 
-function findSubmitAction(e: MouseEvent) {
+function findSubmitAction(e: Event) {
     let button = e.target as HTMLElement;
+    if (e.type === "submit") {
+        e.preventDefault();
+        button = (e as SubmitEvent).submitter;
+    }
     while (button) {
         const action = button.dataset.waFormAction;
         if (/submit|cancel/i.test(action)) {
@@ -129,8 +133,8 @@ export default function Form(
     return <form
         data-wa-form="wa-form"
         { ... a}
-        eventClick={(e) => checkValidity(e)}
-        eventSubmit={(e: SubmitEvent) => e.preventDefault()}>
+        eventClick={checkValidity}
+        eventSubmit={checkValidity}>
         { ... nodes}
     </form>;
 }
