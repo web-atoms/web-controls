@@ -36,7 +36,7 @@ export function FormAction(action: IFormAction, node: XNode) {
     const attributes = node.attributes ??= {};
     attributes["data-wa-form-action"] = action.action;
     if (action.action === "submit") {
-        attributes.eventFormSubmit = action.eventClick;
+        attributes.eventSubmit = action.eventClick;
     }
     return <div>
         { node }
@@ -49,7 +49,7 @@ export function SubmitButton(
     ... nodes: XNode[]) {
     return <button
         data-wa-form-action="submit"
-        eventFormSubmit={eventClick} { ... others }>{ ... nodes}</button>;
+        eventSubmit={eventClick} { ... others }>{ ... nodes}</button>;
 }
 
 function findSubmitAction(e: MouseEvent) {
@@ -86,7 +86,7 @@ function checkValidity(e: MouseEvent) {
                 return;
             }
         }
-        button.dispatchEvent(new CustomEvent("formSubmit"));
+        button.dispatchEvent(new CustomEvent("submit"));
     }, 100);
 }
 
@@ -129,7 +129,8 @@ export default function Form(
     return <form
         data-wa-form="wa-form"
         { ... a}
-        eventClick={(e) => checkValidity(e)}>
+        eventClick={(e) => checkValidity(e)}
+        eventSubmit={(e: SubmitEvent) => e.preventDefault()}>
         { ... nodes}
     </form>;
 }
