@@ -13,6 +13,7 @@ export interface IFormField {
 }
 
 const css = CSS(StyleRule()
+    .verticalFlexLayout({})
     .child(StyleRule(".field-error")
         .padding(5)
         .margin(5)
