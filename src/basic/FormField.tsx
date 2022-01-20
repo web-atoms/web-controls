@@ -96,7 +96,7 @@ export default function FormField(
                 }
             }
             const hp = new HelpPopup(app);
-            PopupService.show(s.element as any, hp.element, { alignment: "auto", cancelToken });
+            PopupService.show(s.element as any, hp.element, { alignment: "centerOfScreen", cancelToken });
         });
     }
 
