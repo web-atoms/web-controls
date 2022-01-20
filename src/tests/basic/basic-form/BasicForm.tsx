@@ -19,7 +19,8 @@ export default class BasicForm extends AtomControl {
                 <FormField
                     label="First name:"
                     required={true}
-                    error={Bind.oneWay(() => this.data.firstName ? "" : "First name is required")}>
+                    error={Bind.oneWay(() => this.data.firstName ? "" : "First name is required")}
+                    help={<div>Enter your <strong>first name</strong></div>}>
                     <input value={Bind.twoWaysImmediate(() => this.data.firstName)}/>
                 </FormField>
                 <FormField

@@ -1,9 +1,13 @@
 import type { App } from "@web-atoms/core/dist/App";
 import Bind from "@web-atoms/core/dist/core/Bind";
 import Colors from "@web-atoms/core/dist/core/Colors";
+import FormattedString from "@web-atoms/core/dist/core/FormattedString";
+import { CancelToken } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import { NavigationService } from "@web-atoms/core/dist/services/NavigationService";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
+import PopupService, { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
 export interface IFormField {
@@ -12,7 +16,7 @@ export interface IFormField {
     error?: string;
     class?: string;
     helpIcon?: string | boolean;
-    help?: string;
+    help?: string | object;
     helpEventClick?: any;
     /**
      * Tooltip displayed on help icon
@@ -44,9 +48,17 @@ const css = CSS(StyleRule()
         )
         .child(StyleRule("i")
             .cursor("pointer")
+            .marginLeft(5)
         )
     )
 , "div[data-wa-form-field=wa-form-field]");
+
+const helpCSS = CSS(StyleRule()
+    .padding(10)
+    .child(StyleRule(".fad")
+        .absolutePosition({ top: 5, right: 5 })
+    )
+);
 
 export default function FormField(
     {
@@ -64,8 +76,27 @@ export default function FormField(
     if (!helpEventClick && help) {
         helpEventClick = Bind.event((s, e) => {
             const app = s.app as App;
-            const ns = app.resolve(NavigationService);
-            ns.notify(help);
+            if (typeof help === "string" || help instanceof FormattedString) {
+                const ns = app.resolve(NavigationService);
+                ns.notify(help);
+                return;
+            }
+
+            const cancelToken = new CancelToken();
+
+            class HelpPopup extends AtomControl {
+                protected create(): void {
+                    this.render(<div class={helpCSS}>
+                        <i
+                            class="fad fa-times-circle"
+                            eventClick={() => cancelToken.cancel()}
+                            />
+                        { help as any}
+                    </div>);
+                }
+            }
+            const hp = new HelpPopup(app);
+            PopupService.show(s.element as any, hp.element, { alignment: "auto", cancelToken });
         });
     }
 
@@ -73,7 +104,7 @@ export default function FormField(
         <div class="label">
             <label text={label}/>
             <span class="required" styleClass={required} text="*" />
-            { help ? <i class={helpIcon} title={helpTitle} eventClick={helpEventClick}/> : null }
+            { help ? <i class={helpIcon} title={helpTitle} eventClick={helpEventClick}/> : undefined }
         </div>
         { node }
         <div class="field-error" text={error}/>
