@@ -53,13 +53,6 @@ const css = CSS(StyleRule()
     )
 , "div[data-wa-form-field=wa-form-field]");
 
-const helpCSS = CSS(StyleRule()
-    .padding(10)
-    .child(StyleRule(".fad")
-        .absolutePosition({ top: 5, right: 5 })
-    )
-);
-
 export default function FormField(
     {
         label,
@@ -82,20 +75,14 @@ export default function FormField(
                 return;
             }
 
-            const cancelToken = new CancelToken();
-
-            class HelpPopup extends AtomControl {
+            class HelpPopup extends PopupWindow {
                 protected create(): void {
-                    this.render(<div class={helpCSS}>
-                        <i
-                            class="fad fa-times-circle"
-                            eventClick={() => cancelToken.cancel()}
-                            />
+                    this.render(<div>
                         { help as any}
                     </div>);
                 }
             }
-            PopupService.showWindow(s.element as any, HelpPopup as any, { cancelToken });
+            HelpPopup.showWindow({ title : helpTitle ?? "Help" });
         });
     }
 
