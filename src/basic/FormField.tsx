@@ -14,6 +14,10 @@ export interface IFormField {
     helpIcon?: string | boolean;
     help?: string;
     helpEventClick?: any;
+    /**
+     * Tooltip displayed on help icon
+     */
+    helpTitle?: string;
     [key: string]: any;
 }
 
@@ -38,6 +42,9 @@ const css = CSS(StyleRule()
         .child(StyleRule(".required")
             .visibility("hidden")
         )
+        .child(StyleRule("i")
+            .cursor("pointer")
+        )
     )
 , "div[data-wa-form-field=wa-form-field]");
 
@@ -49,6 +56,7 @@ export default function FormField(
         helpIcon = "fad fa-question-circle",
         help,
         helpEventClick,
+        helpTitle,
         ... others
     }: IFormField,
     node: XNode) {
@@ -65,7 +73,7 @@ export default function FormField(
         <div class="label">
             <label text={label}/>
             <span class="required" styleClass={required} text="*" />
-            { help ? <i class={helpIcon} eventClick={helpEventClick}/> : null }
+            { help ? <i class={helpIcon} title={helpTitle} eventClick={helpEventClick}/> : null }
         </div>
         { node }
         <div class="field-error" text={error}/>
