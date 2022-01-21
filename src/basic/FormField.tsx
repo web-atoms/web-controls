@@ -39,6 +39,7 @@ const css = CSS(StyleRule()
         )
     )
     .child(StyleRule(".label")
+        .display("flex")
         .child(StyleRule(".true")
             .visibility("visible")
             .color(Colors.red)
@@ -48,7 +49,8 @@ const css = CSS(StyleRule()
         )
         .child(StyleRule("i")
             .cursor("pointer")
-            .marginLeft(5)
+            .marginLeft("auto")
+            .color(Colors.lightGreen)
         )
     )
 , "div[data-wa-form-field=wa-form-field]");
@@ -58,7 +60,7 @@ export default function FormField(
         label,
         required,
         error,
-        helpIcon = "fad fa-question-circle",
+        helpIcon = "fas fa-question-circle",
         help,
         helpEventClick,
         helpTitle,
