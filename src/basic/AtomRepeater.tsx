@@ -147,6 +147,8 @@ class SelectAllControl extends AtomControl {
 
     protected preCreate(): void {
         this.element.dataset.selectAll = "select-all";
+        this.items = [];
+        this.selectedItems = [];
         this.render(<SelectAllControl
             data-is-selected={Bind.oneWay(() => this.items.length > 0
                 && this.items.length === this.selectedItems.length)}
