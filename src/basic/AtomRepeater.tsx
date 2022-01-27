@@ -129,6 +129,77 @@ export function SelectorCheckBox(
     </label>;
 }
 
+CSS(StyleRule()
+    .nested(StyleRule("i[data-ui-type]")
+        .padding(5)
+    )
+    .displayNone("[data-is-selected=true] i[data-ui-type=item-select]")
+    .displayNone("[data-is-selected=false] i[data-ui-type=item-deselect]")
+, "*[data-select-all=select-all]");
+
+class SelectAllControl extends AtomControl {
+
+    @BindableProperty
+    public items: any[];
+
+    @BindableProperty
+    public selectedItems: any[];
+
+    protected preCreate(): void {
+        this.element.dataset.selectAll = "select-all";
+        this.render(<SelectAllControl
+            data-is-selected={Bind.oneWay(() => this.items.length > 0
+                && this.items.length === this.selectedItems.length)}
+        />);
+        this.bindEvent(this.element, "click", () => {
+            const si = this.selectedItems;
+            const items = this.items;
+            if (!si) {
+                return;
+            }
+            if (!items) {
+                return;
+            }
+            if (items.length === 0) {
+                return;
+            }
+            if (items.length === si.length) {
+                si.clear();
+            } else {
+                si.addAll(items);
+            }
+        });
+    }
+
+}
+
+export interface ISelectAll extends ISelectorCheckBox {
+    items: any[];
+    selectedItems: any[];
+}
+
+export function SelectAll(
+    {
+        text = "Select All",
+        icon = "far fa-square",
+        iconSelected = "fas fa-check-square",
+        ... a
+    }: ISelectAll,
+    ... nodes: XNode[]) {
+    if (text) {
+        return <SelectAllControl
+            for="label" { ... a}>
+            <i class={icon} data-ui-type="item-select"/>
+            <i class={iconSelected} data-ui-type="item-deselect"/>
+            <span text={text}/>
+        </SelectAllControl>;
+    }
+    return <SelectAllControl for="label" { ... a}>
+        <i class={icon} data-ui-type="item-select"/>
+        <i class={iconSelected} data-ui-type="item-deselect"/>
+        { ... nodes }
+    </SelectAllControl>;
+}
 export default class AtomRepeater extends AtomControl {
 
     public "event-item-click"?: (e: CustomEvent) => void;

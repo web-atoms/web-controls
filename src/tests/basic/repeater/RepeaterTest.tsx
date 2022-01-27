@@ -3,7 +3,7 @@ import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import Pack from "@web-atoms/core/dist/Pack";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import AtomRepeater, { SelectorCheckBox } from "../../../basic/AtomRepeater";
+import AtomRepeater, { SelectAll, SelectorCheckBox } from "../../../basic/AtomRepeater";
 
 const allOptions = [
     { label: "Audio", value: "audio"},
@@ -22,6 +22,12 @@ export default class RepeaterTest extends AtomControl {
         this.options = [];
         this.render(<div>
             <h5>Select</h5>
+            <div>
+                <SelectAll
+                    items={allOptions}
+                    selectedItems={this.options}
+                    />
+            </div>
             <AtomRepeater
                 selectedItems={this.options}
                 items={allOptions}
