@@ -276,7 +276,13 @@ export default class AtomRepeater extends AtomControl {
             case "items":
                 this.itemsDisposable?.dispose();
                 const items = this.items;
-                const d = items?.watch(() => {
+                const d = items?.watch((target, key, index, item) => {
+                    switch (key) {
+                        case "add":
+                        case "remove":
+                            this.updatePartial(key, index, item);
+                            break;
+                    }
                     this.updateItems();
                     AtomBinder.refreshValue(this, "selectedItem");
                     AtomBinder.refreshValue(this, "value");
@@ -362,14 +368,87 @@ export default class AtomRepeater extends AtomControl {
         }
     }
 
+    public updatePartial(key, index, item, container?: HTMLElement) {
+
+        const items = this.items;
+        if (!items) {
+            return;
+        }
+
+        const ir = this.itemRenderer;
+        if (!ir) {
+            return;
+        }
+
+        container ??= this.itemsPresenter ?? this.element;
+        let start = container.firstElementChild as HTMLElement;
+        let ei;
+
+        while (start) {
+            // tslint:disable-next-line: no-bitwise
+            ei = ~~start.dataset.dataItemIndex;
+            if (ei === index) {
+                break;
+            }
+            start = start.nextElementSibling as HTMLElement;
+        }
+
+        if (!start) {
+            return;
+        }
+
+        const vp = this.valuePath ?? ((it) => it);
+        const si = (this.selectedItems ?? []).map(vp);
+
+        if (key === "remove") {
+            const current = start;
+            start = start.nextElementSibling as HTMLElement;
+            const ac = current.atomControl;
+            if (ac) {
+                ac.dispose();
+            } else {
+                this.unbind(start);
+                this.unbindEvent(start);
+            }
+            current.remove();
+        } else {
+            const en = ir(item);
+            const ea = en.attributes ??= {};
+            const v = vp(item);
+            ea["data-item-index"] = (index++).toString();
+            ea["data-selected-item"] = si.indexOf(v) !== -1
+            ? "true"
+            : "false";
+            const e = document.createElement(ea.for ?? ea.name ?? "div");
+            container.insertBefore(e, start);
+            this.render(en, e, this);
+            start = start.nextElementSibling as HTMLElement;
+        }
+
+        while (start) {
+            const ci = items[index];
+            const cv = vp(ci);
+            start.dataset.itemIndex = (index++).toString();
+            start.dataset.selectedItem = si.indexOf(cv) !== -1
+                ? "true"
+                : "false";
+            start = start.nextElementSibling as HTMLElement;
+        }
+    }
+
     public updateItems(container?: HTMLElement) {
         container ??= this.itemsPresenter ?? this.element;
         let start = container.firstElementChild;
         while (start) {
             const e = start as any;
             start = start.nextElementSibling;
-            this.unbindEvent(e);
-            e.atomControl?.dispose();
+            const ac = e.atomControl;
+            if (ac) {
+                ac.dispose();
+            } else {
+                this.unbindEvent(e);
+                this.unbind(e);
+            }
             e.remove();
         }
         const ir = this.itemRenderer;
