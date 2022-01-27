@@ -93,6 +93,9 @@ CSS(StyleRule()
     .nested(StyleRule("i[data-click-event]")
         .padding(5)
     )
+    .nested(StyleRule("[data-no-wrap=true]")
+        .whiteSpace("nowrap")
+    )
 , "*[data-selected-item]");
 
 CSS(StyleRule()
@@ -118,7 +121,7 @@ export function SelectorCheckBox(
         return <label>
         <i class={icon} data-click-event="item-select"/>
         <i class={iconSelected}  data-click-event="item-deselect"/>
-            <span text={text}/>
+            <span data-no-wrap="true" text={text}/>
             { ... nodes }
         </label>;
     }
@@ -132,6 +135,9 @@ export function SelectorCheckBox(
 CSS(StyleRule()
     .nested(StyleRule("i[data-ui-type]")
         .padding(5)
+    )
+    .nested(StyleRule("[data-no-wrap=true]")
+        .whiteSpace("nowrap")
     )
     .displayNone("[data-is-selected=true] i[data-ui-type=item-select]")
     .displayNone("[data-is-selected=false] i[data-ui-type=item-deselect]")
@@ -193,7 +199,7 @@ export function SelectAll(
             for="label" { ... a}>
             <i class={icon} data-ui-type="item-select"/>
             <i class={iconSelected} data-ui-type="item-deselect"/>
-            <span text={text}/>
+            <span data-no-wrap="true" text={text}/>
         </SelectAllControl>;
     }
     return <SelectAllControl for="label" { ... a}>
