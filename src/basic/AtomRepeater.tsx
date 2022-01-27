@@ -151,7 +151,7 @@ class SelectAllControl extends AtomControl {
         this.selectedItems = [];
         this.render(<SelectAllControl
             data-is-selected={Bind.oneWay(() => this.items.length > 0
-                && this.items.length === this.selectedItems.length)}
+                && this.items.length === this.selectedItems.length, false)}
         />);
         this.bindEvent(this.element, "click", () => {
             const si = this.selectedItems;
