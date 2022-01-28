@@ -209,6 +209,27 @@ export function SelectAll(
         { ... nodes }
     </SelectAllControl>;
 }
+
+export function disposeChildren(owner: AtomControl, e: HTMLElement) {
+    if (!e) {
+        return;
+    }
+    let s = e.firstElementChild;
+    while (s) {
+        const c = s as any;
+        s = s.nextElementSibling as HTMLElement;
+        const ac = c.atomControl;
+        if (ac) {
+            ac.dispose();
+            continue;
+        }
+        disposeChildren(owner, c);
+        owner.unbind(c);
+        owner.unbindEvent(c);
+        c.remove();
+    }
+}
+
 export default class AtomRepeater extends AtomControl {
 
     public "event-item-click"?: (e: CustomEvent) => void;
@@ -445,19 +466,7 @@ export default class AtomRepeater extends AtomControl {
 
     public updateItems(container?: HTMLElement) {
         container ??= this.itemsPresenter ?? this.element;
-        let start = container.firstElementChild;
-        while (start) {
-            const e = start as any;
-            start = start.nextElementSibling;
-            const ac = e.atomControl;
-            if (ac) {
-                ac.dispose();
-            } else {
-                this.unbindEvent(e);
-                this.unbind(e);
-            }
-            e.remove();
-        }
+        disposeChildren(this, container);
         const ir = this.itemRenderer;
         if (!ir) {
             return;
