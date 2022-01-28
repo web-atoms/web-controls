@@ -4,6 +4,7 @@ import XNode from "@web-atoms/core/dist/core/XNode";
 import Pack from "@web-atoms/core/dist/Pack";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import AtomRepeater, { SelectAll, SelectorCheckBox } from "../../../basic/AtomRepeater";
+import ToggleButtonBar from "../../../basic/ToggleButtonBar";
 
 const allOptions = [
     { label: "Audio", value: "audio"},
@@ -41,6 +42,11 @@ export default class RepeaterTest extends AtomControl {
             <AtomRepeater
                 items={Bind.oneWay(() => this.options)}
                 itemRenderer={(item) => <div text={item.label}/>}
+                />
+
+            <h6>Toggle Sample</h6>
+            <ToggleButtonBar
+                items={allOptions}
                 />
         </div>);
     }
