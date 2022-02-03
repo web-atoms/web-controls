@@ -175,6 +175,7 @@ class SelectAllControl extends AtomControl {
             if (items.length === si.length) {
                 si.clear();
             } else {
+                si.length = 0;
                 si.addAll(items);
             }
         });
