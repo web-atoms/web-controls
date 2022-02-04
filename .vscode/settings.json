@@ -7,5 +7,13 @@
         "Muli",
         "oned",
         "postversion"
-    ]
+    ],
+    "emmet.showSuggestionsAsSnippets": false,
+	"emmet.showAbbreviationSuggestions": false,
+	"emmet.excludeLanguages": [
+		"markdown",
+		"typescript",
+		"typescriptreact"
+	]
+
 }
