@@ -250,6 +250,9 @@ export default class AtomRepeater extends AtomControl {
     public items: any[];
 
     @BindableProperty
+    public watch: any;
+
+    @BindableProperty
     public visibilityFilter: (item: any) => boolean;
 
     @BindableProperty
@@ -339,6 +342,7 @@ export default class AtomRepeater extends AtomControl {
                 this.updateClasses();
                 break;
             case "itemRenderer":
+            case "watch":
                 this.updateItems();
                 break;
             case "visibilityFilter":
