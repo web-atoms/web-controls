@@ -5,7 +5,7 @@ import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
-import AtomRepeater, { askSuggestion, Match, MatchCaseInsensitive } from "./AtomRepeater";
+import AtomRepeater, { askSuggestion, disposeChildren, Match, MatchCaseInsensitive } from "./AtomRepeater";
 
 CSS(StyleRule()
     .flexLayout({ inline: true, justifyContent: "stretch" as any})
@@ -60,7 +60,7 @@ export default class DropDown extends AtomRepeater {
     }
 
     protected updateClasses(): void {
-        this.removeAllChildren(this.element);
+        disposeChildren(this, this.element);
         const ir = this.itemRenderer;
         if (!ir) {
             return;
