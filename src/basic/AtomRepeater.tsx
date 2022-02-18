@@ -519,44 +519,44 @@ export default class AtomRepeater extends AtomControl {
     }
 
     protected preCreate(): void {
-        this.bindEvent(this.element, "click", (e: MouseEvent) => this.onElementClick(e));
+        // this.bindEvent(this.element, "click", (e: MouseEvent) => this.onElementClick(e));
     }
 
-    protected onElementClick(e: MouseEvent) {
-        const items = this.items;
-        let target = e.target as HTMLElement;
-        let eventName = "itemClick";
-        while (target) {
-            const itemIndex = target.dataset.itemIndex;
-            const itemClickEvent = target.dataset.clickEvent;
-            if (itemClickEvent) {
-                eventName = itemClickEvent.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
-            }
-            if (typeof itemIndex !== "undefined") {
-                // tslint:disable-next-line: no-bitwise
-                const item = items[~~itemIndex];
-                if (eventName === "itemSelect" || eventName === "itemDeselect") {
-                    const si = this.selectedItems;
-                    if (si) {
-                        const index = si.indexOf(item);
-                        if (index === -1) {
-                            si.add(item);
-                        } else {
-                            si.removeAt(index);
-                        }
-                    }
-                }
-                if (item) {
-                    this.element.dispatchEvent(new CustomEvent(eventName, {
-                        detail: item,
-                        bubbles: false
-                    }));
-                }
-                return;
-            }
-            target = target.parentElement as HTMLElement;
-        }
-    }
+    // protected onElementClick(e: MouseEvent) {
+    //     const items = this.items;
+    //     let target = e.target as HTMLElement;
+    //     let eventName = "itemClick";
+    //     while (target) {
+    //         const itemIndex = target.dataset.itemIndex;
+    //         const itemClickEvent = target.dataset.clickEvent;
+    //         if (itemClickEvent) {
+    //             eventName = itemClickEvent.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+    //         }
+    //         if (typeof itemIndex !== "undefined") {
+    //             // tslint:disable-next-line: no-bitwise
+    //             const item = items[~~itemIndex];
+    //             if (eventName === "itemSelect" || eventName === "itemDeselect") {
+    //                 const si = this.selectedItems;
+    //                 if (si) {
+    //                     const index = si.indexOf(item);
+    //                     if (index === -1) {
+    //                         si.add(item);
+    //                     } else {
+    //                         si.removeAt(index);
+    //                     }
+    //                 }
+    //             }
+    //             if (item) {
+    //                 this.element.dispatchEvent(new CustomEvent(eventName, {
+    //                     detail: item,
+    //                     bubbles: false
+    //                 }));
+    //             }
+    //             return;
+    //         }
+    //         target = target.parentElement as HTMLElement;
+    //     }
+    // }
 
     protected updateVisibility() {
         const container = this.itemsPresenter ?? this.element;
@@ -573,3 +573,57 @@ export default class AtomRepeater extends AtomControl {
     }
 
 }
+
+function onElementClick(e: Event) {
+    let target = e.target as HTMLElement;
+    let eventName;
+    let repeater;
+    let index;
+    while (target) {
+        const a = target.atomControl;
+        if (a !== undefined && a instanceof AtomRepeater) {
+            repeater = a;
+            break;
+        }
+        if (index === undefined) {
+            const itemIndex = target.dataset.itemIndex;
+            if (typeof itemIndex !== "undefined") {
+                // tslint:disable-next-line: no-bitwise
+                index = ~~itemIndex;
+            }
+        }
+        if (eventName === undefined) {
+            const itemClickEvent = target.dataset.clickEvent;
+            if (itemClickEvent) {
+                eventName = itemClickEvent.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+            }
+        }
+        target = target.parentElement as HTMLElement;
+    }
+
+    if (index === undefined) {
+        return;
+    }
+
+    // tslint:disable-next-line: no-bitwise
+    const item = repeater.items[~~index];
+    if (eventName === "itemSelect" || eventName === "itemDeselect") {
+        const si = repeater.selectedItems;
+        if (si) {
+            index = si.indexOf(item);
+            if (index === -1) {
+                si.add(item);
+            } else {
+                si.removeAt(index);
+            }
+        }
+    }
+    if (item) {
+        repeater.element.dispatchEvent(new CustomEvent(eventName ?? "itemClick", {
+            detail: item,
+            bubbles: false
+        }));
+    }
+}
+
+document.body.addEventListener("click", onElementClick);
