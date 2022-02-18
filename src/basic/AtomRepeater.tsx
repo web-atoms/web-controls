@@ -237,6 +237,8 @@ export default class AtomRepeater extends AtomControl {
     public "event-item-select"?: (e: CustomEvent) => void;
     public "event-item-deselect"?: (e: CustomEvent) => void;
 
+    public bubbleEvents: boolean = true;
+
     @BindableProperty
     public allowMultipleSelection: boolean;
 
@@ -621,7 +623,7 @@ function onElementClick(e: Event) {
     if (item) {
         repeater.element.dispatchEvent(new CustomEvent(eventName ?? "itemClick", {
             detail: item,
-            bubbles: false
+            bubbles: repeater.bubbleEvents
         }));
     }
 }
