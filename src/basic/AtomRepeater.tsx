@@ -578,6 +578,7 @@ export default class AtomRepeater extends AtomControl {
 
 function onElementClick(e: Event) {
     let target = e.target as HTMLElement;
+    const originalTarget = target;
     let eventName;
     let repeater;
     let index;
@@ -621,10 +622,12 @@ function onElementClick(e: Event) {
         }
     }
     if (item) {
-        repeater.element.dispatchEvent(new CustomEvent(eventName ?? "itemClick", {
+        const ce = new CustomEvent(eventName ?? "itemClick", {
             detail: item,
             bubbles: repeater.bubbleEvents
-        }));
+        });
+        (ce as any).originalTarget = originalTarget;
+        repeater.element.dispatchEvent(ce);
     }
 }
 
