@@ -626,8 +626,7 @@ function onElementClick(e: Event) {
             detail: item,
             bubbles: repeater.bubbleEvents
         });
-        (ce as any).originalTarget = originalTarget;
-        repeater.element.dispatchEvent(ce);
+        originalTarget.dispatchEvent(ce);
     }
 }
 
