@@ -1,4 +1,4 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
+import Bind, { IAtomComponent } from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import Pack from "@web-atoms/core/dist/Pack";
@@ -30,11 +30,13 @@ export default class RepeaterTest extends AtomControl {
                     />
             </div>
             <AtomRepeater
+                event-change-name={Bind.event((s, e) => this.changeName(s, e))}
                 selectedItems={this.options}
                 items={allOptions}
                 itemRenderer={(item) => <div>
                     <SelectorCheckBox/>
                     <span text={item.label}/>
+                    <button data-click-event="change-name">Change</button>
                 </div>}
                 />
             <hr/>
@@ -49,6 +51,13 @@ export default class RepeaterTest extends AtomControl {
                 items={allOptions}
                 />
         </div>);
+    }
+
+    changeName(s: IAtomComponent, e: CustomEvent<any>): void {
+        const data = e.detail;
+        data.label = data.label + "*";
+        const r = s as AtomRepeater;
+        r.rebuildItem(data);
     }
 
 }

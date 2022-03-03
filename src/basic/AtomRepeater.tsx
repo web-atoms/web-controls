@@ -403,6 +403,12 @@ export default class AtomRepeater extends AtomControl {
         }
     }
 
+    public rebuildItem(item) {
+        const index = this.items.indexOf(item);
+        this.updatePartial("remove", index, item);
+        this.updatePartial("add", index, item);
+    }
+
     public updatePartial(key, index, item, container?: HTMLElement) {
 
         const items = this.items;
@@ -421,7 +427,7 @@ export default class AtomRepeater extends AtomControl {
 
         while (start) {
             // tslint:disable-next-line: no-bitwise
-            ei = ~~start.dataset.dataItemIndex;
+            ei = ~~start.dataset.itemIndex;
             if (ei === index) {
                 break;
             }
@@ -457,7 +463,7 @@ export default class AtomRepeater extends AtomControl {
             const e = document.createElement(ea.for ?? ea.name ?? "div");
             container.insertBefore(e, start);
             this.render(en, e, this);
-            start = start.nextElementSibling as HTMLElement;
+            // start = start.nextElementSibling as HTMLElement;
         }
 
         while (start) {
