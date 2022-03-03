@@ -403,7 +403,11 @@ export default class AtomRepeater extends AtomControl {
         }
     }
 
-    public rebuildItem(item) {
+    public refreshItem(item, fx?: Promise<void> | any) {
+        if (fx?.then) {
+            fx.then(() => this.refreshItem(item), () => this.refreshItem(item));
+            return;
+        }
         const index = this.items.indexOf(item);
         this.updatePartial("remove", index, item);
         this.updatePartial("add", index, item);
@@ -434,7 +438,7 @@ export default class AtomRepeater extends AtomControl {
             start = start.nextElementSibling as HTMLElement;
         }
 
-        if (!start) {
+        if (key !== "add" && !start) {
             return;
         }
 
@@ -448,20 +452,22 @@ export default class AtomRepeater extends AtomControl {
             if (ac) {
                 ac.dispose();
             } else {
-                this.unbind(start);
-                this.unbindEvent(start);
+                this.unbind(current);
+                this.unbindEvent(current);
             }
             current.remove();
         } else {
             const en = ir(item);
             const ea = en.attributes ??= {};
             const v = vp(item);
-            ea["data-item-index"] = (index++).toString();
-            ea["data-selected-item"] = si.indexOf(v) !== -1
-            ? "true"
-            : "false";
             const e = document.createElement(ea.for ?? ea.name ?? "div");
-            container.insertBefore(e, start);
+            e.dataset.itemIndex = (index++).toString();
+            e.dataset.selectedItem = si.indexOf(v) !== -1 ? "true" : "false";
+            if (start) {
+                container.insertBefore(e, start);
+            } else {
+                container.appendChild(e);
+            }
             this.render(en, e, this);
             // start = start.nextElementSibling as HTMLElement;
         }
@@ -525,46 +531,6 @@ export default class AtomRepeater extends AtomControl {
         }
 
     }
-
-    protected preCreate(): void {
-        // this.bindEvent(this.element, "click", (e: MouseEvent) => this.onElementClick(e));
-    }
-
-    // protected onElementClick(e: MouseEvent) {
-    //     const items = this.items;
-    //     let target = e.target as HTMLElement;
-    //     let eventName = "itemClick";
-    //     while (target) {
-    //         const itemIndex = target.dataset.itemIndex;
-    //         const itemClickEvent = target.dataset.clickEvent;
-    //         if (itemClickEvent) {
-    //             eventName = itemClickEvent.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
-    //         }
-    //         if (typeof itemIndex !== "undefined") {
-    //             // tslint:disable-next-line: no-bitwise
-    //             const item = items[~~itemIndex];
-    //             if (eventName === "itemSelect" || eventName === "itemDeselect") {
-    //                 const si = this.selectedItems;
-    //                 if (si) {
-    //                     const index = si.indexOf(item);
-    //                     if (index === -1) {
-    //                         si.add(item);
-    //                     } else {
-    //                         si.removeAt(index);
-    //                     }
-    //                 }
-    //             }
-    //             if (item) {
-    //                 this.element.dispatchEvent(new CustomEvent(eventName, {
-    //                     detail: item,
-    //                     bubbles: false
-    //                 }));
-    //             }
-    //             return;
-    //         }
-    //         target = target.parentElement as HTMLElement;
-    //     }
-    // }
 
     protected updateVisibility() {
         const container = this.itemsPresenter ?? this.element;

@@ -30,7 +30,7 @@ export default class RepeaterTest extends AtomControl {
                     />
             </div>
             <AtomRepeater
-                event-change-name={Bind.event((s, e) => this.changeName(s, e))}
+                event-change-name={Bind.event<AtomRepeater>((s, e) => s.refreshItem(e.detail, this.changeName(e.detail)))}
                 selectedItems={this.options}
                 items={allOptions}
                 itemRenderer={(item) => <div>
@@ -53,11 +53,8 @@ export default class RepeaterTest extends AtomControl {
         </div>);
     }
 
-    changeName(s: IAtomComponent, e: CustomEvent<any>): void {
-        const data = e.detail;
+    changeName(data): void {
         data.label = data.label + "*";
-        const r = s as AtomRepeater;
-        r.rebuildItem(data);
     }
 
 }
