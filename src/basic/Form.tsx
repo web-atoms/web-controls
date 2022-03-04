@@ -6,9 +6,12 @@ import FormField from "./FormField";
 import IElement from "./IElement";
 
 const css = CSS(StyleRule()
-    .verticalFlexLayout({})
+    .verticalFlexLayout({ alignItems: "stretch" })
     .displayNone(" .field-error:empty")
     .displayNone(":not([data-wa-show-errors=yes]) .field-error:not(:empty)")
+    .child(StyleRule("button")
+        .alignSelf("flex-start")
+    )
 , "*[data-wa-form=wa-form]");
 
 export interface ISubmitButton {
