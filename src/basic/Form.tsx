@@ -3,6 +3,7 @@ import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import FormField from "./FormField";
+import IElement from "./IElement";
 
 const css = CSS(StyleRule()
     .displayNone(" .field-error:empty")
@@ -15,13 +16,14 @@ export interface ISubmitButton {
     [key: string]: any;
 }
 
-export interface ISubmitAction {
+export interface ISubmitAction extends IElement {
     action: "submit";
     eventClick: any;
 }
 
-export interface ICancelAction {
+export interface ICancelAction extends IElement{
     action: "cancel";
+    eventClick?: any;
 }
 
 export type IFormAction = ISubmitAction | ICancelAction;
@@ -32,15 +34,29 @@ export type IFormAction = ISubmitAction | ICancelAction;
  * @param node child node where action will be applied
  * @returns XNode
  */
-export function FormAction(action: IFormAction, node: XNode) {
+export function FormAction(
+    {
+        action = "submit",
+        eventClick,
+        ... a
+    }: IFormAction, node: XNode) {
     const attributes = node.attributes ??= {};
-    attributes["data-wa-form-action"] = action.action;
-    if (action.action === "submit") {
-        attributes.eventSubmit = action.eventClick;
+    attributes["data-wa-form-action"] = action;
+    if (action === "submit") {
+        attributes.eventSubmit = eventClick;
     }
-    return <div>
-        { node }
-    </div>;
+    node.attributes = { ... a, ... attributes};
+    return node;
+}
+
+export function SubmitAction(a: IElement, node: XNode) {
+    (a as any).action = "submit";
+    return FormAction(a as any, node);
+}
+
+export function CancelAction(a: IElement, node: XNode) {
+    (a as any).action = "cancel";
+    return FormAction(a as any, node);
 }
 
 export function SubmitButton(
@@ -137,8 +153,7 @@ export default function Form(
     return <form
         data-wa-form="wa-form"
         { ... a}
-        eventClick={checkValidity}
-        eventSubmit={checkValidity}>
+        eventClick={checkValidity}>
         { ... nodes}
     </form>;
 }
