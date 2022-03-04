@@ -6,6 +6,7 @@ import FormField from "./FormField";
 import IElement from "./IElement";
 
 const css = CSS(StyleRule()
+    .verticalFlexLayout({})
     .displayNone(" .field-error:empty")
     .displayNone(":not([data-wa-show-errors=yes]) .field-error:not(:empty)")
 , "*[data-wa-form=wa-form]");
@@ -90,10 +91,10 @@ function checkValidity(e: MouseEvent) {
     if (!button) {
         return;
     }
-    if (button.tagName === "BUTTON" && e.type !== "submit") {
-        // as submit will be followed, we whould ignore this only if the tag is button
-        return;
-    }
+    // if (button.tagName === "BUTTON" && e.type !== "submit") {
+    //     // as submit will be followed, we whould ignore this only if the tag is button
+    //     return;
+    // }
     if (action === "cancel") {
         form.dataset.waShowErrors = "";
         return;
@@ -150,10 +151,10 @@ export default function Form(
     if (a.focusNextOnEnter !== false) {
         a.eventKeypress = moveNext;
     }
-    return <form
+    return <div
         data-wa-form="wa-form"
         { ... a}
         eventClick={checkValidity}>
         { ... nodes}
-    </form>;
+    </div>;
 }
