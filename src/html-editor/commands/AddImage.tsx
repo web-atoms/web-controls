@@ -27,7 +27,7 @@ class ImageDialog extends PopupWindow {
             </FormField>
             <div class="command-bar">
                 <button
-                    eventClick={() => this.viewModel.close(this.createImage())}
+                    eventClick={() => this.close(this.createImage())}
                     text="Add"/>
             </div>
         </div>);

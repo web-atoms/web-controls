@@ -28,7 +28,7 @@ async function showDialog(s: AtomHtmlEditor, e: Event): Promise<string> {
                 <textarea value={Bind.twoWaysImmediate(() => this.source)}/>
                 <div class="command-bar">
                     <button
-                        eventClick={Bind.event(() => this.viewModel.close(this.source))}
+                        eventClick={Bind.event(() => this.close(this.source))}
                         text="Save"/>
                 </div>
             </div>);

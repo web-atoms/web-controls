@@ -61,7 +61,7 @@ class LinkDialog extends PopupWindow {
             <div class="command-bar">
                 <button
                     text="Add"
-                    eventClick={Bind.event(() => this.viewModel.close(this.toLink(this.link)))} />
+                    eventClick={Bind.event(() => this.close(this.toLink(this.link)))} />
             </div>
         </div>);
     }

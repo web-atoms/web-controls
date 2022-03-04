@@ -71,7 +71,7 @@ export function askSuggestion<T>(
                         itemRenderer={itemRenderer}
                         visibilityFilter={Bind.oneWay(() => match(this.search))}
                         eventItemClick={(e) => {
-                            this.viewModel.close(e.detail);
+                            this.close(e.detail);
                         }}
                         items={items}/>
                 </div>
