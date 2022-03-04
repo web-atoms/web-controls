@@ -7,6 +7,7 @@ import { NavigationService } from "@web-atoms/core/dist/services/NavigationServi
 import ReferenceService from "@web-atoms/core/dist/services/ReferenceService";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { AtomTemplateControl } from "@web-atoms/core/dist/web/controls/AtomTemplateControl";
+import PopupService from "@web-atoms/core/dist/web/services/PopupService";
 import { WindowService } from "@web-atoms/core/dist/web/services/WindowService";
 import AppComboBoxViewModel from "./AppComboBoxViewModel";
 import AutoCompleteBoxStyle from "./AutoCompleteBoxStyle";
@@ -329,9 +330,7 @@ export default class AutoCompleteBox extends AtomControl {
             const rs = this.app.get(ReferenceService);
 
             const ws = this.app.get(WindowService);
-
-            ws.currentTarget = this.element;
-
+            
             const iht = rs.put(this.itemHostTemplate);
             const parent = rs.put(this);
 
