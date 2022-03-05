@@ -267,8 +267,12 @@ export default class AtomRepeater extends AtomControl {
         if (this.initialValue !== undefined) {
             return this.initialValue;
         }
+        const sp = this.selectedItem;
+        if (sp === undefined) {
+            return sp;
+        }
         const vp = this.valuePath ?? SameObjectValue;
-        return vp(this.selectedItem);
+        return vp(sp);
     }
 
     public set value(v) {

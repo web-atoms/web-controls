@@ -11,13 +11,14 @@ export default class ComboBox extends AtomRepeater {
 
     constructor(app, e) {
         super(app, e ?? document.createElement("select"));
+        this.selectedItems = [];
     }
 
     public updateItems(container?: HTMLElement): void {
-        super.updateItems(container);
         if (this.isChanging) {
             return;
         }
+        super.updateItems(container);
         const selectedItems = this.selectedItems;
         if (!selectedItems) {
             return;
@@ -29,6 +30,14 @@ export default class ComboBox extends AtomRepeater {
         const first = selectedItems[0];
         (this.element as HTMLSelectElement).selectedIndex = this.items.indexOf(first);
         this.isChanging = false;
+    }
+
+    protected updateClasses(): void {
+        if (this.isChanging) {
+            return;
+        }
+        super.updateClasses();
+        this.updateItems();
     }
 
     protected preCreate(): void {

@@ -9,6 +9,42 @@ import DateTime from "@web-atoms/date-time/dist/DateTime";
 import AtomRepeater from "./AtomRepeater";
 import ComboBox from "./ComboBox";
 
+const getWeekDays = (locale, type: "short" | "long") => {
+    const baseDate = new Date(Date.UTC(2017, 0, 2)); // just a Monday
+    const weekDays = [];
+    for (let i = 0; i < 7; i++) {
+        weekDays.push(baseDate.toLocaleDateString(locale, { weekday: type }));
+        baseDate.setDate(baseDate.getDate() + 1);
+    }
+    return weekDays;
+};
+
+const getMonths = (locale, type: "short" | "long") => {
+    const baseDate = new Date(Date.UTC(2017, 0, 2)); // just a Monday
+    const weekDays = [];
+    for (let i = 0; i < 12; i++) {
+        weekDays.push(baseDate.toLocaleDateString(locale, { month: type }));
+        baseDate.setMonth(i + 1);
+    }
+    return weekDays;
+};
+
+export const weekdays = {
+
+    short: getWeekDays(navigator.language, "short"),
+    long: getWeekDays(navigator.language, "long"),
+};
+
+export const months = {
+    short: getMonths(navigator.language, "short"),
+    long: getMonths(navigator.language, "long")
+};
+
+const monthItems = months.long.map((x, i) => ({
+    label: x,
+    value: i
+}));
+
 const css = CSS(StyleRule()
     .display("inline-grid")
     .gridTemplateRows("auto auto 1fr")
@@ -67,7 +103,7 @@ export default class Calendar extends AtomRepeater {
     @WatchProperty
     public get dates() {
         const year = this.year;
-        const month = this.month;
+        const month = this.month ?? 0;
         const today = DateTime.today;
         let startDate = new DateTime(year, month, 1);
         while (startDate.dayOfWeek !== 1) {
@@ -101,7 +137,7 @@ export default class Calendar extends AtomRepeater {
             class={css}
             items={Bind.oneWay(() => this.dates)}>
                 <i class="fa-solid fa-angle-left"/>
-                <ComboBox/>
+                <ComboBox items={monthItems} value={Bind.twoWays(() => this.month)} />
                 <ComboBox/>
                 <i class="fa-solid fa-angle-right"/>
                 <div class="dates"/>
