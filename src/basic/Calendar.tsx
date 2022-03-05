@@ -103,7 +103,10 @@ export default class Calendar extends AtomRepeater {
     @WatchProperty
     public get dates() {
         const year = this.year;
-        const month = this.month ?? 0;
+        const month = this.month;
+        if (month === undefined) {
+            return [];
+        }
         const today = DateTime.today;
         let startDate = new DateTime(year, month, 1);
         while (startDate.dayOfWeek !== 1) {
