@@ -9,6 +9,8 @@ import DateTime from "@web-atoms/date-time/dist/DateTime";
 import AtomRepeater from "./AtomRepeater";
 import ComboBox from "./ComboBox";
 
+const start = DateTime.now;
+
 const getWeekDays = (locale, type: "short" | "long") => {
     const baseDate = new Date(Date.UTC(2017, 0, 2)); // just a Monday
     const weekDays = [];
@@ -47,8 +49,32 @@ const monthItems = months.long.map((x, i) => ({
 
 const css = CSS(StyleRule()
     .display("inline-grid")
-    .gridTemplateRows("auto auto 1fr")
-    .gridTemplateColumns("auto 1fr 1fr auto")
+    .gridTemplateRows("auto auto auto")
+    .gridTemplateColumns("auto auto auto auto")
+    .child(StyleRule(".fa-solid")
+        .padding(5)
+        .paddingLeft(10)
+        .paddingRight(10)
+        .cursor("pointer")
+        .hoverColor(Colors.blueViolet)
+    )
+    .child(StyleRule(".week")
+        .gridColumnStart("1")
+        .gridColumnEnd("span 4")
+        .gridRowStart("2")
+        .display("inline-grid")
+        .gridTemplateColumns("1fr 1fr 1fr 1fr 1fr 1fr 1fr")
+        .gap(0)
+        .child(StyleRule("*")
+            .fontSize("smaller")
+            .padding("5")
+            .paddingLeft("10")
+            .paddingRight("10")
+            .cursor("default")
+            .alignSelf("center")
+            .justifySelf("center")
+        )
+    )
     .child(StyleRule(".dates")
         .gridColumnStart("1")
         .gridColumnEnd("span 4")
@@ -88,6 +114,7 @@ export interface ICalendarDate {
     isWeekend: boolean;
     row: number;
     column: number;
+    disabled: boolean;
 }
 
 export default class Calendar extends AtomRepeater {
@@ -97,6 +124,14 @@ export default class Calendar extends AtomRepeater {
 
     @BindableProperty
     public month: number;
+
+    @BindableProperty
+    public yearStart: number;
+
+    @BindableProperty
+    public yearEnd: number;
+
+    public enableFunc: (item: ICalendarDate) => boolean;
 
     public dateRenderer: (item: ICalendarDate) => XNode;
 
@@ -115,9 +150,10 @@ export default class Calendar extends AtomRepeater {
         const a = [];
         const y = startDate.year;
         const m = startDate.month;
+        const ef = this.enableFunc;
         for (let index = 0; index < 42; index++) {
             const cd = startDate.add(index);
-            a.push({
+            var item = {
                 label: cd.day + "",
                 row: Math.floor(index / 7),
                 column: index % 7,
@@ -125,27 +161,96 @@ export default class Calendar extends AtomRepeater {
                 value: cd,
                 isToday: cd.equals(today),
                 isOtherMonth: month !== cd.month,
-                isWeekend: (cd.dayOfWeek === 0 || cd.dayOfWeek === 6)
-            });
+                isWeekend: (cd.dayOfWeek === 0 || cd.dayOfWeek === 6),
+                disabled: false
+            };
+            if (ef) {
+                item.disabled = !(ef(item));
+            }
+            a.push(item);
         }
         return a;
+    }
+
+    @WatchProperty
+    public get years() {
+        const years = [];
+        const s = start.year + this.yearStart;
+        const e = start.year + this.yearEnd;
+        for (let index = s; index < e; index++) {
+            years.push({
+                label: index.toString(),
+                value: index
+            });
+        }
+        return years;
+    }
+
+    public onPropertyChanged(name: keyof Calendar): void {
+        super.onPropertyChanged(name);
+        switch (name) {
+            case "enableFunc":
+            case "dateRenderer":
+                this.updateItems();
+                break;
+        }
+    }
+
+    public next() {
+        if (this.month === 11) {
+            this.year++;
+            this.month = 0;
+            return;
+        }
+        this.month++;
+    }
+
+    public prev() {
+        if (this.month === 0) {
+            this.year--;
+            this.month = 11;
+            return;
+        }
+        this.month--;
     }
 
     protected preCreate(): void {
         const now = new Date();
         this.selectedItems = [];
+        this.valuePath = (i) => i.value;
+        this.yearStart = -10;
+        this.yearEnd = 10;
         this.year = now.getFullYear();
         this.month = now.getMonth();
         this.render(<div
             class={css}
             items={Bind.oneWay(() => this.dates)}>
-                <i class="fa-solid fa-angle-left"/>
-                <ComboBox items={monthItems} value={Bind.twoWays(() => this.month)} />
-                <ComboBox/>
-                <i class="fa-solid fa-angle-right"/>
+                <i
+                    event-click={() => this.prev()}
+                    class="fa-solid fa-angle-left"
+                    title="Previous Month"/>
+                <ComboBox
+                    items={monthItems}
+                    value={Bind.twoWays(() => this.month)} />
+                <ComboBox
+                    items={this.years}
+                    value={Bind.twoWays(() => this.year)}/>
+                <i
+                    event-click={() => this.next()}
+                    class="fa-solid fa-angle-right"
+                    title="Next Month"/>
+                <div class="week"/>
                 <div class="dates"/>
             </div>);
         this.itemsPresenter = this.element.lastElementChild;
+        const week = this.element.lastElementChild.previousElementSibling;
+        let w = 1;
+        for (const iterator of weekdays.short) {
+            const text = document.createElement("span");
+            text.textContent = iterator;
+            week.appendChild(text);
+            text.style.gridColumnStart = `${w++}`;
+        }
         this.dateRenderer = (item) => <div text={item.label}/>;
         this.itemRenderer = (item: ICalendarDate) => {
             const d = this.dateRenderer(item);
