@@ -153,7 +153,7 @@ export default class Calendar extends AtomRepeater {
         const ef = this.enableFunc;
         for (let index = 0; index < 42; index++) {
             const cd = startDate.add(index);
-            var item = {
+            const item = {
                 label: cd.day + "",
                 row: Math.floor(index / 7),
                 column: index % 7,
