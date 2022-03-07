@@ -22,12 +22,14 @@ export interface ISubmitButton {
 
 export interface ISubmitAction extends IElement {
     action: "submit";
-    eventClick: any;
+    eventClick?: any;
+    "event-click"?: any;
 }
 
 export interface ICancelAction extends IElement{
     action: "cancel";
     eventClick?: any;
+    "event-click"?: any;
 }
 
 export type IFormAction = ISubmitAction | ICancelAction;
@@ -42,11 +44,19 @@ export function FormAction(
     {
         action = "submit",
         eventClick,
+        "event-click": eventClick2,
         ... a
     }: IFormAction, node: XNode) {
     const attributes = node.attributes ??= {};
     attributes["data-wa-form-action"] = action;
-    if (action === "submit") {
+    const e = attributes["event-click"] || attributes["eventClick"]
+    if (e) {
+        attributes["event-submit"] = e;
+        delete attributes["event-click"];
+        delete attributes.eventClick;
+    }
+    eventClick ??= eventClick2;
+    if (action === "submit" && eventClick) {
         attributes.eventSubmit = eventClick;
     }
     node.attributes = { ... a, ... attributes};
