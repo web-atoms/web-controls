@@ -6,7 +6,7 @@ import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import DateTime from "@web-atoms/date-time/dist/DateTime";
-import AtomRepeater, { dateComparer } from "./AtomRepeater";
+import AtomRepeater from "./AtomRepeater";
 import ComboBox from "./ComboBox";
 
 const start = DateTime.now;
@@ -225,7 +225,6 @@ export default class Calendar extends AtomRepeater {
         this.yearEnd = 10;
         this.year = now.getFullYear();
         this.month = now.getMonth();
-        this.comparer = dateComparer;
         this.render(<div
             class={css}
             items={Bind.oneWay(() => this.dates)}>

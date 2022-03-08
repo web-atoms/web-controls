@@ -232,12 +232,16 @@ export function disposeChildren(owner: AtomControl, e: HTMLElement) {
 }
 
 export function defaultComparer<T>(left:T , right: T) {
+    if (left && right) {
+        if (left instanceof Date) {
+            if (right instanceof Date) {
+                return left.getTime() === right.getTime();
+            }
+            return false;
+        }
+    }
     return left === right;
 };
-
-export function dateComparer(left: Date, right: Date) {
-    return left?.getTime() === right?.getTime();
-}
 
 export default class AtomRepeater extends AtomControl {
 
