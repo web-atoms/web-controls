@@ -236,7 +236,7 @@ export function defaultComparer<T>(left:T , right: T) {
 };
 
 export function dateComparer(left: Date, right: Date) {
-    return left.getTime() === right.getTime();
+    return left?.getTime() === right?.getTime();
 }
 
 export default class AtomRepeater extends AtomControl {
