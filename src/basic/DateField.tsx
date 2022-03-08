@@ -32,13 +32,29 @@ export default class DateField extends AtomControl {
     protected preCreate(): void {
         this.value = null;
         this.format = null;
+
+        const owner = this;
+        class CalendarPopup extends Calendar {
+
+            public owner: DateField;
+
+            protected create(): void {
+                this.owner = owner;
+                super.create();
+                this.render(<Calendar
+                    event-item-select={Bind.event((s, e) => {
+                        this.owner.value = e.detail.value;
+                        setTimeout(() => this.owner.element.click() , 100);
+                    })}
+                    enableFunc={Bind.oneTime(() => this.owner.enableFunc)}
+                    value={Bind.oneWay(() => this.owner.value)}
+                />);
+            }
+        }
+
         this.render(<PopupButton
             text={Bind.oneWay(() => this.format?.(this.value) ?? this.value?.toLocaleDateString() ?? "Select" )}>
-            <Calendar
-                event-item-select={Bind.event((s, e) => this.value = e.detail.value)}
-                enableFunc={Bind.oneTime(() => this.enableFunc)}
-                value={Bind.oneWay(() => this.value)}
-                />
+            <CalendarPopup/>
         </PopupButton>);
     }
 

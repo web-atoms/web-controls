@@ -7,14 +7,13 @@ import PopupService, { IPopup, IPopupOptions } from "@web-atoms/core/dist/web/se
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
 const menuCss = CSS(StyleRule()
-    .child(StyleRule(".menu")
+    .child(StyleRule()
         .padding(5)
         .margin(3)
         .borderRadius(5)
         .cursor("pointer")
         .hoverBackgroundColor(Colors.lightGreen)
-    )
-);
+    ), "*[data-menu-item=menu-item]");
 
 export interface IMenuItem {
     label?: string;
@@ -42,12 +41,12 @@ export function MenuItem({
 }: IMenuItem) {
 
     if (label) {
-        return <div class="menu" eventClick={eventClick} { ... others }>
+        return <div data-menu-item="menu-item" eventClick={eventClick} { ... others }>
             <i class={icon}/>
             <span>{label}</span>
         </div>;
     }
-    return <div class="menu" eventClick={eventClick} { ... others }>
+    return <div data-menu-item="menu-item" eventClick={eventClick} { ... others }>
         <i class={icon}/>
     </div>;
 }
@@ -91,16 +90,27 @@ export default function PopupButton(
             : null;
         popup = PopupService.show(button, menu, options);
 
-        const dispose = () => {
+        const clickHandler = (e) => {
+            let start = e.target as HTMLElement;
+            const body = document.body;
+            while (start) {
+                if (start === body) {
+                    return;
+                }
+                if (start.dataset.menuItem === "menu-item") {
+                    break;
+                }                
+                start = start.parentElement;
+            }
             popup?.dispose();
             popup = null;
         };
 
-        menu.addEventListener("click", dispose);
+        menu.addEventListener("click", clickHandler);
 
         popup.registerDisposable(() => {
             button.classList.remove("pressed");
-            menu.removeEventListener("click", dispose);
+            menu.removeEventListener("click", clickHandler);
             popup = null;
         });
     }

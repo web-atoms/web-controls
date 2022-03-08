@@ -231,6 +231,14 @@ export function disposeChildren(owner: AtomControl, e: HTMLElement) {
     }
 }
 
+export function defaultComparer<T>(left:T , right: T) {
+    return left === right;
+};
+
+export function dateComparer(left: Date, right: Date) {
+    return left.getTime() === right.getTime();
+}
+
 export default class AtomRepeater extends AtomControl {
 
     public "event-item-click"?: (e: CustomEvent) => void;
@@ -263,6 +271,9 @@ export default class AtomRepeater extends AtomControl {
     @BindableProperty
     public valuePath: (a) => any;
 
+    @BindableProperty
+    public comparer: (left, right) => boolean;
+
     public get value() {
         if (this.initialValue !== undefined) {
             return this.initialValue;
@@ -281,7 +292,8 @@ export default class AtomRepeater extends AtomControl {
             return;
         }
         const vp = this.valuePath ?? SameObjectValue;
-        const selectedItem = this.items.find((item) => vp(item) === v);
+        const c = this.comparer ?? defaultComparer;
+        const selectedItem = this.items.find((item) => c(vp(item),v));
         this.selectedItem = selectedItem;
         delete this.initialValue;
     }
