@@ -609,4 +609,4 @@ function onElementClick(e: Event) {
     }
 }
 
-document.body.addEventListener("click", onElementClick);
+document.body.addEventListener("click", onElementClick, true);
