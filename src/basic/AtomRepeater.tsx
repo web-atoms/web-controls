@@ -607,7 +607,7 @@ function onElementClick(e: Event) {
         if (si) {
             index = si.indexOf(item);
             if (index === -1) {
-                if (!this.allowMultipleSelection) {
+                if (!repeater.allowMultipleSelection) {
                     si.clear();
                 }
                 si.add(item);
