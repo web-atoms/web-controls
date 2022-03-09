@@ -35,7 +35,8 @@ export default class DateField extends AtomControl {
             navigator.language, {
                 month: "short",
                 year: "numeric",
-                day: "numeric"
+                day: "numeric",
+                weekday: "short"
             }) ?? "Select";
 
         const owner = this;
