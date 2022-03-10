@@ -17,6 +17,9 @@ export default class DropDown extends AtomRepeater {
     public prompt: string;
 
     @BindableProperty
+    public suggestionPrompt: string;
+
+    @BindableProperty
     public labelPath: (item) => string;
 
     @BindableProperty
@@ -55,7 +58,8 @@ export default class DropDown extends AtomRepeater {
         const selected = await askSuggestion(
             this.items,
             this.suggestionRenderer ?? this.itemRenderer,
-            this.match ?? MatchCaseInsensitive(this.labelPath));
+            this.match ?? MatchCaseInsensitive(this.labelPath),
+            this.suggestionPrompt ?? this.prompt);
         this.selectedItem = selected;
     }
 

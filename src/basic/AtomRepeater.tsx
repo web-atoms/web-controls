@@ -53,13 +53,15 @@ export const SameObjectValue = (item) => item;
 export function askSuggestion<T>(
     items: T[],
     itemRenderer: (item: T) => XNode,
-    match: Match<T>): Promise<T> {
+    match: Match<T>,
+    title: string): Promise<T> {
     class Suggestions extends PopupWindow {
 
         @BindableProperty
         public search: string;
 
         protected create(): void {
+            this.title = title;
             this.render(<div class={popupCSS}>
                 <input
                     type="search"
