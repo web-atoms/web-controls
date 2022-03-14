@@ -314,11 +314,11 @@ export default class AtomRepeater extends AtomControl {
         if (value === first) {
             return;
         }
-        si.length = 0;
         si[0] = value;
-        this.updateClasses();
-        AtomBinder.refreshValue(this, "selectedItem");
-        AtomBinder.refreshValue(this, "value");
+        if (si.length > 1) {
+            si.length = 1;
+        }
+        si.refresh();
     }
 
     private initialValue: any;
