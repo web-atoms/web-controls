@@ -609,10 +609,12 @@ function onElementClick(e: Event) {
         if (si) {
             index = si.indexOf(item);
             if (index === -1) {
-                if (!repeater.allowMultipleSelection) {
-                    si.clear();
+                if (repeater.allowMultipleSelection) {
+                    si.add(item);
+                } else {
+                    si[0] = item;
+                    si.refresh();
                 }
-                si.add(item);
             } else {
                 si.removeAt(index);
             }

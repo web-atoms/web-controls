@@ -54,10 +54,13 @@ export default class ComboBox extends AtomRepeater {
             return;
         }
         this.isChanging = true;
-        this.selectedItems?.clear();
         const index = (this.element as HTMLSelectElement).selectedIndex;
         if (index !== -1) {
-            this.selectedItems?.add(this.items[index]);
+            const si = this.selectedItems;
+            if (si) {
+                si[0] = this.items[index];
+                si.refresh();
+            }
         }
         this.isChanging = false;
     }
