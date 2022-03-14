@@ -55,6 +55,14 @@ const css = CSS(StyleRule()
     )
 , "div[data-wa-form-field=wa-form-field]");
 
+CSS(StyleRule()
+    .width(300)
+    .maxHeight(500)
+    .overflow("auto")
+    .padding(10)
+    .verticalFlexLayout({ alignItems: "center", justifyContent: "flex-start"})
+, "div[data-form-field-help=help-window]");
+
 export default function FormField(
     {
         label,
@@ -79,7 +87,7 @@ export default function FormField(
 
             class HelpPopup extends PopupWindow {
                 protected create(): void {
-                    this.render(<div>
+                    this.render(<div data-form-field-help="help-window">
                         { help as any}
                     </div>);
                 }
