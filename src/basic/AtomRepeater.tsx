@@ -315,9 +315,6 @@ export default class AtomRepeater extends AtomControl {
             return;
         }
         si[0] = value;
-        if (si.length > 1) {
-            si.length = 1;
-        }
         si.refresh();
     }
 
