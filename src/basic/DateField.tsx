@@ -9,14 +9,14 @@ import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import Calendar, { ICalendarDate } from "./Calendar";
 import PopupButton from "./PopupButton";
 
-
 CSS(StyleRule()
+    .display("inline-block")
     .cursor("pointer")
     .hover(StyleRule()
     .textDecoration("underline")
     .color(Colors.blue)
     )
-, "*[data-date-field=date-field]")
+, "*[data-date-field=date-field]");
 
 export default class DateField extends AtomControl {
 
