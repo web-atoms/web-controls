@@ -19,6 +19,12 @@ export interface IFormField {
     help?: string | object;
     helpEventClick?: any;
     /**
+     * Display border, it will add an element in the
+     * DOM with [data-border=border] which you can
+     * customize using CSS
+     */
+    border?: boolean;
+    /**
      * Tooltip displayed on help icon
      */
     helpTitle?: string;
@@ -28,12 +34,39 @@ export interface IFormField {
 const css = CSS(StyleRule()
     .display("grid")
     .alignItems("center")
-    .gridTemplateColumns("auto 1fr auto")
+    .gridTemplateColumns("auto 1fr auto auto")
     .gridTemplateRows("auto auto auto")
     .child(StyleRule("[data-content=content]")
         .gridRowStart("2")
         .gridColumnStart("1")
         .gridColumnEnd("span 2")
+    )
+    .and(StyleRule("[data-border=true]")
+        .nested(StyleRule("input")
+            .border("none")
+            .outline("none")
+        )
+        .nested(StyleRule("textarea")
+            .border("none")
+            .outline("none")
+        )
+        .nested(StyleRule("select")
+            .border("none")
+        )
+    )
+    .child(StyleRule("i[data-border=border]")
+        .gridColumnStart("1")
+        .gridColumnEnd("span 3")
+        .gridRowStart("3")
+        .alignSelf("flex-end")
+        .borderBottomStyle("solid")
+        .borderBottomWidth("1px")
+        .borderBottomColor(Colors.lightGray)
+    )
+    .and(StyleRule("[data-focused=true]")
+            .child(StyleRule("i[data-border=border]")
+            .borderBottomColor(Colors.black)
+        )
     )
     .child(StyleRule("i[data-help=help]")
         .gridRowStart("2")
@@ -45,7 +78,7 @@ const css = CSS(StyleRule()
         .color(Colors.lightGreen)
     )
     .child(StyleRule(".field-error")
-        .gridRowStart("3")
+        .gridRowStart("4")
         .gridColumnStart("1")
         .gridColumnEnd("span 3")
         .padding(5)
@@ -76,6 +109,28 @@ CSS(StyleRule()
     .verticalFlexLayout({ alignItems: "center", justifyContent: "flex-start"})
 , "div[data-form-field-help=help-window]");
 
+document.addEventListener("focusin", (e) => {
+    let { target } = e as any;
+    while (target) {
+        if (target.dataset.waFormField === "wa-form-field") {
+            target.dataset.focused = "true";
+            break;
+        }
+        target = target.parentElement;
+    }
+});
+
+document.addEventListener("focusout", (e) => {
+    let { target } = e as any;
+    while (target) {
+        if (target.dataset.waFormField === "wa-form-field") {
+            delete target.dataset.focused;
+            break;
+        }
+        target = target.parentElement;
+    }
+});
+
 export default function FormField(
     {
         label,
@@ -85,6 +140,7 @@ export default function FormField(
         help,
         helpEventClick,
         helpTitle,
+        border = true,
         ... others
     }: IFormField,
     node: XNode) {
@@ -116,12 +172,14 @@ export default function FormField(
 
     return <div
         data-wa-form-field="wa-form-field"
+        data-border={border}
         { ... others }>
         { label && <label class="label" text={label}/> }
         { required && <span
             data-required="required"
             class={required}
             text="*" />}
+        { border && <i data-border="border"/>}
         { node }
         { help && <i
                 data-help="help"
