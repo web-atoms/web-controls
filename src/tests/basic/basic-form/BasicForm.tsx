@@ -15,7 +15,7 @@ export default class BasicForm extends AtomControl {
             emailAddress: ""
         };
         this.render(<div>
-            <Form>
+            <Form style-margin="50px">
                 <FormField
                     label="First name:"
                     required={true}

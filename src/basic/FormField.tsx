@@ -26,8 +26,28 @@ export interface IFormField {
 }
 
 const css = CSS(StyleRule()
-    .verticalFlexLayout({ alignItems: "stretch"})
+    .display("grid")
+    .alignItems("center")
+    .gridTemplateColumns("auto 1fr auto")
+    .gridTemplateRows("auto auto auto")
+    .child(StyleRule("[data-content=content]")
+        .gridRowStart("2")
+        .gridColumnStart("1")
+        .gridColumnEnd("span 2")
+    )
+    .child(StyleRule("i[data-help=help]")
+        .gridRowStart("2")
+        .gridColumnStart("3")
+        .padding(5)
+        .fontSize("x-large")
+        .cursor("pointer")
+        .marginLeft("auto")
+        .color(Colors.lightGreen)
+    )
     .child(StyleRule(".field-error")
+        .gridRowStart("3")
+        .gridColumnStart("1")
+        .gridColumnEnd("span 3")
         .padding(5)
         .margin(5)
         .borderRadius(9999)
@@ -38,19 +58,12 @@ const css = CSS(StyleRule()
             .display("none")
         )
     )
-    .child(StyleRule(".label")
-        .display("flex")
-        .child(StyleRule(".true")
+    .child(StyleRule("span[data-required=required]")
+        .gridColumnStart("2")
+        .visibility("hidden")
+        .color(Colors.red)
+        .and(StyleRule(".true")
             .visibility("visible")
-            .color(Colors.red)
-        )
-        .child(StyleRule(".required")
-            .visibility("hidden")
-        )
-        .child(StyleRule("i")
-            .cursor("pointer")
-            .marginLeft("auto")
-            .color(Colors.lightGreen)
         )
     )
 , "div[data-wa-form-field=wa-form-field]");
@@ -76,6 +89,9 @@ export default function FormField(
     }: IFormField,
     node: XNode) {
 
+    const na = node.attributes ??= {};
+    na["data-content"] = "content";
+
     if (!helpEventClick && help) {
         helpEventClick = Bind.event((s, e) => {
             const app = s.app as App;
@@ -96,13 +112,22 @@ export default function FormField(
         });
     }
 
-    return <div data-wa-form-field="wa-form-field" { ... others }>
-        <div class="label">
-            <label text={label}/>
-            <span class="required" styleClass={required} text="*" />
-            { help ? <i class={helpIcon} title={helpTitle} eventClick={helpEventClick}/> : undefined }
-        </div>
+    return <div
+        data-wa-form-field="wa-form-field"
+        { ... others }>
+        <label class="label" text={label}/>
+        <span
+            data-required="required"
+            class={required}
+            text="*" />
         { node }
-        <div class="field-error" text={error}/>
+        { help && <i
+                data-help="help"
+                class={helpIcon}
+                title={helpTitle}
+                eventClick={helpEventClick}/>}
+        <div
+            class="field-error"
+            text={error}/>
     </div>;
 }
