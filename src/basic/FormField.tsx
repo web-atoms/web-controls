@@ -89,8 +89,10 @@ export default function FormField(
     }: IFormField,
     node: XNode) {
 
-    const na = node.attributes ??= {};
-    na["data-content"] = "content";
+    if (node) {
+        const na = node.attributes ??= {};
+        na["data-content"] = "content";
+    }
 
     if (!helpEventClick && help) {
         helpEventClick = Bind.event((s, e) => {
