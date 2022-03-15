@@ -34,6 +34,12 @@ export default class BasicForm extends AtomControl {
                     error={Bind.oneWay(() => this.data.emailAddress ? "" : "Email address is required")}>
                     <input value={Bind.twoWaysImmediate(() => this.data.emailAddress)}/>
                 </FormField>
+                <FormField
+                    label=""
+                    help={<div>Demo</div>}
+                    error={Bind.oneWay(() => this.data.emailAddress ? "" : "Email address is required")}>
+                    <input value={Bind.twoWaysImmediate(() => this.data.emailAddress)}/>
+                </FormField>
                 <SubmitButton
                     text="Submit"
                     eventClick={() => alert("Success")}/>

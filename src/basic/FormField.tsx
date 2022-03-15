@@ -115,11 +115,11 @@ export default function FormField(
     return <div
         data-wa-form-field="wa-form-field"
         { ... others }>
-        <label class="label" text={label}/>
-        <span
+        { label && <label class="label" text={label}/> }
+        { required && <span
             data-required="required"
             class={required}
-            text="*" />
+            text="*" />}
         { node }
         { help && <i
                 data-help="help"
