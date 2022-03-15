@@ -140,7 +140,7 @@ export default function FormField(
         help,
         helpEventClick,
         helpTitle,
-        border = true,
+        border = false,
         ... others
     }: IFormField,
     node: XNode) {
