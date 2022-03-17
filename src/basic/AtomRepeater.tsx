@@ -89,6 +89,24 @@ export function askSuggestion<T>(
     return Suggestions.showModal();
 }
 
+CSS(StyleRule()
+    .maxHeight(300)
+    .width(300)
+    .verticalFlexLayout({ alignItems: "stretch" })
+    .child(StyleRule(".items")
+        .flexStretch()
+        .overflow("auto")
+        .child(StyleRule(".presenter")
+            .child(StyleRule("*")
+                .padding(5)
+            )
+            .child(StyleRule("[data-selected-item=true]")
+                .backgroundColor(Colors.lightGreen)
+            )
+        )
+    )
+, "*[data-suggestion-popup=suggestion-popup]");
+
 /**
  * Asks user for selecting item from given suggestions
  * @param items items to display
@@ -117,7 +135,7 @@ export function askSuggestion<T>(
             if (selectedItem) {
                 this.anchorIndex = items.indexOf(selectedItem);
             }
-            this.render(<div class={popupCSS}>
+            this.render(<div data-suggestion-popup="suggestion-popup">
                 <input
                     type="search"
                     value={Bind.twoWaysImmediate(() => this.search)}
