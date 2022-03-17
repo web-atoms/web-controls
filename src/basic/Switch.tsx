@@ -10,7 +10,7 @@ const css = CSS(StyleRule()
 	.position("relative")
 	.display("inline-block")
 	.verticalAlign("top")
-	.width(70)
+	.minWidth(70)
 	.height(30)
 	.padding(3)
 	.margin("0 10px 10px 0")
@@ -88,7 +88,7 @@ const css = CSS(StyleRule()
 	.child(StyleRule(".switch-label, .switch-handle")
 		.transition("All 0.3s ease")
 	)
-);
+, "*[data-ui-switch=ui-switch]");
 
 export interface ISwitch {
 	checked;
@@ -102,7 +102,7 @@ export default function Switch({
 	offLabel
 }: ISwitch) {
 
-    return <label class={css}>
+    return <label data-ui-switch="ui-switch">
 	    <input class="switch-input" type="checkbox" checked={checked} />
 	    <span class="switch-label" data-on={onLabel ?? "On"} data-off={offLabel ?? "Off"}></span>
 	    <span class="switch-handle"></span>
