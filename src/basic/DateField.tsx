@@ -49,6 +49,10 @@ export default class DateField extends AtomControl {
                 super.create();
                 this.render(<Calendar
                     event-item-select={Bind.event((s, e) => {
+                        if (e.detail.disabled) {
+                            return;
+                        }
+                        this.selectedItem = e.detail;
                         this.owner.value = e.detail.value;
                         setTimeout(() => this.owner.element.click() , 100);
                     })}

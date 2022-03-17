@@ -91,10 +91,6 @@ const css = CSS(StyleRule()
             .cursor("pointer")
             .textAlign("center")
             .hoverBackgroundColor(Colors.lightGray.withAlphaPercent(0.5))
-            .and(StyleRule("[data-selected-item=true]")
-                .backgroundColor(Colors.blueViolet)
-                .color(Colors.white)
-            )
             .and(StyleRule("[data-is-today=true]")
                 .backgroundColor(Colors.lightGreen)
             )
@@ -103,6 +99,13 @@ const css = CSS(StyleRule()
             )
             .and(StyleRule("[data-is-other-month=true]")
                 .opacity("0.5")
+            )
+            .and(StyleRule("[data-disabled=true]")
+                .textDecoration("line-through")
+            )
+            .and(StyleRule("[data-selected-item=true]")
+                .backgroundColor(Colors.blueViolet)
+                .color(Colors.white)
             )
         )
     )
@@ -264,6 +267,7 @@ export default class Calendar extends AtomRepeater {
             a["data-is-today"] = item.isToday;
             a["data-is-other-month"] = item.isOtherMonth;
             a["data-is-weekend"] = item.isWeekend;
+            a["data-disabled"] = item.disabled;
             a.styleGridColumnStart = (item.column + 1);
             a.styleGridRowStart = (item.row + 1);
             return d;

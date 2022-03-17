@@ -5,13 +5,16 @@ import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
-import AtomRepeater, { askSuggestion, disposeChildren, Match, MatchCaseInsensitive } from "./AtomRepeater";
+import AtomRepeater, { askSuggestion, askSuggestionPopup, disposeChildren, Match, MatchCaseInsensitive } from "./AtomRepeater";
 
 CSS(StyleRule()
     .flexLayout({ inline: true, justifyContent: "stretch" as any})
 , "div[data-drop-down=drop-down]");
 
 export default class DropDown extends AtomRepeater {
+
+    @BindableProperty
+    public popupSuggestions: boolean;
 
     @BindableProperty
     public prompt: string;
@@ -47,6 +50,7 @@ export default class DropDown extends AtomRepeater {
     protected preCreate(): void {
         // super.preCreate();
         this.prompt = "Select";
+        this.popupSuggestions = true;
         this.bindEvent(this.element, "click", () => this.openPopup());
         this.valuePath = (item) => item?.value ?? item;
         this.labelPath = (item) => item?.label ?? item;
@@ -55,12 +59,24 @@ export default class DropDown extends AtomRepeater {
     }
 
     protected async openPopup() {
-        const selected = await askSuggestion(
+        if (!this.popupSuggestions) {
+            const selected = await askSuggestion(
+                this.items,
+                this.suggestionRenderer ?? this.itemRenderer,
+                this.match ?? MatchCaseInsensitive(this.labelPath),
+                this.suggestionPrompt ?? this.prompt);
+            this.selectedItem = selected;
+            return;
+        }
+
+        const selectedItem = await askSuggestionPopup(
+            this,
             this.items,
             this.suggestionRenderer ?? this.itemRenderer,
             this.match ?? MatchCaseInsensitive(this.labelPath),
-            this.suggestionPrompt ?? this.prompt);
-        this.selectedItem = selected;
+            this.selectedItem);
+        this.selectedItem = selectedItem;
+
     }
 
     protected updateClasses(): void {

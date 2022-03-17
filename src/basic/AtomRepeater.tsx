@@ -1,11 +1,13 @@
+import { App } from "@web-atoms/core/dist/App";
 import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder";
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import { IDisposable } from "@web-atoms/core/dist/core/types";
+import Colors from "@web-atoms/core/dist/core/Colors";
+import { CancelToken, IDisposable } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
+import PopupService, { IPopup, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
 const popupCSS = CSS(StyleRule()
@@ -18,6 +20,9 @@ const popupCSS = CSS(StyleRule()
         .child(StyleRule(".presenter")
             .child(StyleRule("*")
                 .padding(5)
+            )
+            .child(StyleRule("[data-selected-item=true]")
+                .backgroundColor(Colors.lightGreen)
             )
         )
     )
@@ -82,6 +87,98 @@ export function askSuggestion<T>(
     }
 
     return Suggestions.showModal();
+}
+
+/**
+ * Asks user for selecting item from given suggestions
+ * @param items items to display
+ * @param itemRenderer render function
+ * @param match search match
+ * @returns selected item
+ */
+ export function askSuggestionPopup<T>(
+    opener: HTMLElement | AtomControl,
+    items: T[],
+    itemRenderer: (item: T) => XNode,
+    match: Match<T>,
+    selectedItem: T): Promise<T> {
+
+    class Suggestions extends PopupControl {
+
+        public anchorItem: T;
+
+        public anchorIndex: number;
+
+        @BindableProperty
+        public search: string;
+
+        protected create(): void {
+            this.anchorItem = selectedItem;
+            if (selectedItem) {
+                this.anchorIndex = items.indexOf(selectedItem);
+            }
+            this.render(<div class={popupCSS}>
+                <input
+                    type="search"
+                    value={Bind.twoWaysImmediate(() => this.search)}
+                    eventKeydown={(e) => this.onKey(e)}
+                    autofocus={true}/>
+                <div class="items">
+                    <AtomRepeater
+                        class="presenter"
+                        selectedItem={Bind.oneWay(() => this.anchorItem)}
+                        itemRenderer={itemRenderer}
+                        visibilityFilter={Bind.oneWay(() => match(this.search))}
+                        eventItemClick={(e) => {
+                            this.close(e.detail);
+                        }}
+                        items={items}/>
+                </div>
+            </div>);
+        }
+
+        protected onKey(e: KeyboardEvent) {
+            switch (e.key) {
+                case "Enter":
+                    // selection mode...
+                    let anchorItem = this.anchorItem;
+                    if (!anchorItem) {
+                        return;
+                    }
+                    this.anchorIndex = 0;
+                    this.close(anchorItem);
+                    this.anchorItem = null;
+                    this.search = "";
+                    break;
+                case "ArrowDown":
+                    if (items) {
+                        if (!this.anchorItem) {
+                            this.anchorIndex = 0;
+                        } else {
+                            if (this.anchorIndex < items.length - 1) {
+                                this.anchorIndex++;
+                            }
+                        }
+                        this.anchorItem = items[this.anchorIndex];
+                    }
+                    break;
+                case "ArrowUp":
+                        if (items) {
+                            if (!this.anchorItem) {
+                                return;
+                            }
+                            if (this.anchorIndex) {
+                                this.anchorIndex--;
+                            }
+                            this.anchorItem = items[this.anchorIndex];
+                        }
+                        break;
+                }
+        }
+    }
+
+    return Suggestions.showControl(opener);
+
 }
 
 export interface ISelectorCheckBox {
@@ -270,6 +367,9 @@ export default class AtomRepeater extends AtomControl {
 
     @BindableProperty
     public visibilityFilter: (item: any) => boolean;
+
+    @BindableProperty
+    public enableFunc: (item: any) => boolean;
 
     @BindableProperty
     public itemRenderer: (item) => XNode;
