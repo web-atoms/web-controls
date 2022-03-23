@@ -28,6 +28,41 @@ const popupCSS = CSS(StyleRule()
     )
 );
 
+export const getParentRepeaterItem = (target: HTMLElement): [string, AtomRepeater, any, number] | undefined => {
+    let eventName: string;
+    let repeater: AtomRepeater;
+    let index: number;
+    while (target) {
+        const a = target.atomControl;
+        if (a !== undefined && a instanceof AtomRepeater) {
+            repeater = a;
+            break;
+        }
+        if (index === undefined) {
+            const itemIndex = target.dataset.itemIndex;
+            if (typeof itemIndex !== "undefined") {
+                // tslint:disable-next-line: no-bitwise
+                index = ~~itemIndex;
+            }
+        }
+        if (eventName === undefined) {
+            const itemClickEvent = target.dataset.clickEvent;
+            if (itemClickEvent) {
+                eventName = itemClickEvent.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+            }
+        }
+        target = target.parentElement as HTMLElement;
+    }
+
+    if (index === undefined) {
+        return undefined;
+    }
+
+    // tslint:disable-next-line: no-bitwise
+    const item = repeater.items[~~index];
+    return [eventName, repeater, item, index];
+};
+
 export type Match<T> = (text: string) => (item: T) => boolean;
 
 export type IAskSuggestion<T> = (items: T[], itemRenderer: (item: T) => XNode, match: Match<T>) => any;
@@ -114,7 +149,7 @@ CSS(StyleRule()
  * @param match search match
  * @returns selected item
  */
- export function askSuggestionPopup<T>(
+export function askSuggestionPopup<T>(
     opener: HTMLElement | AtomControl,
     items: T[],
     itemRenderer: (item: T) => XNode,
@@ -159,7 +194,7 @@ CSS(StyleRule()
             switch (e.key) {
                 case "Enter":
                     // selection mode...
-                    let anchorItem = this.anchorItem;
+                    const anchorItem = this.anchorItem;
                     if (!anchorItem) {
                         return;
                     }
@@ -348,7 +383,7 @@ export function disposeChildren(owner: AtomControl, e: HTMLElement) {
     }
 }
 
-export function defaultComparer<T>(left:T , right: T) {
+export function defaultComparer<T>(left: T , right: T) {
     if (left && right) {
         if (left instanceof Date) {
             if (right instanceof Date) {
@@ -358,7 +393,7 @@ export function defaultComparer<T>(left:T , right: T) {
         }
     }
     return left === right;
-};
+}
 
 export default class AtomRepeater extends AtomControl {
 
@@ -417,7 +452,7 @@ export default class AtomRepeater extends AtomControl {
         }
         const vp = this.valuePath ?? SameObjectValue;
         const c = this.comparer ?? defaultComparer;
-        const selectedItem = this.items.find((item) => c(vp(item),v));
+        const selectedItem = this.items.find((item) => c(vp(item), v));
         this.selectedItem = selectedItem;
         delete this.initialValue;
     }
