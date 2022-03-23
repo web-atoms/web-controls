@@ -3,7 +3,7 @@ import XNode from "@web-atoms/core/dist/core/XNode";
 import Pack from "@web-atoms/core/dist/Pack";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import Form, { SubmitButton } from "../../../basic/Form";
-import FormField from "../../../basic/FormField";
+import FormField, { HorizontalFormField } from "../../../basic/FormField";
 
 @Pack
 export default class BasicForm extends AtomControl {
@@ -40,6 +40,13 @@ export default class BasicForm extends AtomControl {
                     error={Bind.oneWay(() => this.data.emailAddress ? "" : "Email address is required")}>
                     <input value={Bind.twoWaysImmediate(() => this.data.emailAddress)}/>
                 </FormField>
+                <HorizontalFormField
+                    label="Email Address"
+                    required={false}
+                    help={<div>Demo</div>}
+                    error={Bind.oneWay(() => this.data.emailAddress ? "" : "Email address is required")}>
+                    <input value={Bind.twoWaysImmediate(() => this.data.emailAddress)}/>
+                </HorizontalFormField>
                 <SubmitButton
                     text="Submit"
                     eventClick={() => alert("Success")}/>
