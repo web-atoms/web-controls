@@ -1,11 +1,13 @@
 import Bind from "@web-atoms/core/dist/core/Bind";
 import XNode from "@web-atoms/core/dist/core/XNode";
+import Pack from "@web-atoms/core/dist/Pack";
 import {AtomControl} from "@web-atoms/core/dist/web/controls/AtomControl";
-import setupBridge from "../../setupBridge";
 import AtomField from "../../form/AtomField";
 import AtomForm from "../../form/AtomForm";
+import setupBridge from "../../setupBridge";
 import FormViewModel from "./FormViewModel";
 
+@Pack
 export default class FormTest extends AtomControl {
 
 	public viewModel: FormViewModel;

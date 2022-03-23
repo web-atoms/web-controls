@@ -3,45 +3,40 @@ import { AtomBridge } from "@web-atoms/core/dist/core/AtomBridge";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import { IClassOf } from "@web-atoms/core/dist/core/types";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import AtomField from "./AtomField";
-import AtomFieldTemplate from "./AtomFieldTemplate";
 import AtomFormStyle from "./AtomFormStyle";
-import DefaultFieldTemplate from "./DefaultFieldTemplate";
 
 export default class AtomForm extends AtomControl {
 
     /** Submit event fired when enter was pressed on last input on mobile (Done button event) */
     public eventSubmit: () => void;
 
-    public fieldTemplate: IClassOf<AtomFieldTemplate>;
-
     public focusNextOnEnter: boolean = /mobile/i.test(navigator.userAgent);
 
-    public append(e: AtomControl | HTMLElement | Text): AtomControl {
+    // public append(e: AtomControl | HTMLElement | Text): AtomControl {
 
-        // you can create nested AtomForm
-        if (e instanceof AtomForm) {
-            return super.append(e);
-        }
+    //     // you can create nested AtomForm
+    //     if (e instanceof AtomForm) {
+    //         return super.append(e);
+    //     }
 
-        if (!(e instanceof AtomField)) {
-            throw new Error(`Only AtomField or AtomFormGroup can be added inside AtomForm`);
-        }
-        const fieldContainer = this.createField(e);
-        return super.append(fieldContainer);
-    }
+    //     if (!(e instanceof AtomField)) {
+    //         throw new Error(`Only AtomField or AtomFormGroup can be added inside AtomForm`);
+    //     }
+    //     const fieldContainer = this.createField(e);
+    //     return super.append(fieldContainer);
+    // }
 
-    protected createField(e: AtomField): AtomFieldTemplate {
-        const field = new (this.fieldTemplate)(this.app);
-        field.field = e;
-        return field;
-    }
+    // protected createField(e: AtomField): AtomFieldTemplate {
+    //     const field = new (this.fieldTemplate)(this.app);
+    //     field.field = e;
+    //     return field;
+    // }
 
     protected preCreate(): void {
         super.preCreate();
         this.defaultControlStyle = AtomFormStyle;
-        this.fieldTemplate = DefaultFieldTemplate;
         this.runAfterInit(() => {
+
             this.element.classList.add(this.controlStyle.name);
 
             this.app.callLater(() => {

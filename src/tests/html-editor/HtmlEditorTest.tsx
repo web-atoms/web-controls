@@ -1,0 +1,64 @@
+import XNode from "@web-atoms/core/dist/core/XNode";
+import Pack from "@web-atoms/core/dist/Pack";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
+import AddImage from "../../html-editor/commands/AddImage";
+import AddLink from "../../html-editor/commands/AddLink";
+import Align from "../../html-editor/commands/Align";
+import Bold from "../../html-editor/commands/Bold";
+import ChangeColor from "../../html-editor/commands/ChangeColor";
+import ChangeFont from "../../html-editor/commands/ChangeFont";
+import ChangeFontSize from "../../html-editor/commands/ChangeFontSize";
+import Headings from "../../html-editor/commands/Headings";
+import HorizontalRule from "../../html-editor/commands/HorizontalRule";
+import IndentLess from "../../html-editor/commands/IndentLess";
+import IndentMore from "../../html-editor/commands/IndentMore";
+import Italic from "../../html-editor/commands/Italic";
+import NumberedList from "../../html-editor/commands/NumberedList";
+import RemoveFormat from "../../html-editor/commands/RemoveFormat";
+import Separator from "../../html-editor/commands/Separator";
+import Source from "../../html-editor/commands/Source";
+import StrikeThrough from "../../html-editor/commands/StrikeThrough";
+import Underline from "../../html-editor/commands/Underline";
+import Unlink from "../../html-editor/commands/Unlink";
+import UnorderedList from "../../html-editor/commands/UnorderedList";
+import AtomHtmlEditor, { Toolbar } from "../../html-editor/AtomHtmlEditor";
+
+@Pack
+export default class HtmlEditorTest extends AtomControl {
+
+    protected create(): void {
+        this.render(<div>
+            <AtomHtmlEditor>
+                <Toolbar>
+                    <Bold/>
+                    <Italic/>
+                    <Underline/>
+                    <StrikeThrough/>
+                    <Align/>
+                    <Separator/>
+                    <Headings/>
+                    <ChangeColor/>
+                    <HorizontalRule/>
+                    <Separator/>
+                    <ChangeFont/>
+                    <ChangeFontSize/>
+                    <Separator/>
+                    <NumberedList/>
+                    <UnorderedList/>
+                    <IndentLess/>
+                    <IndentMore/>
+                    <Separator/>
+                </Toolbar>
+                <Toolbar>
+                <AddImage/>
+                    <Separator/>
+                    <AddLink/>
+                    <Unlink/>
+                    <RemoveFormat/>
+                    <Separator/>
+                    <Source/>
+                </Toolbar>
+            </AtomHtmlEditor>
+        </div>);
+    }
+}

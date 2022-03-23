@@ -1,9 +1,20 @@
 {
     "terminal.integrated.shellArgs.windows": ["-ExecutionPolicy", "Bypass"],
     "cSpell.words": [
+        "Akash",
         "Chng",
-        "Muli",
         "downlevel",
-        "oned"
-    ]
+        "hilite",
+        "Muli",
+        "oned",
+        "postversion"
+    ],
+    "emmet.showSuggestionsAsSnippets": false,
+	"emmet.showAbbreviationSuggestions": false,
+	"emmet.excludeLanguages": [
+		"markdown",
+		"typescript",
+		"typescriptreact"
+	]
+
 }
