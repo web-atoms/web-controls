@@ -379,8 +379,8 @@ export function disposeChildren(owner: AtomControl, e: HTMLElement) {
         disposeChildren(owner, c);
         owner.unbind(c);
         owner.unbindEvent(c);
-        c.remove();
     }
+    e.innerHTML = "";// this should remove all elements... fast.. probably??
 }
 
 export function defaultComparer<T>(left: T , right: T) {
