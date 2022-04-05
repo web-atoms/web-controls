@@ -294,6 +294,7 @@ export function SelectorCheckBox(
 
 CSS(StyleRule()
     .flexLayout({ alignItems: "center", justifyContent: "flex-start"})
+    .margin(0)
     .nested(StyleRule("i[data-ui-type]")
         .padding(5)
     )
