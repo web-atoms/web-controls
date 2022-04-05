@@ -7,7 +7,7 @@ import { CancelToken, IDisposable } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import PopupService, { IPopup, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
+import PopupService, { IDialogOptions, IPopup, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
 const popupCSS = CSS(StyleRule()
@@ -94,14 +94,14 @@ export function askSuggestion<T>(
     items: T[],
     itemRenderer: (item: T) => XNode,
     match: Match<T>,
-    title: string): Promise<T> {
+    options: IDialogOptions): Promise<T> {
     class Suggestions extends PopupWindow {
 
         @BindableProperty
         public search: string;
 
         protected create(): void {
-            this.title = title;
+            this.title = options?.title ?? "Select";
             this.render(<div class={popupCSS}>
                 <input
                     type="search"
@@ -120,8 +120,16 @@ export function askSuggestion<T>(
             </div>);
         }
     }
-
-    return Suggestions.showModal();
+    options ??= {};
+    if (typeof options.maximize === "undefined") {
+        if (typeof options.width === "undefined") {
+            options.width = "90%";
+        }
+        if (typeof options.height === "undefined") {
+            options.height = "80%";
+        }
+    }
+    return Suggestions.showModal(options);
 }
 
 CSS(StyleRule()

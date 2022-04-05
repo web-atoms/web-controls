@@ -64,7 +64,7 @@ export default class DropDown extends AtomRepeater {
                 this.items,
                 this.suggestionRenderer ?? this.itemRenderer,
                 this.match ?? MatchCaseInsensitive(this.labelPath),
-                this.suggestionPrompt ?? this.prompt);
+                { title: this.suggestionPrompt ?? this.prompt });
             this.selectedItem = selected;
             return;
         }
