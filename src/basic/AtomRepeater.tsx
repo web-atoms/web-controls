@@ -7,7 +7,7 @@ import { CancelToken, IDisposable } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import PopupService, { IDialogOptions, IPopup, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
+import { IDialogOptions, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
 const popupCSS = CSS(StyleRule()
@@ -27,6 +27,8 @@ const popupCSS = CSS(StyleRule()
         )
     )
 );
+
+let refreshId = 1;
 
 export const getParentRepeaterItem = (target: HTMLElement): [string, AtomRepeater, any, number] | undefined => {
     let eventName: string;
@@ -389,7 +391,7 @@ export function disposeChildren(owner: AtomControl, e: HTMLElement) {
         owner.unbind(c);
         owner.unbindEvent(c);
     }
-    e.innerHTML = "";// this should remove all elements... fast.. probably??
+    e.innerHTML = ""; // this should remove all elements... fast.. probably??
 }
 
 export function defaultComparer<T>(left: T , right: T) {
@@ -586,15 +588,16 @@ export default class AtomRepeater extends AtomControl {
 
     public refreshItem(item, fx?: Promise<void> | any) {
         if (fx?.then) {
-            fx.then(() => this.refreshItem(item), () => this.refreshItem(item));
+            const id = refreshId++;
+            this.element.dispatchEvent(new CustomEvent("refreshLockBegin", { detail: { id }, bubbles: true }));
+            const finalize = () => {
+                this.refreshItem(item);
+                this.element.dispatchEvent(new CustomEvent("refreshLockEnd", { detail: { id }, bubbles: true}));
+            };
+            fx.then(finalize, finalize);
             return;
         }
         const index = this.items.indexOf(item);
-        if (index === -1) {
-            // we need to do full refresh..
-            this.updateItems();
-            return;
-        }
         this.updatePartial("remove", index, item);
         this.updatePartial("add", index, item);
     }
