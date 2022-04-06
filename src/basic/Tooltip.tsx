@@ -25,7 +25,7 @@ document.body.addEventListener("pointerenter", (ev) => {
             start = start.parentElement;
             continue;
         }
-        const [host, node] = tooltips.get(start);
+        const [host, node] = item;
         if (!host.tooltip) {
 
             // find associated data/item
@@ -36,18 +36,27 @@ document.body.addEventListener("pointerenter", (ev) => {
 
             class TooltipControl extends node {
 
-                private host: any;
-
-                private owner: any;
+                private enterEventDisposable;
 
                 protected preCreate(): void {
-                    this.host = host;
-                    this.owner = start;
                     this.element._logicalParent = start;
                     if (data) {
                         this.data = data;
                     }
-                    super.preCreate();
+                    const { element } = this;
+                    // tooltips.set(element, [{ tooltip: this, control: null }, node]);
+                    this.enterEventDisposable = this.bindEvent(element, "mouseenter", () => {
+                        setTimeout(() => {
+                            tooltips.set(element, [{ tooltip: host.tooltip, control: null}, null]);
+                            delete host.tooltip;
+                            this.enterEventDisposable.dispose();
+                        }, 10);
+                    });
+                    this.registerDisposable({
+                        dispose: () => {
+                            tooltips.delete(element);
+                        }
+                    });
                 }
             }
             const t = new TooltipControl(host.control.app);
@@ -58,20 +67,18 @@ document.body.addEventListener("pointerenter", (ev) => {
 }, true);
 
 document.body.addEventListener("pointerleave", (ev) => {
-    let start = ev.target as HTMLElement;
-    while (start) {
+    const start = ev.target as HTMLElement;
+    setTimeout(() => {
         const item = tooltips.get(start);
         if (!item) {
-            start = start.parentElement;
-            continue;
+            return;
         }
-        const [host, node] = tooltips.get(start);
+        const [host] = item;
         if (host.tooltip) {
             host.tooltip.dispose();
             host.tooltip = undefined;
         }
-        break;
-    }
+    }, 250);
 }, true);
 
 CSS(StyleRule()
@@ -80,20 +87,4 @@ CSS(StyleRule()
 "div[data-tooltip=tooltip]");
 
 export default class Tooltip extends AtomControl {
-
-    private host: any;
-
-    private start: HTMLElement;
-
-    protected preCreate(): void {
-        const [host, node] = tooltips.get(this.start);
-        delete host.tooltip;
-        const { element } = this;
-        tooltips.set(element, [{ tooltip: this, control: null }, node]);
-        this.registerDisposable({
-            dispose: () => {
-                tooltips.delete(element);
-            }
-        });
-    }
 }
