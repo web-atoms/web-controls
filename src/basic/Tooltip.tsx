@@ -1,6 +1,6 @@
 import Colors from "@web-atoms/core/dist/core/Colors";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
+import StyleRule, { AnimationType } from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl, ElementValueSetters } from "@web-atoms/core/dist/web/controls/AtomControl";
 import PopupService, { IPopup, PopupControl } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
@@ -35,11 +35,19 @@ document.body.addEventListener("pointerenter", (ev) => {
             }
 
             class TooltipControl extends node {
+
+                private host: any;
+
+                private owner: any;
+
                 protected preCreate(): void {
+                    this.host = host;
+                    this.owner = start;
                     this.element._logicalParent = start;
                     if (data) {
                         this.data = data;
                     }
+                    super.preCreate();
                 }
             }
             const t = new TooltipControl(host.control.app);
@@ -73,4 +81,19 @@ CSS(StyleRule()
 
 export default class Tooltip extends AtomControl {
 
+    private host: any;
+
+    private start: HTMLElement;
+
+    protected preCreate(): void {
+        const [host, node] = tooltips.get(this.start);
+        delete host.tooltip;
+        const { element } = this;
+        tooltips.set(element, [{ tooltip: this, control: null }, node]);
+        this.registerDisposable({
+            dispose: () => {
+                tooltips.delete(element);
+            }
+        });
+    }
 }
