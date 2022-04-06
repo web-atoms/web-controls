@@ -590,6 +590,11 @@ export default class AtomRepeater extends AtomControl {
             return;
         }
         const index = this.items.indexOf(item);
+        if (index === -1) {
+            // we need to do full refresh..
+            this.updateItems();
+            return;
+        }
         this.updatePartial("remove", index, item);
         this.updatePartial("add", index, item);
     }
