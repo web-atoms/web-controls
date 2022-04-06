@@ -28,8 +28,6 @@ const popupCSS = CSS(StyleRule()
     )
 );
 
-let refreshId = 1;
-
 export const getParentRepeaterItem = (target: HTMLElement): [string, AtomRepeater, any, number] | undefined => {
     let eventName: string;
     let repeater: AtomRepeater;
@@ -588,11 +586,8 @@ export default class AtomRepeater extends AtomControl {
 
     public refreshItem(item, fx?: Promise<void> | any) {
         if (fx?.then) {
-            const id = refreshId++;
-            this.element.dispatchEvent(new CustomEvent("refreshLockBegin", { detail: { id }, bubbles: true }));
             const finalize = () => {
                 this.refreshItem(item);
-                this.element.dispatchEvent(new CustomEvent("refreshLockEnd", { detail: { id }, bubbles: true}));
             };
             fx.then(finalize, finalize);
             return;
