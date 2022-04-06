@@ -1,14 +1,15 @@
+import { App } from "@web-atoms/core/dist/App";
 import { IDisposable } from "@web-atoms/core/dist/core/types";
 
 export default class RefreshLock implements IDisposable {
 
     public dispose;
 
-    public promise;
+    private promise;
 
     private map = new Map<number, any>();
 
-    constructor(e: HTMLElement) {
+    constructor(private app: App, e: HTMLElement) {
 
         e.addEventListener("refreshLockBegin", this.begin);
         e.addEventListener("refreshLockEnd", this.end);
@@ -19,12 +20,27 @@ export default class RefreshLock implements IDisposable {
         };
     }
 
+    public queue(fx: (... a: any) => any) {
+        if (this.promise) {
+            this.promise.then(fx);
+            return;
+        }
+        fx();
+    }
+
     private begin = (ce: CustomEvent) => {
+        if (ce.target === ce.currentTarget) {
+            return;
+        }
         const previous = this.promise;
         this.promise = this.setupNew(previous, ce.detail.id);
+        this.app.runAsync(() => this.promise);
     }
 
     private end = (ce: CustomEvent) => {
+        if (ce.target === ce.currentTarget) {
+            return;
+        }
         const resolver = this.map.get(ce.detail.id);
         resolver?.();
     }
@@ -37,5 +53,6 @@ export default class RefreshLock implements IDisposable {
             this.map.set(id, resolve);
         });
         this.map.delete(id);
+        this.promise = null;
     }
 }
