@@ -442,6 +442,9 @@ export default class AtomRepeater extends AtomControl {
     @BindableProperty
     public comparer: (left, right) => boolean;
 
+    @BindableProperty
+    public deferUpdates: boolean;
+
     public get value() {
         if (this.initialValue !== undefined) {
             return this.initialValue;
@@ -485,6 +488,8 @@ export default class AtomRepeater extends AtomControl {
     private itemsDisposable: IDisposable;
 
     private selectedItemsDisposable: IDisposable;
+
+    private deferredUpdateId: any;
 
     public onPropertyChanged(name: string): void {
         switch (name) {
@@ -667,7 +672,16 @@ export default class AtomRepeater extends AtomControl {
         }
     }
 
-    public updateItems(container?: HTMLElement) {
+    public updateItems(container?: HTMLElement, force?: boolean) {
+        if (this.deferUpdates && !force) {
+            if (this.deferredUpdateId) {
+                clearTimeout(this.deferredUpdateId);
+            }
+            this.deferredUpdateId = setTimeout(() => {
+                this.deferredUpdateId = 0;
+                this.updateItems(container, true);
+            }, 1);
+        }
         container ??= this.itemsPresenter ?? this.element;
         disposeChildren(this, container);
         const ir = this.itemRenderer;
