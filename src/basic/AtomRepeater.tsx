@@ -165,6 +165,7 @@ export function askSuggestionPopup<T>(
     selectedItem: T): Promise<T> {
 
     const updateSearch = "search" in opener;
+    const itemsInOpener = "items" in opener;
 
     class Suggestions extends PopupControl {
 
@@ -175,6 +176,8 @@ export function askSuggestionPopup<T>(
         @BindableProperty
         public search: string;
 
+        private opener: any;
+
         onPropertyChanged(name: string): void {
             if (updateSearch &&name === "search") {
                 (opener as any).search = this.search;
@@ -184,8 +187,30 @@ export function askSuggestionPopup<T>(
 
         protected create(): void {
             this.anchorItem = selectedItem;
+            this.opener = opener;
             if (selectedItem) {
                 this.anchorIndex = items.indexOf(selectedItem);
+            }
+            if (itemsInOpener) {
+                this.render(<div data-suggestion-popup="suggestion-popup">
+                    <input
+                        type="search"
+                        value={Bind.twoWaysImmediate(() => this.search)}
+                        eventKeydown={(e) => this.onKey(e)}
+                        autofocus={true}/>
+                    <div class="items">
+                        <AtomRepeater
+                            class="presenter"
+                            selectedItem={Bind.oneWay(() => this.anchorItem)}
+                            itemRenderer={itemRenderer}
+                            visibilityFilter={Bind.oneWay(() => match(this.search))}
+                            eventItemClick={(e) => {
+                                this.close(e.detail);
+                            }}
+                            items={Bind.oneWay(() => this.opener.items)}/>
+                    </div>
+                </div>);
+                return;
             }
             this.render(<div data-suggestion-popup="suggestion-popup">
                 <input
