@@ -1,6 +1,6 @@
 import Colors from "@web-atoms/core/dist/core/Colors";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
+import StyleRule, { AnimationType } from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl, ElementValueSetters } from "@web-atoms/core/dist/web/controls/AtomControl";
 import PopupService, { IPopup, PopupControl } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
@@ -25,7 +25,7 @@ document.body.addEventListener("pointerenter", (ev) => {
             start = start.parentElement;
             continue;
         }
-        const [host, node] = tooltips.get(start);
+        const [host, node] = item;
         if (!host.tooltip) {
 
             // find associated data/item
@@ -35,35 +35,53 @@ document.body.addEventListener("pointerenter", (ev) => {
             }
 
             class TooltipControl extends node {
+
+                private enterEventDisposable;
+
                 protected preCreate(): void {
                     this.element._logicalParent = start;
                     if (data) {
                         this.data = data;
                     }
+                    const { element } = this;
+                    // tooltips.set(element, [{ tooltip: this, control: null }, node]);
+                    this.enterEventDisposable = this.bindEvent(element, "mouseenter", () => {
+                        setTimeout(() => {
+                            tooltips.set(element, [{ tooltip: host.tooltip, control: null}, null]);
+                            delete host.tooltip;
+                            this.enterEventDisposable.dispose();
+                        }, 10);
+                    });
+                    this.registerDisposable({
+                        dispose: () => {
+                            tooltips.delete(element);
+                        }
+                    });
                 }
             }
             const t = new TooltipControl(host.control.app);
-            host.tooltip = PopupService.show(start, t.element);
+            const  alignment: any = start.dataset.tooltipAlignment ?? "auto";
+            host.tooltip = PopupService.show(start, t.element, {
+                alignment
+            });
         }
         break;
     }
 }, true);
 
 document.body.addEventListener("pointerleave", (ev) => {
-    let start = ev.target as HTMLElement;
-    while (start) {
+    const start = ev.target as HTMLElement;
+    setTimeout(() => {
         const item = tooltips.get(start);
         if (!item) {
-            start = start.parentElement;
-            continue;
+            return;
         }
-        const [host, node] = tooltips.get(start);
+        const [host] = item;
         if (host.tooltip) {
             host.tooltip.dispose();
             host.tooltip = undefined;
         }
-        break;
-    }
+    }, 250);
 }, true);
 
 CSS(StyleRule()
@@ -72,5 +90,4 @@ CSS(StyleRule()
 "div[data-tooltip=tooltip]");
 
 export default class Tooltip extends AtomControl {
-
 }

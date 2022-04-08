@@ -29,7 +29,10 @@ export default class TooltipTest extends AtomControl {
             <a tooltip={CustomTooltip}>Demo</a>
             <AtomRepeater
                 items={items}
-                itemRenderer={(item) => <div tooltip={CustomTooltip} text={item.label}/>}
+                itemRenderer={(item) => <div
+                    tooltip={CustomTooltip}
+                    data-tooltip-alignment="right"
+                    text={item.label}/>}
                 />
         </div>);
     }

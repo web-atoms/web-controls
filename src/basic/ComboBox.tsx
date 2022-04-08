@@ -28,7 +28,7 @@ export default class ComboBox extends AtomRepeater {
         }
         this.isChanging = true;
         const first = selectedItems[0];
-        (this.element as HTMLSelectElement).selectedIndex = this.items.indexOf(first);
+        (this.element as HTMLSelectElement).selectedIndex = this.items?.indexOf(first) ?? -1;
         this.isChanging = false;
     }
 

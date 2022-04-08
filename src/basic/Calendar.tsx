@@ -47,7 +47,7 @@ const monthItems = months.long.map((x, i) => ({
     value: i
 }));
 
-const css = CSS(StyleRule()
+CSS(StyleRule()
     .display("inline-grid")
     .gridTemplateRows("auto auto auto")
     .gridTemplateColumns("auto auto auto auto")
@@ -109,7 +109,7 @@ const css = CSS(StyleRule()
             )
         )
     )
-);
+, "*[data-calendar=calendar]");
 
 export interface ICalendarDate {
     label: string;
@@ -229,7 +229,7 @@ export default class Calendar extends AtomRepeater {
         this.year = now.getFullYear();
         this.month = now.getMonth();
         this.render(<div
-            class={css}
+            data-calendar="calendar"
             items={Bind.oneWay(() => this.dates)}>
                 <i
                     event-click={() => this.prev()}

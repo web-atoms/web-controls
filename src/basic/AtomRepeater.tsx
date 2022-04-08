@@ -7,7 +7,7 @@ import { CancelToken, IDisposable } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import PopupService, { IPopup, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
+import { IDialogOptions, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
 const popupCSS = CSS(StyleRule()
@@ -77,7 +77,7 @@ export const MatchCaseInsensitive = (textField?: (item) => string) => {
     textField ??= ArrowToString;
     return (s: string) => {
         s = s.toLowerCase();
-        return (item) => textField(item)?.toLowerCase()?.includes(s);
+        return (item) => textField(item)?.toLowerCase?.()?.includes(s);
     };
 };
 
@@ -94,14 +94,14 @@ export function askSuggestion<T>(
     items: T[],
     itemRenderer: (item: T) => XNode,
     match: Match<T>,
-    title: string): Promise<T> {
+    options: IDialogOptions): Promise<T> {
     class Suggestions extends PopupWindow {
 
         @BindableProperty
         public search: string;
 
         protected create(): void {
-            this.title = title;
+            this.title = options?.title ?? "Select";
             this.render(<div class={popupCSS}>
                 <input
                     type="search"
@@ -120,8 +120,16 @@ export function askSuggestion<T>(
             </div>);
         }
     }
-
-    return Suggestions.showModal();
+    options ??= {};
+    if (typeof options.maximize === "undefined") {
+        if (typeof options.width === "undefined") {
+            options.width = "90%";
+        }
+        if (typeof options.height === "undefined") {
+            options.height = "80%";
+        }
+    }
+    return Suggestions.showModal(options);
 }
 
 CSS(StyleRule()
@@ -156,6 +164,9 @@ export function askSuggestionPopup<T>(
     match: Match<T>,
     selectedItem: T): Promise<T> {
 
+    const updateSearch = "search" in opener;
+    const itemsInOpener = "items" in opener;
+
     class Suggestions extends PopupControl {
 
         public anchorItem: T;
@@ -165,10 +176,45 @@ export function askSuggestionPopup<T>(
         @BindableProperty
         public search: string;
 
+        private opener: any;
+
+        private get items() {
+            return itemsInOpener ? this.opener.items : items;
+        }
+
+        public onPropertyChanged(name: string): void {
+            if (updateSearch && name === "search") {
+                (opener as any).search = this.search;
+            }
+            super.onPropertyChanged(name);
+        }
+
         protected create(): void {
             this.anchorItem = selectedItem;
+            this.opener = opener;
             if (selectedItem) {
                 this.anchorIndex = items.indexOf(selectedItem);
+            }
+            if (itemsInOpener) {
+                this.render(<div data-suggestion-popup="suggestion-popup">
+                    <input
+                        type="search"
+                        value={Bind.twoWaysImmediate(() => this.search)}
+                        eventKeydown={(e) => this.onKey(e)}
+                        autofocus={true}/>
+                    <div class="items">
+                        <AtomRepeater
+                            class="presenter"
+                            selectedItem={Bind.oneWay(() => this.anchorItem)}
+                            itemRenderer={itemRenderer}
+                            visibilityFilter={Bind.oneWay(() => match(this.search))}
+                            eventItemClick={(e) => {
+                                this.close(e.detail);
+                            }}
+                            items={Bind.oneWay(() => this.opener.items)}/>
+                    </div>
+                </div>);
+                return;
             }
             this.render(<div data-suggestion-popup="suggestion-popup">
                 <input
@@ -191,6 +237,7 @@ export function askSuggestionPopup<T>(
         }
 
         protected onKey(e: KeyboardEvent) {
+            const suggested = this.items;
             switch (e.key) {
                 case "Enter":
                     // selection mode...
@@ -204,26 +251,26 @@ export function askSuggestionPopup<T>(
                     this.search = "";
                     break;
                 case "ArrowDown":
-                    if (items) {
+                    if (suggested) {
                         if (!this.anchorItem) {
                             this.anchorIndex = 0;
                         } else {
-                            if (this.anchorIndex < items.length - 1) {
+                            if (this.anchorIndex < suggested.length - 1) {
                                 this.anchorIndex++;
                             }
                         }
-                        this.anchorItem = items[this.anchorIndex];
+                        this.anchorItem = suggested[this.anchorIndex];
                     }
                     break;
                 case "ArrowUp":
-                        if (items) {
+                        if (suggested) {
                             if (!this.anchorItem) {
                                 return;
                             }
                             if (this.anchorIndex) {
                                 this.anchorIndex--;
                             }
-                            this.anchorItem = items[this.anchorIndex];
+                            this.anchorItem = suggested[this.anchorIndex];
                         }
                         break;
                 }
@@ -286,6 +333,7 @@ export function SelectorCheckBox(
 
 CSS(StyleRule()
     .flexLayout({ alignItems: "center", justifyContent: "flex-start"})
+    .margin(0)
     .nested(StyleRule("i[data-ui-type]")
         .padding(5)
     )
@@ -379,8 +427,8 @@ export function disposeChildren(owner: AtomControl, e: HTMLElement) {
         disposeChildren(owner, c);
         owner.unbind(c);
         owner.unbindEvent(c);
-        c.remove();
     }
+    e.innerHTML = ""; // this should remove all elements... fast.. probably??
 }
 
 export function defaultComparer<T>(left: T , right: T) {
@@ -433,6 +481,9 @@ export default class AtomRepeater extends AtomControl {
     @BindableProperty
     public comparer: (left, right) => boolean;
 
+    @BindableProperty
+    public deferUpdates: boolean;
+
     public get value() {
         if (this.initialValue !== undefined) {
             return this.initialValue;
@@ -476,6 +527,8 @@ export default class AtomRepeater extends AtomControl {
     private itemsDisposable: IDisposable;
 
     private selectedItemsDisposable: IDisposable;
+
+    private deferredUpdateId: any;
 
     public onPropertyChanged(name: string): void {
         switch (name) {
@@ -577,7 +630,10 @@ export default class AtomRepeater extends AtomControl {
 
     public refreshItem(item, fx?: Promise<void> | any) {
         if (fx?.then) {
-            fx.then(() => this.refreshItem(item), () => this.refreshItem(item));
+            const finalize = () => {
+                this.refreshItem(item);
+            };
+            fx.then(finalize, finalize);
             return;
         }
         const index = this.items.indexOf(item);
@@ -655,7 +711,16 @@ export default class AtomRepeater extends AtomControl {
         }
     }
 
-    public updateItems(container?: HTMLElement) {
+    public updateItems(container?: HTMLElement, force?: boolean) {
+        if (this.deferUpdates && !force) {
+            if (this.deferredUpdateId) {
+                clearTimeout(this.deferredUpdateId);
+            }
+            this.deferredUpdateId = setTimeout(() => {
+                this.deferredUpdateId = 0;
+                this.updateItems(container, true);
+            }, 1);
+        }
         container ??= this.itemsPresenter ?? this.element;
         disposeChildren(this, container);
         const ir = this.itemRenderer;

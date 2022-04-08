@@ -5,7 +5,8 @@ import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
-import AtomRepeater, { askSuggestion, askSuggestionPopup, disposeChildren, Match, MatchCaseInsensitive } from "./AtomRepeater";
+import AtomRepeater, { askSuggestion, askSuggestionPopup,
+    disposeChildren, Match, MatchCaseInsensitive } from "./AtomRepeater";
 
 CSS(StyleRule()
     .flexLayout({ inline: true, justifyContent: "stretch" as any})
@@ -15,6 +16,9 @@ export default class DropDown extends AtomRepeater {
 
     @BindableProperty
     public popupSuggestions: boolean;
+
+    @BindableProperty
+    public search: string;
 
     @BindableProperty
     public prompt: string;
@@ -56,6 +60,10 @@ export default class DropDown extends AtomRepeater {
         this.labelPath = (item) => item?.label ?? item;
         this.itemRenderer = (item) => <div text={this.labelPath(item)}/>;
         this.element.dataset.dropDown = "drop-down";
+        this.render(<div>
+            <div text={this.prompt}/>
+            <i class="fad fa-caret-circle-down"/>
+        </div>);
     }
 
     protected async openPopup() {
@@ -64,7 +72,7 @@ export default class DropDown extends AtomRepeater {
                 this.items,
                 this.suggestionRenderer ?? this.itemRenderer,
                 this.match ?? MatchCaseInsensitive(this.labelPath),
-                this.suggestionPrompt ?? this.prompt);
+                { title: this.suggestionPrompt ?? this.prompt });
             this.selectedItem = selected;
             return;
         }
