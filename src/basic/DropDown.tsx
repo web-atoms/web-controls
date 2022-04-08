@@ -59,6 +59,10 @@ export default class DropDown extends AtomRepeater {
         this.labelPath = (item) => item?.label ?? item;
         this.itemRenderer = (item) => <div text={this.labelPath(item)}/>;
         this.element.dataset.dropDown = "drop-down";
+        this.render(<div>
+            <div text={this.prompt}/>
+            <i class="fad fa-caret-circle-down"/>
+        </div>);
     }
 
     protected async openPopup() {
