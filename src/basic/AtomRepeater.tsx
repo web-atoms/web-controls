@@ -77,7 +77,7 @@ export const MatchCaseInsensitive = (textField?: (item) => string) => {
     textField ??= ArrowToString;
     return (s: string) => {
         s = s.toLowerCase();
-        return (item) => textField(item)?.toLowerCase()?.includes(s);
+        return (item) => textField(item)?.toLowerCase?.()?.includes(s);
     };
 };
 
