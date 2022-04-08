@@ -5,7 +5,8 @@ import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
-import AtomRepeater, { askSuggestion, askSuggestionPopup, disposeChildren, Match, MatchCaseInsensitive } from "./AtomRepeater";
+import AtomRepeater, { askSuggestion, askSuggestionPopup,
+    disposeChildren, Match, MatchCaseInsensitive } from "./AtomRepeater";
 
 CSS(StyleRule()
     .flexLayout({ inline: true, justifyContent: "stretch" as any})

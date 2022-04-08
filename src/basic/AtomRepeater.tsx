@@ -178,8 +178,12 @@ export function askSuggestionPopup<T>(
 
         private opener: any;
 
-        onPropertyChanged(name: string): void {
-            if (updateSearch &&name === "search") {
+        private get items() {
+            return itemsInOpener ? this.opener.items : items;
+        }
+
+        public onPropertyChanged(name: string): void {
+            if (updateSearch && name === "search") {
                 (opener as any).search = this.search;
             }
             super.onPropertyChanged(name);
@@ -233,6 +237,7 @@ export function askSuggestionPopup<T>(
         }
 
         protected onKey(e: KeyboardEvent) {
+            const suggested = this.items;
             switch (e.key) {
                 case "Enter":
                     // selection mode...
@@ -246,26 +251,26 @@ export function askSuggestionPopup<T>(
                     this.search = "";
                     break;
                 case "ArrowDown":
-                    if (items) {
+                    if (suggested) {
                         if (!this.anchorItem) {
                             this.anchorIndex = 0;
                         } else {
-                            if (this.anchorIndex < items.length - 1) {
+                            if (this.anchorIndex < suggested.length - 1) {
                                 this.anchorIndex++;
                             }
                         }
-                        this.anchorItem = items[this.anchorIndex];
+                        this.anchorItem = suggested[this.anchorIndex];
                     }
                     break;
                 case "ArrowUp":
-                        if (items) {
+                        if (suggested) {
                             if (!this.anchorItem) {
                                 return;
                             }
                             if (this.anchorIndex) {
                                 this.anchorIndex--;
                             }
-                            this.anchorItem = items[this.anchorIndex];
+                            this.anchorItem = suggested[this.anchorIndex];
                         }
                         break;
                 }
