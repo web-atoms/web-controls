@@ -17,6 +17,9 @@ export default class DropDown extends AtomRepeater {
     public popupSuggestions: boolean;
 
     @BindableProperty
+    public search: string;
+
+    @BindableProperty
     public prompt: string;
 
     @BindableProperty

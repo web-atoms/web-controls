@@ -164,6 +164,8 @@ export function askSuggestionPopup<T>(
     match: Match<T>,
     selectedItem: T): Promise<T> {
 
+    const updateSearch = "search" in opener;
+
     class Suggestions extends PopupControl {
 
         public anchorItem: T;
@@ -172,6 +174,13 @@ export function askSuggestionPopup<T>(
 
         @BindableProperty
         public search: string;
+
+        onPropertyChanged(name: string): void {
+            if (updateSearch &&name === "search") {
+                (opener as any).search = this.search;
+            }
+            super.onPropertyChanged(name);
+        }
 
         protected create(): void {
             this.anchorItem = selectedItem;
