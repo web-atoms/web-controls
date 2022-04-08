@@ -60,7 +60,10 @@ document.body.addEventListener("pointerenter", (ev) => {
                 }
             }
             const t = new TooltipControl(host.control.app);
-            host.tooltip = PopupService.show(start, t.element);
+            const  alignment: any = start.dataset.tooltipAlignment ?? "auto";
+            host.tooltip = PopupService.show(start, t.element, {
+                alignment
+            });
         }
         break;
     }
