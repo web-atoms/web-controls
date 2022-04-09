@@ -92,7 +92,7 @@ export const MatchAnyCaseInsensitive = (textField?: (item) => string) => {
             return MatchTrue;
         }
         const r = StringHelper.createContainsAnyWordRegExp(s);
-        return (item) =>  r.some((x) => x.test( textField(item)));
+        return (item) =>  r.test( textField(item));
     };
 };
 
