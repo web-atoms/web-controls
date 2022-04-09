@@ -6,7 +6,7 @@ import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import AtomRepeater, { askSuggestion, askSuggestionPopup,
-    disposeChildren, Match, MatchCaseInsensitive } from "./AtomRepeater";
+    disposeChildren, Match, MatchAnyCaseInsensitive } from "./AtomRepeater";
 
 CSS(StyleRule()
     .flexLayout({ inline: true, justifyContent: "stretch" as any})
@@ -71,7 +71,7 @@ export default class DropDown extends AtomRepeater {
             const selected = await askSuggestion(
                 this.items,
                 this.suggestionRenderer ?? this.itemRenderer,
-                this.match ?? MatchCaseInsensitive(this.labelPath),
+                this.match ?? MatchAnyCaseInsensitive(this.labelPath),
                 { title: this.suggestionPrompt ?? this.prompt });
             this.selectedItem = selected;
             return;
@@ -81,7 +81,7 @@ export default class DropDown extends AtomRepeater {
             this,
             this.items,
             this.suggestionRenderer ?? this.itemRenderer,
-            this.match ?? MatchCaseInsensitive(this.labelPath),
+            this.match ?? MatchAnyCaseInsensitive(this.labelPath),
             this.selectedItem);
         this.selectedItem = selectedItem;
 

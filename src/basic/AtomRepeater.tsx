@@ -9,6 +9,7 @@ import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { IDialogOptions, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
+import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
 
 const popupCSS = CSS(StyleRule()
     .height(500)
@@ -76,8 +77,22 @@ export const ArrowToString = (item) => item.label?.toString() ?? item.toString()
 export const MatchCaseInsensitive = (textField?: (item) => string) => {
     textField ??= ArrowToString;
     return (s: string) => {
-        s = s.toLowerCase();
-        return (item) => textField(item)?.toLowerCase?.()?.includes(s);
+        if (!s) {
+            return MatchTrue;
+        }
+        const r = StringHelper.createContainsRegExp(s);
+        return (item) => r.test(textField(item));
+    };
+};
+
+export const MatchAnyCaseInsensitive = (textField?: (item) => string) => {
+    textField ??= ArrowToString;
+    return (s: string) => {
+        if (!s) {
+            return MatchTrue;
+        }
+        const r = StringHelper.createContainsAnyWordRegExp(s);
+        return (item) =>  r.some((x) => x.test( textField(item)));
     };
 };
 
