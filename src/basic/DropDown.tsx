@@ -14,6 +14,8 @@ CSS(StyleRule()
 
 export default class DropDown extends AtomRepeater {
 
+    public "event-selection-changed"?: (e: CustomEvent) => void;
+
     @BindableProperty
     public popupSuggestions: boolean;
 
@@ -83,8 +85,17 @@ export default class DropDown extends AtomRepeater {
             this.suggestionRenderer ?? this.itemRenderer,
             this.match ?? MatchAnyCaseInsensitive(this.labelPath),
             this.selectedItem);
-        this.selectedItem = selectedItem;
-
+        if (this.selectedItem !== selectedItem) {
+            this.selectedItem = selectedItem;
+            this.element.dispatchEvent(new CustomEvent(
+                "selection-changed",
+                {
+                    bubbles: true,
+                    detail: selectedItem,
+                    cancelable: true
+                }
+            ));
+        }
     }
 
     protected updateClasses(): void {
