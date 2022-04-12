@@ -3,13 +3,13 @@ import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder";
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import Colors from "@web-atoms/core/dist/core/Colors";
+import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
 import { CancelToken, IDisposable } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { IDialogOptions, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
-import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
 
 const popupCSS = CSS(StyleRule()
     .height(500)
@@ -577,7 +577,7 @@ export default class AtomRepeater extends AtomControl {
                 if (this.scrollToSelection) {
                     this.bringSelectionIntoView();
                 }
-            break;
+                break;
             case "selectedItems":
                 this.selectedItemsDisposable?.dispose();
                 const selectedItems = this.selectedItems;
@@ -687,7 +687,6 @@ export default class AtomRepeater extends AtomControl {
             element = element.nextElementSibling as HTMLElement;
         }
     }
-
 
     public refreshItem(item, fx?: Promise<void> | any) {
         if (fx?.then) {
