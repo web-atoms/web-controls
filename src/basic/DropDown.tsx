@@ -88,7 +88,7 @@ export default class DropDown extends AtomRepeater {
         if (this.selectedItem !== selectedItem) {
             this.selectedItem = selectedItem;
             this.element.dispatchEvent(new CustomEvent(
-                "selection-changed",
+                "selectionChanged",
                 {
                     bubbles: true,
                     detail: selectedItem,

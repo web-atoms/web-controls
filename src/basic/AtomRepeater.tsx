@@ -243,6 +243,7 @@ export function askSuggestionPopup<T>(
                         selectedItem={Bind.oneWay(() => this.anchorItem)}
                         itemRenderer={itemRenderer}
                         visibilityFilter={Bind.oneWay(() => match(this.search))}
+                        scrollToSelection={true}
                         eventItemClick={(e) => {
                             this.close(e.detail);
                         }}
@@ -537,6 +538,8 @@ export default class AtomRepeater extends AtomControl {
         si.refresh();
     }
 
+    public scrollToSelection: boolean;
+
     private initialValue: any;
 
     private itemsDisposable: IDisposable;
@@ -544,6 +547,8 @@ export default class AtomRepeater extends AtomControl {
     private selectedItemsDisposable: IDisposable;
 
     private deferredUpdateId: any;
+
+    private bringIntoViewId: any;
 
     public onPropertyChanged(name: string): void {
         switch (name) {
@@ -575,6 +580,12 @@ export default class AtomRepeater extends AtomControl {
                 const selectedItems = this.selectedItems;
                 const sd = selectedItems?.watch(() => {
                     this.updateClasses();
+                    if (this.scrollToSelection) {
+                        const si = this.selectedItem;
+                        if (si) {
+                            this.bringIntoView(si);
+                        }
+                    }
                     AtomBinder.refreshValue(this, "selectedItem");
                     AtomBinder.refreshValue(this, "value");
                 });
@@ -591,6 +602,22 @@ export default class AtomRepeater extends AtomControl {
                 this.updateVisibility();
                 break;
         }
+    }
+
+    public bringIntoView(item, force?: boolean) {
+        if (force) {
+            const element = this.elementForItem(item);
+            element?.scrollIntoView();
+            return;
+        }
+        if (this.bringIntoViewId) {
+            clearTimeout(this.bringIntoViewId);
+        }
+        this.bringIntoViewId = setTimeout(() => {
+            clearTimeout(this.bringIntoViewId);
+            this.bringIntoViewId = undefined;
+            this.bringIntoView(item, true);
+        }, 100);
     }
 
     public forEach<T>(action: (item: T, element: HTMLElement) => void, container?: HTMLElement) {
@@ -642,6 +669,22 @@ export default class AtomRepeater extends AtomControl {
             element = element.nextElementSibling as HTMLElement;
         }
     }
+
+    public elementForItem(itemToFind: any, container?: HTMLElement) {
+        container ??= this.itemsPresenter ?? this.element;
+        const items = this.items;
+        let element = container.firstElementChild as HTMLElement;
+        while (element) {
+            // tslint:disable-next-line: no-bitwise
+            const index = ~~element.dataset.itemIndex;
+            const item = items[index];
+            if (item === itemToFind) {
+                return element;
+            }
+            element = element.nextElementSibling as HTMLElement;
+        }
+    }
+
 
     public refreshItem(item, fx?: Promise<void> | any) {
         if (fx?.then) {
