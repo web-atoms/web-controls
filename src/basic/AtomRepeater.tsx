@@ -574,17 +574,17 @@ export default class AtomRepeater extends AtomControl {
                     this.value = iv;
                 }
                 this.updateItems();
-                break;
+                if (this.scrollToSelection) {
+                    this.bringSelectionIntoView();
+                }
+            break;
             case "selectedItems":
                 this.selectedItemsDisposable?.dispose();
                 const selectedItems = this.selectedItems;
                 const sd = selectedItems?.watch(() => {
                     this.updateClasses();
                     if (this.scrollToSelection) {
-                        const si = this.selectedItem;
-                        if (si) {
-                            this.bringIntoView(si);
-                        }
+                        this.bringSelectionIntoView();
                     }
                     AtomBinder.refreshValue(this, "selectedItem");
                     AtomBinder.refreshValue(this, "value");
@@ -604,10 +604,13 @@ export default class AtomRepeater extends AtomControl {
         }
     }
 
-    public bringIntoView(item, force?: boolean) {
+    public bringSelectionIntoView(force?: boolean) {
         if (force) {
-            const element = this.elementForItem(item);
-            element?.scrollIntoView();
+            const selection = this.selectedItem;
+            if (selection) {
+                const element = this.elementForItem(selection);
+                element?.scrollIntoView();
+            }
             return;
         }
         if (this.bringIntoViewId) {
@@ -616,7 +619,7 @@ export default class AtomRepeater extends AtomControl {
         this.bringIntoViewId = setTimeout(() => {
             clearTimeout(this.bringIntoViewId);
             this.bringIntoViewId = undefined;
-            this.bringIntoView(item, true);
+            this.bringSelectionIntoView(true);
         }, 100);
     }
 
