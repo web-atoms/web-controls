@@ -7,4 +7,5 @@ export default interface IElement {
     href?: string;
     text?: string;
     styleDisplay?: any;
+    [key: string]: any;
 }
