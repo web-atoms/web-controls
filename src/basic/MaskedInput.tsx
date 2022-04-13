@@ -10,18 +10,18 @@ export interface IMaskedInput extends IElement {
 CSS(StyleRule()
     .position("relative")
     .paddingLeft(2)
-    .paddingTop(2)
+    .paddingTop(1)
     .fontFamily("monospace")
-    .and(StyleRule("::after")
-        .absolutePosition({
-            left: 2,
-            top: 2
-        })
-        .content("attr(data-mask)" as any)
-        .fontFamily("inherit")
-        .fontWeight("inherit")
-        .fontSize("inherit")
-    )
+    // .and(StyleRule("::after")
+    //     .absolutePosition({
+    //         left: 2,
+    //         top: 1
+    //     })
+    //     .content("attr(data-mask)" as any)
+    //     .fontFamily("inherit")
+    //     .fontWeight("inherit")
+    //     .fontSize("inherit")
+    // )
 , "input[data-mask]");
 
 const updateMask = (e: Event) => {
