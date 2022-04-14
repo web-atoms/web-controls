@@ -1,5 +1,6 @@
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
+import { CancelToken, IDisposable } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
@@ -29,6 +30,15 @@ export default class DropDown extends AtomRepeater {
     public suggestionPrompt: string;
 
     @BindableProperty
+    public itemsFunc: (name: string, ct: CancelToken) => Promise<any[]> | any;
+
+    /**
+     * Default is 250
+     */
+    @BindableProperty
+    public itemsFuncWaitInMS: number;
+
+    @BindableProperty
     public labelPath: (item) => string;
 
     @BindableProperty
@@ -36,6 +46,10 @@ export default class DropDown extends AtomRepeater {
 
     @BindableProperty
     public suggestionRenderer: (item) => XNode;
+
+    private searchTimeout = null;
+
+    private searchCancelToken: CancelToken;
 
     public updateItems(container?: HTMLElement): void {
         // don't do anything...
@@ -50,11 +64,36 @@ export default class DropDown extends AtomRepeater {
             case "prompt":
                 this.updateClasses();
                 break;
+            case "search":
+                if (this.itemsFunc) {
+                    if (this.searchTimeout) {
+                        clearTimeout(this.searchTimeout);
+                        this.searchTimeout = undefined;
+                    }
+                    this.searchTimeout = setTimeout(() =>
+                        this.app.runAsync(() =>
+                            this.updateSearchItems()) , this.itemsFuncWaitInMS);
+                }
+                break;
         }
+    }
+
+    protected async updateSearchItems() {
+        this.searchTimeout = undefined;
+        let ct = this.searchCancelToken;
+        ct?.cancel();
+        this.searchCancelToken = ct = new CancelToken();
+        let results = this.itemsFunc(this.search, ct) as any;
+        if (results?.then) {
+            results = await results;
+        }
+        this.items = results;
+        this.searchCancelToken = null;
     }
 
     protected preCreate(): void {
         // super.preCreate();
+        this.itemsFuncWaitInMS = 250;
         this.prompt = "Select";
         this.popupSuggestions = true;
         this.bindEvent(this.element, "click", () => this.openPopup());
