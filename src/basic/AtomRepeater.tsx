@@ -253,7 +253,7 @@ export function askSuggestionPopup<T>(
         }
 
         protected onKey(e: KeyboardEvent) {
-            const suggested = match ? this.items.filter(match(this.search)) : this.items;
+            const suggested = match ? this.items?.filter(match(this.search)) : this.items;
             switch (e.key) {
                 case "Enter":
                     // selection mode...
