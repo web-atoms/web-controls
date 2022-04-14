@@ -105,6 +105,11 @@ export default class DropDown extends AtomRepeater {
             <div text={this.prompt}/>
             <i class="fad fa-caret-circle-down"/>
         </div>);
+        this.runAfterInit(() => {
+            if (this.itemsFunc) {
+                this.onPropertyChanged("search");
+            }
+        });
     }
 
     protected async openPopup() {
