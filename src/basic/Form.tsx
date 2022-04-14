@@ -105,7 +105,7 @@ function checkValidity(e: MouseEvent) {
         return;
     }
     // if (button.tagName === "BUTTON" && e.type !== "submit") {
-    //     // as submit will be followed, we whould ignore this only if the tag is button
+    //     // as submit will be followed, we would ignore this only if the tag is button
     //     return;
     // }
     if (action === "cancel") {
