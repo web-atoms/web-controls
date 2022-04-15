@@ -26,7 +26,7 @@ export interface ISubmitAction extends IElement {
     "event-click"?: any;
 }
 
-export interface ICancelAction extends IElement{
+export interface ICancelAction extends IElement {
     action: "cancel";
     eventClick?: any;
     "event-click"?: any;
@@ -46,10 +46,11 @@ export function FormAction(
         eventClick,
         "event-click": eventClick2,
         ... a
-    }: IFormAction, node: XNode) {
+    }: IFormAction,
+    node: XNode) {
     const attributes = node.attributes ??= {};
     attributes["data-wa-form-action"] = action;
-    const e = attributes["event-click"] || attributes["eventClick"]
+    const e = attributes["event-click"] || attributes.eventClick;
     if (e) {
         attributes["event-submit"] = e;
         delete attributes["event-click"];
@@ -128,12 +129,18 @@ function checkValidity(e: MouseEvent) {
     }, 100);
 }
 
-function moveNext(e: KeyboardEvent) {
+const moveNext = (handler) => (e: KeyboardEvent) => {
     if (!/enter|submit|return/i.test(e.key)) {
         return;
     }
     const element = e.target as HTMLElement;
     if (!element.tagName) {
+        return;
+    }
+    if  (handler) {
+        if (element.tagName !== "TEXTAREA") {
+            e.currentTarget.dispatchEvent(new CustomEvent("submitForm"));
+        }
         return;
     }
     if (element.dataset.waFormAction === "submit") {
@@ -146,10 +153,15 @@ function moveNext(e: KeyboardEvent) {
             key: "tab"
         }));
     }
-}
+};
 
 export interface IForm {
     class?: any;
+    /**
+     * If set, when an enter key is pressed on
+     * non textarea element, form will be submitted automatically
+     */
+    eventSubmit?: any;
     /**
      * By default it is true, when user presses enter button on an input
      * the focus will move on to the next input element
@@ -159,14 +171,19 @@ export interface IForm {
 }
 
 export default function Form(
-    a: IForm,
+    {
+        focusNextOnEnter = true,
+        eventSubmit,
+        ... a
+    }: IForm,
     ... nodes: XNode[]) {
-    if (a.focusNextOnEnter !== false) {
-        a.eventKeypress = moveNext;
+    if (focusNextOnEnter) {
+        a.eventKeypress = moveNext(eventSubmit);
     }
     return <div
         data-wa-form="wa-form"
         { ... a}
+        eventSubmitForm={eventSubmit}
         eventClick={checkValidity}>
         { ... nodes}
     </div>;
