@@ -64,16 +64,25 @@ export function FormAction(
     return node;
 }
 
+/**
+ * @deprecated Use Form with eventSubmit and button with data-event="submit"
+ */
 export function SubmitAction(a: IElement, node: XNode) {
     (a as any).action = "submit";
     return FormAction(a as any, node);
 }
 
+/**
+ * @deprecated Use Form with eventSubmit and button with data-event="submit"
+ */
 export function CancelAction(a: IElement, node: XNode) {
     (a as any).action = "cancel";
     return FormAction(a as any, node);
 }
 
+/**
+ * @deprecated Use Form with eventSubmit and button with data-event="submit"
+ */
 export function SubmitButton(
     { eventClick,
         ... others}: ISubmitButton,
@@ -90,7 +99,7 @@ function findSubmitAction(e: Event) {
         button = (e as SubmitEvent).submitter;
     }
     while (button) {
-        const action = button.dataset.waFormAction;
+        const action = button.dataset.waFormAction ?? button.dataset.event;
         if (/submit|cancel/i.test(action)) {
             return { button, action };
         }
@@ -99,12 +108,36 @@ function findSubmitAction(e: Event) {
     return { button };
 }
 
-function checkValidity(e: MouseEvent) {
+const submitFormHandler = (form: HTMLElement) => {
+    if (!form.dataset.waShowErrors) {
+        form.dataset.waShowErrors = "yes";
+    }
+    setTimeout(() => {
+        const all = Array.from(form.getElementsByClassName("field-error"));
+        for (const iterator of all) {
+            if (iterator.textContent) {
+                alert(form.dataset?.errorMessage ?? "Please fix all validations");
+                return;
+            }
+        }
+        form.dispatchEvent(new CustomEvent("submitForm"));
+    }, 100);
+};
+
+const checkValidity = (handler) => (e: MouseEvent) => {
+
     const form = e.currentTarget as HTMLFormElement;
+
     const { button, action } = findSubmitAction(e);
     if (!button) {
         return;
     }
+
+    if (handler) {
+        submitFormHandler(form);
+        return;
+    }
+
     // if (button.tagName === "BUTTON" && e.type !== "submit") {
     //     // as submit will be followed, we would ignore this only if the tag is button
     //     return;
@@ -127,7 +160,7 @@ function checkValidity(e: MouseEvent) {
         }
         button.dispatchEvent(new CustomEvent("submit"));
     }, 100);
-}
+};
 
 const moveNext = (handler) => (e: KeyboardEvent) => {
     if (!/enter|submit|return/i.test(e.key)) {
@@ -139,7 +172,7 @@ const moveNext = (handler) => (e: KeyboardEvent) => {
     }
     if  (handler) {
         if (element.tagName !== "TEXTAREA") {
-            e.currentTarget.dispatchEvent(new CustomEvent("submitForm"));
+            submitFormHandler(e.currentTarget as HTMLElement);
         }
         return;
     }
@@ -155,7 +188,25 @@ const moveNext = (handler) => (e: KeyboardEvent) => {
     }
 };
 
+document.body.addEventListener("click", (e: MouseEvent) => {
+    let start = e.target as HTMLElement;
+    let id;
+    while (start) {
+        id = start.dataset.submitFormId;
+        if (id) {
+            break;
+        }
+        start = start.parentElement;
+    }
+    if (!start) {
+        return;
+    }
+    const form = document.body.querySelector(`[data-form-id="${id}"]`);
+    submitFormHandler(form as HTMLElement);
+});
+
 export interface IForm {
+    id?: number;
     class?: any;
     /**
      * If set, when an enter key is pressed on
@@ -170,8 +221,11 @@ export interface IForm {
     [key: string]: any;
 }
 
+let formId = 0;
+
 export default function Form(
     {
+        id = formId++,
         focusNextOnEnter = true,
         eventSubmit,
         ... a
@@ -180,11 +234,18 @@ export default function Form(
     if (focusNextOnEnter) {
         a.eventKeypress = moveNext(eventSubmit);
     }
+    a["data-form-id"] = id;
     return <div
         data-wa-form="wa-form"
         { ... a}
         eventSubmitForm={eventSubmit}
-        eventClick={checkValidity}>
+        eventClick={checkValidity(eventSubmit)}>
         { ... nodes}
     </div>;
 }
+
+Form.newId = () => formId++;
+
+Form.submitId = (id: number) => ({
+    "data-submit-form-id": id.toString()
+});
