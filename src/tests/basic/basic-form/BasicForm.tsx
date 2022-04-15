@@ -15,7 +15,9 @@ export default class BasicForm extends AtomControl {
             emailAddress: ""
         };
         this.render(<div>
-            <Form style-margin="50px">
+            <Form
+                eventSubmit={() => alert("Submit Success")}
+                style-margin="50px">
                 <FormField
                     label="First name:"
                     required={true}
@@ -47,9 +49,9 @@ export default class BasicForm extends AtomControl {
                     error={Bind.oneWay(() => this.data.emailAddress ? "" : "Email address is required")}>
                     <input value={Bind.twoWaysImmediate(() => this.data.emailAddress)}/>
                 </HorizontalFormField>
-                <SubmitButton
+                <button
                     text="Submit"
-                    eventClick={() => alert("Success")}/>
+                    data-event="submit"/>
             </Form>
         </div>);
     }

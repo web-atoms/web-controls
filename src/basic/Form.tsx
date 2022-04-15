@@ -26,7 +26,7 @@ export interface ISubmitAction extends IElement {
     "event-click"?: any;
 }
 
-export interface ICancelAction extends IElement{
+export interface ICancelAction extends IElement {
     action: "cancel";
     eventClick?: any;
     "event-click"?: any;
@@ -46,10 +46,11 @@ export function FormAction(
         eventClick,
         "event-click": eventClick2,
         ... a
-    }: IFormAction, node: XNode) {
+    }: IFormAction,
+    node: XNode) {
     const attributes = node.attributes ??= {};
     attributes["data-wa-form-action"] = action;
-    const e = attributes["event-click"] || attributes["eventClick"]
+    const e = attributes["event-click"] || attributes.eventClick;
     if (e) {
         attributes["event-submit"] = e;
         delete attributes["event-click"];
@@ -63,16 +64,25 @@ export function FormAction(
     return node;
 }
 
+/**
+ * @deprecated Use Form with eventSubmit and button with data-event="submit"
+ */
 export function SubmitAction(a: IElement, node: XNode) {
     (a as any).action = "submit";
     return FormAction(a as any, node);
 }
 
+/**
+ * @deprecated Use Form with eventSubmit and button with data-event="submit"
+ */
 export function CancelAction(a: IElement, node: XNode) {
     (a as any).action = "cancel";
     return FormAction(a as any, node);
 }
 
+/**
+ * @deprecated Use Form with eventSubmit and button with data-event="submit"
+ */
 export function SubmitButton(
     { eventClick,
         ... others}: ISubmitButton,
@@ -89,7 +99,7 @@ function findSubmitAction(e: Event) {
         button = (e as SubmitEvent).submitter;
     }
     while (button) {
-        const action = button.dataset.waFormAction;
+        const action = button.dataset.waFormAction ?? button.dataset.event;
         if (/submit|cancel/i.test(action)) {
             return { button, action };
         }
@@ -98,14 +108,38 @@ function findSubmitAction(e: Event) {
     return { button };
 }
 
-function checkValidity(e: MouseEvent) {
+const submitFormHandler = (form: HTMLElement) => {
+    if (!form.dataset.waShowErrors) {
+        form.dataset.waShowErrors = "yes";
+    }
+    setTimeout(() => {
+        const all = Array.from(form.getElementsByClassName("field-error"));
+        for (const iterator of all) {
+            if (iterator.textContent) {
+                alert(form.dataset?.errorMessage ?? "Please fix all validations");
+                return;
+            }
+        }
+        form.dispatchEvent(new CustomEvent("submitForm"));
+    }, 100);
+};
+
+const checkValidity = (handler) => (e: MouseEvent) => {
+
     const form = e.currentTarget as HTMLFormElement;
+
     const { button, action } = findSubmitAction(e);
     if (!button) {
         return;
     }
+
+    if (handler) {
+        submitFormHandler(form);
+        return;
+    }
+
     // if (button.tagName === "BUTTON" && e.type !== "submit") {
-    //     // as submit will be followed, we whould ignore this only if the tag is button
+    //     // as submit will be followed, we would ignore this only if the tag is button
     //     return;
     // }
     if (action === "cancel") {
@@ -126,14 +160,20 @@ function checkValidity(e: MouseEvent) {
         }
         button.dispatchEvent(new CustomEvent("submit"));
     }, 100);
-}
+};
 
-function moveNext(e: KeyboardEvent) {
+const moveNext = (handler) => (e: KeyboardEvent) => {
     if (!/enter|submit|return/i.test(e.key)) {
         return;
     }
     const element = e.target as HTMLElement;
     if (!element.tagName) {
+        return;
+    }
+    if  (handler) {
+        if (element.tagName !== "TEXTAREA") {
+            submitFormHandler(e.currentTarget as HTMLElement);
+        }
         return;
     }
     if (element.dataset.waFormAction === "submit") {
@@ -146,10 +186,33 @@ function moveNext(e: KeyboardEvent) {
             key: "tab"
         }));
     }
-}
+};
+
+document.body.addEventListener("click", (e: MouseEvent) => {
+    let start = e.target as HTMLElement;
+    let id;
+    while (start) {
+        id = start.dataset.submitFormId;
+        if (id) {
+            break;
+        }
+        start = start.parentElement;
+    }
+    if (!start) {
+        return;
+    }
+    const form = document.body.querySelector(`[data-form-id="${id}"]`);
+    submitFormHandler(form as HTMLElement);
+});
 
 export interface IForm {
+    id?: number;
     class?: any;
+    /**
+     * If set, when an enter key is pressed on
+     * non textarea element, form will be submitted automatically
+     */
+    eventSubmit?: any;
     /**
      * By default it is true, when user presses enter button on an input
      * the focus will move on to the next input element
@@ -158,16 +221,31 @@ export interface IForm {
     [key: string]: any;
 }
 
+let formId = 0;
+
 export default function Form(
-    a: IForm,
+    {
+        id = formId++,
+        focusNextOnEnter = true,
+        eventSubmit,
+        ... a
+    }: IForm,
     ... nodes: XNode[]) {
-    if (a.focusNextOnEnter !== false) {
-        a.eventKeypress = moveNext;
+    if (focusNextOnEnter) {
+        a.eventKeypress = moveNext(eventSubmit);
     }
+    a["data-form-id"] = id;
     return <div
         data-wa-form="wa-form"
         { ... a}
-        eventClick={checkValidity}>
+        eventSubmitForm={eventSubmit}
+        eventClick={checkValidity(eventSubmit)}>
         { ... nodes}
     </div>;
 }
+
+Form.newId = () => formId++;
+
+Form.submitId = (id: number) => ({
+    "data-submit-form-id": id.toString()
+});

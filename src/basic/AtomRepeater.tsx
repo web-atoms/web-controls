@@ -3,6 +3,7 @@ import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder";
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import Colors from "@web-atoms/core/dist/core/Colors";
+import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
 import { CancelToken, IDisposable } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
@@ -76,8 +77,22 @@ export const ArrowToString = (item) => item.label?.toString() ?? item.toString()
 export const MatchCaseInsensitive = (textField?: (item) => string) => {
     textField ??= ArrowToString;
     return (s: string) => {
-        s = s.toLowerCase();
-        return (item) => textField(item)?.toLowerCase?.()?.includes(s);
+        if (!s) {
+            return MatchTrue;
+        }
+        const r = StringHelper.createContainsRegExp(s);
+        return (item) => r.test(textField(item));
+    };
+};
+
+export const MatchAnyCaseInsensitive = (textField?: (item) => string) => {
+    textField ??= ArrowToString;
+    return (s: string) => {
+        if (!s) {
+            return MatchTrue;
+        }
+        const r = StringHelper.createContainsAnyWordRegExp(s);
+        return (item) =>  r.test( textField(item));
     };
 };
 
@@ -228,6 +243,7 @@ export function askSuggestionPopup<T>(
                         selectedItem={Bind.oneWay(() => this.anchorItem)}
                         itemRenderer={itemRenderer}
                         visibilityFilter={Bind.oneWay(() => match(this.search))}
+                        scrollToSelection={true}
                         eventItemClick={(e) => {
                             this.close(e.detail);
                         }}
@@ -237,7 +253,7 @@ export function askSuggestionPopup<T>(
         }
 
         protected onKey(e: KeyboardEvent) {
-            const suggested = this.items;
+            const suggested = match ? this.items?.filter(match(this.search)) : this.items;
             switch (e.key) {
                 case "Enter":
                     // selection mode...
@@ -522,6 +538,8 @@ export default class AtomRepeater extends AtomControl {
         si.refresh();
     }
 
+    public scrollToSelection: boolean;
+
     private initialValue: any;
 
     private itemsDisposable: IDisposable;
@@ -529,6 +547,8 @@ export default class AtomRepeater extends AtomControl {
     private selectedItemsDisposable: IDisposable;
 
     private deferredUpdateId: any;
+
+    private bringIntoViewId: any;
 
     public onPropertyChanged(name: string): void {
         switch (name) {
@@ -554,12 +574,18 @@ export default class AtomRepeater extends AtomControl {
                     this.value = iv;
                 }
                 this.updateItems();
+                if (this.scrollToSelection) {
+                    this.bringSelectionIntoView();
+                }
                 break;
             case "selectedItems":
                 this.selectedItemsDisposable?.dispose();
                 const selectedItems = this.selectedItems;
                 const sd = selectedItems?.watch(() => {
                     this.updateClasses();
+                    if (this.scrollToSelection) {
+                        this.bringSelectionIntoView();
+                    }
                     AtomBinder.refreshValue(this, "selectedItem");
                     AtomBinder.refreshValue(this, "value");
                 });
@@ -576,6 +602,25 @@ export default class AtomRepeater extends AtomControl {
                 this.updateVisibility();
                 break;
         }
+    }
+
+    public bringSelectionIntoView(force?: boolean) {
+        if (force) {
+            const selection = this.selectedItem;
+            if (selection) {
+                const element = this.elementForItem(selection);
+                element?.scrollIntoView();
+            }
+            return;
+        }
+        if (this.bringIntoViewId) {
+            clearTimeout(this.bringIntoViewId);
+        }
+        this.bringIntoViewId = setTimeout(() => {
+            clearTimeout(this.bringIntoViewId);
+            this.bringIntoViewId = undefined;
+            this.bringSelectionIntoView(true);
+        }, 100);
     }
 
     public forEach<T>(action: (item: T, element: HTMLElement) => void, container?: HTMLElement) {
@@ -624,6 +669,21 @@ export default class AtomRepeater extends AtomControl {
             const index = ~~element.dataset.itemIndex;
             const item = items[index];
             yield  { item, element };
+            element = element.nextElementSibling as HTMLElement;
+        }
+    }
+
+    public elementForItem(itemToFind: any, container?: HTMLElement) {
+        container ??= this.itemsPresenter ?? this.element;
+        const items = this.items;
+        let element = container.firstElementChild as HTMLElement;
+        while (element) {
+            // tslint:disable-next-line: no-bitwise
+            const index = ~~element.dataset.itemIndex;
+            const item = items[index];
+            if (item === itemToFind) {
+                return element;
+            }
             element = element.nextElementSibling as HTMLElement;
         }
     }

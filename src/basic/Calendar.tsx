@@ -239,7 +239,7 @@ export default class Calendar extends AtomRepeater {
                     items={monthItems}
                     value={Bind.twoWays(() => this.month)} />
                 <ComboBox
-                    items={this.years}
+                    items={Bind.oneWay(() => this.years)}
                     value={Bind.twoWays(() => this.year)}/>
                 <i
                     event-click={() => this.next()}
