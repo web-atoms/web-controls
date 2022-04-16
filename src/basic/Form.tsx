@@ -12,6 +12,11 @@ const css = CSS(StyleRule()
     .child(StyleRule("button")
         .alignSelf("flex-start")
     )
+    .and(StyleRule("[data-scrollable=true]")
+        .justifyContent("flex-start")
+        .position("relative")
+        .overflow("auto")
+    )
 , "*[data-wa-form=wa-form]");
 
 export interface ISubmitButton {
@@ -208,6 +213,7 @@ document.body.addEventListener("click", (e: MouseEvent) => {
 export interface IForm {
     id?: number;
     class?: any;
+    scrollable?: boolean ;
     /**
      * If set, when an enter key is pressed on
      * non textarea element, form will be submitted automatically
@@ -227,6 +233,7 @@ export default function Form(
     {
         id = formId++,
         focusNextOnEnter = true,
+        scrollable,
         eventSubmit,
         ... a
     }: IForm,
@@ -235,6 +242,7 @@ export default function Form(
         a.eventKeypress = moveNext(eventSubmit);
     }
     a["data-form-id"] = id;
+    a["data-scrollable"] = !!scrollable;
     return <div
         data-wa-form="wa-form"
         { ... a}
