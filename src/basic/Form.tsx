@@ -14,7 +14,6 @@ const css = CSS(StyleRule()
     )
     .and(StyleRule("[data-scrollable=true]")
         .justifyContent("flex-start")
-        .position("relative")
         .overflow("auto")
     )
 , "*[data-wa-form=wa-form]");
