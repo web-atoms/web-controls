@@ -53,10 +53,10 @@ export default class DateField extends AtomControl {
             protected create(): void {
                 this.owner = owner;
                 super.create();
-                if (owner.yearStart) {
+                if (typeof owner.yearStart === "number") {
                     this.yearStart = owner.yearStart;
                 }
-                if (owner.yearEnd) {
+                if (typeof owner.yearEnd === "number") {
                     this.yearEnd = owner.yearEnd;
                 }
                 this.render(<Calendar
