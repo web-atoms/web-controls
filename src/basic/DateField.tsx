@@ -35,6 +35,7 @@ export default class DateField extends AtomControl {
     @BindableProperty
     public yearEnd: any;
 
+    @BindableProperty
     public year: number;
 
     protected preCreate(): void {
