@@ -18,14 +18,14 @@ export default class DataGridTest extends AtomControl {
         const columns: IDataGridColumn[] = [
             {
                 header: "ID",
-                headerSortUp: "ID",
-                headerSortDown: "ID Desc",
+                headerSort: "ID",
+                headerSortDescending: "ID Desc",
                 label: "id"
             },
             {
                 header: "Currency",
-                headerSortUp: "Currency",
-                headerSortDown: "Currency Desc",
+                headerSort: "Currency",
+                headerSortDescending: "Currency Desc",
                 headerSortDefault: "Currency Desc",
                 cellRenderer(item: ICurrencyInfo) {
                     return <td text={item.currency}/>;

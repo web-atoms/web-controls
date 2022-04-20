@@ -7,12 +7,19 @@ const cellEventName = Symbol("cell-event-name");
 const headerEventName = Symbol("header-event-name");
 const footerEventName = Symbol("footer-event-name");
 
+const fromHyphenToCamel = (input: string) => input.replace(/-([a-z])/ig, (g) => g[1].toUpperCase());
+
+const toEventName = (name: string) => {
+    const r = fromHyphenToCamel(name.replace(/\s+/,"-"));
+    return r[0].toLowerCase() + r.substring(1);
+}
+
 const getCellEventName = (d: IDataGridColumn) => {
     let name = d[cellEventName];
     if (name !== void 0) {
         return name;
     }
-    name = StringHelper.fromHyphenToCamel(d.cellClickEvent ?? `cell-${d.header}-click`);
+    name = toEventName(d.cellClickEvent ?? `cell-${d.header}-click`);
     d[cellEventName] = name;
     return name;
 }
@@ -22,7 +29,7 @@ const getHeaderEventName = (d: IDataGridColumn) => {
     if (name !== void 0) {
         return name;
     }
-    name = StringHelper.fromHyphenToCamel(d.headerClickEvent ?? `header-${d.header}-click`);
+    name = toEventName(d.headerClickEvent ?? `header-${d.header}-click`);
     d[headerEventName] = name;
     return name;
 }
@@ -32,15 +39,15 @@ const getFooterEventName = (d: IDataGridColumn) => {
     if (name !== void 0) {
         return name;
     }
-    name = StringHelper.fromHyphenToCamel(d.footerClickEvent ?? `footer-${d.header}-click`);
+    name = toEventName(d.footerClickEvent ?? `footer-${d.header}-click`);
     d[footerEventName] = name;
     return name;
 }
 
 export interface IDataGridColumnBase {
     header: string;
-    headerSortUp?: any;
-    headerSortDown?: any;
+    headerSort?: any;
+    headerSortDescending?: any;
     headerSortDefault?: any;
     headerClickEvent?: string;
 
@@ -139,16 +146,16 @@ export default class DataGrid extends TableRepeater {
                     x.headerRenderer = (item) => {
                         let order = this.orderBy;
                         if (order !== void 0) {
-                            if (order === x.headerSortUp) {
-                                order = false;
-                            } else if (order === x.headerSortDown) {
+                            if (order === x.headerSort) {
                                 order = true;
+                            } else if (order === x.headerSortDescending) {
+                                order = false;
                             }
                         }
                         return <th>
                         <span text={x.header}/>
                             { typeof order === "boolean" &&
-                                (order ? <i class="fa-solid fa-sort-down"/> : <i class="fa-solid fa-sort-up"/>) }
+                                (order ? <i class="fa-solid fa-arrow-up-short-wide"/> : <i class="fa-solid fa-arrow-down-wide-short"/>) }
                         </th>;
                     };
                 }
@@ -200,12 +207,12 @@ export default class DataGrid extends TableRepeater {
         const isHeader = type === "header";
 
         if (isHeader) {
-            if (order === column.headerSortDown) {
-                order = column.headerSortUp;
-            } else if (order === column.headerSortUp) {
-                order = column.headerSortDown;
+            if (order === column.headerSortDescending) {
+                order = column.headerSort;
+            } else if (order === column.headerSort) {
+                order = column.headerSortDescending;
             } else {
-                order = column.headerSortDefault ?? column.headerSortUp;
+                order = column.headerSortDefault ?? column.headerSort;
             }
             detail = {
                 detail,
