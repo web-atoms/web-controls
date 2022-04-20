@@ -459,6 +459,14 @@ export function defaultComparer<T>(left: T , right: T) {
     return left === right;
 }
 
+const getFirstChild = (container: HTMLElement) => {
+    let child = container.firstElementChild as HTMLElement;
+    while (child && child.dataset.itemIndex === void 0) {
+        child = child.nextElementSibling as HTMLElement;
+    }
+    return child;
+};
+
 export default class AtomRepeater extends AtomControl {
 
     public "event-item-click"?: (e: CustomEvent) => void;
@@ -499,6 +507,18 @@ export default class AtomRepeater extends AtomControl {
 
     @BindableProperty
     public deferUpdates: boolean;
+
+    @BindableProperty
+    public header: any;
+
+    @BindableProperty
+    public headerRenderer: any;
+
+    @BindableProperty
+    public footer: any;
+
+    @BindableProperty
+    public footerRenderer: any;
 
     public itemTag: string;
 
@@ -541,6 +561,10 @@ export default class AtomRepeater extends AtomControl {
     }
 
     public scrollToSelection: boolean;
+
+    protected footerPresenter: HTMLElement;
+
+    protected headerPresenter: HTMLElement;
 
     private initialValue: any;
 
@@ -603,6 +627,14 @@ export default class AtomRepeater extends AtomControl {
             case "visibilityFilter":
                 this.updateVisibility();
                 break;
+            case "header":
+            case "headerRenderer":
+                this.updateHeaderFooter("header", this.headerPresenter, this.header, this.headerRenderer, true);
+                break;
+            case "footer":
+            case "footerRenderer":
+                this.updateHeaderFooter("header", this.headerPresenter, this.header, this.headerRenderer, true);
+                break;
         }
     }
 
@@ -628,11 +660,11 @@ export default class AtomRepeater extends AtomControl {
     public forEach<T>(action: (item: T, element: HTMLElement) => void, container?: HTMLElement) {
         container ??= this.itemsPresenter ?? this.element;
         const items = this.items;
-        let start = container.firstElementChild as HTMLElement;
+        let start = getFirstChild(container);
         while (start) {
+            const index = start.dataset.itemIndex;
             // tslint:disable-next-line: no-bitwise
-            const index = ~~start.dataset.itemIndex;
-            const item = items[index];
+            const item = items[~~index];
             action(item, start);
             start = start.nextElementSibling as HTMLElement;
         }
@@ -641,11 +673,11 @@ export default class AtomRepeater extends AtomControl {
     public *any(fx?: (item) => boolean, itemSelector?: string,  container?: HTMLElement) {
         container ??= this.itemsPresenter ?? this.element;
         const items = this.items;
-        let node = container.firstElementChild as HTMLElement;
+        let node = getFirstChild(container);
         while (node) {
+            const index = node.dataset.itemIndex;
             // tslint:disable-next-line: no-bitwise
-            const index = ~~node.dataset.itemIndex;
-            const item = items[index];
+            const item = items[~~index];
             let element = node;
             if (itemSelector) {
                 element = element.querySelector(itemSelector);
@@ -665,11 +697,11 @@ export default class AtomRepeater extends AtomControl {
     public *all(container?: HTMLElement) {
         container ??= this.itemsPresenter ?? this.element;
         const items = this.items;
-        let element = container.firstElementChild as HTMLElement;
+        let element = getFirstChild(container);
         while (element) {
+            const index = element.dataset.itemIndex;
             // tslint:disable-next-line: no-bitwise
-            const index = ~~element.dataset.itemIndex;
-            const item = items[index];
+            const item = items[~~index];
             yield  { item, element };
             element = element.nextElementSibling as HTMLElement;
         }
@@ -678,11 +710,11 @@ export default class AtomRepeater extends AtomControl {
     public elementForItem(itemToFind: any, container?: HTMLElement) {
         container ??= this.itemsPresenter ?? this.element;
         const items = this.items;
-        let element = container.firstElementChild as HTMLElement;
+        let element = getFirstChild(container);
         while (element) {
+            const index = element.dataset.itemIndex;
             // tslint:disable-next-line: no-bitwise
-            const index = ~~element.dataset.itemIndex;
-            const item = items[index];
+            const item = items[~~index];
             if (item === itemToFind) {
                 return element;
             }
@@ -716,7 +748,7 @@ export default class AtomRepeater extends AtomControl {
         }
 
         container ??= this.itemsPresenter ?? this.element;
-        let start = container.firstElementChild as HTMLElement;
+        let start = getFirstChild(container);
         let ei;
 
         while (start) {
@@ -813,7 +845,7 @@ export default class AtomRepeater extends AtomControl {
     protected updateClasses() {
         const container = this.itemsPresenter ?? this.element;
         const items = this.items;
-        let element = container.firstElementChild as HTMLElement;
+        let element = getFirstChild(container);
         const vp = this.valuePath ?? ((i) => i);
         const si = (this.selectedItems ?? []).map(vp);
         while (element) {
@@ -843,8 +875,49 @@ export default class AtomRepeater extends AtomControl {
         }
     }
 
+
+    protected updateHeaderFooter(
+        name,
+        presenter: HTMLElement,
+        item: any,
+        itemRenderer: (i) => XNode,
+        insert: boolean)  {
+        if (!(presenter && typeof item !== "undefined" && itemRenderer)) {
+            return;
+        }
+
+        presenter ??= this.itemsPresenter ??= this.element;
+        let current: HTMLElement;
+        // remove only the header...
+        if (insert) {
+            current = presenter.firstElementChild as HTMLElement;
+            while (current && current.dataset[name] !== name) {
+                current = current.nextElementSibling as HTMLElement;
+            }
+        } else {
+            current = presenter.lastElementChild as HTMLElement;
+            while (current && current.dataset[name] !== name) {
+                current = current.previousElementSibling as HTMLElement;
+            }
+        }
+
+        if (current) {
+            this.dispose(current);
+        }
+
+        const node = itemRenderer(item);
+        const element = document.createElement(node.attributes?.for ?? node.name ?? "div");
+        element.dataset[name] = name;
+        this.render(node, element, this);
+        if (insert) {
+            presenter.insertBefore(element, presenter.firstElementChild);
+        } else {
+            presenter.appendChild(element);
+        }
+    }
+
     protected dispatchHeaderFooterEvent(eventName, type, originalTarget) {
-        const detail = this[type]
+        const detail = this[type];
         const ce = new CustomEvent(eventName ?? `${type}Click`, {
             detail,
             bubbles: this.bubbleEvents,

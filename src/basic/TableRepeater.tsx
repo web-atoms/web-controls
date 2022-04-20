@@ -9,21 +9,6 @@ CSS(StyleRule()
 
 export default class TableRepeater extends AtomRepeater {
 
-    @BindableProperty
-    public header: any;
-
-    @BindableProperty
-    public headerRenderer: (item) => XNode;
-
-    @BindableProperty
-    public footer: any;
-
-    @BindableProperty
-    public footerRenderer: (item) => XNode;
-
-    protected headerPresenter: HTMLElement;
-    protected footerPresenter: HTMLElement;
-
     constructor(app, e) {
         super(app, e ?? document.createElement("table"));
     }

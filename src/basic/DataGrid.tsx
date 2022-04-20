@@ -12,9 +12,9 @@ const footerEventName = Symbol("footer-event-name");
 const fromHyphenToCamel = (input: string) => input.replace(/-([a-z])/ig, (g) => g[1].toUpperCase());
 
 const toEventName = (name: string) => {
-    const r = fromHyphenToCamel(name.replace(/\s+/,"-"));
+    const r = fromHyphenToCamel(name.replace(/\s+/, "-"));
     return r[0].toLowerCase() + r.substring(1);
-}
+};
 
 const getCellEventName = (d: IDataGridColumn) => {
     let name = d[cellEventName];
@@ -24,7 +24,7 @@ const getCellEventName = (d: IDataGridColumn) => {
     name = toEventName(d.cellClickEvent ?? `cell-${d.header}-click`);
     d[cellEventName] = name;
     return name;
-}
+};
 
 const getHeaderEventName = (d: IDataGridColumn) => {
     let name = d[headerEventName];
@@ -34,7 +34,7 @@ const getHeaderEventName = (d: IDataGridColumn) => {
     name = toEventName(d.headerClickEvent ?? `header-${d.header}-click`);
     d[headerEventName] = name;
     return name;
-}
+};
 
 const getFooterEventName = (d: IDataGridColumn) => {
     let name = d[footerEventName];
@@ -44,7 +44,7 @@ const getFooterEventName = (d: IDataGridColumn) => {
     name = toEventName(d.footerClickEvent ?? `footer-${d.header}-click`);
     d[footerEventName] = name;
     return name;
-}
+};
 
 export interface IDataGridColumnBase {
     header: string;
@@ -156,11 +156,11 @@ export default class DataGrid extends TableRepeater {
         super.preCreate();
         this.header = null;
         this.footer = null;
-        this.element.dataset.dataGrid="data-grid";
+        this.element.dataset.dataGrid = "data-grid";
         this.headerRenderer = (item) => <tr>
             { ... this.columns?.map?.((x) => {
                 if (x.headerRenderer === void 0) {
-                    x.headerRenderer = (item) => {
+                    x.headerRenderer = (_) => {
                         let order = this.orderBy;
                         if (order !== void 0) {
                             if (order === x.headerSort) {
@@ -172,7 +172,9 @@ export default class DataGrid extends TableRepeater {
                         return <th>
                         <span text={x.header}/>
                             { typeof order === "boolean" &&
-                                (order ? <i data-sort="up" class="fa-solid fa-arrow-up-short-wide"/> : <i data-sort="down" class="fa-solid fa-arrow-down-wide-short"/>) }
+                                (order
+                                    ? <i data-sort="up" class="fa-solid fa-arrow-up-short-wide"/>
+                                    : <i data-sort="down" class="fa-solid fa-arrow-down-wide-short"/>) }
                         </th>;
                     };
                 }
@@ -187,8 +189,8 @@ export default class DataGrid extends TableRepeater {
         this.itemRenderer = (item) => <tr>
             { ... this.columns?.map?.((x) => {
                 if (x.cellRenderer === void 0) {
-                    x.labelPath ??= (item) => item[x.label];
-                    x.cellRenderer = (item) => <td text={x.labelPath(item)}/>;
+                    x.labelPath ??= (i) => i[x.label];
+                    x.cellRenderer = (i) => <td text={x.labelPath(i)}/>;
                 }
                 const node = x.cellRenderer?.(item);
                 const na = node.attributes ??= {};
@@ -209,14 +211,15 @@ export default class DataGrid extends TableRepeater {
                     na["data-click-event"] = getFooterEventName(x);
                 }
                 return node;
-            }) ?? [] }        
+            }) ?? [] }
         </tr>;
     }
 
     protected dispatchHeaderFooterEvent(eventName: any, type: any, originalTarget: any): void {
-        let detail = this[type]
+        let detail = this[type];
 
-        const column = this.columns.find((x) => getHeaderEventName(x) === eventName || getFooterEventName(x) === eventName);
+        const column = this.columns.find((x) => getHeaderEventName(x) === eventName
+            || getFooterEventName(x) === eventName);
 
         let order = this.orderBy;
         const originalOrder = this.orderBy;
@@ -286,5 +289,3 @@ export default class DataGrid extends TableRepeater {
         }
     }
 }
-
-
