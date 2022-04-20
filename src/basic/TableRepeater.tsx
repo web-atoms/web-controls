@@ -30,7 +30,7 @@ export default class TableRepeater extends AtomRepeater {
 
     public onPropertyChanged(name: keyof TableRepeater): void {
         super.onPropertyChanged(name);
-        switch(name) {
+        switch (name) {
             case "header":
             case "headerRenderer":
                 this.updateHeaderFooter("header", this.headerPresenter, this.header, this.headerRenderer);
