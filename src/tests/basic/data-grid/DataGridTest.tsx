@@ -18,6 +18,7 @@ export default class DataGridTest extends AtomControl {
         const columns: IDataGridColumn[] = [
             {
                 name: "ID",
+                headerClickHandler: () => this.orderBy = "ID",
                 headerRenderer: (item: ICurrencyInfo) => {
                     return <td>
                         <span text="ID"/>
@@ -30,6 +31,7 @@ export default class DataGridTest extends AtomControl {
             },
             {
                 name: "Currency",
+                headerClickHandler: () => this.orderBy = "Currency",
                 headerRenderer: (item: ICurrencyInfo) => {
                     return <td>
                         <span text="Currency"/>
@@ -50,8 +52,6 @@ export default class DataGridTest extends AtomControl {
 
         this.render(<div>
             <DataGrid
-                event-header-id-click={(e) => this.orderBy = "ID"}
-                event-header-currency-click={(e) => this.orderBy = "Currency"}
                 items={this.viewModel.list}
                 columns={columns}/>
             <span text={`Sort by ${this.orderBy}`}/>

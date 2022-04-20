@@ -843,6 +843,30 @@ export default class AtomRepeater extends AtomControl {
         }
     }
 
+    protected dispatchHeaderFooterEvent(eventName, type, originalTarget) {
+        const detail = this[type]
+        const ce = new CustomEvent(eventName ?? `${type}Click`, {
+            detail,
+            bubbles: this.bubbleEvents,
+            cancelable: true
+        });
+        originalTarget.dispatchEvent(ce);
+        if (!ce.defaultPrevented) {
+            this.onPropertyChanged(type);
+        }
+    }
+
+    protected dispatchItemEvent(eventName, item, recreate, originalTarget) {
+        const ce = new CustomEvent(eventName ?? "itemClick", {
+            detail: item,
+            bubbles: this.bubbleEvents,
+            cancelable: true
+        });
+        originalTarget.dispatchEvent(ce);
+        if (recreate && !ce.defaultPrevented) {
+            this.refreshItem(item, (ce as any).promise);
+        }
+    }
 }
 
 function onElementClick(e: Event) {
@@ -886,16 +910,7 @@ function onElementClick(e: Event) {
 
     if (index === undefined) {
         if (type !== undefined) {
-            const detail = repeater[type]
-            const ce = new CustomEvent(eventName ?? `${type}Click`, {
-                detail,
-                bubbles: repeater.bubbleEvents,
-                cancelable: true
-            });
-            originalTarget.dispatchEvent(ce);
-            if (!ce.defaultPrevented) {
-                repeater.onPropertyChanged(type);
-            }
+            (repeater as any).dispatchHeaderFooterEvent(eventName, type, originalTarget);
         }
         return;
     }
@@ -919,15 +934,7 @@ function onElementClick(e: Event) {
         }
     }
     if (item) {
-        const ce = new CustomEvent(eventName ?? "itemClick", {
-            detail: item,
-            bubbles: repeater.bubbleEvents,
-            cancelable: true
-        });
-        originalTarget.dispatchEvent(ce);
-        if (recreate && !ce.defaultPrevented) {
-            repeater.refreshItem(item, (ce as any).promise);
-        }
+        (repeater as any).dispatchItemEvent(eventName, item, recreate, originalTarget);
     }
 }
 

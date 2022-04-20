@@ -1,22 +1,61 @@
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
+import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import TableRepeater from "./TableRepeater";
+
+const cellEventName = Symbol("cell-event-name");
+const headerEventName = Symbol("header-event-name");
+const footerEventName = Symbol("footer-event-name");
+
+const getCellEventName = (d: IDataGridColumn) => {
+    let name = d[cellEventName];
+    if (name !== void 0) {
+        return name;
+    }
+    name = StringHelper.fromHyphenToCamel(d.cellClickEvent ?? `cell-${d.name}-click`);
+    d[cellEventName] = name;
+    return name;
+}
+
+const getHeaderEventName = (d: IDataGridColumn) => {
+    let name = d[headerEventName];
+    if (name !== void 0) {
+        return name;
+    }
+    name = StringHelper.fromHyphenToCamel(d.headerClickEvent ?? `header-${d.name}-click`);
+    d[headerEventName] = name;
+    return name;
+}
+
+const getFooterEventName = (d: IDataGridColumn) => {
+    let name = d[footerEventName];
+    if (name !== void 0) {
+        return name;
+    }
+    name = StringHelper.fromHyphenToCamel(d.footerClickEvent ?? `footer-${d.name}-click`);
+    d[footerEventName] = name;
+    return name;
+}
 
 export interface IDataGridColumn {
 
     name: string;
 
-    headerClick?: string;
+    headerClickEvent?: string;
 
-    cellClick?: string;
+    cellClickEvent?: string;
 
-    footerClick?: string;
+    footerClickEvent?: string;
 
     cellRenderer: (item) => XNode;
 
     headerRenderer?: (item) => XNode;
 
     footerRenderer?: (item) => XNode;
+
+    headerClickHandler?: (e: CustomEvent) => void;
+    cellClickHandler?: (e: CustomEvent) => void;
+    footerClickHandler?: (e: CustomEvent) => void;
 
 }
 
@@ -49,7 +88,7 @@ export default class DataGrid extends TableRepeater {
                 </td>;
                 const na = node.attributes ??= {};
                 if (na["data-click-event"] === void 0) {
-                    na["data-click-event"] = x.headerClick ?? `header-${x.name.toLowerCase()}-click`;
+                    na["data-click-event"] = getHeaderEventName(x);
                 }
                 return node;
             }) ?? []}
@@ -59,7 +98,7 @@ export default class DataGrid extends TableRepeater {
                 const node = x.cellRenderer(item);
                 const na = node.attributes ??= {};
                 if (na["data-click-event"] === void 0) {
-                    na["data-click-event"] = x.cellClick ?? `cell-${x.name.toLowerCase()}-click`;
+                    na["data-click-event"] = getCellEventName(x);
                 }
                 return node;
             }) ?? []}
@@ -71,11 +110,63 @@ export default class DataGrid extends TableRepeater {
                 </td>;
                 const na = node.attributes ??= {};
                 if (na["data-click-event"] === void 0) {
-                    na["data-click-event"] = x.footerClick ?? `footer-${x.name.toLowerCase()}-click`;
+                    na["data-click-event"] = getFooterEventName(x);
                 }
                 return node;
             }) ?? [] }        
         </tr>;
+    }
+
+    protected dispatchHeaderFooterEvent(eventName: any, type: any, originalTarget: any): void {
+        const detail = this[type]
+        const ce = new CustomEvent(eventName ?? `${type}Click`, {
+            detail,
+            bubbles: this.bubbleEvents,
+            cancelable: true
+        });
+        originalTarget.dispatchEvent(ce);
+        if (ce.defaultPrevented) {
+            return;
+        }
+
+        for (const iterator of this.columns) {
+            if (getHeaderEventName(iterator) === eventName) {
+                iterator.headerClickHandler?.(ce);
+                break;
+            }
+            if (getFooterEventName(iterator) === eventName) {
+                iterator.footerClickHandler?.(ce);
+                break;
+            }
+        }
+        if (ce.defaultPrevented) {
+            return;
+        }
+        this.onPropertyChanged(type);
+    }
+
+    protected dispatchItemEvent(eventName: any, item: any, recreate: any, originalTarget: any): void {
+        const ce = new CustomEvent(eventName ?? "itemClick", {
+            detail: item,
+            bubbles: this.bubbleEvents,
+            cancelable: true
+        });
+        originalTarget.dispatchEvent(ce);
+        if (ce.defaultPrevented) {
+            return;
+        }
+        for (const iterator of this.columns) {
+            if (getCellEventName(iterator) === eventName) {
+                iterator.cellClickHandler?.(ce);
+                break;
+            }
+        }
+        if (ce.defaultPrevented) {
+            return;
+        }
+        if (recreate) {
+            this.refreshItem(item, (ce as any).promise);
+        }
     }
 }
 
