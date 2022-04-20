@@ -831,17 +831,17 @@ export default class AtomRepeater extends AtomControl {
         let start = getFirstChild(container);
         while (start) {
             const next = start.nextElementSibling as HTMLElement;
-            if (start.dataset.itemIndex !== void 0) {
-                disposeChild(this, start);
-            }
+            disposeChild(this, start);
             start = next;
         }
         const ir = this.itemRenderer;
         if (!ir) {
+            this.onPropertyChanged("footer");
             return;
         }
         const items = this.items;
         if (!items) {
+            this.onPropertyChanged("footer");
             return;
         }
 
@@ -858,7 +858,7 @@ export default class AtomRepeater extends AtomControl {
             this.render(e, element, this);
             container.appendChild(element);
         }
-
+        this.onPropertyChanged("footer");
     }
 
     protected updateClasses() {
