@@ -447,6 +447,18 @@ export function disposeChildren(owner: AtomControl, e: HTMLElement) {
     e.innerHTML = ""; // this should remove all elements... fast.. probably??
 }
 
+export function disposeChild(owner: AtomControl, e: HTMLElement) {
+    const ac = e.atomControl;
+    if (ac) {
+        ac.dispose();
+        return;
+    }
+    disposeChildren(owner, e);
+    owner.unbind(e);
+    owner.unbindEvent(e);
+    e.remove();
+}
+
 export function defaultComparer<T>(left: T , right: T) {
     if (left && right) {
         if (left instanceof Date) {
@@ -816,6 +828,14 @@ export default class AtomRepeater extends AtomControl {
             }, 1);
         }
         container ??= this.itemsPresenter ?? this.element;
+        let start = getFirstChild(container);
+        while (start) {
+            const next = start.nextElementSibling as HTMLElement;
+            if (start.dataset.itemIndex !== void 0) {
+                disposeChild(this, start);
+            }
+            start = next;
+        }
         disposeChildren(this, container);
         const ir = this.itemRenderer;
         if (!ir) {
@@ -903,7 +923,7 @@ export default class AtomRepeater extends AtomControl {
         }
 
         if (current) {
-            this.dispose(current);
+            disposeChild(this, current);
         }
 
         if (!(typeof item !== "undefined" && itemRenderer)) {

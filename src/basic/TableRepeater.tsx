@@ -45,16 +45,4 @@ export default class TableRepeater extends AtomRepeater {
         this.headerPresenter = this.element.firstElementChild as HTMLElement;
         this.footerPresenter = this.element.lastElementChild as HTMLElement;
     }
-
-    protected updateHeaderFooter(name, presenter: HTMLElement, item: any, itemRenderer: (i) => XNode)  {
-        if (!(presenter && typeof item !== "undefined" && itemRenderer)) {
-            return;
-        }
-        disposeChildren(this, presenter);
-        const node = itemRenderer(item);
-        const na = node.attributes ??= {};
-        na["data-" + name] = name;
-        this.render(<div>{ node }</div>, presenter, this);
-    }
-
 }

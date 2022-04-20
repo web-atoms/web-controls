@@ -30,6 +30,7 @@ export default class RepeaterTest extends AtomControl {
                     />
             </div>
             <AtomRepeater
+                allowMultipleSelection={true}
                 event-change-name={Bind.event<AtomRepeater>((s, e) => s.refreshItem(e.detail, this.changeName(e.detail)))}
                 selectedItems={this.options}
                 items={allOptions}
