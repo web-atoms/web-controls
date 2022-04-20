@@ -849,8 +849,10 @@ function onElementClick(e: Event) {
     let target = e.target as HTMLElement;
     const originalTarget = target;
     let eventName;
-    let repeater;
+    let repeater: AtomRepeater;
     let index;
+    let type;
+    let recreate;
     while (target) {
         const a = target.atomControl;
         if (a !== undefined && a instanceof AtomRepeater) {
@@ -859,9 +861,15 @@ function onElementClick(e: Event) {
         }
         if (index === undefined) {
             const itemIndex = target.dataset.itemIndex;
-            if (typeof itemIndex !== "undefined") {
+            if (itemIndex !== void 0) {
                 // tslint:disable-next-line: no-bitwise
                 index = ~~itemIndex;
+            }
+        }
+        if (type === undefined) {
+            const itemType = target.dataset.header ?? target.dataset.footer;
+            if (itemType !== void 0) {
+                type = itemType;
             }
         }
         if (eventName === undefined) {
@@ -870,10 +878,25 @@ function onElementClick(e: Event) {
                 eventName = itemClickEvent.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
             }
         }
+        if (recreate === undefined) {
+            recreate = target.dataset.recreate;
+        }
         target = target.parentElement as HTMLElement;
     }
 
     if (index === undefined) {
+        if (type !== undefined) {
+            const detail = repeater[type]
+            const ce = new CustomEvent(eventName ?? `${type}Click`, {
+                detail,
+                bubbles: repeater.bubbleEvents,
+                cancelable: true
+            });
+            originalTarget.dispatchEvent(ce);
+            if (!ce.defaultPrevented) {
+                repeater.onPropertyChanged(type);
+            }
+        }
         return;
     }
 
@@ -898,9 +921,13 @@ function onElementClick(e: Event) {
     if (item) {
         const ce = new CustomEvent(eventName ?? "itemClick", {
             detail: item,
-            bubbles: repeater.bubbleEvents
+            bubbles: repeater.bubbleEvents,
+            cancelable: true
         });
         originalTarget.dispatchEvent(ce);
+        if (recreate && !ce.defaultPrevented) {
+            repeater.refreshItem(item, (ce as any).promise);
+        }
     }
 }
 
