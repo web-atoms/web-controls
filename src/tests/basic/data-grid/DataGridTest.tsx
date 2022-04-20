@@ -17,7 +17,7 @@ export default class DataGridTest extends AtomControl {
 
         const columns: IDataGridColumn[] = [
             {
-                name: "ID",
+                header: "ID",
                 headerClickHandler: () => this.orderBy = "ID",
                 headerRenderer: (item: ICurrencyInfo) => {
                     return <td>
@@ -25,12 +25,10 @@ export default class DataGridTest extends AtomControl {
                         { this.orderBy === "ID" && <i class="fas fa-circle"/> }
                     </td>;
                 },
-                cellRenderer(item: ICurrencyInfo) {
-                    return <td text={item.id}/>;
-                }
+                label: "id"
             },
             {
-                name: "Currency",
+                header: "Currency",
                 headerClickHandler: () => this.orderBy = "Currency",
                 headerRenderer: (item: ICurrencyInfo) => {
                     return <td>
@@ -43,7 +41,7 @@ export default class DataGridTest extends AtomControl {
                 }
             },
             {
-                name: "Code",
+                header: "Code",
                 cellRenderer(item: ICurrencyInfo) {
                     return <td text={item.currencyCode}/>;
                 }

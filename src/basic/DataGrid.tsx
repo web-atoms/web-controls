@@ -12,7 +12,7 @@ const getCellEventName = (d: IDataGridColumn) => {
     if (name !== void 0) {
         return name;
     }
-    name = StringHelper.fromHyphenToCamel(d.cellClickEvent ?? `cell-${d.name}-click`);
+    name = StringHelper.fromHyphenToCamel(d.cellClickEvent ?? `cell-${d.header}-click`);
     d[cellEventName] = name;
     return name;
 }
@@ -22,7 +22,7 @@ const getHeaderEventName = (d: IDataGridColumn) => {
     if (name !== void 0) {
         return name;
     }
-    name = StringHelper.fromHyphenToCamel(d.headerClickEvent ?? `header-${d.name}-click`);
+    name = StringHelper.fromHyphenToCamel(d.headerClickEvent ?? `header-${d.header}-click`);
     d[headerEventName] = name;
     return name;
 }
@@ -32,22 +32,19 @@ const getFooterEventName = (d: IDataGridColumn) => {
     if (name !== void 0) {
         return name;
     }
-    name = StringHelper.fromHyphenToCamel(d.footerClickEvent ?? `footer-${d.name}-click`);
+    name = StringHelper.fromHyphenToCamel(d.footerClickEvent ?? `footer-${d.header}-click`);
     d[footerEventName] = name;
     return name;
 }
 
-export interface IDataGridColumn {
-
-    name: string;
+export interface IDataGridColumnBase {
+    header: string;
 
     headerClickEvent?: string;
 
     cellClickEvent?: string;
 
     footerClickEvent?: string;
-
-    cellRenderer: (item) => XNode;
 
     headerRenderer?: (item) => XNode;
 
@@ -58,6 +55,48 @@ export interface IDataGridColumn {
     footerClickHandler?: (e: CustomEvent) => void;
 
 }
+
+export interface IDataGridColumnWithLabel extends IDataGridColumnBase {
+    label: string;
+    labelPath?: never;
+    cellRenderer?: never;
+}
+
+export interface IDataGridColumnWithLabelPath extends IDataGridColumnBase {
+    labelPath: (item) => string;
+    label?: never;
+    cellRenderer?: never;
+}
+
+export interface IDataGridColumnWithCellRenderer extends IDataGridColumnBase {
+    cellRenderer: (item) => XNode;
+    label?: never;
+    labelPath?: never;
+}
+
+export type IDataGridColumn = IDataGridColumnWithLabel | IDataGridColumnWithLabelPath | IDataGridColumnWithCellRenderer;
+
+// export interface IDataGridColumn {
+
+//     header: string;
+
+//     headerClickEvent?: string;
+
+//     cellClickEvent?: string;
+
+//     footerClickEvent?: string;
+
+//     cellRenderer: (item) => XNode;
+
+//     headerRenderer?: (item) => XNode;
+
+//     footerRenderer?: (item) => XNode;
+
+//     headerClickHandler?: (e: CustomEvent) => void;
+//     cellClickHandler?: (e: CustomEvent) => void;
+//     footerClickHandler?: (e: CustomEvent) => void;
+
+// }
 
 export default class DataGrid extends TableRepeater {
 
@@ -84,7 +123,7 @@ export default class DataGrid extends TableRepeater {
         this.headerRenderer = (item) => <tr>
             { ... this.columns?.map?.((x) => {
                 const node = x.headerRenderer?.(item) ?? <td>
-                    <span text={x.name ?? ""}/>
+                    <span text={x.header ?? ""}/>
                 </td>;
                 const na = node.attributes ??= {};
                 if (na["data-click-event"] === void 0) {
@@ -95,7 +134,11 @@ export default class DataGrid extends TableRepeater {
         </tr>;
         this.itemRenderer = (item) => <tr>
             { ... this.columns?.map?.((x) => {
-                const node = x.cellRenderer(item);
+                if (x.cellRenderer === void 0) {
+                    x.labelPath ??= (item) => item[x.label];
+                    x.cellRenderer = (item) => <td text={x.labelPath(item)}/>;
+                }
+                const node = x.cellRenderer?.(item);
                 const na = node.attributes ??= {};
                 if (na["data-click-event"] === void 0) {
                     na["data-click-event"] = getCellEventName(x);
@@ -105,9 +148,10 @@ export default class DataGrid extends TableRepeater {
         </tr>;
         this.footerRenderer = (item) => <tr>
             { ... this.columns?.map?.((x) => {
-                const node = x.footerRenderer?.(item) ?? <td>
-                    <span text={x.name ?? ""}/>
-                </td>;
+                const node = x.footerRenderer?.(item);
+                if (node === void 0) {
+                    return node;
+                }
                 const na = node.attributes ??= {};
                 if (na["data-click-event"] === void 0) {
                     na["data-click-event"] = getFooterEventName(x);
