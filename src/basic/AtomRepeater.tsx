@@ -633,7 +633,7 @@ export default class AtomRepeater extends AtomControl {
                 break;
             case "footer":
             case "footerRenderer":
-                this.updateHeaderFooter("header", this.headerPresenter, this.header, this.headerRenderer, true);
+                this.updateHeaderFooter("footer", this.footerPresenter, this.footer, this.footerRenderer);
                 break;
         }
     }
@@ -880,7 +880,7 @@ export default class AtomRepeater extends AtomControl {
         presenter: HTMLElement,
         item: any,
         itemRenderer: (i) => XNode,
-        insert: boolean)  {
+        insert?: boolean)  {
         if (!(presenter && typeof item !== "undefined" && itemRenderer)) {
             return;
         }
