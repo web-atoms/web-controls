@@ -500,6 +500,8 @@ export default class AtomRepeater extends AtomControl {
     @BindableProperty
     public deferUpdates: boolean;
 
+    public itemTag: string;
+
     public get value() {
         if (this.initialValue !== undefined) {
             return this.initialValue;
@@ -748,7 +750,7 @@ export default class AtomRepeater extends AtomControl {
             const en = ir(item);
             const ea = en.attributes ??= {};
             const v = vp(item);
-            const e = document.createElement(ea.for ?? ea.name ?? "div");
+            const e = document.createElement(ea.for ?? en.name ?? "div");
             e.dataset.itemIndex = (index++).toString();
             e.dataset.selectedItem = si.indexOf(v) !== -1 ? "true" : "false";
             if (start) {
@@ -799,13 +801,11 @@ export default class AtomRepeater extends AtomControl {
             const e = ir(iterator);
             const ea = e.attributes ??= {};
             const v = vp(iterator);
-            ea["data-item-index"] = (i++).toString();
-            ea["data-selected-item"] = si.indexOf(v) !== -1
-            ? "true"
-            : "false";
-            this.render(<div>
-                { e }
-            </div>, container, this);
+            const element = document.createElement(ea.for ?? e.name ?? "div");
+            element.dataset.itemIndex = (i++).toString();
+            element.dataset.selectedItem = si.indexOf(v) !== -1 ? "true" : "false";
+            this.render(e, element, this);
+            container.appendChild(element);
         }
 
     }
