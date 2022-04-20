@@ -881,11 +881,13 @@ export default class AtomRepeater extends AtomControl {
         item: any,
         itemRenderer: (i) => XNode,
         insert?: boolean)  {
+
+        presenter ??= this.itemsPresenter ??= this.element;
+
         if (!(presenter && typeof item !== "undefined" && itemRenderer)) {
             return;
         }
 
-        presenter ??= this.itemsPresenter ??= this.element;
         let current: HTMLElement;
         // remove only the header...
         if (insert) {
