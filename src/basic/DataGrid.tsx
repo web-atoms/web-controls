@@ -39,7 +39,9 @@ const getFooterEventName = (d: IDataGridColumn) => {
 
 export interface IDataGridColumnBase {
     header: string;
-
+    headerSortUp?: any;
+    headerSortDown?: any;
+    headerSortDefault?: any;
     headerClickEvent?: string;
 
     cellClickEvent?: string;
@@ -103,6 +105,11 @@ export default class DataGrid extends TableRepeater {
     @BindableProperty
     public columns: IDataGridColumn[];
 
+    @BindableProperty
+    public orderBy: any;
+
+    private orderBySet: boolean;
+
     constructor(app, e) {
         super(app, e ?? document.createElement("table"));
     }
@@ -114,6 +121,12 @@ export default class DataGrid extends TableRepeater {
             super.onPropertyChanged("footer");
             super.onPropertyChanged("items");
         }
+        if (name === "orderBy") {
+            if (!this.orderBySet) {
+                this.onPropertyChanged("header");
+            }
+            this.orderBySet = true;
+        }
     }
 
     protected preCreate(): void {
@@ -122,9 +135,24 @@ export default class DataGrid extends TableRepeater {
         this.footer = null;
         this.headerRenderer = (item) => <tr>
             { ... this.columns?.map?.((x) => {
-                const node = x.headerRenderer?.(item) ?? <td>
-                    <span text={x.header ?? ""}/>
-                </td>;
+                if (x.headerRenderer === void 0) {
+                    x.headerRenderer = (item) => {
+                        let order = this.orderBy;
+                        if (order !== void 0) {
+                            if (order === x.headerSortUp) {
+                                order = false;
+                            } else if (order === x.headerSortDown) {
+                                order = true;
+                            }
+                        }
+                        return <th>
+                        <span text={x.header}/>
+                            { typeof order === "boolean" &&
+                                (order ? <i class="fa-solid fa-sort-down"/> : <i class="fa-solid fa-sort-up"/>) }
+                        </th>;
+                    };
+                }
+                const node = x.headerRenderer(item);
                 const na = node.attributes ??= {};
                 if (na["data-click-event"] === void 0) {
                     na["data-click-event"] = getHeaderEventName(x);
@@ -162,7 +190,29 @@ export default class DataGrid extends TableRepeater {
     }
 
     protected dispatchHeaderFooterEvent(eventName: any, type: any, originalTarget: any): void {
-        const detail = this[type]
+        let detail = this[type]
+
+        const column = this.columns.find((x) => getHeaderEventName(x) === eventName || getFooterEventName(x) === eventName);
+
+        let order = this.orderBy;
+        const originalOrder = this.orderBy;
+
+        const isHeader = type === "header";
+
+        if (isHeader) {
+            if (order === column.headerSortDown) {
+                order = column.headerSortUp;
+            } else if (order === column.headerSortUp) {
+                order = column.headerSortDown;
+            } else {
+                order = column.headerSortDefault ?? column.headerSortUp;
+            }
+            detail = {
+                detail,
+                type,
+                order
+            };
+        }
         const ce = new CustomEvent(eventName ?? `${type}Click`, {
             detail,
             bubbles: this.bubbleEvents,
@@ -173,18 +223,17 @@ export default class DataGrid extends TableRepeater {
             return;
         }
 
-        for (const iterator of this.columns) {
-            if (getHeaderEventName(iterator) === eventName) {
-                iterator.headerClickHandler?.(ce);
-                break;
-            }
-            if (getFooterEventName(iterator) === eventName) {
-                iterator.footerClickHandler?.(ce);
-                break;
-            }
+        if (isHeader) {
+            column.headerClickHandler?.(ce);
+        } else {
+            column.footerClickHandler?.(ce);
         }
+
         if (ce.defaultPrevented) {
             return;
+        }
+        if (isHeader && this.orderBy === originalOrder) {
+            this.orderBy = order;
         }
         this.onPropertyChanged(type);
     }

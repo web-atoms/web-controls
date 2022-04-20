@@ -10,32 +10,23 @@ export default class DataGridTest extends AtomControl {
 
     public viewModel: GridTestViewModel;
 
-    public orderBy: string = "";
+    public orderBy: string;
 
     protected create(): void {
         this.viewModel = this.resolve(GridTestViewModel);
-
+        this.orderBy = "ID Desc";
         const columns: IDataGridColumn[] = [
             {
                 header: "ID",
-                headerClickHandler: () => this.orderBy = "ID",
-                headerRenderer: (item: ICurrencyInfo) => {
-                    return <td>
-                        <span text="ID"/>
-                        { this.orderBy === "ID" && <i class="fas fa-circle"/> }
-                    </td>;
-                },
+                headerSortUp: "ID",
+                headerSortDown: "ID Desc",
                 label: "id"
             },
             {
                 header: "Currency",
-                headerClickHandler: () => this.orderBy = "Currency",
-                headerRenderer: (item: ICurrencyInfo) => {
-                    return <td>
-                        <span text="Currency"/>
-                        { this.orderBy === "Currency" && <i class="fas fa-circle"/> }
-                    </td>;
-                },
+                headerSortUp: "Currency",
+                headerSortDown: "Currency Desc",
+                headerSortDefault: "Currency Desc",
                 cellRenderer(item: ICurrencyInfo) {
                     return <td text={item.currency}/>;
                 }
@@ -50,9 +41,10 @@ export default class DataGridTest extends AtomControl {
 
         this.render(<div>
             <DataGrid
+                orderBy={Bind.twoWays(() => this.orderBy)}
                 items={this.viewModel.list}
                 columns={columns}/>
-            <span text={`Sort by ${this.orderBy}`}/>
+            <span text={Bind.oneWay(() => `Sort by ${this.orderBy}`)}/>
         </div>);
     }
 
