@@ -884,7 +884,7 @@ export default class AtomRepeater extends AtomControl {
 
         presenter ??= this.itemsPresenter ??= this.element;
 
-        if (!(presenter && typeof item !== "undefined" && itemRenderer)) {
+        if (!presenter) {
             return;
         }
 
@@ -904,6 +904,10 @@ export default class AtomRepeater extends AtomControl {
 
         if (current) {
             this.dispose(current);
+        }
+
+        if (!(typeof item !== "undefined" && itemRenderer)) {
+            return;
         }
 
         const node = itemRenderer(item);
