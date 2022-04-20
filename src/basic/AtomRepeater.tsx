@@ -828,12 +828,10 @@ export default class AtomRepeater extends AtomControl {
             }, 1);
         }
         container ??= this.itemsPresenter ?? this.element;
-        let start = getFirstChild(container);
-        while (start) {
-            const next = start.nextElementSibling as HTMLElement;
-            disposeChild(this, start);
-            start = next;
-        }
+        disposeChildren(this, container);
+
+        this.onPropertyChanged("header");
+
         const ir = this.itemRenderer;
         if (!ir) {
             this.onPropertyChanged("footer");
