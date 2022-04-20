@@ -875,7 +875,6 @@ export default class AtomRepeater extends AtomControl {
         }
     }
 
-
     protected updateHeaderFooter(
         name,
         presenter: HTMLElement,
