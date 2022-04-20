@@ -67,7 +67,8 @@ export default class TableRepeater extends AtomRepeater {
         }
         disposeChildren(this, presenter);
         const node = itemRenderer(item);
-        node.attributes["data-" + name] = name;
+        const na = node.attributes ??= {};
+        na["data-" + name] = name;
         this.render(<div>{ node }</div>, presenter, this);
     }
 
