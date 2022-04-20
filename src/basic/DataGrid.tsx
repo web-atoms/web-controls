@@ -1,6 +1,8 @@
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
 import XNode from "@web-atoms/core/dist/core/XNode";
+import StyleRule from "@web-atoms/core/dist/style/StyleRule";
+import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import TableRepeater from "./TableRepeater";
 
 const cellEventName = Symbol("cell-event-name");
@@ -107,6 +109,19 @@ export type IDataGridColumn = IDataGridColumnWithLabel | IDataGridColumnWithLabe
 
 // }
 
+CSS(StyleRule()
+    .child(StyleRule("thead")
+        .child(StyleRule("tr[data-header=header]")
+            .child(StyleRule("th")
+                .child(StyleRule("i[data-sort]")
+                    .marginRight(5)
+                    .marginLeft(3)
+                )
+            )
+        )
+    )
+, "table[data-data-grid=data-grid]");
+
 export default class DataGrid extends TableRepeater {
 
     @BindableProperty
@@ -140,6 +155,7 @@ export default class DataGrid extends TableRepeater {
         super.preCreate();
         this.header = null;
         this.footer = null;
+        this.element.dataset.dataGrid="data-grid";
         this.headerRenderer = (item) => <tr>
             { ... this.columns?.map?.((x) => {
                 if (x.headerRenderer === void 0) {
@@ -155,7 +171,7 @@ export default class DataGrid extends TableRepeater {
                         return <th>
                         <span text={x.header}/>
                             { typeof order === "boolean" &&
-                                (order ? <i class="fa-solid fa-arrow-up-short-wide"/> : <i class="fa-solid fa-arrow-down-wide-short"/>) }
+                                (order ? <i data-sort="up" class="fa-solid fa-arrow-up-short-wide"/> : <i data-sort="down" class="fa-solid fa-arrow-down-wide-short"/>) }
                         </th>;
                     };
                 }
