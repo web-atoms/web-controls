@@ -836,7 +836,6 @@ export default class AtomRepeater extends AtomControl {
             }
             start = next;
         }
-        disposeChildren(this, container);
         const ir = this.itemRenderer;
         if (!ir) {
             return;
