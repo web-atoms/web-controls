@@ -69,6 +69,14 @@ export interface IDataGridColumnBase {
     cellClickHandler?: (e: CustomEvent) => void;
     footerClickHandler?: (e: CustomEvent) => void;
 
+    /**
+     * Default is true
+     */
+    ellipsis?: boolean;
+    width?: string;
+    maxWidth?: string;
+    minWidth?: string;
+
 }
 
 export interface IDataGridColumnWithLabel extends IDataGridColumnBase {
@@ -133,6 +141,12 @@ CSS(StyleRule()
             .hoverBackgroundColor(Colors.lightSkyBlue.withAlphaPercent(0.3))
             .and(StyleRule("[data-selected-item=true]")
                 .backgroundColor(Colors.lightGray.withAlphaPercent(0.4))
+            )
+            .child(StyleRule("td[data-ellipsis]")
+                .maxWidth("200px")
+                .overflow("hidden")
+                .textOverflow("ellipsis")
+                .whiteSpace("nowrap")
             )
         )
     )
@@ -219,22 +233,45 @@ export default class DataGrid extends TableRepeater {
                 }
                 const node = x.headerRenderer(item);
                 const na = node.attributes ??= {};
-                if (na["data-click-event"] === void 0) {
-                    na["data-click-event"] = getHeaderEventName(x);
+                na["data-click-event"] ??= getHeaderEventName(x);
+                if (x.width !== void 0) {
+                    na["style-width"] ??= x.width;
+                } else {
+                    if (x.maxWidth !== void 0) {
+                        na["style-max-width"] ??= x.maxWidth;
+                    }
+                    if (x.minWidth !== void 0) {
+                        na["style-min-width"] ??= x.minWidth;
+                    }
                 }
                 return node;
             }) ?? []}
         </tr>;
         this.itemRenderer = (item) => <tr>
             { ... this.columns?.map?.((x) => {
+                x.ellipsis ??= true;
                 if (x.cellRenderer === void 0) {
                     x.labelPath ??= (i) => i[x.label];
-                    x.cellRenderer = (i) => <td text={x.labelPath(i)}/>;
+                    if (x.ellipsis) {
+                        x.cellRenderer = (i) => <td text={x.labelPath(i)}/>;
+                    } else {
+                        x.cellRenderer = (i) => <td text={x.labelPath(i)} title={x.labelPath(i)}/>;
+                    }
                 }
                 const node = x.cellRenderer?.(item);
                 const na = node.attributes ??= {};
-                if (na["data-click-event"] === void 0) {
-                    na["data-click-event"] = getCellEventName(x);
+                if (x.ellipsis) {
+                    na["data-ellipsis"] = "true";
+                }
+                if (x.width !== void 0) {
+                    na["style-width"] ??= x.width;
+                } else {
+                    if (x.maxWidth !== void 0) {
+                        na["style-max-width"] ??= x.maxWidth;
+                    }
+                    if (x.minWidth !== void 0) {
+                        na["style-min-width"] ??= x.minWidth;
+                    }
                 }
                 return node;
             }) ?? []}

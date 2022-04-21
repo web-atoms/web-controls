@@ -37,6 +37,26 @@ export default class DataGridTest extends AtomControl {
                 cellRenderer(item: ICurrencyInfo) {
                     return <td text={item.currencyCode}/>;
                 }
+            },
+            {
+                header: "Flag",
+                label: "flag"
+            },
+            {
+                header: "Level",
+                label: "level"
+            },
+            {
+                header: "Units",
+                label: "units"
+            },
+            {
+                header: "As Of",
+                label: "asOf"
+            },
+            {
+                header: "Change",
+                label: "onedChng"
             }
         ];
 
