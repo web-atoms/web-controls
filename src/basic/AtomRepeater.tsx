@@ -484,6 +484,8 @@ export default class AtomRepeater extends AtomControl {
     public "event-item-click"?: (e: CustomEvent) => void;
     public "event-item-select"?: (e: CustomEvent) => void;
     public "event-item-deselect"?: (e: CustomEvent) => void;
+    public "event-items-updated"?: (e: CustomEvent) => void;
+    public "event-selection-updated"?: (e: CustomEvent) => void;
 
     public bubbleEvents: boolean = true;
 
@@ -601,6 +603,7 @@ export default class AtomRepeater extends AtomControl {
                             break;
                     }
                     this.updateItems();
+                    this.dispatchCustomEvent("items-updated", items);
                     AtomBinder.refreshValue(this, "selectedItem");
                     AtomBinder.refreshValue(this, "value");
                 });
@@ -612,6 +615,7 @@ export default class AtomRepeater extends AtomControl {
                     this.value = iv;
                 }
                 this.updateItems();
+                this.dispatchCustomEvent("items-updated", items);
                 if (this.scrollToSelection) {
                     this.bringSelectionIntoView();
                 }
@@ -626,11 +630,13 @@ export default class AtomRepeater extends AtomControl {
                     }
                     AtomBinder.refreshValue(this, "selectedItem");
                     AtomBinder.refreshValue(this, "value");
+                    this.dispatchCustomEvent("selection-updated", selectedItems);
                 });
                 if (sd) {
                     this.selectedItemsDisposable = this.registerDisposable(sd);
                 }
                 this.updateClasses();
+                this.dispatchCustomEvent("selection-updated", selectedItems);
                 break;
             case "itemRenderer":
             case "watch":
@@ -820,12 +826,13 @@ export default class AtomRepeater extends AtomControl {
     public updateItems(container?: HTMLElement, force?: boolean) {
         if (this.deferUpdates && !force) {
             if (this.deferredUpdateId) {
-                clearTimeout(this.deferredUpdateId);
+                return;
             }
             this.deferredUpdateId = setTimeout(() => {
                 this.deferredUpdateId = 0;
                 this.updateItems(container, true);
             }, 1);
+            return;
         }
         container ??= this.itemsPresenter ?? this.element;
         disposeChildren(this, container);
@@ -857,6 +864,15 @@ export default class AtomRepeater extends AtomControl {
             container.appendChild(element);
         }
         this.onPropertyChanged("footer");
+    }
+
+    protected dispatchCustomEvent(type: string, detail: any) {
+        type = StringHelper.fromHyphenToCamel(type);
+        this.element.dispatchEvent(new CustomEvent(type, {
+            detail,
+            bubbles: false,
+            cancelable: true
+        }));
     }
 
     protected updateClasses() {
