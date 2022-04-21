@@ -154,7 +154,7 @@ export default class DataGrid extends TableRepeater {
 
     protected preCreate(): void {
         super.preCreate();
-        this.header = null;
+        this.header = true;
         this.footer = null;
         this.element.dataset.dataGrid = "data-grid";
         this.headerRenderer = (item) => <tr>
