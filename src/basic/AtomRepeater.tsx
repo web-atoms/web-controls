@@ -868,7 +868,7 @@ export default class AtomRepeater extends AtomControl {
 
     protected dispatchCustomEvent(type: string, detail: any) {
         type = StringHelper.fromHyphenToCamel(type);
-        this.element.dispatchEvent(new CustomEvent(type, {
+        this.element?.dispatchEvent(new CustomEvent(type, {
             detail,
             bubbles: false,
             cancelable: true
