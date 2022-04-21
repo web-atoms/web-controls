@@ -939,7 +939,7 @@ export default class AtomRepeater extends AtomControl {
             disposeChild(this, current);
         }
 
-        if (!(typeof item !== "undefined" && itemRenderer)) {
+        if (!(item && itemRenderer)) {
             return;
         }
 
