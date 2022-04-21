@@ -5,6 +5,7 @@ import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import Colors from "@web-atoms/core/dist/core/Colors";
 import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
 import { CancelToken, IDisposable } from "@web-atoms/core/dist/core/types";
+import WatchProperty from "@web-atoms/core/dist/core/WatchProperty";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
@@ -536,6 +537,16 @@ export default class AtomRepeater extends AtomControl {
 
     public itemTag: string;
 
+    @WatchProperty
+    public get allSelected() {
+        const selectedItems = this.selectedItems;
+        const items = this.items;
+        if (!(items && selectedItems)) {
+            return false;
+        }
+        return items.length && items.length === selectedItems.length;
+    }
+
     public get value() {
         if (this.initialValue !== undefined) {
             return this.initialValue;
@@ -630,6 +641,7 @@ export default class AtomRepeater extends AtomControl {
                     }
                     AtomBinder.refreshValue(this, "selectedItem");
                     AtomBinder.refreshValue(this, "value");
+                    AtomBinder.refreshValue(this, "allSelected");
                     this.dispatchCustomEvent("selection-updated", selectedItems);
                 });
                 if (sd) {
@@ -637,6 +649,7 @@ export default class AtomRepeater extends AtomControl {
                 }
                 this.updateClasses();
                 this.dispatchCustomEvent("selection-updated", selectedItems);
+                AtomBinder.refreshValue(this, "allSelected");
                 break;
             case "itemRenderer":
             case "watch":
@@ -1029,7 +1042,7 @@ function onElementClick(e: Event) {
     // tslint:disable-next-line: no-bitwise
     const item = repeater.items[~~index];
     if (eventName === "itemSelect" || eventName === "itemDeselect") {
-        const si = repeater.selectedItems;
+        const si = repeater.selectedItems ??= [];
         if (si) {
             index = si.indexOf(item);
             if (index === -1) {
