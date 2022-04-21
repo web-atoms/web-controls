@@ -484,8 +484,8 @@ export default class AtomRepeater extends AtomControl {
     public "event-item-click"?: (e: CustomEvent) => void;
     public "event-item-select"?: (e: CustomEvent) => void;
     public "event-item-deselect"?: (e: CustomEvent) => void;
-    public "event-items-updated"?: (e: CustomEvent) => void;
-    public "event-selection-updated"?: (e: CustomEvent) => void;
+    public "event-items-updated"?: (e: CustomEvent<{ type: string, items: any[] }>) => void;
+    public "event-selection-updated"?: (e: CustomEvent<any[]>) => void;
 
     public bubbleEvents: boolean = true;
 
@@ -595,15 +595,15 @@ export default class AtomRepeater extends AtomControl {
             case "items":
                 this.itemsDisposable?.dispose();
                 const items = this.items;
-                const d = items?.watch((target, key, index, item) => {
-                    switch (key) {
+                const d = items?.watch((target, type, index, item) => {
+                    switch (type) {
                         case "add":
                         case "remove":
-                            this.updatePartial(key, index, item);
+                            this.updatePartial(type, index, item);
                             break;
                     }
                     this.updateItems();
-                    this.dispatchCustomEvent("items-updated", items);
+                    this.dispatchCustomEvent("items-updated", { type, items });
                     AtomBinder.refreshValue(this, "selectedItem");
                     AtomBinder.refreshValue(this, "value");
                 });
@@ -615,7 +615,7 @@ export default class AtomRepeater extends AtomControl {
                     this.value = iv;
                 }
                 this.updateItems();
-                this.dispatchCustomEvent("items-updated", items);
+                this.dispatchCustomEvent("items-updated", { type: "reset", items });
                 if (this.scrollToSelection) {
                     this.bringSelectionIntoView();
                 }
