@@ -615,7 +615,7 @@ export default class AtomRepeater extends AtomControl {
                     this.value = iv;
                 }
                 this.updateItems();
-                this.dispatchCustomEvent("items-updated", { type: "reset", items });
+                this.dispatchCustomEvent("items-updated", { type: "reset", items, index : 0 });
                 if (this.scrollToSelection) {
                     this.bringSelectionIntoView();
                 }
