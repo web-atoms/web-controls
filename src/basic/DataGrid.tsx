@@ -166,7 +166,7 @@ export const SelectAllColumn: IDataGridColumn = {
             return;
         }
         const selectedItems = s.selectedItems ??= [];
-        if(s.allSelected) {
+        if (s.allSelected) {
             selectedItems.clear();
             return;
         }
