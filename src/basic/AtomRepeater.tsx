@@ -603,7 +603,7 @@ export default class AtomRepeater extends AtomControl {
                             break;
                     }
                     this.updateItems();
-                    this.dispatchCustomEvent("items-updated", { type, items });
+                    this.dispatchCustomEvent("items-updated", { type, items, index });
                     AtomBinder.refreshValue(this, "selectedItem");
                     AtomBinder.refreshValue(this, "value");
                 });
