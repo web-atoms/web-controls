@@ -582,8 +582,7 @@ export default class AtomRepeater extends AtomControl {
         if (value === first) {
             return;
         }
-        si[0] = value;
-        si.refresh();
+        si.set(0, value);
     }
 
     public scrollToSelection: boolean;
