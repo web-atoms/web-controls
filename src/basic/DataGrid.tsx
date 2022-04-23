@@ -170,8 +170,9 @@ export const SelectAllColumn: IDataGridColumn = {
             selectedItems.clear();
             return;
         }
-        selectedItems.clear();
-        selectedItems.addAll(items);
+        selectedItems.length = 0;
+        selectedItems.push(... items);
+        selectedItems.refresh();
     },
     cellRenderer: () => <SelectorCheckBox/>
 };

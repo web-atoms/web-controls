@@ -393,7 +393,8 @@ class SelectAllControl extends AtomControl {
                 si.clear();
             } else {
                 si.length = 0;
-                si.addAll(items);
+                si.push( ... items);
+                si.refresh();
             }
         });
     }
@@ -610,6 +611,7 @@ export default class AtomRepeater extends AtomControl {
                     switch (type) {
                         case "add":
                         case "remove":
+                        case "set":
                             this.updatePartial(type, index, item);
                             break;
                     }
@@ -762,8 +764,7 @@ export default class AtomRepeater extends AtomControl {
             return;
         }
         const index = this.items.indexOf(item);
-        this.updatePartial("remove", index, item);
-        this.updatePartial("add", index, item);
+        this.updatePartial("set", index, item);
     }
 
     public updatePartial(key, index, item, container?: HTMLElement) {
@@ -798,7 +799,9 @@ export default class AtomRepeater extends AtomControl {
         const vp = this.valuePath ?? ((it) => it);
         const si = (this.selectedItems ?? []).map(vp);
 
-        if (key === "remove") {
+        const isRemove = key === "remove";
+
+        if (isRemove || key  === "set") {
             const current = start;
             start = start.nextElementSibling as HTMLElement;
             const ac = current.atomControl;
@@ -809,7 +812,9 @@ export default class AtomRepeater extends AtomControl {
                 this.unbindEvent(current);
             }
             current.remove();
-        } else {
+        }
+
+        if (!isRemove) {
             const en = ir(item);
             const ea = en.attributes ??= {};
             const v = vp(item);
@@ -1049,8 +1054,7 @@ function onElementClick(e: Event) {
                 if (repeater.allowMultipleSelection) {
                     si.add(item);
                 } else {
-                    si[0] = item;
-                    si.refresh();
+                    si.set(0, item);
                 }
             } else {
                 si.removeAt(index);
