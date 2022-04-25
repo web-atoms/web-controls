@@ -30,10 +30,13 @@ const popupCSS = CSS(StyleRule()
     )
 );
 
-export const getParentRepeaterItem = (target: HTMLElement): [string, AtomRepeater, any, number] | undefined => {
+export type IRepeaterItemInfo = [string, AtomRepeater, any, number, HTMLElement] | undefined;
+
+export const getParentRepeaterItem = (target: HTMLElement): IRepeaterItemInfo => {
     let eventName: string;
     let repeater: AtomRepeater;
     let index: number;
+    let root: any;
     while (target) {
         const a = target.atomControl;
         if (a !== undefined && a instanceof AtomRepeater) {
@@ -53,6 +56,7 @@ export const getParentRepeaterItem = (target: HTMLElement): [string, AtomRepeate
                 eventName = itemClickEvent.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
             }
         }
+        root = target;
         target = target.parentElement as HTMLElement;
     }
 
@@ -62,7 +66,7 @@ export const getParentRepeaterItem = (target: HTMLElement): [string, AtomRepeate
 
     // tslint:disable-next-line: no-bitwise
     const item = repeater.items[~~index];
-    return [eventName, repeater, item, index];
+    return [eventName, repeater, item, index, root];
 };
 
 export type Match<T> = (text: string) => (item: T) => boolean;
@@ -481,6 +485,22 @@ const getFirstChild = (container: HTMLElement) => {
     return child;
 };
 
+function updateDragDrop(e: HTMLElement, force: boolean = false) {
+    if (!e) {
+        return;
+    }
+    if (force) {
+        e.draggable = false;
+    } else {
+        force = e.draggable;
+    }
+    e = e.firstElementChild as HTMLElement;
+    while (e) {
+        updateDragDrop(e, force);
+        e = e.nextElementSibling as HTMLElement;
+    }
+}
+
 export default class AtomRepeater extends AtomControl {
 
     public "event-item-click"?: (e: CustomEvent) => void;
@@ -535,6 +555,9 @@ export default class AtomRepeater extends AtomControl {
 
     @BindableProperty
     public footerRenderer: any;
+
+    @BindableProperty
+    public enableDragDrop: any;
 
     public itemTag: string;
 
@@ -820,6 +843,9 @@ export default class AtomRepeater extends AtomControl {
             const e = document.createElement(ea.for ?? en.name ?? "div");
             e.dataset.itemIndex = (index++).toString();
             e.dataset.selectedItem = si.indexOf(v) !== -1 ? "true" : "false";
+            if (this.enableDragDrop) {
+                updateDragDrop(e);
+            }
             if (start) {
                 container.insertBefore(e, start);
             } else {
@@ -878,6 +904,9 @@ export default class AtomRepeater extends AtomControl {
             element.dataset.itemIndex = (i++).toString();
             element.dataset.selectedItem = si.indexOf(v) !== -1 ? "true" : "false";
             this.render(e, element, this);
+            if (this.enableDragDrop) {
+                updateDragDrop(element);
+            }
             container.appendChild(element);
         }
         this.onPropertyChanged("footer");
@@ -1066,3 +1095,127 @@ function onElementClick(e: Event) {
 }
 
 document.body.addEventListener("click", onElementClick, true);
+
+let hoverItem = {
+    repeater: null,
+    target: null as HTMLElement,
+    item: null,
+    placeholder: null as HTMLElement
+};
+
+document.body.addEventListener("dragstart", (e) => {
+    const { target } = e as any;
+    if (target.draggable) {
+        const ri = getParentRepeaterItem(target);
+        if (!ri) {
+            return;
+        }
+        const [type, repeater, item, index] = ri;
+        if (!repeater || !repeater.enableDragDrop) {
+            return;
+        }
+        const placeholder = document.createElement("div");
+        placeholder.style.width = target.offsetWidth + "px";
+        placeholder.style.height = target.offsetHeight + "px";
+        hoverItem = {
+            repeater,
+            target,
+            item,
+            placeholder,
+        };
+        e.dataTransfer.dropEffect = "move";
+        setTimeout(() => {
+            target.style.display = "none";
+            (target.parentElement as HTMLElement).insertBefore(placeholder, target);
+        }, 0);
+    }
+});
+
+document.body.addEventListener("dragend", (e) => {
+    if (!(hoverItem?.placeholder)) {
+        return;
+    }
+    const {
+        item,
+        placeholder,
+        repeater
+    } = hoverItem;
+    const targetRepeater = placeholder.parentElement.atomControl as AtomRepeater;
+    const previous = placeholder.previousElementSibling as HTMLElement;
+    let index = 0;
+    if (previous) {
+        // tslint:disable-next-line: no-bitwise
+        index = (~~previous.dataset.itemIndex);
+    }
+    placeholder.remove();
+    hoverItem.placeholder = null;
+    repeater.items.remove(item);
+    targetRepeater.items.insert(index, item);
+});
+
+interface IPoint {
+    x: number;
+    y: number;
+}
+
+const dragOver = (e: DragEvent) => {
+    const ri = getParentRepeaterItem(e.target as HTMLElement);
+    if (!ri) {
+        return;
+    }
+    const [type, repeater, item, index, target] = ri;
+    if (!repeater) {
+        return;
+    }
+    if (hoverItem) {
+        const { placeholder } = hoverItem;
+        e.preventDefault();
+        if (target === placeholder) {
+            return;
+        }
+
+        const mp = { x: e.clientX, y: e.clientY };
+
+        const midPoint = (co: DOMRect) => ({ x : co.left + (co.width / 2), y: co.top + (co.height / 2) });
+
+        const isBetween = (n: IPoint, start: IPoint, end: IPoint) =>
+            start.x <= n.x && n.x >= end.x || start.y <= n.y && n.y <= end.y;
+
+        // set placeholder...
+        const rootMP = midPoint(target.getBoundingClientRect());
+
+        // get previous...
+        const previous = target.previousElementSibling as HTMLElement;
+        if (previous && previous !== placeholder) {
+            const pmp  = midPoint(previous.getBoundingClientRect());
+            if (isBetween(mp, pmp, rootMP)) {
+                // inert before...
+                placeholder.remove();
+                target.insertAdjacentElement("beforebegin", placeholder);
+                return;
+            }
+        }
+
+        const next = target.nextElementSibling as HTMLElement;
+        if (next && next !== placeholder) {
+            const npm = midPoint(next.getBoundingClientRect());
+            if (isBetween(mp, rootMP, npm)) {
+                placeholder.remove();
+                target.insertAdjacentElement("afterend", placeholder);
+                return;
+            }
+        }
+
+        if (!previous)  {
+            placeholder.remove();
+            target.insertAdjacentElement("beforebegin", placeholder);
+            return;
+        }
+        placeholder.remove();
+        target.insertAdjacentElement("afterend", placeholder);
+        return;
+    }
+};
+
+document.body.addEventListener("dragover", dragOver);
+document.body.addEventListener("dragenter", dragOver);
