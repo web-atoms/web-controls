@@ -6,7 +6,8 @@ import WatchProperty from "@web-atoms/core/dist/core/WatchProperty";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
-import AtomRepeater, { SelectorCheckBox } from "./AtomRepeater";
+import AtomRepeater, { getParentRepeaterItem, SelectorCheckBox } from "./AtomRepeater";
+import { EditableInput, getPropertyInfo, IPropertyInfo } from "./Editable";
 import TableRepeater from "./TableRepeater";
 
 const cellEventName = Symbol("cell-event-name");
@@ -176,6 +177,28 @@ export const SelectAllColumn: IDataGridColumn = {
     },
     cellRenderer: () => <SelectorCheckBox/>
 };
+
+export interface IEditorColumn {
+    header: string;
+    changeEvents?: string[];
+    editorValuePath?: (editor) => any;
+    propertyPath: string[] | string | IPropertyInfo ;
+}
+
+export function InputColumn({
+    type = "text",
+    header,
+    propertyPath
+}: IEditorColumn & { type?: string}): IDataGridColumn {
+    const property = getPropertyInfo(propertyPath)
+    return ({
+        header,
+        cellRenderer: (item) => <EditableInput
+            propertyPath={propertyPath}
+            value={property.getter(item)}
+            type={type}/>,
+    });
+}
 
 export default class DataGrid extends TableRepeater {
 
