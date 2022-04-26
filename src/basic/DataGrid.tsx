@@ -288,6 +288,7 @@ export default class DataGrid extends TableRepeater {
                 if (x.ellipsis) {
                     na["data-ellipsis"] = "true";
                 }
+                na["data-click-event"] ??= getCellEventName(x);
                 if (x.width !== void 0) {
                     na["style-width"] ??= x.width;
                 } else {
