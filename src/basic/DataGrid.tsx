@@ -2,6 +2,7 @@ import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import Colors from "@web-atoms/core/dist/core/Colors";
 import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
+import { CancelToken } from "@web-atoms/core/dist/core/types";
 import WatchProperty from "@web-atoms/core/dist/core/WatchProperty";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
@@ -354,11 +355,7 @@ export default class DataGrid extends TableRepeater {
             return;
         }
 
-        if (isHeader) {
-            column.headerClickHandler?.(ce);
-        } else {
-            column.footerClickHandler?.(ce);
-        }
+        this.invokeHandler(isHeader ? column.headerClickHandler : column.footerClickHandler, ce);
 
         if (ce.defaultPrevented) {
             return;
@@ -381,7 +378,7 @@ export default class DataGrid extends TableRepeater {
         }
         for (const iterator of this.columns) {
             if (getCellEventName(iterator) === eventName) {
-                iterator.cellClickHandler?.(ce);
+                this.invokeHandler(iterator.cellClickHandler, ce);
                 break;
             }
         }
@@ -390,6 +387,26 @@ export default class DataGrid extends TableRepeater {
         }
         if (recreate) {
             this.refreshItem(item, (ce as any).promise);
+        }
+    }
+
+    private invokeHandler(h, e) {
+        if (!h) {
+            return;
+        }
+        const p = h(e);
+        if (p && p.then) {
+            if (e.promise) {
+                e.promise = Promise.all([e.promise, p]);
+            } else {
+                e.promise = p;
+            }
+            p?.catch((error) => {
+                if (CancelToken.isCancelled(error)) {
+                    return;
+                }
+                console.error(error);
+            });
         }
     }
 }
