@@ -777,15 +777,17 @@ export default class AtomRepeater extends AtomControl {
         }
     }
 
-    public refreshItem(item, fx?: Promise<void> | any) {
+    public refreshItem(item, fx?: Promise<void> | any, index: number = -1) {
+        if (index === -1) {
+            index = this.items.indexOf(item);
+        }
         if (fx?.then) {
             const finalize = () => {
-                this.refreshItem(item);
+                this.refreshItem(item, undefined, index);
             };
             fx.then(finalize, finalize);
             return;
         }
-        const index = this.items.indexOf(item);
         this.updatePartial("set", index, item);
     }
 
