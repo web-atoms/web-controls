@@ -60,7 +60,7 @@ export const getParentRepeaterItem = (target: HTMLElement): IRepeaterItemInfo =>
         target = target.parentElement as HTMLElement;
     }
 
-    if (index === undefined) {
+    if (index === void 0 || repeater === void 0) {
         return undefined;
     }
 
@@ -1022,7 +1022,7 @@ export default class AtomRepeater extends AtomControl {
             cancelable: true
         });
         originalTarget.dispatchEvent(ce);
-        if (recreate && !ce.defaultPrevented) {
+        if (recreate && (ce as any).executed && !ce.defaultPrevented) {
             this.refreshItem(item, (ce as any).promise);
         }
     }

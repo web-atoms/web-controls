@@ -363,8 +363,11 @@ export default class DataGrid extends TableRepeater {
         }
         if (setOrderBy && this.orderBy === originalOrder) {
             this.orderBy = order;
+            (ce as any).executed = true;
         }
-        this.onPropertyChanged(type);
+        if ((ce as any).executed) {
+            this.onPropertyChanged(type);
+        }
     }
 
     protected dispatchItemEvent(eventName: any, item: any, recreate: any, originalTarget: any): void {
@@ -386,7 +389,7 @@ export default class DataGrid extends TableRepeater {
         if (ce.defaultPrevented) {
             return;
         }
-        if (recreate) {
+        if (recreate && (ce as any).executed) {
             this.refreshItem(item, (ce as any).promise);
         }
     }
@@ -396,6 +399,7 @@ export default class DataGrid extends TableRepeater {
             return;
         }
         const p = h(e);
+        e.executed = true;
         if (p && p.then) {
             if (e.promise) {
                 e.promise = Promise.all([e.promise, p]);

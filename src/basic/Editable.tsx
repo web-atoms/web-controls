@@ -77,7 +77,11 @@ function registerEvent(property: IPropertyInfo, changeEvents: string[], editorVa
         for (const iterator of changeEvents) {
             document.body.addEventListener(iterator, (e) => {
                 setTimeout(() => {
-                    const [ _, repeater, item] = getParentRepeaterItem(e.target as HTMLElement);
+                    const ri = getParentRepeaterItem(e.target as HTMLElement);
+                    if (!ri) {
+                        return;
+                    }
+                    const [ _, repeater, item] = ri;
                     const oldValue = property.getter(item);
                     const value = editorValuePath(e.target);
                     if (oldValue != value) {
