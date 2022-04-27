@@ -191,7 +191,7 @@ export function InputColumn({
     header,
     propertyPath
 }: IEditorColumn & { type?: string}): IDataGridColumn {
-    const property = getPropertyInfo(propertyPath)
+    const property = getPropertyInfo(propertyPath);
     return ({
         header,
         cellRenderer: (item) => <EditableInput
@@ -410,6 +410,7 @@ export default class DataGrid extends TableRepeater {
                 if (CancelToken.isCancelled(error)) {
                     return;
                 }
+                // tslint:disable-next-line: no-console
                 console.error(error);
             });
         }

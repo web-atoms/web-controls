@@ -5,7 +5,7 @@ import IElement from "./IElement";
 type Getter = (item) => any;
 
 export interface IPropertyInfo {
-    key?: string,
+    key?: string;
     getter(item): any;
     setter(item, value): void;
 }
@@ -20,15 +20,15 @@ export function getPropertyInfo(propertyPath: string[] | string | IPropertyInfo)
                     item[propertyPath] = value;
                 }
             }
-        }
+        };
     }
     if (!Array.isArray(propertyPath)) {
         return propertyPath;
     }
     const last = propertyPath.pop();
-    let getterIntermediate = undefined;
+    let getterIntermediate;
     if (propertyPath.length > 0) {
-        getterIntermediate = function(item) {
+        getterIntermediate = (item) => {
             if (!item) {
                 return item;
             }
@@ -39,19 +39,19 @@ export function getPropertyInfo(propertyPath: string[] | string | IPropertyInfo)
                 }
             }
             return item;
-        }
+        };
     }
-    let setter = (item, value) => {
+    const setter = (item, value) => {
         if (item) {
             if (getterIntermediate) {
-                item = getterIntermediate(item)
+                item = getterIntermediate(item);
             }
             if (item) {
                 item[last] = value;
             }
         }
-    }
-    let getter = (item) => {
+    };
+    const getter = (item) => {
         if (!item) {
             return item;
         }
@@ -64,7 +64,7 @@ export function getPropertyInfo(propertyPath: string[] | string | IPropertyInfo)
         key: propertyPath.join(","),
         getter,
         setter
-    }
+    };
 }
 
 const handlers = {};
@@ -72,7 +72,7 @@ const handlers = {};
 function registerEvent(property: IPropertyInfo, changeEvents: string[], editorValuePath: (editor) => any) {
     property.key ??= property.setter + ":" + property.getter;
     const name = `${property.key}:${changeEvents.join(",")}`;
-    if(!handlers[name]) {
+    if (!handlers[name]) {
         handlers[name] = changeEvents;
         for (const iterator of changeEvents) {
             document.body.addEventListener(iterator, (e) => {
@@ -84,6 +84,7 @@ function registerEvent(property: IPropertyInfo, changeEvents: string[], editorVa
                     const [ _, repeater, item] = ri;
                     const oldValue = property.getter(item);
                     const value = editorValuePath(e.target);
+                    // tslint:disable-next-line: triple-equals
                     if (oldValue != value) {
                         property.setter(item, value);
                         repeater.refreshItem(item);
@@ -94,17 +95,8 @@ function registerEvent(property: IPropertyInfo, changeEvents: string[], editorVa
     }
 }
 
-
 export interface IEditable extends IElement {
     propertyPath: string[] | string | IPropertyInfo;
-}
-
-export default function Editable(
-    {
-        propertyPath
-    }: IEditable
-) {
-
 }
 
 export function EditableInput(
