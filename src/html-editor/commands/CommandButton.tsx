@@ -37,7 +37,7 @@ function insert(callback: (s: AtomHtmlEditor, e: Event) => Promise<string> | str
     return async (s: AtomHtmlEditor, e: Event) => {
         let r = callback(s, e);
         if (typeof r !== "string") {
-            if (r.then) {
+            if (r?.then) {
                 r = await r;
             }
         }

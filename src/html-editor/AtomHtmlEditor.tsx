@@ -6,9 +6,11 @@ import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
+import AtomRepeater from "../basic/AtomRepeater";
 import AddImage, { showImageDialog } from "./commands/AddImage";
 import AddLink from "./commands/AddLink";
 import Align from "./commands/Align";
+import AttachFile from "./commands/AttachFile";
 import Bold from "./commands/Bold";
 import ChangeColor from "./commands/ChangeColor";
 import ChangeFont from "./commands/ChangeFont";
@@ -38,6 +40,21 @@ const css = CSS(StyleRule()
     .minHeight(500)
     .child(StyleRule("iframe")
         .flexStretch()
+    )
+    .child(StyleRule(".files")
+        .child(StyleRule(".file")
+            .flexLayout({ inline: true })
+            .borderColor(Colors.lightGray.withAlphaPercent(0.5))
+            .borderWidth(1)
+            .borderStyle("solid")
+            .borderRadius(15)
+            .paddingLeft(10)
+            .paddingRight(10)
+            .child(StyleRule("label")
+                .maxWidth(100)
+                .textEllipsis()
+            )
+        )
     )
     .nested(StyleRule(".toolbar")
         .display("flex")
@@ -148,6 +165,9 @@ export default class AtomHtmlEditor extends AtomControl {
     @BindableProperty
     public version: number;
 
+    @BindableProperty
+    public files: File[];
+
     public editor: HTMLDivElement;
 
     public eventDocumentCreated: (e: CustomEvent<HTMLDivElement>) => void;
@@ -200,6 +220,7 @@ export default class AtomHtmlEditor extends AtomControl {
 
     protected preCreate() {
         this.version = 1;
+        this.files = [];
         this.runAfterInit(() => {
             this.setup();
         });
@@ -323,6 +344,7 @@ export default class AtomHtmlEditor extends AtomControl {
                 <IndentMore/>
                 <Separator/>
                 <AddImage/>
+                <AttachFile/>
                 <Separator/>
                 <AddLink/>
                 <Unlink/>
@@ -333,6 +355,19 @@ export default class AtomHtmlEditor extends AtomControl {
         }
         super.render(<div {... node.attributes}>
             { ... node.children as any[]}
+            <AtomRepeater
+                class="files"
+                event-item-delete={(ce) => this.files.remove(ce.detail)}
+                items={Bind.oneWay(() => this.files)}
+                itemRenderer={(file: File) => <div class="file">
+                    <i class="ri-attachment-2"/>
+                    <label text={file.name}/>
+                    <i
+                        data-click-event="item-delete"
+                        class="ri-close-circle-fill"
+                        />
+                </div>}
+                />
             <iframe class="editor-frame"/>
         </div>);
     }

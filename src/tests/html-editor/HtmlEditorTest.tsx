@@ -22,6 +22,7 @@ import Underline from "../../html-editor/commands/Underline";
 import Unlink from "../../html-editor/commands/Unlink";
 import UnorderedList from "../../html-editor/commands/UnorderedList";
 import AtomHtmlEditor, { Toolbar } from "../../html-editor/AtomHtmlEditor";
+import AttachFile from "../../html-editor/commands/AttachFile";
 
 @Pack
 export default class HtmlEditorTest extends AtomControl {
@@ -50,7 +51,8 @@ export default class HtmlEditorTest extends AtomControl {
                     <Separator/>
                 </Toolbar>
                 <Toolbar>
-                <AddImage/>
+                    <AddImage/>
+                    <AttachFile/>
                     <Separator/>
                     <AddLink/>
                     <Unlink/>
