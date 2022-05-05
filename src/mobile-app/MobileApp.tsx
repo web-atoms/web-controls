@@ -3,17 +3,18 @@ import { AtomUri } from "@web-atoms/core/dist/core/AtomUri";
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import Colors from "@web-atoms/core/dist/core/Colors";
-import { IClassOf, IDisposable } from "@web-atoms/core/dist/core/types";
+import { CancelToken, IClassOf, IDisposable } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import { NavigationService } from "@web-atoms/core/dist/services/NavigationService";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomWindowViewModel } from "@web-atoms/core/dist/view-model/AtomWindowViewModel";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import PopupService, { ConfirmPopup, IPopup } from "@web-atoms/core/dist/web/services/PopupService";
+import PopupService, { ConfirmPopup, IPopup, PopupControl } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
 CSS(StyleRule()
     .absolutePosition({ left: 0, top: 0, bottom: 0, right: 0})
+    .overflow("hidden")
 , "div[data-page-app=page-app]");
 
 CSS(StyleRule()
@@ -22,6 +23,9 @@ CSS(StyleRule()
     .display("grid")
     .gridTemplateRows("25px 1fr auto")
     .gridTemplateColumns("25px 1fr auto")
+    .child(StyleRule("[data-icon-button=icon-button]")
+        .padding(5)
+    )
     .child(StyleRule("[data-page-element=icon]")
         .gridRowStart("1")
         .gridColumnStart("1")
@@ -75,6 +79,7 @@ export class BasePage extends AtomControl {
 
     public headerBackgroundRenderer: () => XNode;
 
+    public iconClass: any;
 
     public async requestCancel() {
         if (this.closeWarning) {
@@ -91,6 +96,7 @@ export class BasePage extends AtomControl {
 
     protected preCreate(): void {
         this.element.dataset.basePage = "base-page";
+        this.iconClass = "";
         this.runAfterInit(() => {
             if (!this.element) {
                 return;
@@ -103,15 +109,15 @@ export class BasePage extends AtomControl {
                     if (firstInput) {
                         firstInput.focus();
                         return;
-                    }    
+                    }
                 }
                 return;
             }
         });
 
         setTimeout((p) => {
-            p.dataset.pageState = "true";
-        }, 10, this.element);        
+            p.dataset.pageState = "ready";
+        }, 10, this.element);
     }
 
     protected render(node: XNode, e?: any, creator?: any): void {
@@ -119,7 +125,9 @@ export class BasePage extends AtomControl {
         const titleContent = this.titleRenderer?.() ?? <span
             class="title-text" text={Bind.oneWay(() => this.title)}/>;
         const icon = this.iconRenderer?.() ?? <i
-            eventClick={Bind.event(() => this.requestCancel())}/>;
+            data-icon-button="icon-button"
+            class={Bind.oneWay(() => this.iconClass)}
+            eventClick={(e1) => this.dispatchIconClickEvent(e1)}/>;
         const action = this.actionRenderer?.() ?? undefined;
         const footer = this.footerRenderer?.() ?? undefined;
         const a = node.attributes ??= {};
@@ -148,22 +156,38 @@ export class BasePage extends AtomControl {
             { footer }
         </div>);
     }
+
+    protected dispatchIconClickEvent(e: Event) {
+        const ce = new CustomEvent("iconClick", { bubbles: true });
+        e.target.dispatchEvent(ce);
+    }
 }
 
 export class ContentPage extends BasePage {
 }
 
 export class TabbedPage extends BasePage {
-    
+
+}
+
+export class Drawer extends AtomControl {
+    protected preCreate(): void {
+        this.bindEvent(this.element, "click", (e) => this.closeDrawer());
+    }
+
+    protected closeDrawer() {
+        const ce = new CustomEvent("closeDrawer", { bubbles: true });
+        this.element.dispatchEvent(ce);
+    }
 }
 
 export default class MobileApp extends AtomControl {
 
     public static drawer = XNode.prepare("drawer", true, true);
 
-    public drawer: IClassOf<AtomControl>;
+    public drawer: () => XNode;
 
-    public drawerDisposable: IPopup;
+    public drawerCancelToken: CancelToken;
 
     public pages: BasePage[];
 
@@ -176,25 +200,38 @@ export default class MobileApp extends AtomControl {
 
             const drawer = this.drawer;
             if (drawer) {
-                const ne = new drawer(this.app);
-                this.drawerDisposable = PopupService.show(
-                    this.icon, ne.element, { alignment: "auto" } );
+                const drawerNode = this.drawer();
+                const da = drawerNode.attributes ??= {};
+                da["event-click"] = (de: Event) => {
+                    de.target.dispatchEvent(new CustomEvent("closeDrawer", { bubbles: true }));
+                };
+                class DrawerPopup extends PopupControl {
+                    protected create(): void {
+                        this.render(<div event-close-drawer={() => cancelToken.cancel()}>
+                            { drawerNode }
+                        </div>);
+                    }
+                }
+                const cancelToken = new CancelToken();
+                this.drawerCancelToken = cancelToken;
+                DrawerPopup.showControl(this.icon, { cancelToken });
             }
 
             return;
         }
 
-        const vm = this.selectedPage.viewModel as AtomWindowViewModel;
-        if (vm.cancel) {
-            return await vm.cancel();
-        }
-        this.selectedPage.requestCancel();
+        this.selectedPage.cancel("cancelled");
     }
 
     protected preCreate(): void {
         this.drawer = null;
         this.pages = [];
         this.selectedPage = null;
+        this.bindEvent(this.element, "iconClick", (e) => { this.icon = e.target; return this.back(); });
+        this.bindEvent(this.element, "closeDrawer", (e) => {
+            this.drawerCancelToken?.cancel();
+            this.drawerCancelToken = undefined;
+        });
         const navigationService = this.app.resolve(NavigationService);
         navigationService.registerNavigationHook(
             (uri, { target, clearHistory }) => {
@@ -236,14 +273,23 @@ export default class MobileApp extends AtomControl {
             this.pages.add(selectedPage);
         }
 
+        const hasPages = this.pages.length;
+
         if (clearHistory) {
             for (const iterator of this.pages) {
-                const element = iterator.element;
+                const e = iterator.element;
                 iterator.dispose();
-                element.remove();
+                e.remove();
             }
             this.pages.length = 0;
             this.selectedPage = null;
+        }
+
+        if (!hasPages) {
+            page.element.dataset.pageState = "ready";
+            page.iconClass = "fad fa-bars";
+        } else {
+            page.iconClass = "fad fa-plus";
         }
 
         this.element.appendChild(page.element);
@@ -262,6 +308,7 @@ export default class MobileApp extends AtomControl {
                     page.dispose();
                     element.remove();
                     reject(error ?? "cancelled");
+                    this.selectedPage = last;
                 }, 300);
             };
             const close: any = (r) => {
@@ -274,6 +321,7 @@ export default class MobileApp extends AtomControl {
                     page.dispose();
                     element.remove();
                     resolve(r);
+                    this.selectedPage = last;
                 }, 300);
             };
             vm.cancel = cancel;
@@ -282,5 +330,5 @@ export default class MobileApp extends AtomControl {
             page.close = close;
         });
 
-    }    
+    }
 }
