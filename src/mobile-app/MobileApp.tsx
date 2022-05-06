@@ -19,12 +19,19 @@ CSS(StyleRule()
 
 CSS(StyleRule()
     .absolutePosition({ left: 0, top: 0, bottom: 0, right: 0})
-    .transition("transform 0.3s cubic-bezier(0.55, 0.09, 0.97, 0.32)")
+    .overflow("hidden")
+    .transition("transform 0.3s ease-out")
     .display("grid")
     .gridTemplateRows("25px 1fr auto")
     .gridTemplateColumns("25px 1fr auto")
     .child(StyleRule("[data-icon-button=icon-button]")
         .padding(5)
+    )
+    .child(StyleRule("[data-page-element=header]")
+        .gridRowStart("1")
+        .gridColumnStart("1")
+        .gridColumnEnd("span 3")
+        .backgroundColor(Colors.silver)
     )
     .child(StyleRule("[data-page-element=icon]")
         .gridRowStart("1")
@@ -130,8 +137,13 @@ export class BasePage extends AtomControl {
             eventClick={(e1) => this.dispatchIconClickEvent(e1)}/>;
         const action = this.actionRenderer?.() ?? undefined;
         const footer = this.footerRenderer?.() ?? undefined;
+        const header = this.headerBackgroundRenderer?.() ?? <div/>;
         const a = node.attributes ??= {};
         a["data-page-element"] = "content";
+        if (header) {
+            header.attributes ??= {};
+            header.attributes["data-page-element"] = "header";
+        }
         if (icon) {
             icon.attributes ??= {};
             icon.attributes["data-page-element"] = "icon";
@@ -149,6 +161,7 @@ export class BasePage extends AtomControl {
             footer.attributes["data-page-element"] = "footer";
         }
         super.render(<div viewModelTitle={Bind.oneWay(() => this.viewModel.title)}>
+            { header }
             { icon }
             { titleContent }
             { action }
@@ -225,6 +238,7 @@ export default class MobileApp extends AtomControl {
 
     protected preCreate(): void {
         this.drawer = null;
+        this.element.dataset.pageApp = "page-app";
         this.pages = [];
         this.selectedPage = null;
         this.bindEvent(this.element, "iconClick", (e) => { this.icon = e.target; return this.back(); });
@@ -287,9 +301,9 @@ export default class MobileApp extends AtomControl {
 
         if (!hasPages) {
             page.element.dataset.pageState = "ready";
-            page.iconClass = "fad fa-bars";
+            page.iconClass = "fas fa-bars";
         } else {
-            page.iconClass = "fad fa-plus";
+            page.iconClass = "fas fa-arrow-left";
         }
 
         this.element.appendChild(page.element);

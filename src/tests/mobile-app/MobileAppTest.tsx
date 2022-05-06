@@ -5,7 +5,6 @@ import { NavigationService } from "@web-atoms/core/dist/services/NavigationServi
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import MobileApp, { ContentPage, Drawer } from "../../mobile-app/MobileApp";
 
-
 class Detail extends ContentPage {
     protected create(): void {
         this.render(<div>
@@ -27,7 +26,7 @@ class List extends ContentPage {
     }
 
     protected openDetail() {
-        void this.navigationService.openPage(Detail, {}, { target: "app"});
+        void this.navigationService.openPage(Detail, { title: "Detail" }, { target: "app"});
     }
 }
 
@@ -44,7 +43,7 @@ class DrawerMenu extends Drawer {
     }
 
     protected openList() {
-        void this.navigationService.openPage(List, {}, { target: "app"});
+        void this.navigationService.openPage(List, { title: "List"}, { target: "app"});
     }
 
 }
@@ -64,7 +63,7 @@ export default class MobileAppTest extends MobileApp {
     protected create(): void {
         this.drawer = () => <DrawerMenu/>;
 
-        this.navigationService.openPage(Home, {}, { target: "app"});
+        this.navigationService.openPage(Home, { title: "Home" }, { target: "app"});
     }
 
 }
