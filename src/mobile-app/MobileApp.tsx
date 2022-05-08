@@ -287,7 +287,7 @@ export default class MobileApp extends AtomControl {
             this.pages.add(selectedPage);
         }
 
-        const hasPages = this.pages.length;
+        const hasPages = !clearHistory && this.pages.length;
 
         if (clearHistory) {
             for (const iterator of this.pages) {
