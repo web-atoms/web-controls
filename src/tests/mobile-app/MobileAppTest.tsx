@@ -61,7 +61,7 @@ export default class MobileAppTest extends MobileApp {
     private navigationService: NavigationService;
 
     protected create(): void {
-        this.drawer = () => <DrawerMenu/>;
+        this.drawer = DrawerMenu;
 
         this.navigationService.openPage(Home, { title: "Home" }, { target: "app"});
     }

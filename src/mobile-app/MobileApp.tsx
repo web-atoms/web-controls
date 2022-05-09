@@ -13,12 +13,20 @@ import PopupService, { ConfirmPopup, IPopup, PopupControl } from "@web-atoms/cor
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
 CSS(StyleRule()
-    .absolutePosition({ left: 0, top: 0, bottom: 0, right: 0})
+    .absolutePosition({ left: 0, top: 0})
+    .width("100%")
+    .height("100%")
     .overflow("hidden")
+    .transition("left 0.3s ease-out")
+    .and(StyleRule("[data-drawer=visible]")
+        .left("80%")
+    )
 , "div[data-page-app=page-app]");
 
 CSS(StyleRule()
-    .absolutePosition({ left: 0, top: 0, bottom: 0, right: 0})
+    .absolutePosition({ left: 0, top: 0})
+    .width("100%")
+    .height("100%")
     .overflow("hidden")
     .transition("transform 0.3s ease-out")
     .display("grid")
@@ -76,6 +84,13 @@ CSS(StyleRule()
         .transform("translate(-100%,0)" as any)
     )
 , "div[data-base-page=base-page]");
+
+CSS(StyleRule()
+    .absolutePosition({ left: 0, top: 0 })
+    .width("80%")
+    .height("100%")
+    .overflow("hidden")
+, "div[data-drawer-page=drawer-page]");
 
 export class BasePage extends AtomControl {
 
@@ -187,6 +202,19 @@ export class BasePage extends AtomControl {
         const ce = new CustomEvent("iconClick", { bubbles: true });
         e.target.dispatchEvent(ce);
     }
+
+    protected hide() {
+        this.element.dataset.pageState = "hidden";
+        this.element._logicalParent = this.element.parentElement;
+        setTimeout(() => {
+            this.element.remove();
+        }, 400);
+    }
+
+    protected show() {
+        this.element._logicalParent.appendChild(this.element);
+        this.element.dataset.pageState = "ready";
+    }
 }
 
 export class ContentPage extends BasePage {
@@ -198,6 +226,7 @@ export class TabbedPage extends BasePage {
 
 export class Drawer extends AtomControl {
     protected preCreate(): void {
+        this.element.dataset.drawerPage = "drawer-page";
         this.bindEvent(this.element, "click", (e) => this.closeDrawer());
     }
 
@@ -211,9 +240,9 @@ export default class MobileApp extends AtomControl {
 
     public static drawer = XNode.prepare("drawer", true, true);
 
-    public drawer: () => XNode;
+    public drawer: typeof Drawer;
 
-    public drawerCancelToken: CancelToken;
+    public hideDrawer: () => void;
 
     public pages: BasePage[];
 
@@ -226,21 +255,26 @@ export default class MobileApp extends AtomControl {
 
             const drawer = this.drawer;
             if (drawer) {
-                const drawerNode = this.drawer();
-                const da = drawerNode.attributes ??= {};
-                da["event-click"] = (de: Event) => {
+                const drawerPage = new drawer(this.app);
+                // const da = drawerNode.attributes ??= {};
+                const dispatchCloseDrawer = (de: Event) => {
                     de.target.dispatchEvent(new CustomEvent("closeDrawer", { bubbles: true }));
                 };
-                class DrawerPopup extends PopupControl {
-                    protected create(): void {
-                        this.render(<div event-close-drawer={() => cancelToken.cancel()}>
-                            { drawerNode }
-                        </div>);
-                    }
-                }
-                const cancelToken = new CancelToken();
-                this.drawerCancelToken = cancelToken;
-                DrawerPopup.showControl(this.icon, { cancelToken });
+                this.element.parentElement.appendChild(drawerPage.element);
+                this.element.dataset.drawer = "visible";
+                setTimeout(() => {
+                    this.element.addEventListener("click", dispatchCloseDrawer);
+                }, 10);
+                this.hideDrawer = () => {
+                    this.element.dataset.drawer = "";
+                    this.element.removeEventListener("click", dispatchCloseDrawer);
+                    setTimeout(() => {
+                        const de = drawerPage.element;
+                        drawerPage.dispose();
+                        de.remove();
+                    }, 400);
+                    this.hideDrawer = undefined;
+                };
             }
 
             return;
@@ -256,8 +290,7 @@ export default class MobileApp extends AtomControl {
         this.selectedPage = null;
         this.bindEvent(this.element, "iconClick", (e) => { this.icon = e.target; return this.back(); });
         this.bindEvent(this.element, "closeDrawer", (e) => {
-            this.drawerCancelToken?.cancel();
-            this.drawerCancelToken = undefined;
+            this.hideDrawer?.();
         });
         const navigationService = this.app.resolve(NavigationService);
         navigationService.registerNavigationHook(
@@ -296,7 +329,7 @@ export default class MobileApp extends AtomControl {
 
         const selectedPage = this.selectedPage;
         if (selectedPage) {
-            selectedPage.element.dataset.pageState = "hidden";
+            (selectedPage as any).hide();
             this.pages.add(selectedPage);
         }
 
@@ -330,7 +363,8 @@ export default class MobileApp extends AtomControl {
                 // element.remove();
                 element.dataset.pageState = "";
                 const last = this.pages.pop();
-                last.element.dataset.pageState = "ready";
+                (last as any).show();
+                // last.element.dataset.pageState = "ready";
                 setTimeout(() => {
                     page.dispose();
                     element.remove();
@@ -343,7 +377,7 @@ export default class MobileApp extends AtomControl {
                 // element.remove();
                 delete element.dataset.pageState;
                 const last = this.pages.pop();
-                last.element.dataset.pageState = "ready";
+                (last as any).show();
                 setTimeout(() => {
                     page.dispose();
                     element.remove();

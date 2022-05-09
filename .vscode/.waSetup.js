@@ -12,5 +12,10 @@ bootStrap.integrity = "sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1o
 bootStrap.rel = "stylesheet";
 document.head.appendChild(bootStrap);
 
-document.body.style.minHeight = "500px";
-document.body.style.minWidth = "500px";
+if (/mobile/i.test(navigator.userAgent)) {
+    document.body.style.height = "100%";
+    document.body.style.width = "100%";
+} else {
+    document.body.style.minHeight = "500px";
+    document.body.style.minWidth = "500px";    
+}
