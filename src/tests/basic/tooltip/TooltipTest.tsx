@@ -31,7 +31,6 @@ export default class TooltipTest extends AtomControl {
                 items={items}
                 itemRenderer={(item) => <div
                     tooltip={CustomTooltip}
-                    data-tooltip-alignment="right"
                     text={item.label}/>}
                 />
         </div>);
