@@ -15,17 +15,28 @@ import CSS from "@web-atoms/core/dist/web/styles/CSS";
 CSS(StyleRule()
     .absolutePosition({ left: 0, top: 0, right: 0, bottom: 0})
     .overflow("hidden")
-    .child(StyleRule(".container")
+    .child(StyleRule("[data-container]")
         .absolutePosition({ left: 0, top: 0, right: 0, bottom: 0})
         .overflow("hidden")
         .transition("left 0.3s ease-out")
     )
     .and(StyleRule("[data-drawer=visible]")
-        .child(StyleRule(".container")
+        .child(StyleRule("[data-container]")
             .left("80%")
+        )
+        .child(StyleRule("[data-drawer-page]")
+            .left(0)
         )
     )
 , "div[data-page-app=page-app]");
+
+CSS(StyleRule()
+    .absolutePosition({ left: "-80%", top: 0 })
+    .width("80%")
+    .height("100%")
+    .overflow("hidden")
+    .transition("left 0.3s ease-out")
+, "div[data-drawer-page=drawer-page]");
 
 CSS(StyleRule()
     .absolutePosition({ left: 0, top: 0})
@@ -88,13 +99,6 @@ CSS(StyleRule()
         .transform("translate(-100%,0)" as any)
     )
 , "div[data-base-page=base-page]");
-
-CSS(StyleRule()
-    .absolutePosition({ left: 0, top: 0 })
-    .width("80%")
-    .height("100%")
-    .overflow("hidden")
-, "div[data-drawer-page=drawer-page]");
 
 export class BasePage extends AtomControl {
 
@@ -260,15 +264,15 @@ export default class MobileApp extends AtomControl {
         if (this.pages.length === 0) {
 
             const drawer = this.drawer;
-            if (drawer) {
+            if (drawer && !this.hideDrawer) {
                 const drawerPage = new drawer(this.app);
                 // const da = drawerNode.attributes ??= {};
                 const dispatchCloseDrawer = (de: Event) => {
                     de.target.dispatchEvent(new CustomEvent("closeDrawer", { bubbles: true }));
                 };
                 this.element.appendChild(drawerPage.element);
-                this.element.dataset.drawer = "visible";
                 setTimeout(() => {
+                    this.element.dataset.drawer = "visible";
                     this.element.addEventListener("click", dispatchCloseDrawer);
                 }, 10);
                 this.hideDrawer = () => {
@@ -293,7 +297,7 @@ export default class MobileApp extends AtomControl {
         this.drawer = null;
         this.element.dataset.pageApp = "page-app";
         const container = this.container = document.createElement("div");
-        container.className = "container";
+        container.dataset.container = "true";
         this.element.appendChild(container);
         this.pages = [];
         this.selectedPage = null;
