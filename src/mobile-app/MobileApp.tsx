@@ -13,13 +13,17 @@ import PopupService, { ConfirmPopup, IPopup, PopupControl } from "@web-atoms/cor
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
 CSS(StyleRule()
-    .absolutePosition({ left: 0, top: 0})
-    .width("100%")
-    .height("100%")
+    .absolutePosition({ left: 0, top: 0, right: 0, bottom: 0})
     .overflow("hidden")
-    .transition("left 0.3s ease-out")
+    .child(StyleRule(".container")
+        .absolutePosition({ left: 0, top: 0, right: 0, bottom: 0})
+        .overflow("hidden")
+        .transition("left 0.3s ease-out")
+    )
     .and(StyleRule("[data-drawer=visible]")
-        .left("80%")
+        .child(StyleRule(".container")
+            .left("80%")
+        )
     )
 , "div[data-page-app=page-app]");
 
@@ -250,6 +254,8 @@ export default class MobileApp extends AtomControl {
 
     public icon: any;
 
+    private container: HTMLDivElement;
+
     public async back() {
         if (this.pages.length === 0) {
 
@@ -260,7 +266,7 @@ export default class MobileApp extends AtomControl {
                 const dispatchCloseDrawer = (de: Event) => {
                     de.target.dispatchEvent(new CustomEvent("closeDrawer", { bubbles: true }));
                 };
-                this.element.parentElement.appendChild(drawerPage.element);
+                this.element.appendChild(drawerPage.element);
                 this.element.dataset.drawer = "visible";
                 setTimeout(() => {
                     this.element.addEventListener("click", dispatchCloseDrawer);
@@ -286,6 +292,9 @@ export default class MobileApp extends AtomControl {
     protected preCreate(): void {
         this.drawer = null;
         this.element.dataset.pageApp = "page-app";
+        const container = this.container = document.createElement("div");
+        container.className = "container";
+        this.element.appendChild(container);
         this.pages = [];
         this.selectedPage = null;
         this.bindEvent(this.element, "iconClick", (e) => { this.icon = e.target; return this.back(); });
@@ -352,7 +361,7 @@ export default class MobileApp extends AtomControl {
             page.iconClass = "fas fa-arrow-left";
         }
 
-        this.element.appendChild(page.element);
+        this.container.appendChild(page.element);
         this.selectedPage = page;
 
         const vm = page.viewModel as AtomWindowViewModel;
