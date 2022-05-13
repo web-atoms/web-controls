@@ -242,6 +242,11 @@ export default function Form(
     }
     a["data-form-id"] = id;
     a["data-scrollable"] = !!scrollable;
+    if (!eventSubmit) {
+        if (!id) {
+            a["wa-show-errors"] = "yes";
+        }
+    }
     return <div
         data-wa-form="wa-form"
         { ... a}
