@@ -196,7 +196,7 @@ export class BasePage extends AtomControl {
             footer.attributes ??= {};
             footer.attributes["data-page-element"] = "footer";
         }
-        const extracted = this.extractControlProperties(node);
+        const extracted = this.extractControlProperties(a);
         super.render(<div
             viewModelTitle={Bind.oneWay(() => this.viewModel.title)}
             { ... extracted }>
@@ -218,7 +218,7 @@ export class BasePage extends AtomControl {
         this.element.dataset.pageState = "hidden";
         this.element._logicalParent = this.element.parentElement;
         setTimeout(() => {
-            this.element.remove();
+            this.element?.remove();
         }, 400);
     }
 
