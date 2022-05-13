@@ -196,7 +196,10 @@ export class BasePage extends AtomControl {
             footer.attributes ??= {};
             footer.attributes["data-page-element"] = "footer";
         }
-        super.render(<div viewModelTitle={Bind.oneWay(() => this.viewModel.title)}>
+        const extracted = this.extractControlProperties(node);
+        super.render(<div
+            viewModelTitle={Bind.oneWay(() => this.viewModel.title)}
+            { ... extracted }>
             { header }
             { icon }
             { titleContent }
