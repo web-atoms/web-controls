@@ -114,7 +114,7 @@ export default class AtomChips extends AtomRepeater {
     public suggestionRenderer: (item) => XNode;
 
     public anchorItem: any;
-    
+
     private searchInput: HTMLInputElement;
 
     private anchorIndex: number;

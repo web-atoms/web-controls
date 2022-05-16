@@ -663,6 +663,9 @@ export default class AtomRepeater extends AtomControl {
                     if (this.scrollToSelection) {
                         this.bringSelectionIntoView();
                     }
+                    if (this.selectedItem) {
+                        delete this.initialValue;
+                    }
                     AtomBinder.refreshValue(this, "selectedItem");
                     AtomBinder.refreshValue(this, "value");
                     AtomBinder.refreshValue(this, "allSelected");
