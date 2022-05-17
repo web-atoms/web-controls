@@ -1029,77 +1029,125 @@ export default class AtomRepeater extends AtomControl {
             this.refreshItem(item, (ce as any).promise);
         }
     }
-}
 
-function onElementClick(e: Event) {
-    let target = e.target as HTMLElement;
-    const originalTarget = target;
-    let eventName;
-    let repeater: AtomRepeater;
-    let index;
-    let type;
-    let recreate;
-    while (target) {
-        const a = target.atomControl;
-        if (a !== undefined && a instanceof AtomRepeater) {
-            repeater = a;
-            break;
+    protected dispatchClickEvent(e: MouseEvent, data: any): void {
+        let {
+            clickEvent = "itemClick",
+            // tslint:disable-next-line: prefer-const
+            recreate,
+            // tslint:disable-next-line: prefer-const
+            header,
+            // tslint:disable-next-line: prefer-const
+            footer,
+            // tslint:disable-next-line: prefer-const
+            itemIndex
+        } = data;
+        clickEvent = clickEvent.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+        if (header) {
+            this.dispatchHeaderFooterEvent(clickEvent, header, e.target);
+            return;
         }
-        if (index === undefined) {
-            const itemIndex = target.dataset.itemIndex;
-            if (itemIndex !== void 0) {
-                // tslint:disable-next-line: no-bitwise
-                index = ~~itemIndex;
-            }
+        if (footer) {
+            this.dispatchHeaderFooterEvent(clickEvent, header, e.target);
+            return;
         }
-        if (type === undefined) {
-            const itemType = target.dataset.header ?? target.dataset.footer;
-            if (itemType !== void 0) {
-                type = itemType;
-            }
+        if (itemIndex === void 0 || itemIndex === null) {
+            return;
         }
-        if (eventName === undefined) {
-            const itemClickEvent = target.dataset.clickEvent;
-            if (itemClickEvent) {
-                eventName = itemClickEvent.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
-            }
-        }
-        if (recreate === undefined) {
-            recreate = target.dataset.recreate;
-        }
-        target = target.parentElement as HTMLElement;
-    }
-
-    if (index === undefined) {
-        if (type !== undefined) {
-            (repeater as any).dispatchHeaderFooterEvent(eventName, type, originalTarget);
-        }
-        return;
-    }
-
-    // tslint:disable-next-line: no-bitwise
-    const item = repeater.items[~~index];
-    if (eventName === "itemSelect" || eventName === "itemDeselect") {
-        const si = repeater.selectedItems ??= [];
-        if (si) {
-            index = si.indexOf(item);
-            if (index === -1) {
-                if (repeater.allowMultipleSelection) {
-                    si.add(item);
+        // tslint:disable-next-line: no-bitwise
+        let index = ~~itemIndex;
+        const item = this.items[index];
+        if (clickEvent === "itemSelect" || clickEvent === "itemDeselect") {
+            const si = this.selectedItems ??= [];
+            if (si) {
+                index = si.indexOf(item);
+                if (index === -1) {
+                    if (this.allowMultipleSelection) {
+                        si.add(item);
+                    } else {
+                        si.set(0, item);
+                    }
                 } else {
-                    si.set(0, item);
+                    si.removeAt(index);
                 }
-            } else {
-                si.removeAt(index);
             }
         }
-    }
-    if (item) {
-        (repeater as any).dispatchItemEvent(eventName, item, recreate, originalTarget);
+        if (item) {
+            this.dispatchItemEvent(clickEvent, item, recreate, e.target);
+        }
+
     }
 }
 
-document.body.addEventListener("click", onElementClick, true);
+// function onElementClick(e: Event) {
+//     let target = e.target as HTMLElement;
+//     const originalTarget = target;
+//     let eventName;
+//     let repeater: AtomRepeater;
+//     let index;
+//     let type;
+//     let recreate;
+//     while (target) {
+//         const a = target.atomControl;
+//         if (a !== undefined && a instanceof AtomRepeater) {
+//             repeater = a;
+//             break;
+//         }
+//         if (index === undefined) {
+//             const itemIndex = target.dataset.itemIndex;
+//             if (itemIndex !== void 0) {
+//                 // tslint:disable-next-line: no-bitwise
+//                 index = ~~itemIndex;
+//             }
+//         }
+//         if (type === undefined) {
+//             const itemType = target.dataset.header ?? target.dataset.footer;
+//             if (itemType !== void 0) {
+//                 type = itemType;
+//             }
+//         }
+//         if (eventName === undefined) {
+//             const itemClickEvent = target.dataset.clickEvent;
+//             if (itemClickEvent) {
+//                 eventName = itemClickEvent.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+//             }
+//         }
+//         if (recreate === undefined) {
+//             recreate = target.dataset.recreate;
+//         }
+//         target = target.parentElement as HTMLElement;
+//     }
+
+//     if (index === undefined) {
+//         if (type !== undefined) {
+//             (repeater as any).dispatchHeaderFooterEvent(eventName, type, originalTarget);
+//         }
+//         return;
+//     }
+
+//     // tslint:disable-next-line: no-bitwise
+//     const item = repeater.items[~~index];
+//     if (eventName === "itemSelect" || eventName === "itemDeselect") {
+//         const si = repeater.selectedItems ??= [];
+//         if (si) {
+//             index = si.indexOf(item);
+//             if (index === -1) {
+//                 if (repeater.allowMultipleSelection) {
+//                     si.add(item);
+//                 } else {
+//                     si.set(0, item);
+//                 }
+//             } else {
+//                 si.removeAt(index);
+//             }
+//         }
+//     }
+//     if (item) {
+//         (repeater as any).dispatchItemEvent(eventName, item, recreate, originalTarget);
+//     }
+// }
+
+// document.body.addEventListener("click", onElementClick, true);
 
 let hoverItem = {
     repeater: null,
