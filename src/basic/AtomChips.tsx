@@ -8,9 +8,21 @@ import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import AtomRepeater, { Match } from "./AtomRepeater";
+import IElement from "./IElement";
 
 CSS(StyleRule()
     .flexLayout({ justifyContent: "stretch" as any})
+    .flexFlow("wrap")
+    .child(StyleRule(".search")
+        .border("none")
+        .outline("none")
+    )
+    .child(StyleRule(".presenter")
+        .flexLayout({ inline: true })
+        .child(StyleRule("*")
+            .backgroundColor(Colors.lightGray.withAlphaPercent(0.3))
+        )
+    )
 , "div[data-atom-chips]");
 
 function getChips(target: HTMLElement): AtomChips {
@@ -31,26 +43,8 @@ document.body.addEventListener("focusin", (e) => {
 
 document.body.addEventListener("keydown", (e) => {
     const chips = getChips(e.target as HTMLElement);
-    (chips as any).onKeyDown(e);
+    (chips as any)?.onKey(e);
 });
-
-// CSS(StyleRule()
-//     .height(250)
-//     .width(300)
-//     .verticalFlexLayout({ alignItems: "stretch" })
-//     .child(StyleRule(".items")
-//         .flexStretch()
-//         .overflow("auto")
-//         .child(StyleRule(".presenter")
-//             .child(StyleRule("*")
-//                 .padding(5)
-//             )
-//             .child(StyleRule("[data-selected-item=true]")
-//                 .backgroundColor(Colors.lightGreen)
-//             )
-//         )
-//     )
-// , "*[data-suggestion-popup=suggestion-popup]");
 
 /**
  * Asks user for selecting item from given suggestions
@@ -86,8 +80,72 @@ function askSuggestionPopup<T>(
         }
     }
 
-    return Suggestions.showControl(host, { cancelToken });
+    return Suggestions.showControl(host, { cancelToken, alignment: "auto" });
 }
+
+export interface IChip extends IElement {
+    icon?: string;
+    header?: string;
+    label?: string;
+    deleteIcon?: string;
+    draggable?: boolean;
+}
+
+CSS(StyleRule()
+    .padding(1)
+    .paddingLeft(5)
+    .paddingRight(5)
+    .borderRadius(10)
+    .display("grid")
+    .gridTemplateRows("auto 1fr")
+    .gridTemplateColumns("auto 1fr auto")
+    .child(StyleRule("[data-content]")
+        .gridRowStart("2")
+        .gridColumnStart("2")
+    )
+    .child(StyleRule(".icon")
+        .gridColumnStart("1")
+        .gridRowStart("1")
+        .gridRowEnd("span 2")
+        .alignSelf("center")
+    )
+    .child(StyleRule(".delete")
+        .gridColumnStart("3")
+        .gridRowStart("1")
+        .gridRowEnd("span 2")
+        .alignSelf("center")
+        .color(Colors.red)
+    )
+    .child(StyleRule(".header")
+        .fontSize("x-small")
+        .gridRowStart("1")
+        .gridColumnStart("2")
+    )
+    .child(StyleRule(".label")
+        .gridRowStart("2")
+        .gridColumnStart("2")
+    )
+, "*[data-item-chip]");
+
+export function Chip(
+    {
+        icon,
+        label,
+        header,
+        deleteIcon = "fa-solid fa-xmark",
+        draggable
+    }: IChip, ... nodes: XNode[]) {
+    return <div
+        data-item-chip="chip"
+        draggable={draggable}>
+        { icon && <i class={"icon " + icon}/>}
+        { header && <label class="header" text={label}/>}
+        { label && <label class="label" text={label}/>}
+        { ... nodes }
+        { deleteIcon && <i class={"delete " + deleteIcon} data-click-event="remove-chip"/> }
+    </div>;
+}
+
 export default class AtomChips extends AtomRepeater {
 
     public "event-selection-changed"?: (e: CustomEvent) => void;
@@ -139,7 +197,7 @@ export default class AtomChips extends AtomRepeater {
 
     protected preCreate(): void {
         // super.preCreate();
-        this.prompt = "Select";
+        this.prompt = "Search";
         this.element.dataset.atomChips = "atom-chips";
         // this.bindEvent(this.element, "click", () => this.searchInput.focus());
         this.valuePath = (item) => item?.value ?? item;
@@ -155,8 +213,9 @@ export default class AtomChips extends AtomRepeater {
                 value={Bind.twoWaysImmediate(() => this.search)}
                 type="search"/>
         </div>);
-        this.itemsPresenter = this.element.querySelector("presenter")[0];
-        this.searchInput = this.element.querySelector("search")[0];
+        this.itemsPresenter = this.element.children[1];
+        this.searchInput = this.element.children[2] as HTMLInputElement;
+        this.bindEvent(this.element, "removeChip", (e: CustomEvent) => this.items.remove(e.detail));
     }
 
     protected async openPopup() {
@@ -171,6 +230,7 @@ export default class AtomChips extends AtomRepeater {
                 this.suggestionRenderer ?? this.itemRenderer,
                 cancelToken);
             this.addItem(selectedItem);
+            this.popupCancelToken = null;
         } catch (e) {
             if (CancelToken.isCancelled(e)) {
                 return;
