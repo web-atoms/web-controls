@@ -48,6 +48,7 @@ CSS(StyleRule()
         )
     )
     .child(StyleRule("[data-element=progress]")
+        .zIndex("11")
         .gridRowStart("2")
         .gridColumnStart("1")
         .gridColumnEnd("span 3")
@@ -173,7 +174,7 @@ export default class AtomVideoPlayer extends AtomControl {
 
     private video: HTMLVideoElement;
 
-    private progress: HTMLProgressElement;
+    private progress: HTMLCanvasElement;
 
     private poster: HTMLImageElement;
 
@@ -224,24 +225,24 @@ export default class AtomVideoPlayer extends AtomControl {
                 event-ended={() => this.element.dataset.state = "ended"}
                 event-loadedmetadata={() => {
                     this.duration = this.video.duration;
-                    this.progress.max = this.duration;
-                    this.progress.value = 0;
                     this.updateVolume();
                     this.currentTimeSpan.textContent = durationText(0, this.duration);
+                    this.updateProgress();
                 }}
                 event-pause={() => this.element.dataset.state = "pause"}
                 event-play={() => this.element.dataset.state = "play"}
-                event-progress={(e) => console.log(e)}
+                event-progress={(e) => this.updateProgress()}
                 event-timeupdate={() => {
                     this.time = this.video.currentTime;
                     this.currentTimeSpan.textContent = durationText(this.time, this.duration);
-                    this.progress.value = this.time;
+                    this.element.dataset.state = "play";
+                    this.updateProgress();
                 }}
                 event-waiting={() => this.element.dataset.state = "waiting"}
                 event-volumechange={() => this.updateVolume()}
                 autoplay={false}
                 data-element="video"/>
-            <progress
+            <canvas
                 data-element="progress"
                 />
             <img data-element="poster"/>
@@ -301,7 +302,35 @@ export default class AtomVideoPlayer extends AtomControl {
         this.bindEvent(this.element, "pointerleave", () => {
             this.element.dataset.controls = "false";
         });
+        this.bindEvent(this.progress, "click", (e: MouseEvent) => {
+            e.preventDefault();
+            const scale = e.clientX / this.progress.clientWidth;
+            this.video.currentTime = this.video.duration * scale;
+        });
     }
+
+    private updateProgress() {
+        const context = this.progress.getContext("2d");
+        // context.fillStyle = "rgba(0,0,0,0)";
+        context.strokeStyle = "rgba(0,0,0,0)";
+        const width = this.progress.clientWidth;
+        const height = this.progress.clientHeight;
+        this.progress.width = width;
+        this.progress.height = height;
+        context.clearRect(0,0, width, height);
+        const max = this.video.duration;
+        const seekable = this.video.buffered;
+        const scale = width / max;
+        context.fillStyle = "rgba(255,255,255,0.5)";
+        for (let index = 0; index < seekable.length; index++) {
+            const start = seekable.start(index) * scale;
+            const end = seekable.end(index) * scale;
+            context.fillRect(start, 0, end, height);
+        }
+        context.fillStyle = "#ffffff";
+        context.fillRect(0, 0, this.video.currentTime * scale, height);
+    }
+
     private updateVolume() {
         if (this.video.muted) {
             this.soundIcon.className = mute;
