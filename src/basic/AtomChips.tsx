@@ -171,6 +171,8 @@ export default class AtomChips extends AtomRepeater {
     @BindableProperty
     public suggestionRenderer: (item) => XNode;
 
+    public itemToChip: (item, search) => any;
+
     public anchorItem: any;
 
     private searchInput: HTMLInputElement;
@@ -257,14 +259,20 @@ export default class AtomChips extends AtomRepeater {
         switch (e.key) {
             case "Enter":
                 // selection mode...
-                const anchorItem = this.anchorItem;
-                if (!anchorItem) {
-                    return;
-                }
-                this.anchorIndex = 0;
-                this.addItem(anchorItem);
-                this.anchorItem = null;
-                this.search = "";
+                setTimeout(() => {
+                    let anchorItem = this.anchorItem;
+                    const itemToChip = this.itemToChip;
+                    if (itemToChip) {
+                        anchorItem = itemToChip(anchorItem, this.search);
+                    }
+                    if (!anchorItem) {
+                        return;
+                    }
+                    this.addItem(anchorItem);
+                    this.anchorIndex = 0;
+                    this.anchorItem = null;
+                    this.search = "";
+                }, 1);
                 break;
             case "ArrowDown":
                 if (suggested) {
