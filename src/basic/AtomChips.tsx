@@ -38,7 +38,7 @@ function getChips(target: HTMLElement): AtomChips {
 
 document.body.addEventListener("focusin", (e) => {
     const chips = getChips(e.target as HTMLElement);
-    (chips as any).openPopup();
+    (chips as any)?.openPopup();
 });
 
 document.body.addEventListener("keydown", (e) => {
