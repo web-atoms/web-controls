@@ -280,11 +280,15 @@ export default class AtomChips extends AtomRepeater {
         }
         const cancelToken = this.popupCancelToken = new CancelToken();
         try {
-            const selectedItem = await askSuggestionPopup(
+            let selectedItem = await askSuggestionPopup(
                 this.element,
                 this,
                 this.suggestionRenderer ?? this.itemRenderer,
                 cancelToken);
+            const itemToChip = this.itemToChip;
+            if (itemToChip) {
+                selectedItem = itemToChip(selectedItem, this.search);
+            }
             this.addItem(selectedItem);
             this.search = "";
             this.popupCancelToken = null;
