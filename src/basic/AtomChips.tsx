@@ -41,6 +41,11 @@ document.body.addEventListener("focusin", (e) => {
     (chips as any)?.openPopup();
 });
 
+document.body.addEventListener("focusout", (e) => {
+    const chips = getChips(e.target as HTMLElement);
+    (chips as any)?.closePopup();
+});
+
 document.body.addEventListener("keydown", (e) => {
     const chips = getChips(e.target as HTMLElement);
     (chips as any)?.onKey(e);
@@ -268,6 +273,13 @@ export default class AtomChips extends AtomRepeater {
         this.itemsPresenter = this.element.children[1];
         this.searchInput = this.element.children[2] as HTMLInputElement;
         this.bindEvent(this.element, "removeChip", (e: CustomEvent) => this.items.remove(e.detail));
+    }
+
+    protected closePopup() {
+        setTimeout(() =>  {
+            this.popupCancelToken?.cancel();
+            this.popupCancelToken = null;
+        }, 250);
     }
 
     protected async openPopup() {
