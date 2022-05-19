@@ -275,6 +275,9 @@ export default class MobileApp extends AtomControl {
                 const drawerPage = new drawer(this.app);
                 // const da = drawerNode.attributes ??= {};
                 const dispatchCloseDrawer = (de: Event) => {
+                    if (de.defaultPrevented) {
+                        return;
+                    }
                     de.target.dispatchEvent(new CustomEvent("closeDrawer", { bubbles: true }));
                 };
                 this.element.appendChild(drawerPage.element);
