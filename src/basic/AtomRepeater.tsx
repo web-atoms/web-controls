@@ -46,8 +46,8 @@ export const getParentRepeaterItem = (target: HTMLElement): IRepeaterItemInfo =>
         if (index === undefined) {
             const itemIndex = target.dataset.itemIndex;
             if (typeof itemIndex !== "undefined") {
-                // tslint:disable-next-line: no-bitwise
                 root = target;
+                // tslint:disable-next-line: no-bitwise
                 index = ~~itemIndex;
             }
         }
@@ -1265,24 +1265,20 @@ const dragOver = (e: DragEvent) => {
         if (isAfter(targetBounds, mp)) {
             const next = target.nextElementSibling;
             if (next === placeholder) {
-                console.log("next is placeholder");
                 return;
             }
             placeholder.remove();
             target.insertAdjacentElement("afterend", placeholder);
-            console.log("next replaced with placeholder");
             return;
         }
 
         if (isBefore(targetBounds, mp)) {
             const previous = target.previousElementSibling;
             if (previous === placeholder) {
-                console.log("previous is placeholder");
                 return;
             }
             placeholder.remove();
             target.insertAdjacentElement("beforebegin", placeholder);
-            console.log("previous replaced with placeholder");
         }
 
         return;

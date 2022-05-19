@@ -141,7 +141,8 @@ export function Chip(
         header,
         deleteIcon = "fa-solid fa-xmark",
         draggable
-    }: IChip, ... nodes: XNode[]) {
+    }: IChip,
+    ... nodes: XNode[]) {
     return <div
         data-item-chip="chip"
         draggable={draggable}>
@@ -195,7 +196,8 @@ export function Suggestion(
         label,
         header,
         deleteIcon
-    }: IChip, ... nodes: XNode[]) {
+    }: IChip,
+    ... nodes: XNode[]) {
     return <div
         data-item-suggestion="suggestion">
         { icon && <i class={"icon " + icon}/>}
