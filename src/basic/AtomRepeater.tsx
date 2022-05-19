@@ -47,6 +47,7 @@ export const getParentRepeaterItem = (target: HTMLElement): IRepeaterItemInfo =>
             const itemIndex = target.dataset.itemIndex;
             if (typeof itemIndex !== "undefined") {
                 // tslint:disable-next-line: no-bitwise
+                root = target;
                 index = ~~itemIndex;
             }
         }
@@ -56,7 +57,6 @@ export const getParentRepeaterItem = (target: HTMLElement): IRepeaterItemInfo =>
                 eventName = itemClickEvent.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
             }
         }
-        root = target;
         target = target.parentElement as HTMLElement;
     }
 
@@ -1171,6 +1171,9 @@ document.body.addEventListener("dragstart", (e) => {
         const placeholder = document.createElement("div");
         placeholder.style.width = target.offsetWidth + "px";
         placeholder.style.height = target.offsetHeight + "px";
+        placeholder.style.backgroundColor = Colors.lightGray.toString();
+        placeholder.style.border = "solid 1px gray";
+        placeholder.style.borderRadius = "10px";
         hoverItem = {
             repeater,
             target,
@@ -1194,17 +1197,30 @@ document.body.addEventListener("dragend", (e) => {
         placeholder,
         repeater
     } = hoverItem;
-    const targetRepeater = placeholder.parentElement.atomControl as AtomRepeater;
-    const previous = placeholder.previousElementSibling as HTMLElement;
-    let index = 0;
-    if (previous) {
-        // tslint:disable-next-line: no-bitwise
-        index = (~~previous.dataset.itemIndex);
+    let start = placeholder;
+    let index = -1;
+    while (start) {
+        const itemIndex = (start.previousElementSibling as HTMLElement)?.dataset?.itemIndex;
+        if (itemIndex !== void 0) {
+            // tslint:disable-next-line: no-bitwise
+            index = ~~itemIndex;
+        }
+        if (start.parentElement.atomControl) {
+            break;
+        }
+        start = start.parentElement;
     }
+    const targetRepeater = start.parentElement.atomControl as AtomRepeater;
     placeholder.remove();
     hoverItem.placeholder = null;
     repeater.items.remove(item);
-    targetRepeater.items.insert(index, item);
+    index++;
+    const ce = new CustomEvent("itemDropped", { detail: { item, index }});
+    if (ce.defaultPrevented) {
+        return;
+    }
+    const { detail } = ce;
+    targetRepeater.items.insert(detail.index, detail.item);
 });
 
 interface IPoint {
@@ -1213,6 +1229,12 @@ interface IPoint {
 }
 
 const dragOver = (e: DragEvent) => {
+    if (hoverItem) {
+        const { placeholder } = hoverItem;
+        if (e.target === placeholder) {
+            return;
+        }
+    }
     const ri = getParentRepeaterItem(e.target as HTMLElement);
     if (!ri) {
         return;
@@ -1224,14 +1246,13 @@ const dragOver = (e: DragEvent) => {
     if (hoverItem) {
         const { placeholder } = hoverItem;
         e.preventDefault();
-        if (target === placeholder) {
-            return;
-        }
 
         const mp = { x: e.clientX, y: e.clientY };
 
-        const isBefore = (co: DOMRect, n: IPoint) => n.x <= (co.x + (co.width * 0.3)) || n.y <= (co.y + (co.height * 0.3));
-        const isAfter = (co: DOMRect, n: IPoint) => n.x >= (co.x + (co.width * 0.7)) || n.y >= (co.y + (co.height * 0.7));
+        const isBefore = (co: DOMRect, n: IPoint) =>
+            n.x <= (co.x + (co.width * 0.3)) || n.y <= (co.y + (co.height * 0.3));
+        const isAfter = (co: DOMRect, n: IPoint) =>
+            n.x >= (co.x + (co.width * 0.7)) || n.y >= (co.y + (co.height * 0.7));
 
         // const midPoint = (co: DOMRect) => ({ x : co.left + (co.width / 2), y: co.top + (co.height / 2) });
 
@@ -1241,35 +1262,29 @@ const dragOver = (e: DragEvent) => {
         // set placeholder...
         const targetBounds = target.getBoundingClientRect();
 
-        // get previous...
-        const previous = target.previousElementSibling as HTMLElement;
-        if (previous && previous !== placeholder) {
-            const pmp  = previous.getBoundingClientRect();
-            if (isBefore(targetBounds, mp) && isAfter(pmp, mp)) {
-                // inert before...
-                placeholder.remove();
-                target.insertAdjacentElement("beforebegin", placeholder);
+        if (isAfter(targetBounds, mp)) {
+            const next = target.nextElementSibling;
+            if (next === placeholder) {
+                console.log("next is placeholder");
                 return;
             }
-        }
-
-        const next = target.nextElementSibling as HTMLElement;
-        if (next && next !== placeholder) {
-            const npm = next.getBoundingClientRect();
-            if (isAfter(targetBounds, mp) && isBefore(npm, mp)) {
-                placeholder.remove();
-                target.insertAdjacentElement("afterend", placeholder);
-                return;
-            }
-        }
-
-        if (!previous)  {
             placeholder.remove();
-            target.insertAdjacentElement("beforebegin", placeholder);
+            target.insertAdjacentElement("afterend", placeholder);
+            console.log("next replaced with placeholder");
             return;
         }
-        placeholder.remove();
-        target.insertAdjacentElement("afterend", placeholder);
+
+        if (isBefore(targetBounds, mp)) {
+            const previous = target.previousElementSibling;
+            if (previous === placeholder) {
+                console.log("previous is placeholder");
+                return;
+            }
+            placeholder.remove();
+            target.insertAdjacentElement("beforebegin", placeholder);
+            console.log("previous replaced with placeholder");
+        }
+
         return;
     }
 };

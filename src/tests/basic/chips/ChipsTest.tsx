@@ -8,7 +8,7 @@ import GridTestViewModel, { ICurrencyInfo } from "../../data-grid/GridTestViewMo
 @Pack
 export default class ChipsTest extends AtomControl {
 
-    public viewModel: GridTestViewModel
+    public viewModel: GridTestViewModel;
 
     private selectedChips: ICurrencyInfo[];
 
@@ -22,7 +22,7 @@ export default class ChipsTest extends AtomControl {
                 suggestions={Bind.oneWay(() => this.viewModel.list)}
                 itemRenderer={(item: ICurrencyInfo) =>
                     <Chip
-                        draggable={true}                        
+                        draggable={true}
                         header={item.currency}
                         label={item.currencyCode}
                     />}
