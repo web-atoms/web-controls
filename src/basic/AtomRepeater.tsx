@@ -143,7 +143,8 @@ export function askSuggestion<T>(
     options ??= {};
     if (typeof options.maximize === "undefined") {
         if (typeof options.width === "undefined") {
-            options.width = "90%";
+            options.maxWidth = "90%";
+            options.minWidth = "300px";
         }
         if (typeof options.height === "undefined") {
             options.height = "80%";
