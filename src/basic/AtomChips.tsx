@@ -71,6 +71,7 @@ function askSuggestionPopup<T>(
                         class="presenter"
                         selectedItem={Bind.oneWay(() => this.opener.anchorItem)}
                         itemRenderer={itemRenderer}
+                        eventDeleteSuggestion={(e) => opener.element.dispatchEvent(e) }
                         eventItemClick={(e) => {
                             this.close(e.detail);
                         }}
@@ -146,18 +147,56 @@ export function Chip(
     </div>;
 }
 
+CSS(StyleRule()
+    .padding(1)
+    .paddingLeft(5)
+    .paddingRight(5)
+    .borderRadius(10)
+    .display("grid")
+    .gridTemplateRows("auto 1fr")
+    .gridTemplateColumns("auto 1fr auto")
+    .child(StyleRule("[data-content]")
+        .gridRowStart("2")
+        .gridColumnStart("2")
+    )
+    .child(StyleRule(".icon")
+        .gridColumnStart("1")
+        .gridRowStart("1")
+        .gridRowEnd("span 2")
+        .alignSelf("center")
+    )
+    .child(StyleRule(".delete")
+        .gridColumnStart("3")
+        .gridRowStart("1")
+        .gridRowEnd("span 2")
+        .alignSelf("center")
+        .color(Colors.red)
+    )
+    .child(StyleRule(".header")
+        .fontSize("x-small")
+        .gridRowStart("1")
+        .gridColumnStart("2")
+    )
+    .child(StyleRule(".label")
+        .gridRowStart("2")
+        .gridColumnStart("2")
+    )
+, "*[data-item-suggestion]");
+
 export function Suggestion(
     {
         icon,
         label,
-        header
+        header,
+        deleteIcon
     }: IChip, ... nodes: XNode[]) {
     return <div
-        data-item-chip="chip">
+        data-item-suggestion="suggestion">
         { icon && <i class={"icon " + icon}/>}
         { header && <label class="header" text={label}/>}
         { label && <label class="label" text={label}/>}
         { ... nodes }
+        { deleteIcon && <i class={"delete " + deleteIcon} data-click-event="remove-suggestion"/> }
     </div>;
 }
 
