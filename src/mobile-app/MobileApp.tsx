@@ -242,7 +242,7 @@ export class TabbedPage extends BasePage {
 export class Drawer extends AtomControl {
     protected preCreate(): void {
         this.element.dataset.drawerPage = "drawer-page";
-        this.bindEvent(this.element, "click", (e) => this.closeDrawer());
+        this.bindEvent(this.element, "click", (e: Event) => e.defaultPrevented ? null : this.closeDrawer());
     }
 
     protected closeDrawer() {
