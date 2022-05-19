@@ -232,6 +232,7 @@ export default class AtomChips extends AtomRepeater {
                 this.suggestionRenderer ?? this.itemRenderer,
                 cancelToken);
             this.addItem(selectedItem);
+            this.search = "";
             this.popupCancelToken = null;
         } catch (e) {
             if (CancelToken.isCancelled(e)) {
@@ -259,6 +260,8 @@ export default class AtomChips extends AtomRepeater {
         switch (e.key) {
             case "Enter":
                 // selection mode...
+                e.preventDefault?.();
+                e.stopImmediatePropagation?.();
                 setTimeout(() => {
                     let anchorItem = this.anchorItem;
                     const itemToChip = this.itemToChip;
