@@ -301,6 +301,7 @@ export default class AtomChips extends AtomRepeater {
             this.search = "";
             this.popupCancelToken = null;
         } catch (e) {
+            this.popupCancelToken = null;
             if (CancelToken.isCancelled(e)) {
                 return;
             }
