@@ -5,7 +5,7 @@ import { IDisposable } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
-import AtomRepeater, { askSuggestion } from "./AtomRepeater";
+import AtomRepeater, { askSuggestion, askSuggestionPopup, MatchAnyCaseInsensitive } from "./AtomRepeater";
 
 CSS(StyleRule()
 .margin(5)
@@ -52,6 +52,9 @@ export default class AtomSuggestions extends AtomRepeater {
     @BindableProperty
     public suggestionRenderer: (item) => XNode;
 
+    @BindableProperty
+    public popupSuggestions: boolean;
+
     private selectedItemsWatcher: IDisposable;
 
     public onPropertyChanged(name: keyof AtomSuggestions): void {
@@ -93,12 +96,30 @@ export default class AtomSuggestions extends AtomRepeater {
 
     protected async more() {
         const vf = this.visibilityFilter ?? ((item) => true);
-        const selected = await askSuggestion(
-            this.items.filter(vf),
+        if (!this.popupSuggestions) {
+            const selected = await askSuggestion(
+                this.items.filter(vf),
+                this.suggestionRenderer ?? this.itemRenderer,
+                (text: string) => this.match(text),
+                { title: this.title });
+            this.selectedItems?.add(selected);
+        }
+
+        const selectedItem = await askSuggestionPopup(
+            this,
+            this.items,
             this.suggestionRenderer ?? this.itemRenderer,
             (text: string) => this.match(text),
-            { title: this.title });
-        this.selectedItems?.add(selected);
+            this.selectedItem);
+        this.selectedItems?.add(selectedItem);
+        this.element.dispatchEvent(new CustomEvent(
+            "itemAdded",
+            {
+                bubbles: true,
+                detail: selectedItem,
+                cancelable: true
+            }
+        ));
     }
 
 }
