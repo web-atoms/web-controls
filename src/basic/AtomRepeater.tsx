@@ -1230,19 +1230,22 @@ const dragOver = (e: DragEvent) => {
 
         const mp = { x: e.clientX, y: e.clientY };
 
-        const midPoint = (co: DOMRect) => ({ x : co.left + (co.width / 2), y: co.top + (co.height / 2) });
+        const isBefore = (co: DOMRect, n: IPoint) => n.x <= (co.x + (co.width * 0.3)) || n.y <= (co.y + (co.height * 0.3));
+        const isAfter = (co: DOMRect, n: IPoint) => n.x >= (co.x + (co.width * 0.7)) || n.y >= (co.y + (co.height * 0.7));
 
-        const isBetween = (n: IPoint, start: IPoint, end: IPoint) =>
-            start.x <= n.x && n.x >= end.x || start.y <= n.y && n.y <= end.y;
+        // const midPoint = (co: DOMRect) => ({ x : co.left + (co.width / 2), y: co.top + (co.height / 2) });
+
+        // const isBetween = (n: IPoint, start: IPoint, end: IPoint) =>
+        //     start.x <= n.x && n.x >= end.x || start.y <= n.y && n.y <= end.y;
 
         // set placeholder...
-        const rootMP = midPoint(target.getBoundingClientRect());
+        const targetBounds = target.getBoundingClientRect();
 
         // get previous...
         const previous = target.previousElementSibling as HTMLElement;
         if (previous && previous !== placeholder) {
-            const pmp  = midPoint(previous.getBoundingClientRect());
-            if (isBetween(mp, pmp, rootMP)) {
+            const pmp  = previous.getBoundingClientRect();
+            if (isBefore(targetBounds, mp) && isAfter(pmp, mp)) {
                 // inert before...
                 placeholder.remove();
                 target.insertAdjacentElement("beforebegin", placeholder);
@@ -1252,8 +1255,8 @@ const dragOver = (e: DragEvent) => {
 
         const next = target.nextElementSibling as HTMLElement;
         if (next && next !== placeholder) {
-            const npm = midPoint(next.getBoundingClientRect());
-            if (isBetween(mp, rootMP, npm)) {
+            const npm = next.getBoundingClientRect();
+            if (isAfter(targetBounds, mp) && isBefore(npm, mp)) {
                 placeholder.remove();
                 target.insertAdjacentElement("afterend", placeholder);
                 return;
