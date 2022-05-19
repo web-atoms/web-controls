@@ -146,6 +146,21 @@ export function Chip(
     </div>;
 }
 
+export function Suggestion(
+    {
+        icon,
+        label,
+        header
+    }: IChip, ... nodes: XNode[]) {
+    return <div
+        data-item-chip="chip">
+        { icon && <i class={"icon " + icon}/>}
+        { header && <label class="header" text={label}/>}
+        { label && <label class="label" text={label}/>}
+        { ... nodes }
+    </div>;
+}
+
 export default class AtomChips extends AtomRepeater {
 
     public "event-selection-changed"?: (e: CustomEvent) => void;
