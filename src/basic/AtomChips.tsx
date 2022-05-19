@@ -39,12 +39,12 @@ function getChips(target: HTMLElement): AtomChips {
 
 document.body.addEventListener("focusin", (e) => {
     const chips = getChips(e.target as HTMLElement);
-    (chips as any)?.openPopup();
+    (chips as any)?.setFocus(true);
 });
 
 document.body.addEventListener("focusout", (e) => {
     const chips = getChips(e.target as HTMLElement);
-    (chips as any)?.closePopup();
+    (chips as any)?.setFocus(false);
 });
 
 document.body.addEventListener("keydown", (e) => {
@@ -233,6 +233,9 @@ export default class AtomChips extends AtomRepeater {
 
     public itemToChip: (item, search) => any;
 
+    @BindableProperty
+    public focused: boolean;
+
     public anchorItem: any;
 
     private searchInput: HTMLInputElement;
@@ -240,6 +243,8 @@ export default class AtomChips extends AtomRepeater {
     private anchorIndex: number;
 
     private popupCancelToken: CancelToken;
+
+    private suggestionsWatcher: IDisposable;
 
     public onPropertyChanged(name: string): void {
         super.onPropertyChanged(name);
@@ -249,6 +254,20 @@ export default class AtomChips extends AtomRepeater {
                 break;
             case "prompt":
                 this.updateClasses();
+                break;
+            case "focused":
+                this.updatePopup();
+                break;
+            case "suggestions":
+                this.suggestionsWatcher?.dispose();
+                this.suggestionsWatcher = undefined;
+                const suggestions = this.suggestions;
+                if (suggestions) {
+                    this.suggestionsWatcher = this.registerDisposable(suggestions.watch(() => {
+                        this.updatePopup();
+                    }));
+                }
+                this.updatePopup();
                 break;
         }
     }
@@ -276,14 +295,28 @@ export default class AtomChips extends AtomRepeater {
         this.bindEvent(this.element, "removeChip", (e: CustomEvent) => this.items.remove(e.detail));
     }
 
-    protected closePopup() {
-        setTimeout(() =>  {
-            this.popupCancelToken?.cancel();
-            this.popupCancelToken = null;
-        }, 250);
+    protected setFocus(hasFocus) {
+        if (hasFocus) {
+            this.focused = true;
+            return;
+        }
+        setTimeout(() => {
+            this.focused = false;
+        }, 100);
     }
 
-    protected async openPopup() {
+    protected async updatePopup() {
+        const suggestions = this.suggestions;
+        if (!this.focused) {
+            this.popupCancelToken?.cancel();
+            this.popupCancelToken = null;
+            return;
+        }
+        if (!suggestions || !suggestions.length) {
+            this.popupCancelToken?.cancel();
+            this.popupCancelToken = null;
+            return;
+        }
         if (this.popupCancelToken) {
             return;
         }
