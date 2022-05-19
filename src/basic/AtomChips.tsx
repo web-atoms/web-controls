@@ -235,10 +235,6 @@ export default class AtomChips extends AtomRepeater {
 
     private popupCancelToken: CancelToken;
 
-    public updateItems(container?: HTMLElement): void {
-        // don't do anything...
-    }
-
     public onPropertyChanged(name: string): void {
         super.onPropertyChanged(name);
         switch (name) {
