@@ -16,6 +16,8 @@ CSS(StyleRule()
     .child(StyleRule(".search")
         .border("none")
         .outline("none")
+        .paddingLeft(20)
+        .background(`transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' class='bi bi-search' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'%3E%3C/path%3E%3C/svg%3E") no-repeat 1px center` as any)
     )
     .child(StyleRule(".presenter")
         .flexLayout({ inline: true, justifyContent: "flex-start" })
@@ -294,7 +296,6 @@ export default class AtomChips extends AtomRepeater {
         this.itemRenderer = (item) => <div text={this.labelPath(item)}/>;
         this.element.dataset.dropDown = "drop-down";
         this.render(<div>
-            <i class="fad fa-search"/>
             <div class="presenter"></div>
             <input
                 class="search"
@@ -302,8 +303,8 @@ export default class AtomChips extends AtomRepeater {
                 value={Bind.twoWaysImmediate(() => this.search)}
                 type="search"/>
         </div>);
-        this.itemsPresenter = this.element.children[1];
-        this.searchInput = this.element.children[2] as HTMLInputElement;
+        this.itemsPresenter = this.element.children[0];
+        this.searchInput = this.element.children[1] as HTMLInputElement;
         this.bindEvent(this.element, "removeChip", (e: CustomEvent) => this.items.remove(e.detail));
     }
 
