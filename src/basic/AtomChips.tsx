@@ -302,9 +302,11 @@ export default class AtomChips extends AtomRepeater {
                 placeholder={Bind.oneWay(() => this.prompt)}
                 value={Bind.twoWaysImmediate(() => this.search)}
                 type="search"/>
+            <div class="footer"/>
         </div>);
         this.itemsPresenter = this.element.children[0];
         this.searchInput = this.element.children[1] as HTMLInputElement;
+        this.footerPresenter = this.element.children[2] as HTMLInputElement;
         this.bindEvent(this.element, "removeChip", (e: CustomEvent) => this.items.remove(e.detail));
     }
 
