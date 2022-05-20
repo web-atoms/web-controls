@@ -228,6 +228,19 @@ export interface IForm {
 
 let formId = 0;
 
+export function FormGroup(
+    {
+        group,
+    },
+    ... nodes: XNode[]
+    ) {
+    for (const iterator of nodes) {
+        const a = iterator.attributes ??= {};
+        a["data-group"] = group;
+    }
+    return nodes;
+}
+
 export default function Form(
     {
         id = formId++,
