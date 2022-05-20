@@ -16,14 +16,18 @@ CSS(StyleRule()
     .child(StyleRule(".search")
         .border("none")
         .outline("none")
-        .paddingLeft(20)
-        .background(`transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' class='bi bi-search' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'%3E%3C/path%3E%3C/svg%3E") no-repeat 1px center` as any)
     )
     .child(StyleRule(".presenter")
         .flexLayout({ inline: true, justifyContent: "flex-start" })
         .flexFlow("wrap")
         .child(StyleRule("*")
             .backgroundColor(Colors.lightGray.withAlphaPercent(0.3))
+        )
+    )
+    .and(StyleRule("[data-mode=search]")
+        .child(StyleRule(".search") 
+            .paddingLeft(20)
+            .background(`transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' class='bi bi-search' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'%3E%3C/path%3E%3C/svg%3E") no-repeat 1px center` as any)
         )
     )
 , "div[data-atom-chips]");
@@ -299,6 +303,7 @@ export default class AtomChips extends AtomRepeater {
         // super.preCreate();
         this.prompt = "Search";
         this.element.dataset.atomChips = "atom-chips";
+        this.element.dataset.mode = "search";
         // this.bindEvent(this.element, "click", () => this.searchInput.focus());
         this.valuePath = (item) => item?.value ?? item;
         this.labelPath = (item) => item?.label ?? item;
