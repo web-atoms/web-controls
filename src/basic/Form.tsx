@@ -215,7 +215,6 @@ document.body.addEventListener("click", (e: MouseEvent) => {
 export interface IForm {
     id?: number;
     class?: any;
-    allButtonTitle?: string;
     scrollable?: boolean ;
     /**
      * If set, when an enter key is pressed on
@@ -257,7 +256,6 @@ export default function Form(
         focusNextOnEnter = true,
         scrollable,
         eventSubmit,
-        allButtonTitle = "All",
         ... a
     }: IForm,
     ... nodes: XNode[]) {
@@ -290,6 +288,88 @@ export default function Form(
         eventSubmitForm={eventSubmit}
         eventClick={checkValidity(eventSubmit)}>
         { ... fields}
+    </div>;
+}
+
+export interface IFormLayout extends IForm {
+    header?: XNode;
+    footer?: XNode;
+}
+
+CSS(StyleRule()
+    .display("grid")
+    .alignSelf("stretch")
+    .justifyContent("stretch" as any)
+    .flex("1 1 100%")
+    .gridTemplateRows("auto 1fr auto")
+    .gridTemplateColumns("1fr")
+    .child(StyleRule("[data-element=header]")
+        .gridRowStart("1")
+    )
+    .child(StyleRule("[data-element=content]")
+        .gridRowStart("2")
+        .overflow("auto")
+    )
+    .child(StyleRule("[data-element=header]")
+        .gridRowStart("3")
+    )
+, "*[data-form-layout=form-layout]")
+
+export function FormLayout(
+    {
+        id = formId++,
+        focusNextOnEnter = true,
+        scrollable,
+        eventSubmit,
+        header,
+        footer,
+        ... a
+    }: IFormLayout,
+    ... nodes: XNode[]) {
+    if (focusNextOnEnter) {
+        a.eventKeypress = moveNext(eventSubmit);
+    }
+    a["data-form-id"] = id;
+    a["data-scrollable"] = !!scrollable;
+    if (!eventSubmit) {
+        a["data-wa-show-errors"] = "yes";
+    }
+
+    const fields = [];
+    for (const iterator of nodes) {
+        const ca = iterator.attributes as any;
+        if (ca?.[formGroupSymbol]) {
+            for (const child of iterator.children) {
+                const cha = child.attributes ??= {};
+                cha["data-group"] = ca.group;
+                fields.push(child);
+            }
+            continue;
+        }
+        fields.push(iterator);
+    }
+
+    if (header) {
+        const ha = header.attributes ??= {};
+        ha["data-element"] = "header";
+    }
+    
+    if (footer) {
+        const ha = footer.attributes ??= {};
+        ha["data-element"] = "footer";
+    }
+
+    return <div
+        data-wa-form="wa-form"
+        data-form-layout="form-layout"
+        { ... a}
+        eventSubmitForm={eventSubmit}
+        eventClick={checkValidity(eventSubmit)}>
+        { header }
+        <div data-element="content">
+            { ... fields}
+        </div>
+        { footer }
     </div>;
 }
 
