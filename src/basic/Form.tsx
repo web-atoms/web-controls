@@ -1,9 +1,12 @@
 import Bind from "@web-atoms/core/dist/core/Bind";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
+import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import FormField from "./FormField";
 import IElement from "./IElement";
+import ToggleButtonBar from "./ToggleButtonBar";
+export const FormButtonBar = ToggleButtonBar;
 
 const css = CSS(StyleRule()
     .verticalFlexLayout({ alignItems: "stretch" })
@@ -212,6 +215,7 @@ document.body.addEventListener("click", (e: MouseEvent) => {
 export interface IForm {
     id?: number;
     class?: any;
+    allButtonTitle?: string;
     scrollable?: boolean ;
     /**
      * If set, when an enter key is pressed on
@@ -228,17 +232,23 @@ export interface IForm {
 
 let formId = 0;
 
+const formGroupSymbol = Symbol("formGroup");
+
+export interface IFormGroup {
+    group: string;
+    // header?: string;
+    // icon?: string;
+}
+
 export function FormGroup(
-    {
-        group,
-    },
+    fg: IFormGroup,
     ... nodes: XNode[]
     ) {
-    for (const iterator of nodes) {
-        const a = iterator.attributes ??= {};
-        a["data-group"] = group;
-    }
-    return nodes;
+    fg[formGroupSymbol] = true;
+    return <div
+        { ... fg}>
+        { ... nodes}
+    </div>;
 }
 
 export default function Form(
@@ -247,6 +257,7 @@ export default function Form(
         focusNextOnEnter = true,
         scrollable,
         eventSubmit,
+        allButtonTitle = "All",
         ... a
     }: IForm,
     ... nodes: XNode[]) {
@@ -258,12 +269,27 @@ export default function Form(
     if (!eventSubmit) {
         a["data-wa-show-errors"] = "yes";
     }
+
+    const fields = [];
+    for (const iterator of nodes) {
+        const ca = iterator.attributes as any;
+        if (ca?.[formGroupSymbol]) {
+            for (const child of iterator.children) {
+                const cha = child.attributes ??= {};
+                cha["data-group"] = ca.group;
+                fields.push(child);
+            }
+            continue;
+        }
+        fields.push(iterator);
+    }
+    
     return <div
         data-wa-form="wa-form"
         { ... a}
         eventSubmitForm={eventSubmit}
         eventClick={checkValidity(eventSubmit)}>
-        { ... nodes}
+        { ... fields}
     </div>;
 }
 
