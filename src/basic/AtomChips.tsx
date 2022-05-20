@@ -143,6 +143,9 @@ CSS(StyleRule()
         .gridRowStart("2")
         .gridColumnStart("2")
     )
+    .and(StyleRule("[data-deleted=true]")
+        .display("none")
+    )
 , "*[data-item-chip]");
 
 export function Chip(
@@ -307,7 +310,7 @@ export default class AtomChips extends AtomRepeater {
         this.itemsPresenter = this.element.children[0];
         this.searchInput = this.element.children[1] as HTMLInputElement;
         this.footerPresenter = this.element.children[2] as HTMLInputElement;
-        this.bindEvent(this.element, "removeChip", (e: CustomEvent) => this.items.remove(e.detail));
+        this.bindEvent(this.element, "removeChip", (e: CustomEvent) => this.removeItem(e.detail));
     }
 
     protected setFocus(hasFocus) {
@@ -369,6 +372,10 @@ export default class AtomChips extends AtomRepeater {
         if (!ce.defaultPrevented) {
             this.items.add(ce.detail);
         }
+    }
+
+    protected removeItem(item) {
+        this.items.remove(item);
     }
 
     protected onKey(e: KeyboardEvent) {
