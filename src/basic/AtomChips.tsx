@@ -98,6 +98,7 @@ export interface IChip extends IElement {
     label?: string;
     deleteIcon?: string;
     draggable?: boolean;
+    recreate?: boolean;
 }
 
 CSS(StyleRule()
@@ -154,10 +155,12 @@ export function Chip(
         label,
         header,
         deleteIcon = "fa-solid fa-xmark",
-        draggable
+        draggable,
+        recreate = true
     }: IChip,
     ... nodes: XNode[]) {
     return <div
+        data-recreate={recreate}
         data-item-chip="chip"
         draggable={draggable}>
         { icon && <i class={"icon " + icon}/>}
