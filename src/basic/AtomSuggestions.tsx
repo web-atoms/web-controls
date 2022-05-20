@@ -109,6 +109,7 @@ export default class AtomSuggestions extends AtomRepeater {
                 (text: string) => this.match(text),
                 { title: this.title });
             this.selectedItems?.add(selected);
+            return;
         }
 
         const selectedItem = await askSuggestionPopup(
