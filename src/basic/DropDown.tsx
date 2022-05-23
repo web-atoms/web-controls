@@ -11,6 +11,9 @@ import AtomRepeater, { askSuggestion, askSuggestionPopup,
 
 CSS(StyleRule()
     .flexLayout({ inline: true, justifyContent: "stretch" as any})
+    .nested(StyleRule("[data-white-space=nowrap]")
+        .whiteSpace("nowrap")
+    )
 , "div[data-drop-down=drop-down]");
 
 export default class DropDown extends AtomRepeater {
@@ -64,7 +67,7 @@ export default class DropDown extends AtomRepeater {
         this.itemRenderer = (item) => <div text={this.labelPath(item)}/>;
         this.element.dataset.dropDown = "drop-down";
         this.render(<div>
-            <div text={this.prompt}/>
+            <div data-white-space="nowrap" text={this.prompt}/>
             <i class="fad fa-caret-circle-down"/>
         </div>);
     }
@@ -107,10 +110,15 @@ export default class DropDown extends AtomRepeater {
         }
         if (!this.selectedItem) {
             this.render(<div>
-                <div text={this.prompt}/>
+                <div data-white-space="nowrap" text={this.prompt}/>
                 <i class="fad fa-caret-circle-down"/>
             </div>);
             return;
+        }
+        const node = ir(this.selectedItem);
+        const na = node.attributes ??= {};
+        if (!na["data-white-space"]) {
+            na["data-white-space"] ="nowrap";
         }
         this.render(<div>
             { ir(this.selectedItem) }
