@@ -309,7 +309,9 @@ CSS(StyleRule()
     .child(StyleRule("[data-element=content]")
         .gridRowStart("2")
         .overflow("auto")
-        .verticalFlexLayout({ alignItems: "stretch" })
+        .child(StyleRule("div")
+            .verticalFlexLayout({ alignItems: "stretch" })
+        )
     )
     .child(StyleRule("[data-element=footer]")
         .gridRowStart("3")
@@ -368,7 +370,9 @@ export function FormLayout(
         eventClick={checkValidity(eventSubmit)}>
         { header }
         <div data-element="content">
+            <div>
             { ... fields}
+            </div>
         </div>
         { footer }
     </div>;
