@@ -586,7 +586,9 @@ export default class AtomRepeater extends AtomControl {
 
     public set value(v) {
         this.initialValue = v;
-        if (!this.items) {
+        if (!this.items || !this.items.length) {
+            // this will force value based items loader
+            AtomBinder.refreshValue(this, "value");
             return;
         }
         const vp = this.valuePath ?? SameObjectValue;
