@@ -121,7 +121,7 @@ export default class DropDown extends AtomRepeater {
             na["data-white-space"] ="nowrap";
         }
         this.render(<div>
-            { ir(this.selectedItem) }
+            { node }
             <i class="fad fa-caret-circle-down"/>
         </div>);
     }
