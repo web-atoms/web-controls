@@ -270,6 +270,9 @@ export default function Form(
 
     const fields = [];
     for (const iterator of nodes) {
+        if (!iterator) {
+            continue;
+        }
         const ca = iterator.attributes as any;
         if (ca?.[formGroupSymbol]) {
             for (const child of iterator.children) {
@@ -340,6 +343,9 @@ export function FormLayout(
 
     const fields = [];
     for (const iterator of nodes) {
+        if (!iterator) {
+            continue;
+        }
         const ca = iterator.attributes as any;
         if (ca?.[formGroupSymbol]) {
             for (const child of iterator.children) {
