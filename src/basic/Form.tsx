@@ -321,6 +321,8 @@ CSS(StyleRule()
     )
 , "*[data-form-layout=form-layout]")
 
+const elementType = Symbol.for("elementType");
+
 export function FormLayout(
     {
         id = formId++,
@@ -346,6 +348,19 @@ export function FormLayout(
         if (!iterator) {
             continue;
         }
+
+        const et = iterator[elementType];
+        if (et !== void 0) {
+            if(et === "header") {
+                header = et;
+                continue;
+            } 
+            if (et === "footer") {
+                footer = et;
+                continue;
+            }
+        }
+
         const ca = iterator.attributes as any;
         if (ca?.[formGroupSymbol]) {
             for (const child of iterator.children) {
@@ -383,6 +398,17 @@ export function FormLayout(
         { footer }
     </div>;
 }
+
+FormLayout.Footer = (child: XNode) => {
+    child[elementType] = "footer";
+    return child;
+};
+
+FormLayout.Header = (child: XNode) => {
+    child[elementType] = "header";
+    return child;
+};
+
 
 Form.newId = () => formId++;
 
