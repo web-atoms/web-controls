@@ -352,11 +352,13 @@ export function FormLayout(
         const et = iterator[elementType];
         if (et !== void 0) {
             if(et === "header") {
-                header = et;
+                header = iterator;
+                delete iterator[elementType];
                 continue;
             } 
             if (et === "footer") {
-                footer = et;
+                footer = iterator;
+                delete iterator[elementType];
                 continue;
             }
         }
