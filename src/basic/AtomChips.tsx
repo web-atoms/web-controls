@@ -171,7 +171,7 @@ export function Chip(
         data-item-chip="chip"
         draggable={draggable}>
         { icon && <i class={"icon " + icon}/>}
-        { header && <label class="header" text={label}/>}
+        { header && <label class="header" text={header}/>}
         { label && <label class="label" text={label}/>}
         { ... nodes }
         { deleteIcon && <i class={"delete " + deleteIcon} data-click-event="remove-chip"/> }
@@ -226,7 +226,7 @@ export function Suggestion(
     return <div
         data-item-suggestion="suggestion">
         { icon && <i class={"icon " + icon}/>}
-        { header && <label class="header" text={label}/>}
+        { header && <label class="header" text={header}/>}
         { label && <label class="label" text={label}/>}
         { ... nodes }
         { deleteIcon && <i class={"delete " + deleteIcon} data-click-event="remove-suggestion"/> }
