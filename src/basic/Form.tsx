@@ -399,12 +399,12 @@ export function FormLayout(
     </div>;
 }
 
-FormLayout.Footer = (child: XNode) => {
+FormLayout.Footer = ({}, child: XNode) => {
     child[elementType] = "footer";
     return child;
 };
 
-FormLayout.Header = (child: XNode) => {
+FormLayout.Header = ({}, child: XNode) => {
     child[elementType] = "header";
     return child;
 };
