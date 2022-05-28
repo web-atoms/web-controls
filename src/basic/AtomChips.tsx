@@ -25,8 +25,9 @@ CSS(StyleRule()
         )
     )
     .and(StyleRule("[data-mode=search]")
-        .child(StyleRule(".search") 
+        .child(StyleRule(".search")
             .paddingLeft(20)
+            // tslint:disable-next-line: max-line-length
             .background(`transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' class='bi bi-search' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'%3E%3C/path%3E%3C/svg%3E") no-repeat 1px center` as any)
         )
     )
@@ -235,7 +236,20 @@ export function Suggestion(
 
 export default class AtomChips extends AtomRepeater {
 
-    public "event-selection-changed"?: (e: CustomEvent) => void;
+    /**
+     * Fired when user chooses an item from suggestions displayed,
+     * You can call preventDefault() to prevent suggestion to be
+     * added in the chips. You can expect detail and you can
+     * change the item by changing detail or by assigning to new
+     * object
+     */
+    public "event-suggestion-chosen"?: (e: CustomEvent) => any;
+
+    /**
+     * Fired when user tries to remove the chip, you can call
+     * preventDefault() to prevent chip from being removed.
+     */
+    public "event-remove-chip"?: (e: CustomEvent) => any;
 
     @BindableProperty
     public suggestions: any[];
@@ -385,8 +399,15 @@ export default class AtomChips extends AtomRepeater {
         }
     }
 
-    protected removeItem(item) {
-        this.items.remove(item);
+    protected removeItem(detail) {
+        const ce = new CustomEvent("removeChip", {
+            detail,
+            cancelable: true,
+            bubbles: true
+        });
+        if (!ce.defaultPrevented) {
+            this.items.remove(ce.detail);
+        }
     }
 
     protected onKey(e: KeyboardEvent) {

@@ -284,7 +284,7 @@ export default function Form(
         }
         fields.push(iterator);
     }
-    
+
     return <div
         data-wa-form="wa-form"
         { ... a}
@@ -319,7 +319,7 @@ CSS(StyleRule()
     .child(StyleRule("[data-element=footer]")
         .gridRowStart("3")
     )
-, "*[data-form-layout=form-layout]")
+, "*[data-form-layout=form-layout]");
 
 const elementType = Symbol.for("elementType");
 
@@ -351,11 +351,11 @@ export function FormLayout(
 
         const et = iterator[elementType];
         if (et !== void 0) {
-            if(et === "header") {
+            if (et === "header") {
                 header = iterator;
                 delete iterator[elementType];
                 continue;
-            } 
+            }
             if (et === "footer") {
                 footer = iterator;
                 delete iterator[elementType];
@@ -379,7 +379,7 @@ export function FormLayout(
         const ha = header.attributes ??= {};
         ha["data-element"] = "header";
     }
-    
+
     if (footer) {
         const ha = footer.attributes ??= {};
         ha["data-element"] = "footer";
@@ -410,7 +410,6 @@ FormLayout.Header = ({}, child: XNode) => {
     child[elementType] = "header";
     return child;
 };
-
 
 Form.newId = () => formId++;
 
