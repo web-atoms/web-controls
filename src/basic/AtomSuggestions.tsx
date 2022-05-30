@@ -42,6 +42,8 @@ export default class AtomSuggestions extends AtomRepeater {
 
     public eventItemClick: any;
 
+    public "event-item-selected": (ce: CustomEvent) => any;
+
     @BindableProperty
     public valuePath: any;
 
@@ -91,7 +93,7 @@ export default class AtomSuggestions extends AtomRepeater {
 
     protected create(): void {
         this.version = 1;
-        this.render(<div data-suggestions="suggestions" eventItemClick={(e) => this.selectedItems?.add(e.detail)}>
+        this.render(<div data-suggestions="suggestions" eventItemClick={(e) => this.addItem(e.detail)}>
             <span class="header" text={Bind.oneWay(() => this.title)}/>
             <div class="items"></div>
             <div class="more" eventClick={Bind.event(() => this.more())}>More</div>
@@ -118,15 +120,22 @@ export default class AtomSuggestions extends AtomRepeater {
             this.suggestionRenderer ?? this.itemRenderer,
             (text: string) => this.match(text),
             this.selectedItem);
-        this.selectedItems?.add(selectedItem);
-        this.element.dispatchEvent(new CustomEvent(
-            "itemAdded",
+        this.addItem(selectedItem);
+    }
+
+
+    protected addItem(selectedItem: any) {
+        const ce = new CustomEvent(
+            "itemSelected",
             {
                 bubbles: true,
                 detail: selectedItem,
                 cancelable: true
             }
-        ));
+        );
+        this.element.dispatchEvent(ce);
+        if (!ce.defaultPrevented) {
+            this.selectedItems?.add(ce.detail);
+        }
     }
-
 }
