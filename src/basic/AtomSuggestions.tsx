@@ -110,7 +110,7 @@ export default class AtomSuggestions extends AtomRepeater {
                 this.suggestionRenderer ?? this.itemRenderer,
                 (text: string) => this.match(text),
                 { title: this.title });
-            this.selectedItems?.add(selected);
+            this.addItem(selected);
             return;
         }
 
