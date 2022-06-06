@@ -15,9 +15,10 @@ jobs:
           node-version: 16
           registry-url: https://registry.npmjs.org/
       - run: npm install -g typescript
-      - run: npm install -D istanbul remap-istanbul @web-atoms/ts-to-systemjs@1.0.7
+      - run: npm install -D istanbul remap-istanbul
       - run: npm install
-      - run: node ./node_modules/@web-atoms/ts-to-systemjs/index.js
+      - run: tsc
+      # - run: node ./node_modules/@web-atoms/ts-to-systemjs/index.js
       - run: npm run test
       - run: npm publish --access public
         env:
