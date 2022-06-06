@@ -1,6 +1,8 @@
+import Bind from "@web-atoms/core/dist/core/Bind";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
+import IElement from "./IElement";
 
 CSS(StyleRule()
     .display("inline-grid")
@@ -32,11 +34,16 @@ document.body.addEventListener("togglePassword", (e) => {
     current.title = !isPassword ? "Display Password" : "Hide Password";
 });
 
+export interface IPasswordBox extends IElement {
+    value: any;
+    placeholder?: any;
+}
+
 export default function PasswordBox({
     placeholder,
     value,
     ... a
-}) {
+}: IPasswordBox) {
     return <div
         data-password-box="password-box"
         { ... a}>
