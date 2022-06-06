@@ -6,7 +6,7 @@ import IElement from "./IElement";
 
 CSS(StyleRule()
     .display("inline-grid")
-    .gridTemplateColumns("1fr auto")
+    .gridTemplateColumns("1fr 20px")
     .child(StyleRule("input")
         .gridRowStart("1")
         .gridColumnStart("1")
@@ -18,6 +18,8 @@ CSS(StyleRule()
     .child(StyleRule("i")
         .gridRowStart("1")
         .gridColumnStart("2")
+        .alignSelf("center")
+        .justifySelf("center")
         .zIndex("2")
     )
 , "div[data-password-box=password-box]");
