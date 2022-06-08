@@ -79,8 +79,7 @@ export const MatchFalse = (... a: any[]) => false;
 
 export const ArrowToString = (item) => item.label?.toString() ?? item.toString();
 
-export const MatchCaseInsensitive = (textField?: (item) => string) => {
-    textField ??= ArrowToString;
+export const MatchCaseInsensitive = (textField: (item) => string = ArrowToString) => {
     return (s: string) => {
         if (!s) {
             return MatchTrue;
@@ -90,8 +89,7 @@ export const MatchCaseInsensitive = (textField?: (item) => string) => {
     };
 };
 
-export const MatchAnyCaseInsensitive = (textField?: (item) => string) => {
-    textField ??= ArrowToString;
+export const MatchAnyCaseInsensitive = (textField: (item) => string = ArrowToString) => {
     return (s: string) => {
         if (!s) {
             return MatchTrue;

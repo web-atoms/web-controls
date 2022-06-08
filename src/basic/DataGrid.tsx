@@ -211,8 +211,8 @@ export default class DataGrid extends TableRepeater {
 
     private orderBySet: boolean;
 
-    constructor(app, e) {
-        super(app, e ?? document.createElement("table"));
+    constructor(app, e = document.createElement("table")) {
+        super(app, e);
     }
 
     public onPropertyChanged(name: keyof DataGrid): void {

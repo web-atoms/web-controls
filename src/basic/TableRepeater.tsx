@@ -9,8 +9,8 @@ CSS(StyleRule()
 
 export default class TableRepeater extends AtomRepeater {
 
-    constructor(app, e) {
-        super(app, e ?? document.createElement("table"));
+    constructor(app, e = document.createElement("table")) {
+        super(app, e);
     }
 
     public onPropertyChanged(name: keyof TableRepeater): void {

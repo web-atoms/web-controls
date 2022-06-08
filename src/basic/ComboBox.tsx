@@ -9,8 +9,8 @@ export default class ComboBox extends AtomRepeater {
 
     private isChanging = false;
 
-    constructor(app, e) {
-        super(app, e ?? document.createElement("select"));
+    constructor(app, e = document.createElement("select")) {
+        super(app, e);
         this.selectedItems = [];
     }
 

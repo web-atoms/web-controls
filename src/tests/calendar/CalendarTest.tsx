@@ -9,10 +9,6 @@ import AtomCalendar from "../../calendar/AtomCalendar";
 
 export default class CalendarTest extends AtomControl {
 
-	constructor(app: any, e?: any) {
-		super(app, e || document.createElement("div"));
-	}
-
 	public create(): void {
 
 		this.render(

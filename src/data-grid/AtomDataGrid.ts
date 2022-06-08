@@ -14,8 +14,8 @@ export default class AtomDataGrid extends AtomItemsControl {
     @BindableProperty
     public  columns: any[]  ;
 
-    constructor(app: any, e?: any) {
-        super(app, e || document.createElement("div"));
+    constructor(app: any, e: any = document.createElement("div")) {
+        super(app, e);
     }
 
     public append(e): any {
