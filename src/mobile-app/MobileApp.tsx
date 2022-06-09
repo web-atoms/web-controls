@@ -90,11 +90,6 @@ CSS(StyleRule()
         .position("relative")
         .scrollBarWidth("5px")
         .scrollBarColor(Colors.orange, "white")
-        // this is case when content is flex
-        // and it will not scroll
-        .child(StyleRule("*")
-            .flexShrink("0")
-        )
     )
     .child(StyleRule("[data-page-element=footer]")
         .gridRowStart("3")
