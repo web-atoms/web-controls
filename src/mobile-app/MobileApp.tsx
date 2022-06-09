@@ -88,12 +88,12 @@ CSS(StyleRule()
         .padding(5)
         .overflow("hidden")
         .position("relative")
-        .child(StyleRule("*")
-            .maximizeAbsolute()
-            .overflow("auto")
-            .scrollBarWidth("5px")
-            .scrollBarColor(Colors.orange, "white")
-        )
+        .overflow("auto")
+        .scrollBarWidth("5px")
+        .scrollBarColor(Colors.orange, "white")
+        // .child(StyleRule("*")
+        //     .maximizeAbsolute()
+        // )
     )
     .child(StyleRule("[data-page-element=footer]")
         .gridRowStart("3")
@@ -211,7 +211,7 @@ export class BasePage extends AtomControl {
             { icon }
             { titleContent }
             { action }
-            <div data-page-element="content">{ node }</div>
+            { node }
             { footer }
         </div>);
     }
