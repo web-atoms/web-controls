@@ -183,6 +183,8 @@ export class BasePage extends AtomControl {
         const action = this.actionRenderer?.() ?? undefined;
         const footer = this.footerRenderer?.() ?? undefined;
         const header = this.headerBackgroundRenderer?.() ?? <div/>;
+        const na = node.attributes ??= {};
+        na["data-page-element"] = "content";
         if (header) {
             header.attributes ??= {};
             header.attributes["data-page-element"] = "header";
