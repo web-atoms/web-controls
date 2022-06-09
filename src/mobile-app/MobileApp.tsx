@@ -86,10 +86,13 @@ CSS(StyleRule()
         .gridColumnStart("1")
         .gridColumnEnd("span 3")
         .padding(5)
-        .overflow("auto")
+        .overflow("hidden")
         .position("relative")
-        .scrollBarWidth("5px")
-        .scrollBarColor(Colors.orange, "white")
+        .child(StyleRule("*")
+            .overflow("auto")
+            .scrollBarWidth("5px")
+            .scrollBarColor(Colors.orange, "white")
+        )
     )
     .child(StyleRule("[data-page-element=footer]")
         .gridRowStart("3")
@@ -179,8 +182,6 @@ export class BasePage extends AtomControl {
         const action = this.actionRenderer?.() ?? undefined;
         const footer = this.footerRenderer?.() ?? undefined;
         const header = this.headerBackgroundRenderer?.() ?? <div/>;
-        const a = node.attributes ??= {};
-        a["data-page-element"] = "content";
         if (header) {
             header.attributes ??= {};
             header.attributes["data-page-element"] = "header";
@@ -209,7 +210,7 @@ export class BasePage extends AtomControl {
             { icon }
             { titleContent }
             { action }
-            { node }
+            <div data-page-element="content">{ node }</div>
             { footer }
         </div>);
     }
