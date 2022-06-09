@@ -309,6 +309,8 @@ export default class MobileApp extends AtomControl {
     }
 
     protected preCreate(): void {
+        // disable top level scroll
+        document.body.style.overflow = "hidden";
         this.drawer = null;
         this.element.dataset.pageApp = "page-app";
         const container = this.container = document.createElement("div");
