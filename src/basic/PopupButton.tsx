@@ -8,14 +8,18 @@ import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
 CSS(StyleRule()
     .padding(5)
-    .margin(3)
     .borderRadius(5)
     .cursor("pointer")
     .hoverBackgroundColor(Colors.lightGreen)
+    .flexLayout({ alignItems: "center", justifyContent: "flex-start"})
+    .flexWrap("wrap")
+    .child(StyleRule("*")
+        .flexShrink("0")
+    )
 , "*[data-menu-item=menu-item]");
 
 CSS(StyleRule()
-    .verticalFlexLayout({})
+    .verticalFlexLayout({ justifyContent: "stretch" as any, alignItems: "stretch"})
 , "*[data-menu-items=menu-items]");
 
 export interface IMenuItem {
