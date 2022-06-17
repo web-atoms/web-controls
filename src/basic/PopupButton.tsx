@@ -6,14 +6,17 @@ import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import PopupService, { IPopup, IPopupOptions } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
-const menuCss = CSS(StyleRule()
-    .child(StyleRule()
-        .padding(5)
-        .margin(3)
-        .borderRadius(5)
-        .cursor("pointer")
-        .hoverBackgroundColor(Colors.lightGreen)
-    ), "*[data-menu-item=menu-item]");
+CSS(StyleRule()
+    .padding(5)
+    .margin(3)
+    .borderRadius(5)
+    .cursor("pointer")
+    .hoverBackgroundColor(Colors.lightGreen)
+, "*[data-menu-item=menu-item]");
+
+CSS(StyleRule()
+    .verticalFlexLayout({})
+, "*[data-menu-items=menu-items]");
 
 export interface IMenuItem {
     label?: string;
@@ -79,7 +82,7 @@ export default function PopupButton(
         }
 
         const menu = document.createElement("div");
-        (s as any).render(<div class={menuCss}>
+        (s as any).render(<div data-menu-items="menu-items">
             { ... menus}
         </div>, menu);
 
