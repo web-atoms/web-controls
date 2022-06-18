@@ -884,6 +884,13 @@ export default class AtomRepeater extends AtomControl {
             return;
         }
         container ??= this.itemsPresenter ?? this.element;
+
+        // this is case when
+        // updateItems is fired after
+        // repeater is disposed
+        if (!container) {
+            return;
+        }
         disposeChildren(this, container);
 
         this.onPropertyChanged("header");
