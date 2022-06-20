@@ -122,6 +122,10 @@ CSS(StyleRule()
     )
 , "div[data-base-page=base-page]");
 
+CSS(StyleRule()
+    .paddingBottom(200)
+, "body[data-keyboard=shown] div[data-base-page=base-page] > [data-page-element=content]");
+
 export class BasePage extends AtomControl {
 
     public close: (result) => void;
