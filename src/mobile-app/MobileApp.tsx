@@ -123,7 +123,7 @@ CSS(StyleRule()
 , "div[data-base-page=base-page]");
 
 CSS(StyleRule()
-    .paddingBottom(200)
+    .paddingBottom(500)
 , "body[data-keyboard=shown] div[data-base-page=base-page] > [data-page-element=content]");
 
 export class BasePage extends AtomControl {
