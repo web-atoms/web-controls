@@ -440,18 +440,3 @@ export default class MobileApp extends AtomControl {
 
     }
 }
-
-// const pointers: PointerEvent[] = [];
-
-// // lets add pinch zoom events...
-// document.addEventListener("pointerdown", (ev) => {
-//     pointers[ev.pointerId] = ev;
-// });
-
-// document.addEventListener("pointermove", (ev) => {
-//     pointers[ev.pointerId] = ev;
-
-//     if (pointers.length == 2) {
-
-//     }
-// });
