@@ -13,8 +13,15 @@ if (!meta) {
 }
 
 meta.content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no";
-
 const isMobile = window.innerHeight > window.innerWidth;
+
+if (isMobile) {
+    CSS(StyleRule()
+        .position("fixed")
+        .overflow("hidden")
+    , "html,body");
+}
+
 
 // tslint:disable-next-line: max-line-length
 const url = "https://test-gush.azureedge.net/photos/size(2000)/files/tfs/14171/9ccc415481024aabbc9c0bc3b4efc831/meritt-thomas-MQ9U2GFnnDc-unsplash.jpg/meritt-thomas-MQ9U2GFnnDc-unsplash.2000.jpg";

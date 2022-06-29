@@ -1,5 +1,6 @@
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
+import Colors from "@web-atoms/core/dist/core/Colors";
 import XNode, { isTemplateSymbol } from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
@@ -11,6 +12,17 @@ CSS(StyleRule()
     .cursor("grab")
     .and(StyleRule("[data-state=grabbing]")
         .cursor("grabbing")
+    )
+    .child(StyleRule(".scale")
+        .absolutePosition({
+            right: 10,
+            top: 10
+        })
+        .border("solid 2px darkgray")
+        .borderRadius(4)
+        .backgroundColor(Colors.white)
+        .padding(4)
+        .color(Colors.black)
     )
     .child(StyleRule(".image-container")
         .maximizeAbsolute()
@@ -78,6 +90,9 @@ export default class PinchZoomView extends AtomControl {
                     />
             </div>
             <i class={Bind.oneWay(() => this.loading ? "spinner fa-duotone fa-spinner fa-spin" : "hide")}/>
+            <i
+                event-click={() => this.updateZoom()}
+                class={Bind.oneWay(() => this.zoom.scale ? "scale fa-solid fa-arrows-minimize" : "hide")}/>
         </div>);
         this.imageContainer = this.element.firstElementChild as HTMLDivElement;
         this.image = this.imageContainer.firstElementChild as HTMLImageElement;
@@ -120,8 +135,8 @@ export default class PinchZoomView extends AtomControl {
             }
 
             // enable panning...
-            x += 2 * (ev.offsetX - previous.offsetX);
-            y += 2 * (ev.offsetY - previous.offsetY);
+            x += (ev.offsetX - previous.offsetX);
+            y += (ev.offsetY - previous.offsetY);
             this.updateZoom({
                 anchorX,
                 anchorY,
@@ -142,10 +157,24 @@ export default class PinchZoomView extends AtomControl {
             }
         }
 
+        let last = 0;
+        let lastEvent: PointerEvent = null;
+
         this.bindEvent(scrollView, "pointerdown", (ev: PointerEvent) => {
             const target = ev.currentTarget as HTMLElement;
             ev.preventDefault();
             ev.stopImmediatePropagation?.();
+            const now = Date.now();
+            const diff = now - last;
+            last = now;
+            // console.log(diff);
+            if (lastEvent && lastEvent.pointerId === ev.pointerId && diff < 500) {
+                setTimeout(() => {
+                    // reset..                    
+                    this.updateZoom();
+                }, 1);
+            }
+            lastEvent = ev;
             setTimeout(() => {
                 this.element.dataset.state = "grabbing";
             }, 1);
@@ -177,7 +206,7 @@ export default class PinchZoomView extends AtomControl {
                 anchorY,
                 x,
                 y,
-                scale: newScale < 0 ? 1 : newScale
+                scale: newScale < 0 ? 0 : newScale
             });
 
         }, undefined, {
@@ -192,7 +221,13 @@ export default class PinchZoomView extends AtomControl {
         return text;
     }
 
-    private updateZoom(zoom: IZoom) {
+    private updateZoom(zoom: IZoom = {
+        x: 0,
+        y: 0,
+        anchorX: 0,
+        anchorY: 0,
+        scale: 0
+    }) {
         let { anchorX, anchorY, scale, x, y } = zoom;
         // console.log(zoom);
         this.zoom = zoom;
@@ -222,7 +257,7 @@ export default class PinchZoomView extends AtomControl {
         const clientWidth = this.element.clientWidth;
         const scaleFactor = (clientWidth + scale) / clientWidth;
 
-        this.imageContainer.style.transformOrigin = `${anchorX*scaleFactor}px ${anchorY*scaleFactor}`;
+        this.imageContainer.style.transformOrigin = `${anchorX}px ${anchorY}`;
         this.imageContainer.style.transform = `translate(${x}px, ${y}px) scale(${scaleFactor})`;
     }
 }
