@@ -14,6 +14,7 @@ CSS(StyleRule()
 export default class Animations {
 
     public static slideFromBottom = AtomControl.registerProperty("animate", "bottom-slide", (ctrl, e, v) => {
+        e.dataset.animateSlide="from-bottom";
         if (v) {
             e.dataset.ready = "false";
             e.style.display = "";
