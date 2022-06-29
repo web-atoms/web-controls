@@ -8,6 +8,7 @@ import CSS from "@web-atoms/core/dist/web/styles/CSS";
 CSS(StyleRule()
     .overflow("auto")
     .child(StyleRule(".image-container")
+        .overflow("hidden")
         .display("grid")
         .alignItems("center")
         .justifyItems("center")
@@ -165,8 +166,8 @@ export default class PinchZoomView extends AtomControl {
         if (scale <= 0) {
             // this.image.style.transformOrigin = "0,0";
             // this.image.style.transform = `scale(${s})`;
-            this.imageContainer.style.width = "100%";
-            this.imageContainer.style.height = "100%";
+            this.image.style.maxWidth = this.element.clientWidth + "px";
+            this.image.style.maxHeight = this.element.clientHeight + "px";
             return;
         }
     }
