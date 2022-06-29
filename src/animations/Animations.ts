@@ -3,7 +3,7 @@ import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
 CSS(StyleRule()
-    .transform("translate(0,-100%)" as any)
+    .transform("translate(0,100%)" as any)
     .transition("all 0.5s ease-out")
     .and(StyleRule("[data-ready=true]")
         .transform("translate(0,0)" as any)
