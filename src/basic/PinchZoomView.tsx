@@ -186,25 +186,25 @@ export default class PinchZoomView extends AtomControl {
         const newWidth = (this.element.clientWidth + scale) + "px";
         const newHeight = (this.element.clientHeight + scale) + "px";
 
-        this.image.style.maxWidth = newWidth;
-        this.image.style.maxHeight = newHeight;
+        this.image.style.maxWidth = this.element.clientWidth + "px";
+        this.image.style.maxHeight = this.element.clientHeight + "px";
 
         if (scale <= 0) {
             // this.image.style.transformOrigin = "0,0";
             // this.image.style.transform = `scale(${s})`;
-            this.imageContainer.style.width = "100%";
-            this.imageContainer.style.height = "100%";
-            this.image.style.maxWidth = this.element.clientWidth + "px";
-            this.image.style.maxHeight = this.element.clientHeight + "px";
+            this.imageContainer.style.transform = "";
             return;
         }
 
         const clientWidth = this.element.clientWidth;
         const clientHeight = this.element.clientHeight;
         const scaleFactor = (clientWidth + scale) / clientWidth;
-        const scaleYFactor = (clientHeight + scale ) / clientHeight;
+        // const scaleYFactor = (clientHeight + scale ) / clientHeight;
 
         console.log({anchorX, anchorY});
+
+        this.imageContainer.style.transformOrigin = `0 0`;
+        this.imageContainer.style.transform = `translate(${anchorX}px, ${anchorY}px) scale(${scaleFactor})`;
 
         // this.imageContainer.style.transformOrigin = `${anchorX*scaleFactor}px ${anchorY*scaleYFactor}px`;
         // this.imageContainer.style.transform = `scale(${scaleFactor})`
@@ -214,8 +214,8 @@ export default class PinchZoomView extends AtomControl {
 
         // console.log(left, top);
 
-        this.imageContainer.style.top = `-${anchorX*scaleFactor}px`;
-        this.imageContainer.style.left = `-${anchorY*scaleYFactor}px`;
+        // this.imageContainer.style.top = `-${anchorX*scaleFactor}px`;
+        // this.imageContainer.style.left = `-${anchorY*scaleYFactor}px`;
 
         // this.imageContainer.style.width = newWidth;
         // this.imageContainer.style.height = newHeight;
