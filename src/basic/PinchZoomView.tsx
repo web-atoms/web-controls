@@ -100,9 +100,6 @@ export default class PinchZoomView extends AtomControl {
 
         this.element.dataset.pinchZoom = "true";
 
-        // const pointers: PointerEvent[] = [];
-        let pinchDistance = 0;
-
         this.render(<div>
             <div class="image-container">
                 <img
@@ -147,9 +144,9 @@ export default class PinchZoomView extends AtomControl {
                     const second = ev.touches[1];
                     anchorX = ((first.clientX + second.clientX) / 2) - rect.left;
                     anchorY = ((first.clientY + second.clientY) / 2) - rect.top;
-                    scale = distance(first, second);
-                    if (pinchDistance !== scale) {
-                        pinchDistance = scale;
+                    const newScale = distance(first, second);
+                    if (newScale !== scale) {
+                        scale = newScale > scale ? scale + newScale : scale - newScale;
                         this.updateZoom({
                             anchorX,
                             anchorY,
