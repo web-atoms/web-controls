@@ -126,63 +126,81 @@ export default class PinchZoomView extends AtomControl {
 
         let previous: {x: number, y: number};
 
-        this.bindEvent(scrollView, "touchmove", (ev: TouchEvent) => {
-            ev.preventDefault();
-            ev.stopImmediatePropagation?.();
+        let touchMoveDisposable;
+        let touchEndDisposable;
 
-            let { x, y, anchorX, anchorY, scale } = this.zoom;
+        this.bindEvent(scrollView, "touchstart", (evs: TouchEvent) => {
+            previous = center(evs);
+            evs.preventDefault();
+            evs.stopImmediatePropagation?.();
+            
 
-            if (ev.touches.length === 2) {
-                const rect = this.element.getBoundingClientRect();
-                const first = ev.touches[0];
-                const second = ev.touches[1];
-                anchorX = ((first.clientX + second.clientX) / 2) - rect.left;
-                anchorY = ((first.clientY + second.clientY) / 2) - rect.top;
-                scale = distance(first, second);
-                if (pinchDistance !== scale) {
-                    pinchDistance = scale;
-                    this.updateZoom({
-                        anchorX,
-                        anchorY,
-                        x,
-                        y,
-                        scale
-                    });
+            touchMoveDisposable ??= this.bindEvent(scrollView, "touchmove", (ev: TouchEvent) => {
+                ev.preventDefault();
+                ev.stopImmediatePropagation?.();
+
+                let { x, y, anchorX, anchorY, scale } = this.zoom;
+
+                if (ev.touches.length === 2) {
+                    const rect = this.element.getBoundingClientRect();
+                    const first = ev.touches[0];
+                    const second = ev.touches[1];
+                    anchorX = ((first.clientX + second.clientX) / 2) - rect.left;
+                    anchorY = ((first.clientY + second.clientY) / 2) - rect.top;
+                    scale = distance(first, second);
+                    if (pinchDistance !== scale) {
+                        pinchDistance = scale;
+                        this.updateZoom({
+                            anchorX,
+                            anchorY,
+                            x,
+                            y,
+                            scale
+                        });
+                    }
+                    return;
                 }
-                return;
-            }
 
-            // enable panning...
-            const cp = center(ev);
-            x += (cp.x - previous.x);
-            y += (cp.y - previous.y);
-            previous = cp;
-            this.updateZoom({
-                anchorX,
-                anchorY,
-                x,
-                y,
-                scale
+                if (!previous) {
+                    return;
+                }
+                // enable panning...
+                const cp = center(ev);
+                x += (cp.x - previous.x);
+                y += (cp.y - previous.y);
+                previous = cp;
+                this.updateZoom({
+                    anchorX,
+                    anchorY,
+                    x,
+                    y,
+                    scale
+                });
+
             });
 
-        });
+            touchEndDisposable ??= this.bindEvent(scrollView, "touchend", (ev: TouchEvent) => {
+                ev.preventDefault();
+                ev.stopImmediatePropagation?.();
 
-        // this.bindEvent(scrollView, "pointerup", (ev: PointerEvent) => {
-        //     this.element.dataset.state = "";
-        //     pointers.remove((i) => i.pointerId === ev.pointerId);
-        // });
+                touchMoveDisposable.dispose();
+                touchEndDisposable.dispose();
+                touchMoveDisposable = null;
+                touchEndDisposable = null;
+            });
+        });
 
         let mouseMoveDisposable;
         let mouseUpDisposable;
 
-        this.bindEvent(scrollView, "pointerdown", (ev: PointerEvent) => {
+        this.bindEvent(scrollView, "mousedown", (ev: MouseEvent) => {
             this.element.dataset.state = "grabbing";
             previous = {
                 x: ev.clientX,
                 y: ev.clientY
             };
 
-            mouseMoveDisposable ??= this.bindEvent(scrollView, "pointermove", (e: PointerEvent) => {
+            mouseMoveDisposable ??= this.bindEvent(scrollView, "mousemove", (e: MouseEvent) => {
                 e.preventDefault();
                 e.stopImmediatePropagation?.();
                 const { anchorX, anchorY, scale } = this.zoom;
@@ -200,7 +218,7 @@ export default class PinchZoomView extends AtomControl {
                 });
                     
             });
-            mouseUpDisposable ??= this.bindEvent(scrollView, "pointerup", (e: PointerEvent) => {
+            mouseUpDisposable ??= this.bindEvent(scrollView, "mouseup", (e: MouseEvent) => {
                 e.preventDefault();
                 e.stopImmediatePropagation?.();
 
