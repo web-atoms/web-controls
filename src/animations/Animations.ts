@@ -22,9 +22,17 @@ export default class Animations {
                 e.dataset.ready = "true";
             }, 100);
             return;
+        } else {
+            if (e.dataset.ready) {
+                e.dataset.ready = "false";
+                setTimeout(() => {
+                    e.style.display = "none";
+                }, 600);
+                return;
+            }
+            e.dataset.ready = "false";
+            e.style.display = "none";            
         }
-        e.dataset.ready = "false";
-        e.style.display = "none";
     });
 
 }
