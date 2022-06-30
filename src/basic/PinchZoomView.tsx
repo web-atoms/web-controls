@@ -129,13 +129,10 @@ export default class PinchZoomView extends AtomControl {
         this.bindEvent(scrollView, "touchmove", (ev: TouchEvent) => {
             ev.preventDefault();
             ev.stopImmediatePropagation?.();
-            const target = ev.target as HTMLElement;
 
             let { x, y, anchorX, anchorY, scale } = this.zoom;
 
             if (ev.touches.length === 2) {
-                ev.preventDefault();
-
                 const first = ev.touches[0];
                 const second = ev.touches[1];
                 anchorX = (first.clientX + second.clientX) / 2;
