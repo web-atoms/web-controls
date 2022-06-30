@@ -128,8 +128,8 @@ export default class PinchZoomView extends AtomControl {
 
         this.bindEvent(scrollView, "touchstart", (evs: TouchEvent) => {
             previous = center(evs);
-            evs.preventDefault();
-            evs.stopImmediatePropagation?.();
+            // evs.preventDefault();
+            // evs.stopImmediatePropagation?.();
             
 
             touchMoveDisposable ??= this.bindEvent(scrollView, "touchmove", (ev: TouchEvent) => {
