@@ -133,10 +133,11 @@ export default class PinchZoomView extends AtomControl {
             let { x, y, anchorX, anchorY, scale } = this.zoom;
 
             if (ev.touches.length === 2) {
+                const rect = this.element.getBoundingClientRect();
                 const first = ev.touches[0];
                 const second = ev.touches[1];
-                anchorX = (first.clientX + second.clientX) / 2;
-                anchorY = (first.clientY + second.clientY) / 2;
+                anchorX = ((first.clientX + second.clientX) / 2) - rect.left;
+                anchorY = ((first.clientY + second.clientY) / 2) - rect.top;
                 scale = distance(first, second);
                 if (pinchDistance !== scale) {
                     pinchDistance = scale;
