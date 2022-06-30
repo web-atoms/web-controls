@@ -43,8 +43,8 @@ CSS(StyleRule()
 export interface IZoom {
     anchorX: number;
     anchorY: number;
-    x: number,
-    y: number,
+    x: number;
+    y: number;
     scale: number;
 }
 
@@ -99,7 +99,7 @@ export default class PinchZoomView extends AtomControl {
 
         const scrollView = this.element;
 
-        const pointerMove = (ev: PointerEvent) => {
+        this.bindEvent(scrollView, "pointermove", (ev: PointerEvent) => {
             ev.preventDefault();
             ev.stopImmediatePropagation?.();
             const target = ev.target as HTMLElement;
@@ -115,12 +115,12 @@ export default class PinchZoomView extends AtomControl {
             let { x, y, anchorX, anchorY, scale } = this.zoom;
 
             if (pointers.length === 2) {
-                const [first, last] = pointers;
-                const diffX = first.offsetX - last.offsetX;
-                const diffY = first.offsetY - last.offsetY;
-                anchorX = (first.offsetX + last.offsetX) / 2;
-                anchorY = (first.offsetY + last.offsetY) / 2;
-                const scale = Math.sqrt( (diffX * diffX) + (diffY * diffY) );
+                const [first, second] = pointers;
+                const diffX = first.offsetX - second.offsetX;
+                const diffY = first.offsetY - second.offsetY;
+                anchorX = (first.offsetX + second.offsetX) / 2;
+                anchorY = (first.offsetY + second.offsetY) / 2;
+                scale = Math.sqrt( (diffX * diffX) + (diffY * diffY) );
                 if (pinchDistance !== scale) {
                     pinchDistance = scale;
                     this.updateZoom({
@@ -143,25 +143,19 @@ export default class PinchZoomView extends AtomControl {
                 x,
                 y,
                 scale
-            })
+            });
 
-        };
+        });
 
-        function pointerUp(ev: PointerEvent) {
-            const target = ev.currentTarget as HTMLElement;
-            target.dataset.state = "";
+        this.bindEvent(scrollView, "pointerup", (ev: PointerEvent) => {
+            this.element.dataset.state = "";
             pointers.remove((i) => i.pointerId === ev.pointerId);
-            if (pointers.length === 0) {
-                scrollView.removeEventListener("pointermove", pointerMove);
-                scrollView.removeEventListener("pointerup", pointerUp);
-            }
-        }
+        });
 
         let last = 0;
         let lastEvent: PointerEvent = null;
 
         this.bindEvent(scrollView, "pointerdown", (ev: PointerEvent) => {
-            const target = ev.currentTarget as HTMLElement;
             ev.preventDefault();
             ev.stopImmediatePropagation?.();
             const now = Date.now();
@@ -170,22 +164,16 @@ export default class PinchZoomView extends AtomControl {
             // console.log(diff);
             if (lastEvent && lastEvent.pointerId === ev.pointerId && diff < 500) {
                 setTimeout(() => {
-                    // reset..                    
+                    // reset..
                     this.updateZoom();
                 }, 1);
             }
             lastEvent = ev;
-            setTimeout(() => {
-                this.element.dataset.state = "grabbing";
-            }, 1);
+            this.element.dataset.state = "grabbing";
             for (const iterator of pointers) {
                 if (iterator.pointerId === ev.pointerId) {
                     return;
                 }
-            }
-            if (pointers.length === 0) {
-                scrollView.addEventListener("pointermove", pointerMove);
-                scrollView.addEventListener("pointerup", pointerUp);
             }
             pointers.push(ev);
         } );
@@ -228,7 +216,8 @@ export default class PinchZoomView extends AtomControl {
         anchorY: 0,
         scale: 0
     }) {
-        let { anchorX, anchorY, scale, x, y } = zoom;
+        const { anchorX, anchorY, x, y } = zoom;
+        let { scale } = zoom;
         // console.log(zoom);
         this.zoom = zoom;
         const image = this.image;
