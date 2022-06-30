@@ -158,7 +158,7 @@ export default class PinchZoomView extends AtomControl {
                     }
                     scale = previousDistance > newScale
                         ? scale - (previousDistance - newScale)
-                        : scale + newScale;
+                        : previousDistance + newScale;
                     this.updateZoom({
                         anchorX,
                         anchorY,
@@ -189,8 +189,8 @@ export default class PinchZoomView extends AtomControl {
             });
 
             touchEndDisposable ??= this.bindEvent(scrollView, "touchend", (ev: TouchEvent) => {
-                ev.preventDefault();
-                ev.stopImmediatePropagation?.();
+                // ev.preventDefault();
+                // ev.stopImmediatePropagation?.();
 
                 touchMoveDisposable?.dispose();
                 touchEndDisposable?.dispose();
