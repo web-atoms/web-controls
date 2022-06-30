@@ -98,7 +98,8 @@ export default class PinchZoomView extends AtomControl {
             <i class={Bind.oneWay(() => this.loading ? "spinner fa-duotone fa-spinner fa-spin" : "hide")}/>
             <i
                 event-click={() => this.updateZoom()}
-                class={Bind.oneWay(() => this.zoom.scale ? "scale fa-solid fa-arrows-minimize" : "hide")}/>
+                class={Bind.oneWay(() => this.zoom.scale ? "scale fa-solid fa-arrows-minimize" : "hide")}
+                title="Display entire image"/>
         </div>);
         this.imageContainer = this.element.firstElementChild as HTMLDivElement;
         this.image = this.imageContainer.firstElementChild as HTMLImageElement;
