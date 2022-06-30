@@ -44,6 +44,24 @@ CSS(StyleRule()
     , "div[data-pinch-zoom]"
 );
 
+const center = (ev: TouchEvent) => {
+    const touch = ev.touches[0];
+    if (touch) {
+        return {
+            x: touch.clientX,
+            y: touch.clientY
+        }
+    }
+    return {
+        x: 0,
+        y: 0
+    };
+}
+
+const distance = (first: Touch, second: Touch) => {
+    return Math.hypot(first.pageX - second.pageX, first.pageY - second.pageY);
+};
+
 export interface IZoom {
     anchorX: number;
     anchorY: number;
@@ -82,7 +100,7 @@ export default class PinchZoomView extends AtomControl {
 
         this.element.dataset.pinchZoom = "true";
 
-        const pointers: PointerEvent[] = [];
+        // const pointers: PointerEvent[] = [];
         let pinchDistance = 0;
 
         this.render(<div>
@@ -106,28 +124,23 @@ export default class PinchZoomView extends AtomControl {
 
         const scrollView = this.element;
 
-        this.bindEvent(scrollView, "pointermove", (ev: PointerEvent) => {
+        let previous: {x: number, y: number};
+
+        this.bindEvent(scrollView, "touchmove", (ev: TouchEvent) => {
             ev.preventDefault();
             ev.stopImmediatePropagation?.();
             const target = ev.target as HTMLElement;
 
-            const index = pointers.findIndex((e) => e.pointerId === ev.pointerId);
-            if (index === -1) {
-                return;
-            }
-
-            const previous = pointers[index];
-            pointers[index] = ev;
-
             let { x, y, anchorX, anchorY, scale } = this.zoom;
 
-            if (pointers.length === 2) {
-                const [first, second] = pointers;
-                const diffX = first.offsetX - second.offsetX;
-                const diffY = first.offsetY - second.offsetY;
-                anchorX = (first.offsetX + second.offsetX) / 2;
-                anchorY = (first.offsetY + second.offsetY) / 2;
-                scale = Math.sqrt( (diffX * diffX) + (diffY * diffY) );
+            if (ev.touches.length === 2) {
+                ev.preventDefault();
+
+                const first = ev.touches[0];
+                const second = ev.touches[1];
+                anchorX = (first.clientX + second.clientX) / 2;
+                anchorY = (first.clientY + second.clientY) / 2;
+                scale = distance(first, second);
                 if (pinchDistance !== scale) {
                     pinchDistance = scale;
                     this.updateZoom({
@@ -142,8 +155,10 @@ export default class PinchZoomView extends AtomControl {
             }
 
             // enable panning...
-            x += (ev.offsetX - previous.offsetX);
-            y += (ev.offsetY - previous.offsetY);
+            const cp = center(ev);
+            x += (cp.x - previous.x);
+            y += (cp.y - previous.y);
+            previous = cp;
             this.updateZoom({
                 anchorX,
                 anchorY,
@@ -154,36 +169,52 @@ export default class PinchZoomView extends AtomControl {
 
         });
 
-        this.bindEvent(scrollView, "pointerup", (ev: PointerEvent) => {
-            this.element.dataset.state = "";
-            pointers.remove((i) => i.pointerId === ev.pointerId);
-        });
+        // this.bindEvent(scrollView, "pointerup", (ev: PointerEvent) => {
+        //     this.element.dataset.state = "";
+        //     pointers.remove((i) => i.pointerId === ev.pointerId);
+        // });
 
-        let last = 0;
-        let lastEvent: PointerEvent = null;
+        let mouseMoveDisposable;
+        let mouseUpDisposable;
 
         this.bindEvent(scrollView, "pointerdown", (ev: PointerEvent) => {
-            ev.preventDefault();
-            ev.stopImmediatePropagation?.();
-            const now = Date.now();
-            const diff = now - last;
-            last = now;
-            // console.log(diff);
-            if (lastEvent && lastEvent.pointerId === ev.pointerId && diff < 500) {
-                setTimeout(() => {
-                    // reset..
-                    this.updateZoom();
-                }, 1);
-            }
-            lastEvent = ev;
             this.element.dataset.state = "grabbing";
-            for (const iterator of pointers) {
-                if (iterator.pointerId === ev.pointerId) {
-                    return;
-                }
-            }
-            pointers.push(ev);
-        } );
+            previous = {
+                x: ev.clientX,
+                y: ev.clientY
+            };
+
+            mouseMoveDisposable ??= this.bindEvent(scrollView, "pointermove", (e: PointerEvent) => {
+                e.preventDefault();
+                e.stopImmediatePropagation?.();
+                const { anchorX, anchorY, scale } = this.zoom;
+                let {x , y } = this.zoom;
+                const cp = { x: e.clientX, y: e.clientY };
+                x += (cp.x - previous.x);
+                y += (cp.y - previous.y);
+                previous = cp;
+                this.updateZoom({
+                    anchorX,
+                    anchorY,
+                    x,
+                    y,
+                    scale
+                });
+                    
+            });
+            mouseUpDisposable ??= this.bindEvent(scrollView, "pointerup", (e: PointerEvent) => {
+                e.preventDefault();
+                e.stopImmediatePropagation?.();
+
+                this.element.dataset.state = "";
+                previous = null;
+                mouseMoveDisposable.dispose();
+                mouseUpDisposable.dispose();
+                mouseMoveDisposable = null;
+                mouseUpDisposable = null;
+            });
+
+        });
 
         this.bindEvent(scrollView, "wheel", (ev: WheelEvent) => {
 
