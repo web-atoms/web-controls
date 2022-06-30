@@ -65,6 +65,8 @@ export default class PinchZoomView extends AtomControl {
 
     protected preCreate() {
 
+        this.element.title = "Use mouse wheel to zoom";
+
         this.loading = false;
         this.zoom = {
             scale: 0,
