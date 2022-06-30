@@ -130,6 +130,10 @@ export default class PinchZoomView extends AtomControl {
             previous = center(evs);
             // evs.preventDefault();
             // evs.stopImmediatePropagation?.();
+
+            // const start = this.zoom.scale;
+
+            let previousDistance = undefined;
             
 
             touchMoveDisposable ??= this.bindEvent(scrollView, "touchmove", (ev: TouchEvent) => {
@@ -145,16 +149,24 @@ export default class PinchZoomView extends AtomControl {
                     anchorX = ((first.clientX + second.clientX) / 2) - rect.left;
                     anchorY = ((first.clientY + second.clientY) / 2) - rect.top;
                     const newScale = distance(first, second);
-                    if (newScale !== scale) {
-                        scale = newScale > scale ? scale + newScale : scale - newScale;
-                        this.updateZoom({
-                            anchorX,
-                            anchorY,
-                            x,
-                            y,
-                            scale
-                        });
+                    if (previousDistance === void 0) {
+                        previousDistance = newScale;
+                        return;
                     }
+                    if (previousDistance === newScale) {
+                        return;
+                    }
+                    scale = previousDistance > newScale
+                        ? scale - (previousDistance - newScale)
+                        : scale + newScale;
+                    this.updateZoom({
+                        anchorX,
+                        anchorY,
+                        x,
+                        y,
+                        scale
+                    });
+                    
                     return;
                 }
 
@@ -180,10 +192,11 @@ export default class PinchZoomView extends AtomControl {
                 ev.preventDefault();
                 ev.stopImmediatePropagation?.();
 
-                touchMoveDisposable.dispose();
-                touchEndDisposable.dispose();
-                touchMoveDisposable = null;
-                touchEndDisposable = null;
+                touchMoveDisposable?.dispose();
+                touchEndDisposable?.dispose();
+                touchMoveDisposable = undefined;
+                touchEndDisposable = undefined;
+                previousDistance = undefined;
             });
         });
 
@@ -223,8 +236,8 @@ export default class PinchZoomView extends AtomControl {
                 previous = null;
                 mouseMoveDisposable.dispose();
                 mouseUpDisposable.dispose();
-                mouseMoveDisposable = null;
-                mouseUpDisposable = null;
+                mouseMoveDisposable = undefined;
+                mouseUpDisposable = undefined;
             });
 
         });
