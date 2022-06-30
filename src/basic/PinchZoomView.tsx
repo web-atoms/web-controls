@@ -157,7 +157,7 @@ export default class PinchZoomView extends AtomControl {
                         return;
                     }
                     scale = previousDistance > newScale
-                        ? scale - (previousDistance - newScale)
+                        ? previousDistance - newScale
                         : previousDistance + newScale;
                     this.updateZoom({
                         anchorX,
