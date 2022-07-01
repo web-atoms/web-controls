@@ -127,11 +127,11 @@ CSS(StyleRule()
 //     .paddingBottom(500)
 // , "body[data-keyboard=shown] div[data-base-page=base-page] > [data-page-element=content]");
 
-if (/iphone|ios/i.test(window.navigator.userAgent)) {
-    CSS(StyleRule()
-        .marginBottom(500)
-    , "body[data-keyboard=shown] div[data-page-app=page-app]");
-}
+// if (/iphone|ios/i.test(window.navigator.userAgent)) {
+//     CSS(StyleRule()
+//         .marginBottom(500)
+//     , "body[data-keyboard=shown] div[data-page-app=page-app]");
+// }
 
 export class BasePage extends AtomControl {
 
