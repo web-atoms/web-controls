@@ -318,6 +318,7 @@ export default class MobileApp extends AtomControl {
                     }, 400);
                     this.hideDrawer = undefined;
                 };
+                return false;
             }
 
             return true;
@@ -335,9 +336,8 @@ export default class MobileApp extends AtomControl {
             ce.preventDefault();
             this.app.runAsync(async () => {
                 if (await this.back()) {
-                    return;
+                    detail();
                 }
-                detail();
             });
         });
 
