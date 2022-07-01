@@ -320,13 +320,27 @@ export default class MobileApp extends AtomControl {
                 };
             }
 
-            return;
+            return true;
         }
 
         this.selectedPage.cancel("cancelled");
+        return false;
     }
 
     protected preCreate(): void {
+
+        // tslint:disable-next-line: ban-types
+        window.addEventListener("backButton", (ce: CustomEvent<Function>) => {
+            const { detail } = ce;
+            ce.preventDefault();
+            this.app.runAsync(async () => {
+                if (await this.back()) {
+                    return;
+                }
+                detail();
+            });
+        });
+
         // disable top level scroll
         document.body.style.overflow = "hidden";
         this.drawer = null;
