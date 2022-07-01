@@ -257,7 +257,9 @@ export class BasePage extends AtomControl {
 
     protected show() {
         this.element._logicalParent.appendChild(this.element);
-        this.element.dataset.pageState = "ready";
+        setTimeout(() => {
+            this.element.dataset.pageState = "ready";
+        }, 10);
     }
 }
 
