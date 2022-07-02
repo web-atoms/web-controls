@@ -23,16 +23,7 @@ CSS(StyleRule()
 
 export default class BottomPopup extends AtomControl {
 
-    public static showControl<T>(
-        opener: HTMLElement | AtomControl,
-        options?: IPopupOptions): Promise<T> {
-        options ??= {};
-        let start = ((opener as any)?.atomControl?.element ?? opener);
-        const body = document.body;
-        while (start && start.parentElement !== body) {
-            start = start.parentElement;
-        }
-        options.parentElement = start;
+    public static show<T>(): Promise<T> {
         return new Promise((resolve, reject) => {
             const popup = new this(MobileApp.current.app);
             popup.close = (r) => {

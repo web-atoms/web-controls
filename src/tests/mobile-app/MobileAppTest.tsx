@@ -54,7 +54,7 @@ class Home extends ContentPage {
 
     protected create(): void {
 
-        this.actionRenderer = () => <i class="fad fa-search" event-click={() => PopupMenu.showControl(this)}/>;
+        this.actionRenderer = () => <i class="fad fa-search" event-click={() => PopupMenu.show()}/>;
 
         this.render(<div>
             Home
