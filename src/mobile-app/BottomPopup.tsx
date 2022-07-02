@@ -9,7 +9,7 @@ import MobileApp from "./MobileApp";
 
 CSS(StyleRule()
     .maximizeAbsolute()
-    .backgroundColor(Colors.maroon.withAlphaPercent(0.5))
+    .backgroundColor(Colors.black.withAlphaPercent(0.3))
     .zIndex("50000")
     .child(StyleRule("[data-element=content]")
         .backgroundColor(Colors.white)
