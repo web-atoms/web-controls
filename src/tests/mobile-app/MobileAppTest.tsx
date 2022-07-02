@@ -3,6 +3,8 @@ import XNode from "@web-atoms/core/dist/core/XNode";
 import Pack from "@web-atoms/core/dist/Pack";
 import { NavigationService } from "@web-atoms/core/dist/services/NavigationService";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
+import { MenuItem } from "../../basic/PopupButton";
+import BottomPopup from "../../mobile-app/BottomPopup";
 import MobileApp, { ContentPage, Drawer } from "../../mobile-app/MobileApp";
 
 class Detail extends ContentPage {
@@ -49,8 +51,23 @@ class DrawerMenu extends Drawer {
 }
 
 class Home extends ContentPage {
+
     protected create(): void {
-        this.render(<div>Home</div>);
+
+        this.actionRenderer = () => <i class="fad fa-search" event-click={() => PopupMenu.showControl(this)}/>;
+
+        this.render(<div>
+            Home
+        </div>);
+    }
+}
+
+class PopupMenu extends BottomPopup {
+    protected create() {
+        this.render(<div>
+            <MenuItem label="One"/>
+            <MenuItem label="Two"/>
+        </div>);
     }
 }
 

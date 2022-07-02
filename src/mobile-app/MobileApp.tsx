@@ -84,7 +84,7 @@ CSS(StyleRule()
         .padding(10)
         .gridRowStart("1")
         .gridColumnStart("3")
-        .nested(StyleRule("button") 
+        .nested(StyleRule("button")
             .width(30)
             .border("none")
             .outline("none")
@@ -92,7 +92,7 @@ CSS(StyleRule()
             .fontSize("inherit")
         )
     )
-    .child(StyleRule("button[data-page-element=action]") 
+    .child(StyleRule("button[data-page-element=action]")
         .width(30)
         .zIndex(12)
         .border("none")
@@ -291,6 +291,8 @@ export class Drawer extends AtomControl {
 
 export default class MobileApp extends AtomControl {
 
+    public static current: MobileApp;
+
     public static drawer = XNode.prepare("drawer", true, true);
 
     public drawer: typeof Drawer;
@@ -344,6 +346,8 @@ export default class MobileApp extends AtomControl {
     }
 
     protected preCreate(): void {
+
+        MobileApp.current = this;
 
         // tslint:disable-next-line: ban-types
         window.addEventListener("backButton", (ce: CustomEvent<Function>) => {
