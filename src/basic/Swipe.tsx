@@ -11,13 +11,25 @@ let swipeStart: ISwipeStart = null;
 
 CSS(StyleRule()
     .display("grid")
-    .alignItems("stretch")
-    .justifyContent("stretch" as any)
     .child(StyleRule("*")
         .gridRow("1")
         .gridColumn("1")
     )
 , "[data-swipe]");
+
+CSS(StyleRule()
+    .child(StyleRule("*")
+        .alignSelf("center")
+        .justifySelf("end" as any)
+        .zIndex(2)
+        .and(StyleRule(":first-child")
+            .alignSelf("stretch")
+            .justifySelf("stretch" as any)
+            .zIndex(10)
+        )
+    )
+, "[data-swipe=left]");
+
 
 document.body.addEventListener("touchstart", (e: TouchEvent) => {
     let element = e.target as HTMLElement;
@@ -61,7 +73,8 @@ document.body.addEventListener("touchmove", (e: TouchEvent) => {
     const { left } = element.getBoundingClientRect();
     const cx = e.touches[0].screenX - left;
     const { x } = swipeStart;
-    if (x < cx) {
+    let diff = cx - x;
+    if (diff > 0) {
         // swipe right..
         if (swipe !== "right") {
             return;
@@ -70,9 +83,42 @@ document.body.addEventListener("touchmove", (e: TouchEvent) => {
         if (swipe !== "left") {
             return;
         }
-        let child = element.firstElementChild;
+        let content = element.firstElementChild as HTMLElement;
+        let maxMargin = 0;
+        let child = content?.nextElementSibling as HTMLElement;
+        let count = 0;
         while (child) {
-            
+            maxMargin += child.offsetWidth;
+            count++;
+            child = child.nextElementSibling as HTMLElement;
+        }
+        let margin = -diff;
+        if (maxMargin && margin > maxMargin) {
+            margin = maxMargin;
+        }
+        if (margin <= 5) {
+            delete content.style.marginRight;
+            delete content.style.transform;
+            child = content?.nextElementSibling as HTMLElement;
+            while (child) {
+                delete child.style.marginRight;
+                child = child.nextElementSibling as HTMLElement;
+            }
+            return;
+        }
+        content.style.marginRight = `${margin}px`;
+        content.style.transform = `translateX(-${margin}px)`;
+        
+        let avgMargin = Math.ceil(margin / count);
+        child = content?.nextElementSibling as HTMLElement;
+        while (child) {
+            count--;
+            if (count === 0) {
+                break;
+            }
+            let m = (avgMargin * count) + 5;
+            child.style.marginRight = `${m}px`;
+            child = child.nextElementSibling as HTMLElement;
         }
     }
 });
