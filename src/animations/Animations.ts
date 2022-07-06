@@ -41,6 +41,9 @@ export default class Animations {
             }, 10);
             return;
         }
+        if (e.dataset.animationState === "normal") {
+            e.dataset.animationState = "down";
+        }
         setTimeout(() => {
             e.removeAttribute("data-animation-state");
         }, 600);
@@ -54,6 +57,9 @@ export default class Animations {
                 e.dataset.animationState = "normal";
             }, 10);
             return;
+        }
+        if (e.dataset.animationState === "normal") {
+            e.dataset.animationState = "up";
         }
         setTimeout(() => {
             e.removeAttribute("data-animation-state");
