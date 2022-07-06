@@ -34,8 +34,8 @@ export default class Animations {
 
     public static slideFromBottom = AtomControl.registerProperty("animate", "bottom-slide", (ctrl, e, v) => {
         e.dataset.animateSlide = "from-bottom";
-        e.dataset.animationState = "down";
         if (v) {
+            e.dataset.animationState = "down";
             setTimeout(() => {
                 e.dataset.animationState = "normal";
             }, 10);
@@ -48,8 +48,8 @@ export default class Animations {
 
     public static slideFromTop = AtomControl.registerProperty("animate", "top-slide", (ctrl, e, v) => {
         e.dataset.animateSlide = "from-top";
-        e.dataset.animationState = "up";
         if (v) {
+            e.dataset.animationState = "up";
             setTimeout(() => {
                 e.dataset.animationState = "normal";
             }, 10);
