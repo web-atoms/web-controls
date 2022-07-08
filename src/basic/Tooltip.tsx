@@ -17,57 +17,7 @@ ElementValueSetters.tooltip = (control: AtomControl, e: HTMLElement, value: any)
     });
 };
 
-document.body.addEventListener("pointerenter", (ev) => {
-    let start = ev.target as HTMLElement;
-    while (start) {
-        const item = tooltips.get(start);
-        if (!item) {
-            start = start.parentElement;
-            continue;
-        }
-        const [host, node] = item;
-        if (!host.tooltip) {
-
-            // find associated data/item
-            let data = getParentRepeaterItem(start);
-            if (data) {
-                data = data[2];
-            }
-
-            class TooltipControl extends node {
-
-                private enterEventDisposable;
-
-                protected preCreate(): void {
-                    this.element._logicalParent = start;
-                    if (data) {
-                        this.data = data;
-                    }
-                    const { element } = this;
-                    // tooltips.set(element, [{ tooltip: this, control: null }, node]);
-                    this.enterEventDisposable = this.bindEvent(element, "mouseenter", () => {
-                        setTimeout(() => {
-                            tooltips.set(element, [{ tooltip: host.tooltip, control: null}, null]);
-                            delete host.tooltip;
-                            this.enterEventDisposable.dispose();
-                        }, 10);
-                    });
-                    this.registerDisposable({
-                        dispose: () => {
-                            tooltips.delete(element);
-                        }
-                    });
-                }
-            }
-            const t = new TooltipControl(host.control.app);
-            const  alignment: any = start.dataset.tooltipAlignment ?? "auto";
-            host.tooltip = PopupService.show(start, t.element, {
-                alignment
-            });
-        }
-        break;
-    }
-}, true);
+document.body.addEventListener("pointerenter", (ev) => Tooltip.show(ev.target as HTMLElement), true);
 
 document.body.addEventListener("pointerleave", (ev) => {
     const start = ev.target as HTMLElement;
@@ -90,4 +40,55 @@ CSS(StyleRule()
 "div[data-tooltip=tooltip]");
 
 export default class Tooltip extends AtomControl {
+
+    public static show(start: HTMLElement) {
+        while (start) {
+            const item = tooltips.get(start);
+            if (!item) {
+                start = start.parentElement;
+                continue;
+            }
+            const [host, node] = item;
+            if (!host.tooltip) {
+
+                // find associated data/item
+                let data = getParentRepeaterItem(start);
+                if (data) {
+                    data = data[2];
+                }
+
+                class TooltipControl extends node {
+
+                    private enterEventDisposable;
+
+                    protected preCreate(): void {
+                        this.element._logicalParent = start;
+                        if (data) {
+                            this.data = data;
+                        }
+                        const { element } = this;
+                        // tooltips.set(element, [{ tooltip: this, control: null }, node]);
+                        this.enterEventDisposable = this.bindEvent(element, "mouseenter", () => {
+                            setTimeout(() => {
+                                tooltips.set(element, [{ tooltip: host.tooltip, control: null}, null]);
+                                delete host.tooltip;
+                                this.enterEventDisposable.dispose();
+                            }, 10);
+                        });
+                        this.registerDisposable({
+                            dispose: () => {
+                                tooltips.delete(element);
+                            }
+                        });
+                    }
+                }
+                const t = new TooltipControl(host.control.app);
+                const  alignment: any = start.dataset.tooltipAlignment ?? "auto";
+                host.tooltip = PopupService.show(start, t.element, {
+                    alignment
+                });
+            }
+            break;
+        }
+    }
 }
