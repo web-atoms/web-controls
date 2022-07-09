@@ -7,8 +7,8 @@ import CSS from "@web-atoms/core/dist/web/styles/CSS";
 export interface IExpander {
     icon?: string | string[];
     isExpanded: boolean;
-    "event-expanded"?: () => void;
-    "event-collapsed"?: () => void;
+    "event-expanded"?: (e: CustomEvent) => any;
+    "event-collapsed"?: (e: CustomEvent) => any;
     [key: string]: any;
 }
 
