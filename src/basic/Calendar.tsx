@@ -182,7 +182,7 @@ export default class Calendar extends AtomRepeater {
     public get years() {
         const years = [];
         const s = start.year + this.yearStart;
-        const e = start.year + this.yearEnd;
+        const e = start.year + this.yearEnd + 1;
         for (let index = s; index < e; index++) {
             years.push({
                 label: index.toString(),

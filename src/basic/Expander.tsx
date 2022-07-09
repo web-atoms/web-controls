@@ -62,9 +62,12 @@ CSS(StyleRule()
 , "*[data-is-expander]");
 
 document.body.addEventListener("click", (e: MouseEvent) => {
+    if (e.defaultPrevented) {
+        return;
+    }
     let start = e.target as HTMLElement;
     while (start) {
-        if(/icon|caret|header/.test(start.dataset.element)) {
+        if (/icon|caret|header/.test(start.dataset.element)) {
             break;
         }
         start = start.parentElement;
@@ -75,12 +78,28 @@ document.body.addEventListener("click", (e: MouseEvent) => {
     }
     const ds = start.dataset;
     if (ds.isExpanded === "false") {
-        ds.isExpanded = "true";
-        start.dispatchEvent(new CustomEvent("expanded", { bubbles: false }));
+        // ds.isExpanded = "true";
+        start.dispatchEvent(new CustomEvent("expanded", { bubbles: true, cancelable: true }));
     } else {
-        ds.isExpanded = "false";
-        start.dispatchEvent(new CustomEvent("collapsed", { bubbles: false }));
+        // ds.isExpanded = "false";
+        start.dispatchEvent(new CustomEvent("collapsed", { bubbles: true, cancelable: true }));
     }
+});
+
+document.body.addEventListener("expanded", (ce) => {
+    if (ce.defaultPrevented) {
+        return;
+    }
+    const target = ce.target as HTMLElement;
+    target.dataset.isExpanded = "true";
+});
+
+document.body.addEventListener("collapsed", (ce) => {
+    if (ce.defaultPrevented) {
+        return;
+    }
+    const target = ce.target as HTMLElement;
+    target.dataset.isExpanded = "false";
 });
 
 export default function Expander(

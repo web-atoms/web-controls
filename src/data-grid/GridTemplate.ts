@@ -21,8 +21,8 @@ export default function GridTemplate(
 
         private lastCreateRowId = null;
 
-        constructor(app: App, e?: HTMLElement) {
-            super(app, e || document.createElement("tr"));
+        constructor(app: App, e: HTMLElement = document.createElement("tr")) {
+            super(app, e);
         }
 
         public preCreate(): void {

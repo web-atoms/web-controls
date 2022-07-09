@@ -10,13 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3.2.0
         with:
-          node-version: 12
+          node-version: 16
           registry-url: https://registry.npmjs.org/
       - run: npm install -g typescript
+      - run: npm install -D istanbul remap-istanbul
       - run: npm install
       - run: tsc
+      # - run: node ./node_modules/@web-atoms/ts-to-systemjs/index.js
       - run: npm run test
       - run: npm publish --access public
         env:

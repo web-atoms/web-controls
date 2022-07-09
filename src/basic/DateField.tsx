@@ -35,6 +35,9 @@ export default class DateField extends AtomControl {
     @BindableProperty
     public yearEnd: any;
 
+    @BindableProperty
+    public year: number;
+
     protected preCreate(): void {
         this.value = null;
         this.format = (d) => d?.toLocaleDateString(
@@ -53,11 +56,14 @@ export default class DateField extends AtomControl {
             protected create(): void {
                 this.owner = owner;
                 super.create();
-                if (owner.yearStart) {
+                if (typeof owner.yearStart === "number") {
                     this.yearStart = owner.yearStart;
                 }
-                if (owner.yearEnd) {
+                if (typeof owner.yearEnd === "number") {
                     this.yearEnd = owner.yearEnd;
+                }
+                if (typeof owner.year === "number") {
+                    this.year = owner.year;
                 }
                 this.render(<Calendar
                     event-item-select={Bind.event((s, e) => {

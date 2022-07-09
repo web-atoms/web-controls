@@ -1,6 +1,7 @@
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
+import IElement from "./IElement";
 
 /**
  * Original source = https://www.htmllion.com/css3-toggle-switch-button.html
@@ -90,7 +91,7 @@ const css = CSS(StyleRule()
 	)
 , "*[data-ui-switch=ui-switch]");
 
-export interface ISwitch {
+export interface ISwitch extends IElement {
 	checked;
 	onLabel?: string;
 	offLabel?: string;
@@ -99,10 +100,11 @@ export interface ISwitch {
 export default function Switch({
 	checked,
 	onLabel,
-	offLabel
+	offLabel,
+	... a
 }: ISwitch) {
 
-    return <label data-ui-switch="ui-switch">
+    return <label data-ui-switch="ui-switch" { ... a} >
 	    <input class="switch-input" type="checkbox" checked={checked} />
 	    <span class="switch-label" data-on={onLabel ?? "On"} data-off={offLabel ?? "Off"}></span>
 	    <span class="switch-handle"></span>

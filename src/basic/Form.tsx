@@ -1,9 +1,12 @@
 import Bind from "@web-atoms/core/dist/core/Bind";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
+import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import FormField from "./FormField";
 import IElement from "./IElement";
+import ToggleButtonBar from "./ToggleButtonBar";
+export const FormButtonBar = ToggleButtonBar;
 
 const css = CSS(StyleRule()
     .verticalFlexLayout({ alignItems: "stretch" })
@@ -11,6 +14,10 @@ const css = CSS(StyleRule()
     .displayNone(":not([data-wa-show-errors=yes]) .field-error:not(:empty)")
     .child(StyleRule("button")
         .alignSelf("flex-start")
+    )
+    .and(StyleRule("[data-scrollable=true]")
+        .justifyContent("flex-start")
+        .overflow("auto")
     )
 , "*[data-wa-form=wa-form]");
 
@@ -208,6 +215,7 @@ document.body.addEventListener("click", (e: MouseEvent) => {
 export interface IForm {
     id?: number;
     class?: any;
+    scrollable?: boolean ;
     /**
      * If set, when an enter key is pressed on
      * non textarea element, form will be submitted automatically
@@ -223,10 +231,30 @@ export interface IForm {
 
 let formId = 0;
 
+const formGroupSymbol = Symbol("formGroup");
+
+export interface IFormGroup {
+    group: string;
+    // header?: string;
+    // icon?: string;
+}
+
+export function FormGroup(
+    fg: IFormGroup,
+    ... nodes: XNode[]
+    ) {
+    fg[formGroupSymbol] = true;
+    return <div
+        { ... fg}>
+        { ... nodes}
+    </div>;
+}
+
 export default function Form(
     {
         id = formId++,
         focusNextOnEnter = true,
+        scrollable,
         eventSubmit,
         ... a
     }: IForm,
@@ -235,14 +263,153 @@ export default function Form(
         a.eventKeypress = moveNext(eventSubmit);
     }
     a["data-form-id"] = id;
+    a["data-scrollable"] = !!scrollable;
+    if (!eventSubmit) {
+        a["data-wa-show-errors"] = "yes";
+    }
+
+    const fields = [];
+    for (const iterator of nodes) {
+        if (!iterator) {
+            continue;
+        }
+        const ca = iterator.attributes as any;
+        if (ca?.[formGroupSymbol]) {
+            for (const child of iterator.children) {
+                const cha = child.attributes ??= {};
+                cha["data-group"] = ca.group;
+                fields.push(child);
+            }
+            continue;
+        }
+        fields.push(iterator);
+    }
+
     return <div
         data-wa-form="wa-form"
         { ... a}
         eventSubmitForm={eventSubmit}
         eventClick={checkValidity(eventSubmit)}>
-        { ... nodes}
+        { ... fields}
     </div>;
 }
+
+export interface IFormLayout extends IForm {
+    header?: XNode;
+    footer?: XNode;
+}
+
+CSS(StyleRule()
+    .display("grid")
+    .alignSelf("stretch")
+    .justifyContent("stretch" as any)
+    .flex("1 1 100%")
+    .gridTemplateRows("auto 1fr auto")
+    .gridTemplateColumns("1fr")
+    .child(StyleRule("[data-element=header]")
+        .gridRowStart("1")
+    )
+    .child(StyleRule("[data-element=content]")
+        .gridRowStart("2")
+        .overflow("auto")
+        .child(StyleRule("div")
+            .verticalFlexLayout({ alignItems: "stretch", gap: 10 })
+        )
+    )
+    .child(StyleRule("[data-element=footer]")
+        .gridRowStart("3")
+    )
+, "*[data-form-layout=form-layout]");
+
+const elementType = Symbol.for("elementType");
+
+export function FormLayout(
+    {
+        id = formId++,
+        focusNextOnEnter = true,
+        scrollable,
+        eventSubmit,
+        header,
+        footer,
+        ... a
+    }: IFormLayout,
+    ... nodes: XNode[]) {
+    if (focusNextOnEnter) {
+        a.eventKeypress = moveNext(eventSubmit);
+    }
+    a["data-form-id"] = id;
+    a["data-scrollable"] = !!scrollable;
+    if (!eventSubmit) {
+        a["data-wa-show-errors"] = "yes";
+    }
+
+    const fields = [];
+    for (const iterator of nodes) {
+        if (!iterator) {
+            continue;
+        }
+
+        const et = iterator[elementType];
+        if (et !== void 0) {
+            if (et === "header") {
+                header = iterator;
+                delete iterator[elementType];
+                continue;
+            }
+            if (et === "footer") {
+                footer = iterator;
+                delete iterator[elementType];
+                continue;
+            }
+        }
+
+        const ca = iterator.attributes as any;
+        if (ca?.[formGroupSymbol]) {
+            for (const child of iterator.children) {
+                const cha = child.attributes ??= {};
+                cha["data-group"] = ca.group;
+                fields.push(child);
+            }
+            continue;
+        }
+        fields.push(iterator);
+    }
+
+    if (header) {
+        const ha = header.attributes ??= {};
+        ha["data-element"] = "header";
+    }
+
+    if (footer) {
+        const ha = footer.attributes ??= {};
+        ha["data-element"] = "footer";
+    }
+
+    return <div
+        data-wa-form="wa-form"
+        data-form-layout="form-layout"
+        { ... a}
+        eventSubmitForm={eventSubmit}
+        eventClick={checkValidity(eventSubmit)}>
+        { header }
+        <div data-element="content">
+            <div>
+            { ... fields}
+            </div>
+        </div>
+        { footer }
+    </div>;
+}
+
+FormLayout.Footer = ({}, child: XNode) => {
+    child[elementType] = "footer";
+    return child;
+};
+
+FormLayout.Header = ({}, child: XNode) => {
+    child[elementType] = "header";
+    return child;
+};
 
 Form.newId = () => formId++;
 

@@ -9,8 +9,8 @@ export default class AtomSwitch extends AtomControl {
     @BindableProperty
     public value: boolean;
 
-    constructor(app, e) {
-        super(app, e || document.createElement("label"));
+    constructor(app, e = document.createElement("label")) {
+        super(app, e);
     }
 
     public create() {

@@ -4,11 +4,15 @@ import XNode from "@web-atoms/core/dist/core/XNode"
 import {BindableProperty} from "@web-atoms/core/dist/core/BindableProperty";
 import {AtomControl} from "@web-atoms/core/dist/web/controls/AtomControl";
 
-    import FormattedString from "@web-atoms/core/dist/core/FormattedString";
+    import FormattedString from "@web-atoms/core/dist/core/FormattedString";
 
 
-export default class AtomColumn extends AtomControl {	
-	constructor(app: any, e?: any) {		super(app, e || document.createElement("th"));	}
+
+export default class AtomColumn extends AtomControl {
+	
+	constructor(app: any, e: any = document.createElement("th")) {
+		super(app, e);
+	}
 
 	@BindableProperty
 	public label: string | FormattedString ;
@@ -34,7 +38,8 @@ export default class AtomColumn extends AtomControl {
 	@BindableProperty
 	public dataTemplate: any ;
 
-	public create(): void {		
+	public create(): void {
+		
 		this.label = null;
 		this.labelPath = null;
 		this.valuePath = null;
@@ -47,9 +52,14 @@ export default class AtomColumn extends AtomControl {
 		<div>
 			<span
 				template="headerTemplate"
-				formattedText={Bind.oneWay(() => this.label)}>			</span>
+				formattedText={Bind.oneWay(() => this.label)}>
+			</span>
 			<span
 				template="dataTemplate"
 				styleTextAlign={Bind.oneWay(() => this.align)}
-				formattedText={Bind.oneWay((x) => x.localViewModel.getItem(x.data, this.valuePath))}>			</span>		</div>
-		);	}}
+				formattedText={Bind.oneWay((x) => x.localViewModel.getItem(x.data, this.valuePath))}>
+			</span>
+		</div>
+		);
+	}
+}
