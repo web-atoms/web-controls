@@ -62,9 +62,12 @@ CSS(StyleRule()
 , "*[data-is-expander]");
 
 document.body.addEventListener("click", (e: MouseEvent) => {
+    if (e.defaultPrevented) {
+        return;
+    }
     let start = e.target as HTMLElement;
     while (start) {
-        if(/icon|caret|header/.test(start.dataset.element)) {
+        if (/icon|caret|header/.test(start.dataset.element)) {
             break;
         }
         start = start.parentElement;
