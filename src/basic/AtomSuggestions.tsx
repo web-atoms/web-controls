@@ -82,13 +82,13 @@ export default class AtomSuggestions extends AtomRepeater {
             case "version":
                 // this.updateVisibility(this.itemsPresenter);
                 const vp = this.valuePath ?? ((item) => item);
-                const selectedValues = (this.selectedItems ?? []).map(vp);
-                this.updateVisibilityFilter(vp, selectedValues);
+                this.updateVisibilityFilter(vp, this.selectedItems ?? []);
                 break;
         }
     }
 
-    protected updateVisibilityFilter(vp: (item) => boolean, selectedValues: any[]) {
+    protected updateVisibilityFilter(vp: (item) => boolean, selectedItems: any[]) {
+        const selectedValues = selectedItems.map(vp);
         this.visibilityFilter = (item) => {
             const v = vp(item);
             return selectedValues.length === 0 || selectedValues.indexOf(v) === -1;
