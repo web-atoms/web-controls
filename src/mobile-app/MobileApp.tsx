@@ -14,6 +14,7 @@ import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
 CSS(StyleRule()
     .absolutePosition({ left: 0, top: 0, right: 0, bottom: 0})
+    .padding(5)
     .overflow("hidden")
     .child(StyleRule("[data-container]")
         .absolutePosition({ left: 0, top: 0, bottom: 0, width: "100%"})
