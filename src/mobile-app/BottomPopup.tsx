@@ -75,6 +75,7 @@ export default class BottomPopup extends AtomControl {
         const na = node.attributes ??= {};
         na["data-animate-slide"] = "from-bottom";
         na["data-element"] = "content";
+        na["data-click-event"] = "popupClick";
         this.render(<div>
             { node }
         </div>);
