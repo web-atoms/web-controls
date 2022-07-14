@@ -386,7 +386,7 @@ export default class MobileApp extends AtomControl {
     protected async loadPageForReturn(url: AtomUri, clearHistory: boolean): Promise<any> {
         const p = await this.loadPage(url, clearHistory);
         try {
-            return await (p as any).returnPromise;
+            return await (p as any);
         } catch (ex) {
             // this will prevent warning in chrome for unhandled exception
             if ((ex.message ? ex.message : ex) === "cancelled") {
