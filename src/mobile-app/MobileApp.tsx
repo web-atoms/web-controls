@@ -163,6 +163,8 @@ export class BasePage extends AtomControl {
 
     public headerBackgroundRenderer: () => XNode;
 
+    public init: () => any;
+
     public iconClass: any;
 
     public async requestCancel() {
