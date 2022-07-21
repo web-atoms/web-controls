@@ -400,8 +400,7 @@ export default class MobileApp extends AtomControl {
     }
 
     protected async loadPage(url: AtomUri, clearHistory: boolean) {
-        const { view: page, disposables } =
-        await AtomLoader.loadView<BasePage>(url, this.app, false, () => new AtomWindowViewModel(this.app));
+        const page = await AtomLoader.loadControl<BasePage>(url, this.app);
         page.title = "Title";
         if (url.query && url.query.title) {
             page.title = url.query.title.toString();
