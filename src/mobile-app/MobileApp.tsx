@@ -179,9 +179,12 @@ export class BasePage extends AtomControl {
 
     protected init: () => any;
 
+    private viewModelTitle: string;
+
     protected preCreate(): void {
         this.element.dataset.basePage = "base-page";
         this.iconClass = "";
+        this.viewModelTitle = null;
         this.runAfterInit(() => {
             if (!this.element) {
                 return;
@@ -208,7 +211,7 @@ export class BasePage extends AtomControl {
     protected render(node: XNode, e?: any, creator?: any): void {
         this.render = super.render;
         const titleContent = this.titleRenderer?.() ?? <span
-            class="title-text" text={Bind.oneWay(() => this.title)}/>;
+            class="title-text" text={Bind.oneWay(() => this.viewModelTitle || this.title)}/>;
         const icon = this.iconRenderer?.() ?? <i
             data-icon-button="icon-button"
             class={Bind.oneWay(() => this.iconClass)}
@@ -402,12 +405,10 @@ export default class MobileApp extends AtomControl {
 
     protected async loadPage(url: AtomUri, clearHistory: boolean) {
         const page = await AtomLoader.loadControl<BasePage>(url, this.app);
-        page.title = "Title";
+        page.title ??= "Title";
         if (url.query && url.query.title) {
             page.title = url.query.title.toString();
         }
-
-        page.bind(page.element, "title", [["viewModel", "title"]]);
 
         const selectedPage = this.selectedPage;
         if (selectedPage) {
