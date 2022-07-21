@@ -162,9 +162,6 @@ export class BasePage extends AtomControl {
     public footerRenderer: () => XNode;
 
     public headerBackgroundRenderer: () => XNode;
-
-    public init: () => any;
-
     public iconClass: any;
 
     public async requestCancel() {
@@ -179,6 +176,8 @@ export class BasePage extends AtomControl {
         }
         this.cancel();
     }
+
+    protected init: () => any;
 
     protected preCreate(): void {
         this.element.dataset.basePage = "base-page";
