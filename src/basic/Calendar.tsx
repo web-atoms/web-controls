@@ -223,7 +223,7 @@ export default class Calendar extends AtomRepeater {
     protected preCreate(): void {
         const now = new Date();
         this.selectedItems = [];
-        this.valuePath = (i) => i.value;
+        this.valuePath = (i) => i?.value;
         this.yearStart = -10;
         this.yearEnd = 10;
         this.year = now.getFullYear();
