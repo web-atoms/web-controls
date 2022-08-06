@@ -12,6 +12,11 @@ import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { IDialogOptions, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
+export interface IItemPair<ParentItem, ChildItem> {
+    parent: ParentItem;
+    child: ChildItem;
+}
+
 const popupCSS = CSS(StyleRule()
     .height(500)
     .width(300)
@@ -1027,9 +1032,9 @@ export default class AtomRepeater extends AtomControl {
         }
     }
 
-    protected dispatchItemEvent(eventName, item, recreate, originalTarget) {
+    protected dispatchItemEvent(eventName, item, recreate, originalTarget, nestedItem?) {
         const ce = new CustomEvent(eventName ?? "itemClick", {
-            detail: item,
+            detail: nestedItem ? { parent: item, child: nestedItem } : item,
             bubbles: this.bubbleEvents,
             cancelable: true
         });
@@ -1090,7 +1095,7 @@ export default class AtomRepeater extends AtomControl {
                 for (const iterator of itemPath.split(".")) {
                     nestedItem = nestedItem[iterator];
                 }
-                this.dispatchItemEvent(clickEvent, nestedItem, recreate, e.target);
+                this.dispatchItemEvent(clickEvent, item, recreate, e.target, nestedItem);
                 return;
             }
             this.dispatchItemEvent(clickEvent, item, recreate, e.target);
