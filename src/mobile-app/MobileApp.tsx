@@ -9,6 +9,7 @@ import { NavigationService } from "@web-atoms/core/dist/services/NavigationServi
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomWindowViewModel } from "@web-atoms/core/dist/view-model/AtomWindowViewModel";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
+import { AtomUI, ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import PopupService, { ConfirmPopup, IPopup, PopupControl } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
@@ -212,10 +213,12 @@ export class BasePage extends AtomControl {
 
     protected recreate(renderer, name) {
         const node = this[renderer]?.() ?? undefined;
-        const existing = this.element.querySelector(`[data-page-element]="${name}"`) as HTMLElement;
-        if (existing) {
-            this.dispose(existing);
-            existing.remove();
+        for (const e of ChildEnumerator.enumerate(this.element)) {
+            if (e.dataset.pageElement === name) {
+                this.dispose(e);
+                e.remove();
+                break;
+            }
         }
         if (node) {
             const na = node.attributes ??= {};
