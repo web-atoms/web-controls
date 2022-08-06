@@ -532,7 +532,7 @@ export default class AtomRepeater extends AtomControl {
     public enableFunc: (item: any) => boolean;
 
     @BindableProperty
-    public itemRenderer: (item) => XNode;
+    public itemRenderer: (item, index?: number) => XNode;
 
     @BindableProperty
     public valuePath: (a) => any;
@@ -843,7 +843,7 @@ export default class AtomRepeater extends AtomControl {
         }
 
         if (!isRemove) {
-            const en = ir(item);
+            const en = ir(item, index);
             const ea = en.attributes ??= {};
             const v = vp(item);
             const e = document.createElement(ea.for ?? en.name ?? "div");
@@ -910,11 +910,12 @@ export default class AtomRepeater extends AtomControl {
         const si = (this.selectedItems ?? []).map(vp);
         let i = 0;
         for (const iterator of items) {
-            const e = ir(iterator);
+            const index = i++;
+            const e = ir(iterator, index);
             const ea = e.attributes ??= {};
             const v = vp(iterator);
             const element = document.createElement(ea.for ?? e.name ?? "div");
-            element.dataset.itemIndex = (i++).toString();
+            element.dataset.itemIndex = index.toString();
             element.dataset.selectedItem = si.indexOf(v) !== -1 ? "true" : "false";
             this.render(e, element, this);
             if (this.enableDragDrop) {
@@ -1048,7 +1049,9 @@ export default class AtomRepeater extends AtomControl {
             // tslint:disable-next-line: prefer-const
             footer,
             // tslint:disable-next-line: prefer-const
-            itemIndex
+            itemIndex,
+            // tslint:disable-next-line: prefer-const
+            itemPath
         } = data;
         clickEvent = clickEvent.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
         if (header) {
@@ -1081,6 +1084,15 @@ export default class AtomRepeater extends AtomControl {
             }
         }
         if (item) {
+            if (itemPath) {
+                // check path...
+                let nestedItem = item;
+                for (const iterator of itemPath.split(".")) {
+                    nestedItem = nestedItem[iterator];
+                }
+                this.dispatchItemEvent(clickEvent, nestedItem, recreate, e.target);
+                return;
+            }
             this.dispatchItemEvent(clickEvent, item, recreate, e.target);
         }
 
