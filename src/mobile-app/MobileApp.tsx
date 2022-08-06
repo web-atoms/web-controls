@@ -154,16 +154,26 @@ export class BasePage extends AtomControl {
     @BindableProperty
     public title?: string;
 
+    @BindableProperty
     public titleRenderer: () => XNode;
 
+    @BindableProperty
     public iconRenderer: () => XNode;
 
+    @BindableProperty
     public actionRenderer: () => XNode;
 
+    @BindableProperty
     public footerRenderer: () => XNode;
 
     public headerBackgroundRenderer: () => XNode;
     public iconClass: any;
+
+    protected init: () => any;
+
+    private viewModelTitle: string;
+
+    private initialized: boolean;
 
     public async requestCancel() {
         if (this.closeWarning) {
@@ -178,9 +188,42 @@ export class BasePage extends AtomControl {
         this.cancel();
     }
 
-    protected init: () => any;
+    public onPropertyChanged(name) {
+        super.onPropertyChanged(name);
 
-    private viewModelTitle: string;
+        if (!this.initialized) {
+            return;
+        }
+        switch (name) {
+            case "footerRenderer":
+                this.recreate(name, "footer");
+                break;
+            case "iconRenderer":
+                this.recreate(name, "icon");
+                break;
+            case "titleRenderer":
+                this.recreate(name, "title");
+                break;
+            case "actionRenderer":
+                this.recreate(name, "action");
+                break;
+        }
+    }
+
+    protected recreate(renderer, name) {
+        const node = this[renderer]?.() ?? undefined;
+        const existing = this.element.querySelector(`[data-page-element]="${name}"`) as HTMLElement;
+        if (existing) {
+            this.dispose(existing);
+            existing.remove();
+        }
+        if (node) {
+            const na = node.attributes ??= {};
+            na["data-page-element"] = name;
+            this.render(<div>{node}</div>);
+        }
+
+    }
 
     protected preCreate(): void {
         this.element.dataset.basePage = "base-page";
@@ -253,6 +296,7 @@ export class BasePage extends AtomControl {
             { node }
             { footer }
         </div>);
+        this.initialized = true;
     }
 
     protected dispatchIconClickEvent(e: Event) {
