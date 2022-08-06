@@ -12,7 +12,7 @@ import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { IDialogOptions, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
-export interface IItemPair<ParentItem, ChildItem> {
+export interface IItemPair<ParentItem = any, ChildItem = any> {
     parent: ParentItem;
     child: ChildItem;
 }
