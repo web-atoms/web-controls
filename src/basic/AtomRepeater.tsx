@@ -1094,7 +1094,7 @@ export default class AtomRepeater extends AtomControl {
                 let nestedItem = {};
                 const all: string[] = itemPath.split(",");
                 for (const iterator of all) {
-                    let [name,paths] = iterator.split("=");
+                    let [name,paths] = iterator.split(/\=|\:/);
                     if (paths === void 0) {
                         if (all.length > 1) {
                             throw new Error("Invalid path, please use name=path format");
