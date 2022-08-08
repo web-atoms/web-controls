@@ -1094,27 +1094,26 @@ export default class AtomRepeater extends AtomControl {
                 let nestedItem = {};
                 const all: string[] = itemPath.split(",");
                 for (const iterator of all) {
-                    for (let [name,paths] of iterator.split("=")) {
-                        if (paths === void 0) {
-                            if (all.length > 1) {
-                                throw new Error("Invalid path, please use name=path format");
-                            }
-                            paths = name;
+                    let [name,paths] = iterator.split("=");
+                    if (paths === void 0) {
+                        if (all.length > 1) {
+                            throw new Error("Invalid path, please use name=path format");
                         }
-                        let start = item;
-                        for (const path of paths.split(".")) {
-                            if (path === "$") {
-                                start = item;
-                                continue;
-                            }
-                            start = start[path];
-                        }
-                        if (all.length === 1) {
-                            nestedItem = start;
-                            break;
-                        }
-                        nestedItem[name] = start;
+                        paths = name;
                     }
+                    let start = item;
+                    for (const path of paths.split(".")) {
+                        if (path === "$") {
+                            start = item;
+                            continue;
+                        }
+                        start = start[path];
+                    }
+                    if (all.length === 1) {
+                        nestedItem = start;
+                        break;
+                    }
+                    nestedItem[name] = start;
                 }
                 this.dispatchItemEvent(clickEvent, item, recreate, e.target, nestedItem);
                 return;
