@@ -1034,7 +1034,7 @@ export default class AtomRepeater extends AtomControl {
 
     protected dispatchItemEvent(eventName, item, recreate, originalTarget, nestedItem?) {
         const ce = new CustomEvent(eventName ?? "itemClick", {
-            detail: nestedItem ? { parent: item, child: nestedItem } : item,
+            detail: nestedItem ?? item,
             bubbles: this.bubbleEvents,
             cancelable: true
         });
@@ -1091,9 +1091,30 @@ export default class AtomRepeater extends AtomControl {
         if (item) {
             if (itemPath) {
                 // check path...
-                let nestedItem = item;
-                for (const iterator of itemPath.split(".")) {
-                    nestedItem = nestedItem[iterator];
+                let nestedItem = {};
+                const all: string[] = itemPath.split(",");
+                for (const iterator of all) {
+                    for (let [name,paths] of iterator.split("=")) {
+                        if (paths === void 0) {
+                            if (all.length > 1) {
+                                throw new Error("Invalid path, please use name=path format");
+                            }
+                            paths = name;
+                        }
+                        let start = item;
+                        for (const path of paths.split(".")) {
+                            if (path === "$") {
+                                start = item;
+                                continue;
+                            }
+                            start = start[path];
+                        }
+                        if (all.length === 1) {
+                            nestedItem = start;
+                            break;
+                        }
+                        nestedItem[name] = start;
+                    }
                 }
                 this.dispatchItemEvent(clickEvent, item, recreate, e.target, nestedItem);
                 return;
@@ -1103,76 +1124,6 @@ export default class AtomRepeater extends AtomControl {
 
     }
 }
-
-// function onElementClick(e: Event) {
-//     let target = e.target as HTMLElement;
-//     const originalTarget = target;
-//     let eventName;
-//     let repeater: AtomRepeater;
-//     let index;
-//     let type;
-//     let recreate;
-//     while (target) {
-//         const a = target.atomControl;
-//         if (a !== undefined && a instanceof AtomRepeater) {
-//             repeater = a;
-//             break;
-//         }
-//         if (index === undefined) {
-//             const itemIndex = target.dataset.itemIndex;
-//             if (itemIndex !== void 0) {
-//                 // tslint:disable-next-line: no-bitwise
-//                 index = ~~itemIndex;
-//             }
-//         }
-//         if (type === undefined) {
-//             const itemType = target.dataset.header ?? target.dataset.footer;
-//             if (itemType !== void 0) {
-//                 type = itemType;
-//             }
-//         }
-//         if (eventName === undefined) {
-//             const itemClickEvent = target.dataset.clickEvent;
-//             if (itemClickEvent) {
-//                 eventName = itemClickEvent.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
-//             }
-//         }
-//         if (recreate === undefined) {
-//             recreate = target.dataset.recreate;
-//         }
-//         target = target.parentElement as HTMLElement;
-//     }
-
-//     if (index === undefined) {
-//         if (type !== undefined) {
-//             (repeater as any).dispatchHeaderFooterEvent(eventName, type, originalTarget);
-//         }
-//         return;
-//     }
-
-//     // tslint:disable-next-line: no-bitwise
-//     const item = repeater.items[~~index];
-//     if (eventName === "itemSelect" || eventName === "itemDeselect") {
-//         const si = repeater.selectedItems ??= [];
-//         if (si) {
-//             index = si.indexOf(item);
-//             if (index === -1) {
-//                 if (repeater.allowMultipleSelection) {
-//                     si.add(item);
-//                 } else {
-//                     si.set(0, item);
-//                 }
-//             } else {
-//                 si.removeAt(index);
-//             }
-//         }
-//     }
-//     if (item) {
-//         (repeater as any).dispatchItemEvent(eventName, item, recreate, originalTarget);
-//     }
-// }
-
-// document.body.addEventListener("click", onElementClick, true);
 
 let hoverItem = {
     repeater: null,
