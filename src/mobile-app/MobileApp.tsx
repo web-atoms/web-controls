@@ -170,8 +170,6 @@ export class BasePage extends AtomControl {
     public headerBackgroundRenderer: () => XNode;
     public iconClass: any;
 
-    protected init: () => any;
-
     private viewModelTitle: string;
 
     private initialized: boolean;
@@ -209,6 +207,10 @@ export class BasePage extends AtomControl {
                 this.recreate(name, "action");
                 break;
         }
+    }
+
+    protected init(): any {
+
     }
 
     protected recreate(renderer, name) {
@@ -322,6 +324,8 @@ export class BasePage extends AtomControl {
         }, 10);
     }
 }
+
+delete (BasePage.prototype as any).init;
 
 export class ContentPage extends BasePage {
 }
