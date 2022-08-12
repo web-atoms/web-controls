@@ -73,7 +73,7 @@ document.body.addEventListener("keydown", (e) => {
 function askSuggestionPopup<T>(
     host: HTMLElement,
     opener: AtomChips,
-    itemRenderer: (item: T) => XNode,
+    itemRenderer: (item: T, index: number, repeater: AtomRepeater) => XNode,
     cancelToken: CancelToken): Promise<T> {
 
     class Suggestions extends PopupControl {
@@ -274,7 +274,7 @@ export default class AtomChips extends AtomRepeater {
     public match: Match<any>;
 
     @BindableProperty
-    public suggestionRenderer: (item) => XNode;
+    public suggestionRenderer: (item, index: number, repeater: AtomRepeater) => XNode;
 
     public itemToChip: (item, search) => any;
 

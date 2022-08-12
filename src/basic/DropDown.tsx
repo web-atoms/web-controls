@@ -115,7 +115,9 @@ export default class DropDown extends AtomRepeater {
             </div>);
             return;
         }
-        const node = ir(this.selectedItem);
+        const selectedItem = this.selectedItem;
+        const index = this.items.indexOf(selectedItem);
+        const node = ir(selectedItem, index, this);
         const na = node.attributes ??= {};
         if (!na["data-white-space"]) {
             na["data-white-space"] ="nowrap";

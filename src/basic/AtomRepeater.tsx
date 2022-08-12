@@ -115,7 +115,7 @@ export const SameObjectValue = (item) => item;
  */
 export function askSuggestion<T>(
     items: T[],
-    itemRenderer: (item: T) => XNode,
+    itemRenderer: (item: T, index: number, repeater: AtomRepeater) => XNode,
     match: Match<T>,
     options: IDialogOptions): Promise<T> {
     class Suggestions extends PopupWindow {
@@ -184,7 +184,7 @@ CSS(StyleRule()
 export function askSuggestionPopup<T>(
     opener: HTMLElement | AtomControl,
     items: T[],
-    itemRenderer: (item: T) => XNode,
+    itemRenderer: (item: T, index: number, repeater: AtomRepeater) => XNode,
     match: Match<T>,
     selectedItem: T): Promise<T> {
 
