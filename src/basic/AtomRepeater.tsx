@@ -507,6 +507,16 @@ function updateDragDrop(e: HTMLElement, force: boolean = false) {
 
 export default class AtomRepeater extends AtomControl {
 
+    public static from(element: HTMLElement) {
+        while (element) {
+            const { atomControl } = element;
+            if (atomControl instanceof AtomRepeater) {
+                return atomControl;
+            }
+            element = element.parentElement;
+        }   
+    }
+
     public "event-item-click"?: (e: CustomEvent) => void;
     public "event-item-select"?: (e: CustomEvent) => void;
     public "event-item-deselect"?: (e: CustomEvent) => void;
