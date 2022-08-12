@@ -11,6 +11,7 @@ import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { IDialogOptions, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
+import EventScope from "@web-atoms/core/dist/core/EventScope";
 
 export interface IItemPair<ParentItem = any, ChildItem = any> {
     parent: ParentItem;
@@ -574,6 +575,12 @@ export default class AtomRepeater extends AtomControl {
     public enableDragDrop: any;
 
     public itemTag: string;
+
+    public set refreshEventScope(v: EventScope) {
+        this.registerDisposable(v.listen((ce: CustomEvent) => {
+            this.refreshItem(ce.detail);
+        }));
+    }
 
     @WatchProperty
     public get allSelected() {
