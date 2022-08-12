@@ -547,7 +547,7 @@ export default class AtomRepeater extends AtomControl {
     public enableFunc: (item: any) => boolean;
 
     @BindableProperty
-    public itemRenderer: (item, index?: number) => XNode;
+    public itemRenderer: (item, index: number, repeater: AtomRepeater) => XNode;
 
     @BindableProperty
     public valuePath: (a) => any;
@@ -858,7 +858,7 @@ export default class AtomRepeater extends AtomControl {
         }
 
         if (!isRemove) {
-            const en = ir(item, index);
+            const en = ir(item, index, this);
             const ea = en.attributes ??= {};
             const v = vp(item);
             const e = document.createElement(ea.for ?? en.name ?? "div");
@@ -926,7 +926,7 @@ export default class AtomRepeater extends AtomControl {
         let i = 0;
         for (const iterator of items) {
             const index = i++;
-            const e = ir(iterator, index);
+            const e = ir(iterator, index, this);
             const ea = e.attributes ??= {};
             const v = vp(iterator);
             const element = document.createElement(ea.for ?? e.name ?? "div");
