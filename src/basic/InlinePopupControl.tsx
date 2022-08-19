@@ -6,9 +6,10 @@ import { IPopupOptions } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
 CSS(StyleRule()
-    .position("relative")
+    .position("absolute")
     .height(0)
     .width(0)
+    .left(0)
     .child(StyleRule("*")
         .position("absolute")
         .left(0)
@@ -77,7 +78,10 @@ export default class InlinePopupControl extends AtomControl {
             container.dataset.inlinePopup = "true";
 
             container.appendChild(popup.element);
-
+            container.style.top = openerElement.offsetHeight + "px";
+            if (openerElement.offsetParent !== openerElement.parentElement) {
+                openerElement.parentElement.style.position = "relative";
+            }
             openerElement.insertAdjacentElement("afterend", container);
 
             let resolved = false;
