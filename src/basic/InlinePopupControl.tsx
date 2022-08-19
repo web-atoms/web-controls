@@ -78,11 +78,13 @@ export default class InlinePopupControl extends AtomControl {
             container.dataset.inlinePopup = "true";
 
             container.appendChild(popup.element);
-            container.style.top = (openerElement.offsetTop + openerElement.offsetHeight) + "px";
             if (openerElement.offsetParent !== openerElement.parentElement) {
                 openerElement.parentElement.style.position = "relative";
             }
-            setTimeout(() => openerElement.insertAdjacentElement("afterend", container), 50);
+            setTimeout(() => {
+                container.style.top = (openerElement.offsetTop + openerElement.offsetHeight) + "px";
+                openerElement.insertAdjacentElement("afterend", container);
+            }, 50);
 
             let resolved = false;
             const { cancelToken } = options;
