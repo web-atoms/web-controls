@@ -78,7 +78,7 @@ export default class InlinePopupControl extends AtomControl {
             container.dataset.inlinePopup = "true";
 
             container.appendChild(popup.element);
-            container.style.top = openerElement.offsetHeight + "px";
+            container.style.top = (openerElement.offsetTop + openerElement.offsetHeight) + "px";
             if (openerElement.offsetParent !== openerElement.parentElement) {
                 openerElement.parentElement.style.position = "relative";
             }
@@ -88,7 +88,7 @@ export default class InlinePopupControl extends AtomControl {
             const { cancelToken } = options;
             if (cancelToken) {
                 cancelToken.registerForCancel((r) => {
-                    // popup.cancel(r);
+                    popup.cancel(r);
                 });
             }
             popup.close = (r) => {
