@@ -88,7 +88,7 @@ export default class InlinePopupControl extends AtomControl {
             const { cancelToken } = options;
             if (cancelToken) {
                 cancelToken.registerForCancel((r) => {
-                    popup.cancel(r);
+                    // popup.cancel(r);
                 });
             }
             popup.close = (r) => {
