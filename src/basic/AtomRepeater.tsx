@@ -12,6 +12,7 @@ import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { IDialogOptions, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import EventScope from "@web-atoms/core/dist/core/EventScope";
+import InlinePopupControl from "./InlinePopupControl";
 
 export interface IItemPair<ParentItem = any, ChildItem = any> {
     parent: ParentItem;
@@ -192,7 +193,7 @@ export function askSuggestionPopup<T>(
     const updateSearch = "search" in opener;
     const itemsInOpener = "items" in opener;
 
-    class Suggestions extends PopupControl {
+    class Suggestions extends InlinePopupControl {
 
         public anchorItem: T;
 

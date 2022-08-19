@@ -9,6 +9,7 @@ import { PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/Pop
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import AtomRepeater, { Match } from "./AtomRepeater";
 import IElement from "./IElement";
+import InlinePopupControl from "./InlinePopupControl";
 
 CSS(StyleRule()
     .flexLayout({ justifyContent: "stretch" as any})
@@ -76,7 +77,7 @@ function askSuggestionPopup<T>(
     itemRenderer: (item: T, index: number, repeater: AtomRepeater) => XNode,
     cancelToken: CancelToken): Promise<T> {
 
-    class Suggestions extends PopupControl {
+    class Suggestions extends InlinePopupControl {
 
         private opener: AtomChips;
 

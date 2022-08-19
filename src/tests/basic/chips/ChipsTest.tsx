@@ -28,6 +28,9 @@ export default class ChipsTest extends AtomControl {
                     />}
                 suggestionRenderer={(item: ICurrencyInfo) => <div text={`${item.currency} (${item.currencyCode})`}/>}
                 />
+            <div>
+                Selection popup will be displayed on the top of this text.
+            </div>
         </div>);
     }
 
