@@ -1,7 +1,8 @@
 import { App } from "@web-atoms/core/dist/App";
 import Colors from "@web-atoms/core/dist/core/Colors";
+import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
+import { AtomControl, ElementValueSetters } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { IPopupOptions } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
@@ -51,6 +52,15 @@ function closeHandler(
 }
 
 export default class InlinePopupControl extends AtomControl {
+
+    public static showPopup<T>(opener: HTMLElement | AtomControl, popup: XNode, options: IPopupOptions = {}) {
+        const c = class extends InlinePopupControl {
+            protected create() {
+                this.render(popup);
+            }
+        };
+        return c.showControl(opener, options);
+    }
 
     public static showControl<T>(
         opener: HTMLElement | AtomControl,
