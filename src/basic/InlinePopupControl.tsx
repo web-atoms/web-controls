@@ -19,6 +19,7 @@ CSS(StyleRule()
         .padding(5)
         .borderRadius(5)
         .backgroundColor(Colors.white)
+        .zIndex(200)
         .defaultBoxShadow()
     )
 , "*[data-inline-popup=true]");
