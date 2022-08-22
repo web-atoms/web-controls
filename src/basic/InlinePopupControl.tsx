@@ -51,12 +51,32 @@ function closeHandler(
     container.registerDisposable(() => document.body.removeEventListener("click", handler));
 }
 
+export interface IInlinePopupOptions extends IPopupOptions {
+    cancelOnClick?: boolean;
+}
+
 export default class InlinePopupControl extends AtomControl {
 
-    public static showPopup<T>(opener: HTMLElement | AtomControl, popup: XNode, options: IPopupOptions = {}) {
+    public static showPopup<T>(opener: HTMLElement | AtomControl, popup: XNode, options: IInlinePopupOptions = {}) {
         const c = class extends InlinePopupControl {
             protected create() {
                 this.render(popup);
+            }
+
+            protected dispatchClickEvent(e: MouseEvent, data: any) {
+                let start = this.element.parentElement;
+                while (start) {
+                    const { atomControl } = start;
+                    if (atomControl) {
+                        (atomControl as any).dispatchClickEvent(e, data);
+                        if (options?.cancelOnClick) {
+                            this.cancel();
+                        }
+                        return;
+                    }
+                    start = start.parentElement;
+                }
+                super.dispatchClickEvent(e, data);
             }
         };
         return c.showControl(opener, options);
