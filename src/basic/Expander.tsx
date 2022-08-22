@@ -110,6 +110,9 @@ export default function Expander(
         ... a
     }: IExpander,
     header: XNode, detail: XNode) {
+    if (!detail) {
+        throw new Error("Expander must contain two children, one header and one detail")
+    }
     const ha = header.attributes ??= {};
     const da = detail.attributes ??= {};
     ha["data-element"] = "header";
