@@ -88,7 +88,9 @@ export default class BottomPopup extends AtomControl {
         }
         const element = this.element;
         const child = element?.firstElementChild as HTMLElement;
-        child.dataset.animationState = "down";
+        if (child) {
+            child.dataset.animationState = "down";
+        }
         setTimeout(() => {
             super.dispose(e);
             element.remove();
