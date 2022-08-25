@@ -46,11 +46,20 @@ export default class BottomPopup extends AtomControl {
             cancelToken.registerForCancel(popup.cancel);
         }
         const result = new Promise<T>((resolve, reject) => {
+            let disposed = false;
             popup.close = (r) => {
+                if (disposed) {
+                    return;
+                }
+                disposed = true;
                 popup.dispose();
                 resolve(r);
             };
             popup.cancel = (reason = "cancelled") => {
+                if (disposed) {
+                    return;
+                }
+                disposed = true;
                 popup.dispose();
                 reject(reason);
             };
