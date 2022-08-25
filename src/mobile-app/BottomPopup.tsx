@@ -22,7 +22,7 @@ CSS(StyleRule()
 , "div[data-bottom-popup]");
 
 export interface IBottomPopupOptions extends IPopupOptions {
-    parameters: {[key: string]: any};
+    parameters?: {[key: string]: any};
 }
 
 export default class BottomPopup extends AtomControl {
@@ -30,7 +30,7 @@ export default class BottomPopup extends AtomControl {
     public static async show<T>({
         parameters,
         cancelToken
-    }: IBottomPopupOptions): Promise<T> {
+    }: IBottomPopupOptions = {}): Promise<T> {
         const popup = new this(MobileApp.current.app);
         popup.bindEvent(window as any, "backButton", (ce: CustomEvent) => {
             ce.preventDefault();
