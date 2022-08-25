@@ -42,14 +42,10 @@ export default class BottomPopup extends AtomControl {
         popup.element.dataset.clickEvent = "cancelPopup";
         document.body.append(popup.element);
         popup.parameters = parameters;
-        const pr = popup.init?.();
-        if (pr) {
-            await pr;
-        }
         if (cancelToken) {
             cancelToken.registerForCancel(popup.cancel);
         }
-        return new Promise((resolve, reject) => {
+        const result = new Promise<T>((resolve, reject) => {
             popup.close = (r) => {
                 popup.dispose();
                 resolve(r);
@@ -59,6 +55,11 @@ export default class BottomPopup extends AtomControl {
                 reject(reason);
             };
         });
+        const pr = popup.init?.();
+        if (pr) {
+            await pr;
+        }
+        return await result;
     }
 
     public parameters: any;
