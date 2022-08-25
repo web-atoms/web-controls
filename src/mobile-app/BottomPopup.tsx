@@ -57,7 +57,11 @@ export default class BottomPopup extends AtomControl {
         });
         const pr = popup.init?.();
         if (pr) {
-            await pr;
+            try {
+                await pr;
+            } catch (e) {
+                popup.cancel(e);
+            }
         }
         return await result;
     }
