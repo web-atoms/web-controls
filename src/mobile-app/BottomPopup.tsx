@@ -21,11 +21,35 @@ CSS(StyleRule()
     )
 , "div[data-bottom-popup]");
 
+export interface IBottomPopupOptions extends IPopupOptions {
+    parameters: {[key: string]: any};
+}
+
 export default class BottomPopup extends AtomControl {
 
-    public static show<T>(): Promise<T> {
+    public static async show<T>({
+        parameters,
+        cancelToken
+    }: IBottomPopupOptions): Promise<T> {
+        const popup = new this(MobileApp.current.app);
+        popup.bindEvent(window as any, "backButton", (ce: CustomEvent) => {
+            ce.preventDefault();
+            popup.cancel();
+        }, void 0, true);
+        popup.bindEvent(popup.element, "cancelPopup", () => {
+            popup.cancel();
+        });
+        popup.element.dataset.clickEvent = "cancelPopup";
+        document.body.append(popup.element);
+        popup.parameters = parameters;
+        const pr = popup.init?.();
+        if (pr) {
+            await pr;
+        }
+        if (cancelToken) {
+            cancelToken.registerForCancel(popup.cancel);
+        }
         return new Promise((resolve, reject) => {
-            const popup = new this(MobileApp.current.app);
             popup.close = (r) => {
                 popup.dispose();
                 resolve(r);
@@ -34,17 +58,10 @@ export default class BottomPopup extends AtomControl {
                 popup.dispose();
                 reject(reason);
             };
-            popup.bindEvent(window as any, "backButton", (ce: CustomEvent) => {
-                ce.preventDefault();
-                popup.cancel();
-            }, void 0, true);
-            popup.bindEvent(popup.element, "cancelPopup", () => {
-                popup.cancel();
-            });
-            popup.element.dataset.clickEvent = "cancelPopup";
-            document.body.append(popup.element);
         });
     }
+
+    public parameters: any;
 
     public close: (r?: any) => void;
 
@@ -63,6 +80,8 @@ export default class BottomPopup extends AtomControl {
             element.remove();
         }, 500);
     }
+
+    public async init() {}
 
     protected preCreate() {
         const element = this.element;
@@ -87,3 +106,5 @@ export default class BottomPopup extends AtomControl {
     }
 
 }
+
+delete BottomPopup.prototype.init;
