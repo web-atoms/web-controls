@@ -6,24 +6,6 @@ import { AtomControl, ElementValueSetters } from "@web-atoms/core/dist/web/contr
 import { IPopupOptions } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
-CSS(StyleRule()
-    .position("absolute")
-    .height(0)
-    .width(0)
-    .left(0)
-    .child(StyleRule("*")
-        .position("absolute")
-        .left(0)
-        .top(0)
-        .maxHeight(200)
-        .padding(5)
-        .borderRadius(5)
-        .backgroundColor(Colors.white)
-        .zIndex(200)
-        .defaultBoxShadow()
-    )
-, "*[data-inline-popup=true]");
-
 function closeHandler(
     host: HTMLElement,
     opener: HTMLElement,
