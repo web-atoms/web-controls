@@ -433,7 +433,7 @@ export default class MobileApp extends AtomControl {
         const navigationService = this.app.resolve(NavigationService);
         navigationService.registerNavigationHook(
             (uri, { target, clearHistory }) => {
-                if (target === "app") {
+                if (/^(app|root)$/.test(target)) {
                     return this.loadPageForReturn(uri, clearHistory);
                 }
             }
