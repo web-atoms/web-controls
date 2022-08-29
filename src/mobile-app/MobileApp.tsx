@@ -520,9 +520,11 @@ export default class MobileApp extends AtomControl {
                     this.selectedPage = last;
                 }, 300);
             };
-            vm.cancel = cancel;
+            if (vm) {
+                vm.cancel = cancel;
+                vm.close = close;
+            }
             page.cancel = cancel;
-            vm.close = close;
             page.close = close;
         });
 
