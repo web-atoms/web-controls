@@ -11,7 +11,7 @@ import PopupService, { PopupWindow } from "@web-atoms/core/dist/web/services/Pop
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
 export interface IFormField {
-    label: string;
+    label: string | XNode;
     required?: boolean;
     error?: string;
     class?: string;
@@ -206,11 +206,19 @@ export default function FormField(
         });
     }
 
+    let labelIsNode = false;
+
+    if (label && label instanceof XNode) {
+        const la = label.attributes ??= {};
+        la["data-element"] = "label";
+        labelIsNode = true;
+    }
+
     return <div
         data-wa-form-field="wa-form-field"
         data-border={border}
         { ... others }>
-        { label && <label class="label" text={label}/> }
+        { label && (labelIsNode ? label : <label data-element="label" text={label}/>) }
         { required && <span
             data-required="required"
             class={required}
