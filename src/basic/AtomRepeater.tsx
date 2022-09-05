@@ -1109,10 +1109,16 @@ export default class AtomRepeater extends AtomControl {
         if (item) {
             if (itemPath) {
                 // check path...
+
+                if (/^[\{\"}]/.test(itemPath)) {
+                    this.dispatchItemEvent(clickEvent, item, recreate, e.target, JSON.parse(itemPath));
+                    return;
+                }
+
                 let nestedItem = {};
                 const all: string[] = itemPath.split(",");
                 for (const iterator of all) {
-                    let [name,paths] = iterator.split(/\=|\:/);
+                    let [name, paths] = iterator.split(/\=|\:/);
                     if (paths === void 0) {
                         if (all.length > 1) {
                             throw new Error("Invalid path, please use name=path format");
