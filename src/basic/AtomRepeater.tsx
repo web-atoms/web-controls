@@ -516,7 +516,7 @@ export default class AtomRepeater extends AtomControl {
                 return atomControl;
             }
             element = element.parentElement;
-        }   
+        }
     }
 
     public "event-item-click"?: (e: CustomEvent) => void;
@@ -580,6 +580,12 @@ export default class AtomRepeater extends AtomControl {
     public set refreshEventScope(v: EventScope) {
         this.registerDisposable(v.listen((ce: CustomEvent) => {
             this.refreshItem(ce.detail);
+        }));
+    }
+
+    public set removeItemEventScope(v: EventScope) {
+        this.registerDisposable(v.listen((ce: CustomEvent) => {
+            this.items.remove(ce.detail);
         }));
     }
 
