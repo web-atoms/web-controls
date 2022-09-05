@@ -583,12 +583,6 @@ export default class AtomRepeater extends AtomControl {
         }));
     }
 
-    public set removeItemEventScope(v: EventScope) {
-        this.registerDisposable(v.listen((ce: CustomEvent) => {
-            this.items.remove(ce.detail);
-        }));
-    }
-
     @WatchProperty
     public get allSelected() {
         const selectedItems = this.selectedItems;
