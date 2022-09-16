@@ -335,6 +335,9 @@ export class TabbedPage extends BasePage {
 }
 
 export class Drawer extends AtomControl {
+
+    protected init(): any {}
+
     protected preCreate(): void {
         this.element.dataset.drawerPage = "drawer-page";
         this.bindEvent(this.element, "click", (e: Event) => e.defaultPrevented ? null : this.closeDrawer());
@@ -345,6 +348,8 @@ export class Drawer extends AtomControl {
         this.element.dispatchEvent(ce);
     }
 }
+
+delete (Drawer.prototype as any).init;
 
 export default class MobileApp extends AtomControl {
 
@@ -370,6 +375,13 @@ export default class MobileApp extends AtomControl {
             const drawer = this.drawer;
             if (drawer && !this.hideDrawer) {
                 const drawerPage = new drawer(this.app);
+
+                (drawerPage as any).init?.()?.catch((error) => {
+                    if (!CancelToken.isCancelled(error)) {
+                        console.error(error);
+                    }
+                });
+
                 // const da = drawerNode.attributes ??= {};
                 const dispatchCloseDrawer = (de: Event) => {
                     if (de.defaultPrevented) {
