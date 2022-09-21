@@ -408,6 +408,20 @@ export default class MobileApp extends AtomControl {
                     }
                 });
 
+                const modalClose = (ce: Event) => {
+                    let start = ce.target as HTMLElement;
+                    const de = drawerPage.element;
+                    while (start) {
+                        if (start === de) {
+                            return;
+                        }
+                        start = start.parentElement;
+                    }
+                    ce.preventDefault();
+                    ce.stopImmediatePropagation?.();
+                    ce.target.dispatchEvent(new CustomEvent("closeDrawer", { bubbles: true }));
+                };
+
                 // const da = drawerNode.attributes ??= {};
                 const dispatchCloseDrawer = (de: Event) => {
                     if (de.defaultPrevented) {
@@ -418,11 +432,11 @@ export default class MobileApp extends AtomControl {
                 this.element.appendChild(drawerPage.element);
                 setTimeout(() => {
                     this.element.dataset.drawer = "visible";
-                    this.element.addEventListener("click", dispatchCloseDrawer);
+                    drawerPage.bindEvent(this.element, "click", dispatchCloseDrawer);
+                    drawerPage.bindEvent(document.body, "click", modalClose, null, true);
                 }, 10);
                 this.hideDrawer = () => {
                     this.element.dataset.drawer = "";
-                    this.element.removeEventListener("click", dispatchCloseDrawer);
                     setTimeout(() => {
                         const de = drawerPage.element;
                         drawerPage.dispose();
