@@ -224,13 +224,14 @@ export class BasePage extends AtomControl {
                 break;
                 case "headerRenderer":
                     this.recreate(name, "header");
-                    break;    
+                    break;
             case "actionBarRenderer":
                 this.recreate(name, "action-bar");
                 break;
         }
     }
 
+    // tslint:disable-next-line: no-empty
     protected init(): any {
 
     }
@@ -362,6 +363,7 @@ export class TabbedPage extends BasePage {
 
 export class Drawer extends AtomControl {
 
+    // tslint:disable-next-line: no-empty
     protected init(): any {}
 
     protected preCreate(): void {
@@ -404,6 +406,7 @@ export default class MobileApp extends AtomControl {
 
                 (drawerPage as any).init?.()?.catch((error) => {
                     if (!CancelToken.isCancelled(error)) {
+                        // tslint:disable-next-line: no-console
                         console.error(error);
                     }
                 });

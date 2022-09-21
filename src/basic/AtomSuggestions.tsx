@@ -136,7 +136,6 @@ export default class AtomSuggestions extends AtomRepeater {
         this.addItem(selectedItem);
     }
 
-
     protected addItem(selectedItem: any) {
         const ce = new CustomEvent(
             "itemSelected",
