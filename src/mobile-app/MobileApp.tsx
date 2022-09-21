@@ -47,12 +47,12 @@ CSS(StyleRule()
     .overflow("hidden")
     .transition("transform 0.3s ease-out")
     .display("grid")
-    .gridTemplateRows("auto 1fr auto")
+    .gridTemplateRows("auto auto 1fr auto")
     .gridTemplateColumns("auto 1fr auto")
     .child(StyleRule("[data-icon-button=icon-button]")
         .padding(5)
     )
-    .child(StyleRule("[data-page-element=header]")
+    .child(StyleRule("[data-page-element=action-bar]")
         .zIndex(11)
         .gridRowStart("1")
         .gridColumnStart("1")
@@ -102,8 +102,14 @@ CSS(StyleRule()
         .outline("none")
         .background("transparent" as any)
     )
-    .child(StyleRule("[data-page-element=content]")
+    .child(StyleRule("[data-page-element=header]")
         .gridRowStart("2")
+        .gridColumnStart("1")
+        .gridColumnEnd("span 3")
+        .padding(5)
+    )
+    .child(StyleRule("[data-page-element=content]")
+        .gridRowStart("3")
         .gridColumnStart("1")
         .gridColumnEnd("span 3")
         .padding(5)
@@ -119,7 +125,7 @@ CSS(StyleRule()
         )
     )
     .child(StyleRule("[data-page-element=footer]")
-        .gridRowStart("3")
+        .gridRowStart("4")
         .gridColumnStart("1")
         .gridColumnEnd("span 3")
         .zIndex(11)
@@ -167,12 +173,21 @@ export class BasePage extends AtomControl {
     @BindableProperty
     public footerRenderer: () => XNode;
 
-    public headerBackgroundRenderer: () => XNode;
+    @BindableProperty
+    public actionBarRenderer: () => XNode;
+
+    @BindableProperty
+    public headerRenderer: () => XNode;
+
     public iconClass: any;
 
     private viewModelTitle: string;
 
     private initialized: boolean;
+
+    private contentElement: HTMLElement;
+
+    private scrollTop: number;
 
     public async requestCancel() {
         if (this.closeWarning) {
@@ -206,6 +221,12 @@ export class BasePage extends AtomControl {
             case "actionRenderer":
                 this.recreate(name, "action");
                 break;
+            case "headerRenderer":
+                this.recreate(name, "header");
+                break;
+            case "actionBarRenderer":
+                this.recreate(name, "action-bar");
+                break;
         }
     }
 
@@ -223,8 +244,7 @@ export class BasePage extends AtomControl {
             }
         }
         if (node) {
-            const na = node.attributes ??= {};
-            na["data-page-element"] = name;
+            (node.attributes ??= {})["data-page-element"] = name;
             this.render(<div>{node}</div>);
         }
 
@@ -267,40 +287,40 @@ export class BasePage extends AtomControl {
             eventClick={(e1) => this.dispatchIconClickEvent(e1)}/>;
         const action = this.actionRenderer?.() ?? undefined;
         const footer = this.footerRenderer?.() ?? undefined;
-        const header = this.headerBackgroundRenderer?.() ?? <div/>;
-        const na = node.attributes ??= {};
-        na["data-page-element"] = "content";
-        if (header) {
-            header.attributes ??= {};
-            header.attributes["data-page-element"] = "header";
+        const actionBar = this.actionBarRenderer?.() ?? <div/>;
+        const header = this.headerRenderer?.() ?? undefined;
+        (node.attributes ??= {})["data-page-element"] = "content";
+        if (actionBar) {
+            (actionBar.attributes ??= {})["data-page-element"] = "action-bar";
         }
         if (icon) {
-            icon.attributes ??= {};
-            icon.attributes["data-page-element"] = "icon";
+            (icon.attributes ??= {})["data-page-element"] = "icon";
         }
         if (titleContent) {
-            titleContent.attributes ??= {};
-            titleContent.attributes["data-page-element"] = "title";
+            (titleContent.attributes ??= {})["data-page-element"] = "title";
         }
         if (action) {
-            action.attributes ??= {};
-            action.attributes["data-page-element"] = "action";
+            (action.attributes ??= {})["data-page-element"] = "action";
         }
         if (footer) {
-            footer.attributes ??= {};
-            footer.attributes["data-page-element"] = "footer";
+            (footer.attributes ??= {})["data-page-element"] = "footer";
+        }
+        if (header) {
+            (header.attributes ??= {})["data-page-element"] = "header";
         }
         const extracted = this.extractControlProperties(node);
         super.render(<div
             viewModelTitle={Bind.oneWay(() => this.viewModel.title)}
             { ... extracted }>
-            { header }
+            { actionBar }
             { icon }
             { titleContent }
             { action }
+            { header }
             { node }
             { footer }
         </div>);
+        this.contentElement = this.element.querySelector(`[data-page-element="content"]`);
         this.initialized = true;
     }
 
@@ -312,6 +332,7 @@ export class BasePage extends AtomControl {
     protected hide() {
         this.element.dataset.pageState = "hidden";
         this.element._logicalParent = this.element.parentElement;
+        this.scrollTop = this.contentElement?.scrollTop;
         setTimeout(() => {
             this.element?.remove();
         }, 400);
@@ -320,6 +341,9 @@ export class BasePage extends AtomControl {
     protected show() {
         this.element._logicalParent.appendChild(this.element);
         setTimeout(() => {
+            if (this.scrollTop) {
+                this.contentElement.scrollTop = this.scrollTop;
+            }
             this.element.dataset.pageState = "ready";
         }, 10);
     }
