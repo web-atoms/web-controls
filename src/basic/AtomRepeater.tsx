@@ -14,6 +14,10 @@ import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import EventScope from "@web-atoms/core/dist/core/EventScope";
 import InlinePopupControl from "./InlinePopupControl";
 
+CSS(StyleRule()
+    .display("none")
+, "[data-display-none=true]");
+
 export interface IItemPair<ParentItem = any, ChildItem = any> {
     parent: ParentItem;
     child: ChildItem;
@@ -986,7 +990,11 @@ export default class AtomRepeater extends AtomControl {
             // tslint:disable-next-line: no-bitwise
             const index = ~~element.dataset.itemIndex;
             const item = items[index];
-            element.style.display = vf(item) ? "" : "none";
+            if (vf(item)) {
+                element.dataset.displayNone = "true";
+            } else {
+                element.removeAttribute("data-display-none");
+            }
             element = element.nextElementSibling as HTMLElement;
         }
     }
