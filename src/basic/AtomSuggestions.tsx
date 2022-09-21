@@ -55,6 +55,12 @@ export default class AtomSuggestions extends AtomRepeater {
     public match: (text) => (item) => boolean;
 
     @BindableProperty
+    public search: string;
+
+    @BindableProperty
+    public searchPath: (item) => string;
+
+    @BindableProperty
     public version: number;
 
     @BindableProperty
@@ -80,6 +86,8 @@ export default class AtomSuggestions extends AtomRepeater {
                 this.version++;
                 break;
             case "version":
+            case "search":
+            case "searchPath":
                 // this.updateVisibility(this.itemsPresenter);
                 const vp = this.valuePath ?? ((item) => item);
                 this.updateVisibilityFilter(vp, this.selectedItems ?? []);
@@ -89,14 +97,21 @@ export default class AtomSuggestions extends AtomRepeater {
 
     protected updateVisibilityFilter(vp: (item) => boolean, selectedItems: any[]) {
         const selectedValues = selectedItems.map(vp);
+        const search = this.match(this.search);
+        const searchPath = this.searchPath;
         this.visibilityFilter = (item) => {
             const v = vp(item);
+            if (searchPath && !search(searchPath(item))) {
+                return false;
+            }
             return selectedValues.length === 0 || selectedValues.indexOf(v) === -1;
         };
     }
 
     protected create(): void {
         this.version = 1;
+        this.search = "";
+        this.searchPath = null;
         this.render(<div data-suggestions="suggestions" eventItemClick={(e) => this.addItem(e.detail)}>
             <span class="header" text={Bind.oneWay(() => this.title)}/>
             <div class="items"></div>
