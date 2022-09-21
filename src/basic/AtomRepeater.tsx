@@ -16,7 +16,7 @@ import InlinePopupControl from "./InlinePopupControl";
 
 CSS(StyleRule()
     .display("none")
-, "[data-display-none=true]");
+, "[data-ui-display=none]");
 
 export interface IItemPair<ParentItem = any, ChildItem = any> {
     parent: ParentItem;
@@ -991,9 +991,9 @@ export default class AtomRepeater extends AtomControl {
             const index = ~~element.dataset.itemIndex;
             const item = items[index];
             if (vf(item)) {
-                element.dataset.displayNone = "true";
+                element.removeAttribute("data-ui-display");
             } else {
-                element.removeAttribute("data-display-none");
+                element.dataset.uiDisplay = "none";
             }
             element = element.nextElementSibling as HTMLElement;
         }
