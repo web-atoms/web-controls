@@ -21,9 +21,14 @@ class List extends ContentPage {
     private navigationService: NavigationService;
 
     protected create(): void {
+        const items = [];
+        for (let index = 0; index < 100; index++) {
+            items.push(<div event-click={() => this.openDetail()}>Line Item {index.toString()}</div>);
+        }
         this.render(<div>
             A big list page...
             <button event-click={() => this.openDetail()}>Open Detail</button>
+            { ... items }
         </div>);
     }
 

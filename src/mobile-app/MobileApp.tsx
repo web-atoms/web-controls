@@ -168,11 +168,16 @@ export class BasePage extends AtomControl {
     public footerRenderer: () => XNode;
 
     public headerBackgroundRenderer: () => XNode;
+
     public iconClass: any;
+
+    public scrollTop: number;
 
     private viewModelTitle: string;
 
     private initialized: boolean;
+
+    private contentElement: HTMLElement;
 
     public async requestCancel() {
         if (this.closeWarning) {
@@ -302,6 +307,7 @@ export class BasePage extends AtomControl {
             { footer }
         </div>);
         this.initialized = true;
+        this.contentElement = this.element.querySelector("[data-page-element='content']");
     }
 
     protected dispatchIconClickEvent(e: Event) {
@@ -312,6 +318,7 @@ export class BasePage extends AtomControl {
     protected hide() {
         this.element.dataset.pageState = "hidden";
         this.element._logicalParent = this.element.parentElement;
+        this.scrollTop = this.contentElement?.scrollTop;
         setTimeout(() => {
             this.element?.remove();
         }, 400);
@@ -320,6 +327,9 @@ export class BasePage extends AtomControl {
     protected show() {
         this.element._logicalParent.appendChild(this.element);
         setTimeout(() => {
+            if (this.scrollTop) {
+                this.contentElement.scrollTop = this.scrollTop;
+            }
             this.element.dataset.pageState = "ready";
         }, 10);
     }
