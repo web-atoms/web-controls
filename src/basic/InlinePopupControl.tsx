@@ -26,7 +26,7 @@ export default class InlinePopupControl extends PopupControl {
                 super.dispatchClickEvent(e, data);
             }
         };
-        return InlinePopupControl.showControl(opener, options);
+        return c.showControl(opener, options);
     }
 
 }
