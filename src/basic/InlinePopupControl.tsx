@@ -5,13 +5,12 @@ import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl, ElementValueSetters } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { IPopupOptions, PopupControl } from "@web-atoms/core/dist/web/services/PopupService";
 
-export interface IInlinePopupOptions extends IPopupOptions {
-    cancelOnClick?: boolean;
-}
-
 export default class InlinePopupControl extends PopupControl {
 
-    public static showPopup<T>(opener: HTMLElement | AtomControl, popup: XNode, options: IInlinePopupOptions = {}) {
+    public static showPopup<T>(opener: HTMLElement | AtomControl, popup: XNode, {
+        onClick = "close",
+        ... options
+    }: IPopupOptions = {}) {
         const c = class extends InlinePopupControl {
             protected create() {
                 this.render(popup);
@@ -23,7 +22,11 @@ export default class InlinePopupControl extends PopupControl {
                     const { atomControl } = start;
                     if (atomControl) {
                         (atomControl as any).dispatchClickEvent(e, data);
-                        if (options?.cancelOnClick) {
+                        if (onClick) {
+                            if (onClick === "close") {
+                                this.close();
+                                return;
+                            }
                             this.cancel();
                         }
                         return;
