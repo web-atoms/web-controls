@@ -7,10 +7,7 @@ import { IPopupOptions, PopupControl } from "@web-atoms/core/dist/web/services/P
 
 export default class InlinePopupControl extends PopupControl {
 
-    public static showPopup<T>(opener: HTMLElement | AtomControl, popup: XNode, {
-        onClick = "close",
-        ... options
-    }: IPopupOptions = {}) {
+    public static showPopup<T>(opener: HTMLElement | AtomControl, popup: XNode, options: IPopupOptions = {}) {
         const c = class extends InlinePopupControl {
             protected create() {
                 this.render(popup);
@@ -22,13 +19,6 @@ export default class InlinePopupControl extends PopupControl {
                     const { atomControl } = start;
                     if (atomControl) {
                         (atomControl as any).dispatchClickEvent(e, data);
-                        if (onClick) {
-                            if (onClick === "close") {
-                                this.close();
-                                return;
-                            }
-                            this.cancel();
-                        }
                         return;
                     }
                     start = start.parentElement;
@@ -36,7 +26,7 @@ export default class InlinePopupControl extends PopupControl {
                 super.dispatchClickEvent(e, data);
             }
         };
-        return c.showControl(opener, options);
+        return InlinePopupControl.showControl(opener, options);
     }
 
 }
