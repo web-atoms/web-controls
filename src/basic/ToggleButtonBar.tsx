@@ -6,7 +6,11 @@ import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import AtomRepeater from "./AtomRepeater";
 
 CSS(StyleRule()
-    .flexLayout({ inline: true, gap: 0 })
+    .display("inline-grid")
+    .gridAutoFlow("column")
+    .alignContent("center")
+    .justifyItems("stretch")
+    .textAlign("center")
     .borderStyle("solid")
     .borderWidth(1)
     .borderColor(Colors.lightGray)
