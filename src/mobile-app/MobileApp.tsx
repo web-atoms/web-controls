@@ -1,3 +1,4 @@
+import { AtomDisposableList } from "@web-atoms/core/dist/core/AtomDisposableList";
 import { AtomLoader } from "@web-atoms/core/dist/core/AtomLoader";
 import { AtomUri } from "@web-atoms/core/dist/core/AtomUri";
 import Bind from "@web-atoms/core/dist/core/Bind";
@@ -109,6 +110,34 @@ CSS(StyleRule()
         .gridColumnEnd("span 3")
         .backgroundColor(Colors.silver)
     )
+    .child(StyleRule("[data-page-element=pull-to-refresh]")
+        .gridRowStart("3")
+        .gridColumnStart("1")
+        .gridColumnEnd("span 3")
+        .padding(5)
+        .margin(10)
+        .zIndex(9)
+        .alignSelf("start" as any)
+        .justifySelf("center")
+        .nested(StyleRule(".pull-icon")
+            .transition("all 0.3s ease-out")
+        )
+        .and(StyleRule("[data-mode=up] .pull-icon")
+            .transform("rotate(180deg)" as any)
+        )
+        .and(StyleRule("[data-mode=loading] .pull-icon")
+            .display("none")
+        )
+        .and(StyleRule(":not([data-mode=down]) .down")
+            .display("none")
+        )
+        .and(StyleRule(":not([data-mode=up]) .up")
+            .display("none")
+        )
+        .and(StyleRule(":not([data-mode=loading]) .loading")
+            .display("none")
+        )
+    )
     .child(StyleRule("[data-page-element=content]")
         .gridRowStart("3")
         .gridColumnStart("1")
@@ -150,6 +179,15 @@ CSS(StyleRule()
 //     , "body[data-keyboard=shown] div[data-page-app=page-app]");
 // }
 
+export function PullToRefresh() {
+    return <div>
+        <i class="pull-icon fa-solid fa-down"/>
+        <span class="down" text=" Pull"/>
+        <span class="up" text=" Refresh"/>
+        <i class="loading fa-duotone fa-spinner fa-spin"/>
+    </div>;
+}
+
 export class BasePage extends AtomControl {
 
     public close: (result) => void;
@@ -180,6 +218,9 @@ export class BasePage extends AtomControl {
     @BindableProperty
     public headerRenderer: () => XNode;
 
+    @BindableProperty
+    public pullToRefreshRenderer: () => XNode;
+
     public iconClass: any;
 
     private viewModelTitle: string;
@@ -187,6 +228,10 @@ export class BasePage extends AtomControl {
     private initialized: boolean;
 
     private contentElement: HTMLElement;
+
+    private pullToRefreshElement: HTMLElement;
+
+    private pullToRefreshDisposable: IDisposable;
 
     private scrollTop: number;
 
@@ -222,9 +267,13 @@ export class BasePage extends AtomControl {
             case "actionRenderer":
                 this.recreate(name, "action");
                 break;
-                case "headerRenderer":
-                    this.recreate(name, "header");
-                    break;
+            case "headerRenderer":
+                this.recreate(name, "header");
+                break;
+            case "pullToRefreshRenderer":
+                this.recreate(name, "pull-to-refresh");
+                this.enablePullToRefreshEvents();
+                break;
             case "actionBarRenderer":
                 this.recreate(name, "action-bar");
                 break;
@@ -292,6 +341,7 @@ export class BasePage extends AtomControl {
         const footer = this.footerRenderer?.() ?? undefined;
         const actionBar = this.actionBarRenderer?.() ?? <div/>;
         const header = this.headerRenderer?.() ?? undefined;
+        const pullToRefresh = this.pullToRefreshRenderer?.() ?? undefined;
         (node.attributes ??= {})["data-page-element"] = "content";
         if (actionBar) {
             (actionBar.attributes ??= {})["data-page-element"] = "action-bar";
@@ -311,6 +361,9 @@ export class BasePage extends AtomControl {
         if (header) {
             (header.attributes ??= {})["data-page-element"] = "header";
         }
+        if (pullToRefresh) {
+            (pullToRefresh.attributes ??= {})["data-page-element"] = "pull-to-refresh";
+        }
         const extracted = this.extractControlProperties(node);
         super.render(<div
             viewModelTitle={Bind.oneWay(() => this.viewModel.title)}
@@ -320,11 +373,90 @@ export class BasePage extends AtomControl {
             { titleContent }
             { action }
             { header }
+            { pullToRefresh }
             { node }
             { footer }
         </div>);
         this.contentElement = this.element.querySelector("[data-page-element='content']");
+        this.pullToRefreshElement = this.element.querySelector("[data-page-element='pull-to-refresh']");
+        // we will not keep in the dom
+        // this is to prevent any heavy animation classes slowing down performance
+        this.pullToRefreshElement.remove();
         this.initialized = true;
+        this.enablePullToRefreshEvents();
+    }
+
+    protected enablePullToRefreshEvents() {
+        const e = this.pullToRefreshElement;
+        if (!e) {
+            this.pullToRefreshDisposable?.dispose();
+            this.pullToRefreshDisposable = void 0;
+            return e;
+        }
+        if (this.pullToRefreshDisposable) {
+            return;
+        }
+        this.pullToRefreshDisposable = this.bindEvent(this.contentElement, "mousedown", (de: MouseEvent) => {
+            if (!this.pullToRefreshElement) {
+                this.pullToRefreshDisposable?.dispose();
+                this.pullToRefreshDisposable = null;
+                return;
+            }
+
+            if (this.contentElement.scrollTop > 0) {
+                return;
+            }
+
+            this.element.appendChild(this.pullToRefreshElement);
+            this.pullToRefreshElement.dataset.mode = "down";
+
+            const d = new AtomDisposableList();
+            const startY = de.screenY;
+            d.add(this.bindEvent(this.contentElement, "mousemove", (me: MouseEvent) => {
+
+                const diffX = Math.min(75, me.screenY - startY);
+                this.contentElement.style.transform = `translateY(${diffX}px)`;
+                if (diffX > 50) {
+                    this.pullToRefreshElement.dataset.mode = "up";
+                } else {
+                    this.pullToRefreshElement.dataset.mode = "down";
+                }
+            }));
+            d.add(this.bindEvent(this.contentElement, "mouseup", (ue: MouseEvent) => {
+                d.dispose();
+
+                const done = () => {
+                    delete this.pullToRefreshElement.dataset.mode;
+                    this.contentElement.style.transform = ``;
+                    this.pullToRefreshElement.style.transform = "";
+                    this.pullToRefreshElement.remove();
+                };
+
+                const diffX = ue.screenY - startY;
+                if (diffX <= 50) {
+                    done();
+                    return;
+                }
+
+                const ce = new CustomEvent("reloadPage", { detail: this, bubbles: true, cancelable: true});
+                this.contentElement.dispatchEvent(ce);
+                if (ce.defaultPrevented) {
+                    done();
+                    return;
+                }
+
+                this.pullToRefreshElement.dataset.mode = "loading";
+
+                const promise = (ce as any).promise as PromiseLike<void>;
+                if (!promise) {
+                    done();
+                    return;
+                }
+
+                promise.then(done, done);
+
+            }));
+        });
     }
 
     protected dispatchIconClickEvent(e: Event) {

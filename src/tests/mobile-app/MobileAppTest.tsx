@@ -1,11 +1,12 @@
 import InjectProperty from "@web-atoms/core/dist/core/InjectProperty";
+import sleep from "@web-atoms/core/dist/core/sleep";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import Pack from "@web-atoms/core/dist/Pack";
 import { NavigationService } from "@web-atoms/core/dist/services/NavigationService";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { MenuItem } from "../../basic/PopupButton";
 import BottomPopup from "../../mobile-app/BottomPopup";
-import MobileApp, { ContentPage, Drawer } from "../../mobile-app/MobileApp";
+import MobileApp, { ContentPage, Drawer, PullToRefresh } from "../../mobile-app/MobileApp";
 
 class Detail extends ContentPage {
     protected create(): void {
@@ -61,9 +62,13 @@ class Home extends ContentPage {
 
         this.actionRenderer = () => <i class="fad fa-search" event-click={() => PopupMenu.show()}/>;
 
+        this.pullToRefreshRenderer = PullToRefresh;
+
         this.render(<div>
             Home
         </div>);
+
+        this.bindEvent(this.element, "reloadPage", () => sleep(2000));
     }
 }
 
