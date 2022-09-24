@@ -271,7 +271,8 @@ export class BasePage extends AtomControl {
                 this.recreate(name, "header");
                 break;
             case "pullToRefreshRenderer":
-                this.recreate(name, "pull-to-refresh");
+                this.pullToRefreshElement = this.recreate(name, "pull-to-refresh");
+                this.pullToRefreshElement?.remove();
                 this.enablePullToRefreshEvents();
                 break;
             case "actionBarRenderer":
@@ -285,7 +286,7 @@ export class BasePage extends AtomControl {
 
     }
 
-    protected recreate(renderer, name) {
+    protected recreate(renderer, name): HTMLElement {
         const node = this[renderer]?.() ?? undefined;
         for (const e of ChildEnumerator.enumerate(this.element)) {
             if (e.dataset.pageElement === name) {
@@ -298,8 +299,9 @@ export class BasePage extends AtomControl {
             const na = node.attributes ??= {};
             na["data-page-element"] = name;
             this.render(<div>{node}</div>);
+            return this.element.querySelector(`[data-page-element="${name}"]`);
         }
-
+        return null;
     }
 
     protected preCreate(): void {
