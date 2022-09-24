@@ -381,7 +381,7 @@ export class BasePage extends AtomControl {
         this.pullToRefreshElement = this.element.querySelector("[data-page-element='pull-to-refresh']");
         // we will not keep in the dom
         // this is to prevent any heavy animation classes slowing down performance
-        this.pullToRefreshElement.remove();
+        this.pullToRefreshElement.remove?.();
         this.initialized = true;
         this.enablePullToRefreshEvents();
     }
