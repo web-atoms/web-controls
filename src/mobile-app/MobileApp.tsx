@@ -398,7 +398,7 @@ export class BasePage extends AtomControl {
         if (this.pullToRefreshDisposable) {
             return;
         }
-        this.pullToRefreshDisposable = this.bindEvent(this.contentElement, "mousedown", (de: MouseEvent) => {
+        this.pullToRefreshDisposable = this.bindEvent(this.contentElement, "pointerdown", (de: MouseEvent) => {
             if (!this.pullToRefreshElement) {
                 this.pullToRefreshDisposable?.dispose();
                 this.pullToRefreshDisposable = null;
@@ -414,7 +414,9 @@ export class BasePage extends AtomControl {
 
             const d = new AtomDisposableList();
             const startY = de.screenY;
-            d.add(this.bindEvent(this.contentElement, "mousemove", (me: MouseEvent) => {
+            this.contentElement.style.touchAction = "none";
+            d.add(() => delete this.contentElement.style.touchAction);
+            d.add(this.bindEvent(this.contentElement, "pointermove", (me: MouseEvent) => {
 
                 const diffX = Math.min(75, me.screenY - startY);
                 this.contentElement.style.transform = `translateY(${diffX}px)`;
@@ -424,7 +426,9 @@ export class BasePage extends AtomControl {
                     this.pullToRefreshElement.dataset.mode = "down";
                 }
             }));
-            d.add(this.bindEvent(this.contentElement, "mouseup", (ue: MouseEvent) => {
+            d.add(this.bindEvent(this.contentElement, "pointerup", (ue: MouseEvent) => {
+                ue.stopPropagation();
+                ue.preventDefault();
                 d.dispose();
 
                 const done = () => {
