@@ -386,6 +386,8 @@ export class BasePage extends AtomControl {
         this.pullToRefreshElement?.remove?.();
         this.initialized = true;
         this.enablePullToRefreshEvents();
+
+        setTimeout(() => this.contentElement.scrollTo(0, 0), 100);
     }
 
     protected enablePullToRefreshEvents() {
