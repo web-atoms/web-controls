@@ -399,6 +399,8 @@ export class BasePage extends AtomControl {
             return;
         }
 
+        let elementAdded = false;
+
         const touchStart = (te: Event) => {
 
             if (!this.pullToRefreshElement) {
@@ -412,31 +414,48 @@ export class BasePage extends AtomControl {
             }
 
             const isMouseEvent = te.type === "mousedown";
-            const touchMove = isMouseEvent ? "mousemove" : "touchmove";
-            const touchEnd = isMouseEvent ? "mouseup" : "touchend";
+            const moveEventName = isMouseEvent ? "mousemove" : "touchmove";
+            const endEventName = isMouseEvent ? "mouseup" : "touchend";
             const startY = isMouseEvent ? (te as MouseEvent).screenY : (te as TouchEvent).touches[0].screenY;
 
-            this.element.appendChild(this.pullToRefreshElement);
             this.pullToRefreshElement.dataset.mode = "down";
 
+            if (isMouseEvent) {
+                te.stopPropagation();
+                te.preventDefault();
+            }
+
             const d = new AtomDisposableList();
-            this.contentElement.style.touchAction = "none";
             d.add(() => {
                 this.contentElement.style.removeProperty("touch-action");
             });
-            d.add(this.bindEvent(this.contentElement, touchMove, (me: Event) => {
+            d.add(this.bindEvent(this.contentElement, moveEventName, (me: Event) => {
                 const screenY = isMouseEvent ? (me as MouseEvent).screenY : (me as TouchEvent).touches[0].screenY;
                 const diffX = Math.min(75, screenY - startY);
+
+                if (diffX > 5) {
+                    if (!elementAdded) {
+                        this.contentElement.style.touchAction = "none";
+                        elementAdded = true;
+                        this.element.appendChild(this.pullToRefreshElement);
+                    }
+                } else {
+                    return;
+                }
+
                 this.contentElement.style.transform = `translateY(${diffX}px)`;
                 if (diffX > 50) {
                     this.pullToRefreshElement.dataset.mode = "up";
                 } else {
                     this.pullToRefreshElement.dataset.mode = "down";
                 }
-            }));
-            d.add(this.bindEvent(this.contentElement, touchEnd, (ue: MouseEvent) => {
+            }, null, { passive: true }));
+            d.add(this.bindEvent(this.contentElement, endEventName, (ue: MouseEvent) => {
                 ue.stopPropagation();
-                ue.preventDefault();
+                if (isMouseEvent) {
+                    ue.stopImmediatePropagation();
+                    ue.preventDefault();
+                }
                 d.dispose();
 
                 const done = () => {
@@ -444,6 +463,7 @@ export class BasePage extends AtomControl {
                     this.contentElement.style.transform = ``;
                     this.pullToRefreshElement.style.transform = "";
                     this.pullToRefreshElement.remove();
+                    elementAdded = false;
                 };
 
                 const diffX = ue.screenY - startY;
@@ -469,12 +489,12 @@ export class BasePage extends AtomControl {
 
                 promise.then(done, done);
 
-            }));
+            }, null, { passive: !isMouseEvent }));
         };
 
         const ed = new AtomDisposableList();
         ed.add(this.bindEvent(this.contentElement, "mousedown", touchStart));
-        ed.add(this.bindEvent(this.contentElement, "touchstart", touchStart));
+        ed.add(this.bindEvent(this.contentElement, "touchstart", touchStart, null, { passive: true }));
 
         this.pullToRefreshDisposable = ed;
 
