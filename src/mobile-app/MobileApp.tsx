@@ -398,7 +398,9 @@ export class BasePage extends AtomControl {
         if (this.pullToRefreshDisposable) {
             return;
         }
-        this.pullToRefreshDisposable = this.bindEvent(this.contentElement, "pointerdown", (de: MouseEvent) => {
+
+        const touchStart = (te: Event) => {
+
             if (!this.pullToRefreshElement) {
                 this.pullToRefreshDisposable?.dispose();
                 this.pullToRefreshDisposable = null;
@@ -409,16 +411,22 @@ export class BasePage extends AtomControl {
                 return;
             }
 
+            const isMouseEvent = te.type === "mousedown";
+            const touchMove = isMouseEvent ? "mousemove" : "touchmove";
+            const touchEnd = isMouseEvent ? "mouseup" : "touchend";
+            const startY = isMouseEvent ? (te as MouseEvent).screenY : (te as TouchEvent).touches[0].screenY;
+
             this.element.appendChild(this.pullToRefreshElement);
             this.pullToRefreshElement.dataset.mode = "down";
 
             const d = new AtomDisposableList();
-            const startY = de.screenY;
             this.contentElement.style.touchAction = "none";
-            d.add(() => delete this.contentElement.style.touchAction);
-            d.add(this.bindEvent(this.contentElement, "pointermove", (me: MouseEvent) => {
-
-                const diffX = Math.min(75, me.screenY - startY);
+            d.add(() => {
+                this.contentElement.style.removeProperty("touch-action");
+            });
+            d.add(this.bindEvent(this.contentElement, touchMove, (me: Event) => {
+                const screenY = isMouseEvent ? (me as MouseEvent).screenY : (me as TouchEvent).touches[0].screenY;
+                const diffX = Math.min(75, screenY - startY);
                 this.contentElement.style.transform = `translateY(${diffX}px)`;
                 if (diffX > 50) {
                     this.pullToRefreshElement.dataset.mode = "up";
@@ -426,7 +434,7 @@ export class BasePage extends AtomControl {
                     this.pullToRefreshElement.dataset.mode = "down";
                 }
             }));
-            d.add(this.bindEvent(this.contentElement, "pointerup", (ue: MouseEvent) => {
+            d.add(this.bindEvent(this.contentElement, touchEnd, (ue: MouseEvent) => {
                 ue.stopPropagation();
                 ue.preventDefault();
                 d.dispose();
@@ -462,7 +470,81 @@ export class BasePage extends AtomControl {
                 promise.then(done, done);
 
             }));
-        });
+        };
+
+        const ed = new AtomDisposableList();
+        ed.add(this.bindEvent(this.contentElement, "mousedown", touchStart));
+        ed.add(this.bindEvent(this.contentElement, "touchstart", touchStart));
+
+        this.pullToRefreshDisposable = ed;
+
+        // this.pullToRefreshDisposable = this.bindEvent(this.contentElement, "pointerdown", (de: MouseEvent) => {
+        //     if (!this.pullToRefreshElement) {
+        //         this.pullToRefreshDisposable?.dispose();
+        //         this.pullToRefreshDisposable = null;
+        //         return;
+        //     }
+
+        //     if (this.contentElement.scrollTop > 0) {
+        //         return;
+        //     }
+
+        //     this.element.appendChild(this.pullToRefreshElement);
+        //     this.pullToRefreshElement.dataset.mode = "down";
+
+        //     const d = new AtomDisposableList();
+        //     const startY = de.screenY;
+        //     this.contentElement.style.touchAction = "none";
+        //     d.add(() => {
+        //         this.contentElement.style.removeProperty("touch-action");
+        //     });
+        //     d.add(this.bindEvent(this.contentElement, "pointermove", (me: MouseEvent) => {
+
+        //         const diffX = Math.min(75, me.screenY - startY);
+        //         this.contentElement.style.transform = `translateY(${diffX}px)`;
+        //         if (diffX > 50) {
+        //             this.pullToRefreshElement.dataset.mode = "up";
+        //         } else {
+        //             this.pullToRefreshElement.dataset.mode = "down";
+        //         }
+        //     }));
+        //     d.add(this.bindEvent(this.contentElement, "pointerup", (ue: MouseEvent) => {
+        //         ue.stopPropagation();
+        //         ue.preventDefault();
+        //         d.dispose();
+
+        //         const done = () => {
+        //             delete this.pullToRefreshElement.dataset.mode;
+        //             this.contentElement.style.transform = ``;
+        //             this.pullToRefreshElement.style.transform = "";
+        //             this.pullToRefreshElement.remove();
+        //         };
+
+        //         const diffX = ue.screenY - startY;
+        //         if (diffX <= 50) {
+        //             done();
+        //             return;
+        //         }
+
+        //         const ce = new CustomEvent("reloadPage", { detail: this, bubbles: true, cancelable: true});
+        //         this.contentElement.dispatchEvent(ce);
+        //         if (ce.defaultPrevented) {
+        //             done();
+        //             return;
+        //         }
+
+        //         this.pullToRefreshElement.dataset.mode = "loading";
+
+        //         const promise = (ce as any).promise as PromiseLike<void>;
+        //         if (!promise) {
+        //             done();
+        //             return;
+        //         }
+
+        //         promise.then(done, done);
+
+        //     }));
+        // });
     }
 
     protected dispatchIconClickEvent(e: Event) {

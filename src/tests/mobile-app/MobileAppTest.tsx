@@ -22,6 +22,7 @@ class List extends ContentPage {
     private navigationService: NavigationService;
 
     protected create(): void {
+        this.pullToRefreshRenderer = PullToRefresh;
         const items = [];
         for (let index = 0; index < 100; index++) {
             items.push(<div event-click={() => this.openDetail()}>Line Item {index.toString()}</div>);
