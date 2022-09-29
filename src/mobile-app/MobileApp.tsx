@@ -699,6 +699,10 @@ export default class MobileApp extends AtomControl {
         return false;
     }
 
+    protected async init() {
+
+    }
+
     protected preCreate(): void {
 
         MobileApp.current = this;
@@ -735,6 +739,7 @@ export default class MobileApp extends AtomControl {
                 }
             }
         );
+        this.runAfterInit(() => this.app.runAsync(() => this.init()));
     }
 
     protected async loadPageForReturn(url: AtomUri, clearHistory: boolean): Promise<any> {
