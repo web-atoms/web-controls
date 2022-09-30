@@ -214,6 +214,7 @@ export default class AtomHtmlEditor extends AtomControl {
 
     public editor: HTMLDivElement;
 
+    @BindableProperty
     public tags: ITagCommand[];
 
     public eventDocumentCreated: (e: CustomEvent<HTMLDivElement>) => void;
@@ -267,6 +268,26 @@ export default class AtomHtmlEditor extends AtomControl {
             return this.editorWindow.getComputedStyle(e)[name];
         } catch (ex) {
             return null;
+        }
+    }
+
+    public onPropertyChanged(name) {
+        super.onPropertyChanged(name);
+        if (name === "tags") {
+            this.setupTags();
+        }
+    }
+
+    protected setupTags() {
+        const doc = this.editorDocument;
+        for (const { name, style } of this.tags) {
+            if (style) {
+                const styleElement = doc.createElement("style");
+                styleElement.textContent = `*[data-command=${name}] {
+                    ${style.toStyleSheet()}
+                }`
+                doc.head.appendChild(styleElement);
+            }
         }
     }
 
@@ -364,10 +385,6 @@ export default class AtomHtmlEditor extends AtomControl {
             }
         });
 
-        if (!this.tags) {
-            return;
-        }
-
         this.bindEvent(this.element, "editorClick", (ce: CustomEvent) => {
             const { detail } = ce;
             for (const { name, handler } of this.tags) {
@@ -377,15 +394,6 @@ export default class AtomHtmlEditor extends AtomControl {
             }
         });
 
-        for (const { name, style } of this.tags) {
-            if (style) {
-                const styleElement = doc.createElement("style");
-                styleElement.textContent = `*[data-command=${name}] {
-                    ${style.toStyleSheet()}
-                }`
-                doc.head.appendChild(styleElement);
-            }
-        }
     }
 
     protected documentCreated(e: HTMLDivElement) {
