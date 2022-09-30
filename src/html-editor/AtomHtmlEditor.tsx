@@ -389,9 +389,9 @@ export default class AtomHtmlEditor extends AtomControl {
         });
 
         this.bindEvent(this.element, "editorClick", (ce: CustomEvent) => {
-            const { detail } = ce;
+            const { detail: { data} } = ce;
             for (const { name, handler } of this.tags) {
-                if (name === detail.command || name === detail.clickEvent) {
+                if (name === data.command || name === data.clickEvent) {
                     handler(ce);
                 }
             }
