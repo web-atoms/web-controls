@@ -3,24 +3,25 @@ import Colors from "@web-atoms/core/dist/core/Colors";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
-import PopupButton from "../../basic/PopupButton";
+import PopupButton, { MenuItem } from "../../basic/PopupButton";
 import type AtomHtmlEditor from "../AtomHtmlEditor";
 
 const fontMenuCSS = CSS(StyleRule()
     .padding(5)
-    .child(StyleRule(".menu")
-        .padding(5)
-        .hoverBackgroundColor(Colors.lightGreen)
-        .child(StyleRule("i")
-            .opacity("0")
-            .and(StyleRule(".selected")
-                .opacity("1")
-            )
-        )
-    )
+    .width(170)
+    // .child(StyleRule(".menu")
+    //     .padding(5)
+    //     .hoverBackgroundColor(Colors.lightGreen)
+    //     .child(StyleRule("i")
+    //         .opacity("0")
+    //         .and(StyleRule(".selected")
+    //             .opacity("1")
+    //         )
+    //     )
+    // )
 );
 
-const fonts = [
+const fonts: Array<[string, string[]]> = [
     ["Sans Serif", ["arial", "sans-serif"]],
     ["Serif", [`"times new roman"`, "serif"]],
     ["Fixed Width", ["monospace"]],
@@ -69,7 +70,18 @@ export default function ChangeFont() {
         text={Bind.oneWay((e: AtomHtmlEditor) => selectFont(e.getStyle("fontFamily", e.version)))}
         title="Change Font">
         <div class={fontMenuCSS}>
-            { ... fonts.map((x) => <FontMenu name={x[0]} value={x[1]}/>)}
+            { ... fonts.map(([name, value]) =>
+                <MenuItem
+                    style-font-family={name}
+                    icon={Bind.oneWay((e: AtomHtmlEditor) => e.getStyle("fontFamily", e.version)
+                    .toLowerCase()
+                    .indexOf(value[0].toLowerCase()) !== -1
+                    ? "ri-check-line selected"
+                    : "")}
+                    label={name}
+                    eventClick={Bind.event((e: AtomHtmlEditor) =>
+                        e.executeCommand("fontName", false, value.join(" ")) )}
+                    />)}
         </div>
     </PopupButton>;
 }

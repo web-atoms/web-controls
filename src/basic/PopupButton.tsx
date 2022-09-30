@@ -92,9 +92,13 @@ export default function PopupButton(
 
         const options: IPopupOptions = showAsDialog
             ? {
-                alignment: "centerOfScreen"
+                alignment: "centerOfScreen",
+                popupStyle: ".none"
             }
-            : null;
+            : {
+                alignment: "bottomLeft",
+                popupStyle: ".none"
+            };
         popup = PopupService.show(button, menu, options);
 
         const clickHandler = (e) => {
