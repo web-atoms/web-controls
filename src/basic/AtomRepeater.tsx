@@ -513,11 +513,11 @@ function updateDragDrop(e: HTMLElement, force: boolean = false) {
 
 export default class AtomRepeater extends AtomControl {
 
-    public static from(element: HTMLElement) {
+    public static from<T = AtomRepeater>(element: any): T {
         while (element) {
             const { atomControl } = element;
             if (atomControl instanceof AtomRepeater) {
-                return atomControl;
+                return atomControl as any;
             }
             element = element.parentElement;
         }
