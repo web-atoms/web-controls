@@ -195,7 +195,7 @@ export interface IEditorCommand {
 export interface ITagCommand<T = any> {
     name: string;
     style: AtomStyleRules;
-    handler: (ce: CustomEvent<T>) => any
+    handler: (ce: CustomEvent<{ target: HTMLElement, data: T}>) => any
 }
 
 export default class AtomHtmlEditor extends AtomControl {
