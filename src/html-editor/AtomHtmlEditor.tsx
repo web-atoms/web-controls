@@ -84,68 +84,106 @@ export function Toolbar(a: any, ... nodes: XNode[]) {
     </div>;
 }
 
-function preventLinkClick(e: Event, editor: HTMLElement) {
+function preventLinkClick(e: Event, editor: HTMLElement, doc: Document) {
     let target = e.target as HTMLElement;
-    const body = document.body;
-    while (target && target !== body) {
-
-        const ds = target.dataset;
-
-        const command = ds.command;
-        if (command) {
-            let commandParameter = ds.commandParameter;
-            if (!commandParameter) {
-                commandParameter = ds.commandParameters;
-                if (commandParameter) {
-                    commandParameter = JSON.parse(commandParameter);
-                }
-            }
-
-            // this will force currentTarget/lastTarget to be updated
-            // in navigation and popup service
-            editor.dispatchEvent(new CustomEvent("click", {
-                bubbles: true
-            }));
-
-            editor.dispatchEvent(new CustomEvent<IEditorCommand>("command", {
-                bubbles: true,
-                detail: {
-                    target,
-                    command,
-                    commandParameter
-                }
-            }));
-
-            e.preventDefault();
-            return;
-        }
-
-        const click = ds.click;
-        if (click) {
-            editor.dispatchEvent(new CustomEvent("click", {
-                bubbles: true
-            }));
-
-            editor.dispatchEvent(new CustomEvent("htmlEditorClick", {
-                detail: {
-                    target,
-                    command: click
-                }
-            }));
-        }
-
-        if (target.isContentEditable) {
+    const body = doc.body;
+    while (target) {
+        if (target === body) {
             break;
         }
+        if (target.isContentEditable) {
+            return;
+        }
         if (target.tagName === "A") {
-            editor.dispatchEvent(new CustomEvent("click", {
-                bubbles: true
-            }));
             e.preventDefault();
-            return false;
         }
         target = target.parentElement;
     }
+
+    target = e.target as HTMLElement;
+    const originalTarget = target;
+    const data = new Proxy(originalTarget, {
+        get(target, p) {
+            if (typeof p !== "string") {
+                return;
+            }
+            while (target) {
+                const value = target.dataset[p];
+                if (value !== void 0) {
+                    return value;
+                }
+                target = target.parentElement;
+            }
+        }
+    });
+    editor.dispatchEvent(new CustomEvent("editorClick", {
+        detail: {
+            target,
+            data
+        },
+        bubbles: true,
+        cancelable: true
+    } ));
+
+    // while (target && target !== body) {
+
+    //     const ds = target.dataset;
+
+    //     const command = ds.command;
+    //     if (command) {
+    //         let commandParameter = ds.commandParameter;
+    //         if (!commandParameter) {
+    //             commandParameter = ds.commandParameters;
+    //             if (commandParameter) {
+    //                 commandParameter = JSON.parse(commandParameter);
+    //             }
+    //         }
+
+    //         // this will force currentTarget/lastTarget to be updated
+    //         // in navigation and popup service
+    //         editor.dispatchEvent(new CustomEvent("click", {
+    //             bubbles: true
+    //         }));
+
+    //         editor.dispatchEvent(new CustomEvent<IEditorCommand>("command", {
+    //             bubbles: true,
+    //             detail: {
+    //                 target,
+    //                 command,
+    //                 commandParameter
+    //             }
+    //         }));
+
+    //         e.preventDefault();
+    //         return;
+    //     }
+
+    //     const click = ds.click;
+    //     if (click) {
+    //         editor.dispatchEvent(new CustomEvent("click", {
+    //             bubbles: true
+    //         }));
+
+    //         editor.dispatchEvent(new CustomEvent("htmlEditorClick", {
+    //             detail: {
+    //                 target,
+    //                 command: click
+    //             }
+    //         }));
+    //     }
+
+    //     if (target.isContentEditable) {
+    //         break;
+    //     }
+    //     if (target.tagName === "A") {
+    //         editor.dispatchEvent(new CustomEvent("click", {
+    //             bubbles: true
+    //         }));
+    //         e.preventDefault();
+    //         return false;
+    //     }
+    //     target = target.parentElement;
+    // }
 }
 
 export interface IEditorCommand {
@@ -178,7 +216,7 @@ export default class AtomHtmlEditor extends AtomControl {
 
     public get htmlContent(): string {
         try {
-            return this.editor.innerHTML;
+            return this.editor?.innerHTML ?? this.initialContent;
         } catch (ex) {
             // tslint:disable-next-line: no-console
             console.warn(ex);
@@ -186,13 +224,19 @@ export default class AtomHtmlEditor extends AtomControl {
     }
 
     public set htmlContent(v: string) {
-        this.editor.innerHTML = v;
+        if (this.editor) {
+            this.editor.innerHTML = v;
+        } else {
+            this.initialContent = v;
+        }
         AtomBinder.refreshValue(this, "htmlContent");
     }
 
     private editorWindow: Window;
 
     private editorDocument: Document;
+
+    private initialContent: string;
 
     public insertImage(s: AtomHtmlEditor, e: Event) {
         return showImageDialog(s, e);
@@ -274,10 +318,11 @@ export default class AtomHtmlEditor extends AtomControl {
         // const script = doc.createElement("script");
         // script.textContent = `document.body.addEventListener("click", ${preventLinkClick.toString()});`;
         // doc.body.appendChild(script);
-        doc.body.addEventListener("click", (e) => preventLinkClick(e, this.element));
+        doc.body.addEventListener("click", (e) => preventLinkClick(e, this.element, doc));
 
         this.editor = doc.getElementById("editor") as HTMLDivElement;
         this.editor.contentEditable = "true";
+        this.editor.innerHTML = this.initialContent ?? "";
         doc.execCommand("styleWithCSS");
         doc.execCommand("insertBrOnReturn");
         const updateVersion = () => setTimeout(() => {
