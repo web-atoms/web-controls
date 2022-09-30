@@ -280,6 +280,9 @@ export default class AtomHtmlEditor extends AtomControl {
 
     protected setupTags() {
         const doc = this.editorDocument;
+        if (!doc) {
+            return;
+        }
         for (const { name, style } of this.tags) {
             if (style) {
                 const styleElement = doc.createElement("style");
@@ -393,6 +396,8 @@ export default class AtomHtmlEditor extends AtomControl {
                 }
             }
         });
+
+        this.setupTags();
 
     }
 
