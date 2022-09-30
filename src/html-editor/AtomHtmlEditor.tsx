@@ -3,7 +3,7 @@ import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import Colors from "@web-atoms/core/dist/core/Colors";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
+import StyleRule, { AtomStyleRules } from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import AtomRepeater from "../basic/AtomRepeater";
@@ -192,6 +192,12 @@ export interface IEditorCommand {
     commandParameter: string;
 }
 
+export interface ITagCommand<T = any> {
+    name: string;
+    style: AtomStyleRules;
+    handler: (ce: CustomEvent<T>) => any
+}
+
 export default class AtomHtmlEditor extends AtomControl {
 
     @BindableProperty
@@ -207,6 +213,8 @@ export default class AtomHtmlEditor extends AtomControl {
     public files: File[];
 
     public editor: HTMLDivElement;
+
+    public tags: ITagCommand[];
 
     public eventDocumentCreated: (e: CustomEvent<HTMLDivElement>) => void;
 
@@ -355,6 +363,29 @@ export default class AtomHtmlEditor extends AtomControl {
                 this.editor.removeEventListener("input", updateVersion);
             }
         });
+
+        if (!this.tags) {
+            return;
+        }
+
+        this.bindEvent(this.element, "editorClick", (ce: CustomEvent) => {
+            const { detail } = ce;
+            for (const { name, handler } of this.tags) {
+                if (name === detail.command || name === detail.clickEvent) {
+                    handler(ce);
+                }
+            }
+        });
+
+        for (const { name, style } of this.tags) {
+            if (style) {
+                const styleElement = doc.createElement("style");
+                styleElement.textContent = `*[data-command=${name}] {
+                    ${style.toStyleSheet()}
+                }`
+                doc.head.appendChild(styleElement);
+            }
+        }
     }
 
     protected documentCreated(e: HTMLDivElement) {
