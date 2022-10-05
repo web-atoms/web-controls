@@ -39,7 +39,7 @@ class List extends ContentPage {
     }
 }
 
-class DrawerMenu extends Drawer {
+export class DrawerMenu extends Drawer {
 
     @InjectProperty
     private navigationService: NavigationService;
@@ -57,7 +57,7 @@ class DrawerMenu extends Drawer {
 
 }
 
-class Home extends ContentPage {
+export class Home extends ContentPage {
 
     protected create(): void {
 

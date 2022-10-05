@@ -143,7 +143,6 @@ CSS(StyleRule()
         .gridColumnStart("1")
         .gridColumnEnd("span 3")
         .padding(5)
-        .overflow("hidden")
         .position("relative")
         .overflow("auto")
         .zIndex(10)
@@ -635,8 +634,6 @@ export default class MobileApp extends AtomControl {
 
     public selectedPage: BasePage;
 
-    public icon: any;
-
     private container: HTMLDivElement;
 
     public async back() {
@@ -727,7 +724,7 @@ export default class MobileApp extends AtomControl {
         this.element.appendChild(container);
         this.pages = [];
         this.selectedPage = null;
-        this.bindEvent(this.element, "iconClick", (e) => { this.icon = e.target; return this.back(); });
+        this.bindEvent(this.element, "iconClick", (e) => this.back());
         this.bindEvent(this.element, "closeDrawer", (e) => {
             this.hideDrawer?.();
         });
