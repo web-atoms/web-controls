@@ -13,22 +13,22 @@ CSS(StyleRule()
     .minWidth(900)
     .gridTemplateRows("1fr auto")
     .gridTemplateColumns("auto 1fr auto")
-    .child(StyleRule("[data-element=app]")
+    .child(StyleRule("[data-page-element=app]")
         .gridRow("1")
         .gridColumn("2")
         .position("inherit")
     )
-    .child(StyleRule("[data-element=menu-renderer]")
+    .child(StyleRule("[data-page-element=menu-renderer]")
         .gridRow("1")
         .gridColumn("1")
         .overflow("auto")
     )
-    .child(StyleRule("[data-element=side-bar]")
+    .child(StyleRule("[data-page-element=side-bar]")
         .gridRow("1")
         .gridColumn("3")
         .overflow("auto")
     )
-    .child(StyleRule("[data-element=status-bar]")
+    .child(StyleRule("[data-page-element=status-bar]")
         .gridRow("2")
         .gridColumn("1 / span 3")
         .overflow("auto")
@@ -108,7 +108,7 @@ export default class DesktopApp extends AtomControl {
     protected create() {
 
         this.render(<div data-desktop-app="desktop-app">
-            <MobileApp data-element="app" />
+            <MobileApp data-page-element="app" />
         </div>);
 
         this.recreate("menuRenderer", "menu-renderer", false);
