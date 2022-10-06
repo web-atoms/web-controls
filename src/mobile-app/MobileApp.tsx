@@ -610,6 +610,7 @@ export class Drawer extends AtomControl {
     protected preCreate(): void {
         this.element.dataset.drawerPage = "drawer-page";
         this.bindEvent(this.element, "click", (e: Event) => e.defaultPrevented ? null : this.closeDrawer());
+        this.runAfterInit(() => this.app.runAsync(() => this.init?.()));
     }
 
     protected closeDrawer() {
@@ -643,12 +644,12 @@ export default class MobileApp extends AtomControl {
             if (drawer && !this.hideDrawer) {
                 const drawerPage = new drawer(this.app);
 
-                (drawerPage as any).init?.()?.catch((error) => {
-                    if (!CancelToken.isCancelled(error)) {
-                        // tslint:disable-next-line: no-console
-                        console.error(error);
-                    }
-                });
+                // (drawerPage as any).init?.()?.catch((error) => {
+                //     if (!CancelToken.isCancelled(error)) {
+                //         // tslint:disable-next-line: no-console
+                //         console.error(error);
+                //     }
+                // });
 
                 const modalClose = (ce: Event) => {
                     let start = ce.target as HTMLElement;
