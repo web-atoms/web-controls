@@ -110,7 +110,7 @@ export default function PopupButton(
                 }
                 if (start.dataset.menuItem === "menu-item") {
                     break;
-                }                
+                }
                 start = start.parentElement;
             }
             popup?.dispose();

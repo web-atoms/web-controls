@@ -7,5 +7,7 @@ export default interface IElement {
     href?: string;
     text?: string;
     styleDisplay?: any;
+    "data-click-event"?: string;
+    "event-click"?: (me: MouseEvent) => any;
     [key: string]: any;
 }

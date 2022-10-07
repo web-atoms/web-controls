@@ -7,6 +7,7 @@ import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import Calendar, { ICalendarDate } from "./Calendar";
+import { InlinePopupButton } from "./InlinePopup";
 import PopupButton from "./PopupButton";
 
 CSS(StyleRule()
@@ -80,11 +81,11 @@ export default class DateField extends AtomControl {
             }
         }
 
-        this.render(<PopupButton
+        this.render(<InlinePopupButton
             data-date-field="date-field"
             text={Bind.oneWay(() => this.format?.(this.value) ?? this.value?.toLocaleDateString() ?? "Select" )}>
             <CalendarPopup/>
-        </PopupButton>);
+        </InlinePopupButton>);
     }
 
 }
