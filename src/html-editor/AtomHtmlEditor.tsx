@@ -92,6 +92,10 @@ function preventLinkClick(e: Event, editor: HTMLElement, doc: Document) {
             break;
         }
         if (target.isContentEditable) {
+            editor.dispatchEvent(new MouseEvent("click", {
+                bubbles: true,
+                cancelable: true
+            }));
             return;
         }
         if (target.tagName === "A") {
@@ -116,6 +120,7 @@ function preventLinkClick(e: Event, editor: HTMLElement, doc: Document) {
             }
         }
     });
+
     editor.dispatchEvent(new CustomEvent("editorClick", {
         detail: {
             target,
@@ -124,6 +129,12 @@ function preventLinkClick(e: Event, editor: HTMLElement, doc: Document) {
         bubbles: true,
         cancelable: true
     } ));
+
+    editor.dispatchEvent(new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true
+    }));
+
 
     // while (target && target !== body) {
 
@@ -283,13 +294,15 @@ export default class AtomHtmlEditor extends AtomControl {
         if (!doc) {
             return;
         }
-        for (const { name, style } of this.tags) {
-            if (style) {
-                const styleElement = doc.createElement("style");
-                styleElement.textContent = `*[data-command=${name}] {
-                    ${style.toStyleSheet()}
-                }`
-                doc.head.appendChild(styleElement);
+        if (Array.isArray(this.tags)) {
+            for (const { name, style } of this.tags) {
+                if (style) {
+                    const styleElement = doc.createElement("style");
+                    styleElement.textContent = `*[data-command=${name}] {
+                        ${style.toStyleSheet()}
+                    }`
+                    doc.head.appendChild(styleElement);
+                }
             }
         }
     }

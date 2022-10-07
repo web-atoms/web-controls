@@ -15,6 +15,8 @@ CSS(StyleRule()
     .padding(5)
     .border("solid 1px lightgray")
     .defaultBoxShadow()
+    .zIndex(5000)
+    .backgroundColor("var(--primary-bg, white)")
 , "*[data-inline-popup=inline-popup]");
 
 function closeHandler(
@@ -108,7 +110,7 @@ export default class InlinePopup extends AtomControl {
                 disposables.dispose();
             };
 
-            const cancel = (r?) => {
+            const cancel = (r = "cancelled") => {
                 if (resolved) {
                     return;
                 }
@@ -133,7 +135,7 @@ export default class InlinePopup extends AtomControl {
 
             if (options.onClick) {
                 disposables.add(control.bindEvent(container, "click", async () => {
-                    await sleep(100);
+                    await sleep(200);
                     defaultClose();
                 }));
             }
@@ -153,6 +155,7 @@ export interface IInlinePopupButtonOptions extends IElement {
     icon?: any;
     hasBorder?: boolean;
     nodes?: XNode[];
+    onClick?: "close" | "cancel";
 }
 
 CSS(StyleRule()
@@ -172,22 +175,23 @@ export function InlinePopupButton(
         text,
         label,
         icon,
-        hasBorder = true,
-        nodes = []
+        hasBorder = false,
+        nodes = [],
+        onClick = "close",
+        ... a
     }: IInlinePopupButtonOptions,
-    popupNode: XNode) {
-    let cancelToken: CancelToken;
-    const done = () => cancelToken = null;
+    ... popupNodes: XNode[]) {
+    let isOpen = false;
+    const done = () => isOpen = false;
     const click = async (e: MouseEvent) => {
-        if (e.defaultPrevented) {
+        if (isOpen || e.defaultPrevented) {
             return;
         }
-        if (cancelToken) {
-            cancelToken.cancel();
-            return;
-        }
+        const popupNode = popupNodes.length > 1 ? <div>{... popupNodes }</div> : popupNodes[0];
         try {
-            await InlinePopup.show(e.target as any, popupNode, { cancelToken });
+            isOpen = true;
+            await InlinePopup.show(
+                e.currentTarget as any, popupNode, { onClick });
         } finally {
             done();
         }
@@ -195,7 +199,8 @@ export function InlinePopupButton(
     return <button
         event-click={click}
         data-has-border={!!hasBorder}
-        data-inline-popup-button="inline-popup-button">
+        data-inline-popup-button="inline-popup-button"
+        { ... a}>
         {icon && <i class={icon}/>}
         {text && <span text={text}/>}
         {label && <label text={text}/>}

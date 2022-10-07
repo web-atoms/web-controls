@@ -73,7 +73,7 @@ export default class DateField extends AtomControl {
                         }
                         this.selectedItem = e.detail;
                         this.owner.value = e.detail.value;
-                        setTimeout(() => this.owner.element.click() , 100);
+                        // setTimeout(() => this.owner.element.click() , 100);
                     })}
                     enableFunc={Bind.oneTime(() => this.owner.enableFunc)}
                     value={Bind.oneWay(() => this.owner.value)}

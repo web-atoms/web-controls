@@ -5,6 +5,7 @@ import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import PopupService, { IPopup, IPopupOptions } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
+import InlinePopup, { InlinePopupButton } from "./InlinePopup";
 
 CSS(StyleRule()
     .padding(5)
@@ -66,80 +67,82 @@ const iconLabelCss = CSS(
         )
 );
 
-export default function PopupButton(
-{
-    icon,
-    label,
-    showAsDialog,
-    ... others
-}: IPopupButton,
-... menus: Array<IMenuItem | XNode>) {
+export default InlinePopupButton;
 
-    let popup: IPopup = null;
-    function openPopup(s: AtomControl, e: Event) {
-        const button = e.currentTarget as HTMLElement;
-        button.classList.add("pressed");
-        if (popup) {
-            popup.dispose();
-            popup = null;
-            return;
-        }
+// export default function PopupButton(
+// {
+//     icon,
+//     label,
+//     showAsDialog,
+//     ... others
+// }: IPopupButton,
+// ... menus: Array<IMenuItem | XNode>) {
 
-        const menu = document.createElement("div");
-        (s as any).render(<div data-menu-items="menu-items">
-            { ... menus}
-        </div>, menu);
+//     let popup: IPopup = null;
+//     function openPopup(s: AtomControl, e: Event) {
+//         const button = e.currentTarget as HTMLElement;
+//         button.classList.add("pressed");
+//         if (popup) {
+//             popup.dispose();
+//             popup = null;
+//             return;
+//         }
 
-        const options: IPopupOptions = showAsDialog
-            ? {
-                alignment: "centerOfScreen",
-                popupStyle: ".none"
-            }
-            : {
-                alignment: "bottomLeft",
-                popupStyle: ".none"
-            };
-        popup = PopupService.show(button, menu, options);
+//         const menu = document.createElement("div");
+//         (s as any).render(<div data-menu-items="menu-items">
+//             { ... menus}
+//         </div>, menu);
 
-        const clickHandler = (e) => {
-            let start = e.target as HTMLElement;
-            const body = document.body;
-            while (start) {
-                if (start === body) {
-                    return;
-                }
-                if (start.dataset.menuItem === "menu-item") {
-                    break;
-                }
-                start = start.parentElement;
-            }
-            popup?.dispose();
-            popup = null;
-        };
+//         const options: IPopupOptions = showAsDialog
+//             ? {
+//                 alignment: "centerOfScreen",
+//                 popupStyle: ".none"
+//             }
+//             : {
+//                 alignment: "bottomLeft",
+//                 popupStyle: ".none"
+//             };
+//         popup = PopupService.show(button, menu, options);
 
-        menu.addEventListener("click", clickHandler);
+//         const clickHandler = (e) => {
+//             let start = e.target as HTMLElement;
+//             const body = document.body;
+//             while (start) {
+//                 if (start === body) {
+//                     return;
+//                 }
+//                 if (start.dataset.menuItem === "menu-item") {
+//                     break;
+//                 }
+//                 start = start.parentElement;
+//             }
+//             popup?.dispose();
+//             popup = null;
+//         };
 
-        popup.registerDisposable(() => {
-            button.classList.remove("pressed");
-            menu.removeEventListener("click", clickHandler);
-            popup = null;
-        });
-    }
+//         menu.addEventListener("click", clickHandler);
 
-    if (label) {
-        return <button
-            { ... others }
-            eventClick={Bind.event((s, e) => openPopup(s as AtomControl, e))}>
-            <label class={iconLabelCss}>
-                <i class={icon}/>
-                <span>{label}</span>
-            </label>
-        </button>;
-    }
+//         popup.registerDisposable(() => {
+//             button.classList.remove("pressed");
+//             menu.removeEventListener("click", clickHandler);
+//             popup = null;
+//         });
+//     }
 
-    return <button
-        { ... others }
-        eventClick={Bind.event((s, e) => openPopup(s as AtomControl, e))}>
-        <i class={icon}/>
-    </button>;
-}
+//     if (label) {
+//         return <button
+//             { ... others }
+//             eventClick={Bind.event((s, e) => openPopup(s as AtomControl, e))}>
+//             <label class={iconLabelCss}>
+//                 <i class={icon}/>
+//                 <span>{label}</span>
+//             </label>
+//         </button>;
+//     }
+
+//     return <button
+//         { ... others }
+//         eventClick={Bind.event((s, e) => openPopup(s as AtomControl, e))}>
+//         <i class={icon}/>
+//     </button>;
+// }
