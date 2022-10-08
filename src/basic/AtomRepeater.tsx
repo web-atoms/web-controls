@@ -13,6 +13,7 @@ import { IDialogOptions, PopupControl, PopupWindow } from "@web-atoms/core/dist/
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import EventScope from "@web-atoms/core/dist/core/EventScope";
 import InlinePopupControl from "./InlinePopupControl";
+import InlinePopup from "./InlinePopup";
 
 CSS(StyleRule()
     .display("none")
@@ -197,7 +198,7 @@ export function askSuggestionPopup<T>(
     const updateSearch = "search" in opener;
     const itemsInOpener = "items" in opener;
 
-    class Suggestions extends InlinePopupControl {
+    class Suggestions extends InlinePopup {
 
         public anchorItem: T;
 
@@ -308,7 +309,7 @@ export function askSuggestionPopup<T>(
         }
     }
 
-    return Suggestions.showControl(opener);
+    return Suggestions.showControl<T>(opener);
 
 }
 

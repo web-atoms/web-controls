@@ -1,10 +1,11 @@
+import { App } from "@web-atoms/core/dist/App";
 import { AtomDisposableList } from "@web-atoms/core/dist/core/AtomDisposableList";
 import Colors from "@web-atoms/core/dist/core/Colors";
 import sleep from "@web-atoms/core/dist/core/sleep";
 import { CancelToken } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule, { ContentAlignType } from "@web-atoms/core/dist/style/StyleRule";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
+import { AtomControl, ElementValueSetters } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { IPopupOptions } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import IElement from "./IElement";
@@ -50,7 +51,6 @@ function closeHandler(
 }
 
 export interface IInlinePopupOptions extends IPopupOptions {
-
 }
 
 export default class InlinePopup extends AtomControl {
@@ -86,6 +86,10 @@ export default class InlinePopup extends AtomControl {
                 container.style.top = "0px";
                 container.style.left = `${targetElement.offsetWidth}px`;
                 break;
+            default:
+                container.style.top = `${targetElement.offsetHeight}px`;
+                container.style.left = "0px";
+                break;
         }
 
         container._logicalParent = targetElement;
@@ -119,6 +123,13 @@ export default class InlinePopup extends AtomControl {
                 disposables.dispose();
             };
 
+            const firstChild = (container.firstElementChild as HTMLElement).atomControl;
+
+            if (firstChild instanceof InlinePopup) {
+                firstChild.cancel = cancel;
+                firstChild.close = close;
+            }
+
             const defaultClose = options.onClick === "close" ? close : cancel;
 
             const observer = new MutationObserver(() => {
@@ -147,6 +158,27 @@ export default class InlinePopup extends AtomControl {
         });
     }
 
+    public static showControl<T>(target: HTMLElement | AtomControl, options: IPopupOptions = {}) {
+        const node = XNode.create(this, {});
+        return this.show<T>(target, node, options);
+    }
+
+    public close: (r?) => void;
+
+    public cancel: (r?) => void;
+
+    protected dispatchClickEvent(e: MouseEvent, data: any) {
+        let start = this.element.parentElement;
+        while (start) {
+            const atomControl = AtomControl.from(start);
+            if (atomControl) {
+                (atomControl as any).dispatchClickEvent(e, data);
+                return;
+            }
+            start = start.parentElement;
+        }
+        super.dispatchClickEvent(e, data);
+    }
 }
 
 export interface IInlinePopupButtonOptions extends IElement {
@@ -156,6 +188,7 @@ export interface IInlinePopupButtonOptions extends IElement {
     hasBorder?: boolean;
     nodes?: XNode[];
     onClick?: "close" | "cancel";
+    popup?: PopupFactory;
 }
 
 CSS(StyleRule()
@@ -170,6 +203,69 @@ CSS(StyleRule()
     )
 , "*[data-inline-popup-button=inline-popup-button]");
 
+export type PopupFactory = (data) => XNode;
+
+document.body.addEventListener("click", (e) => {
+
+    let start = e.target as HTMLElement;
+    let popupFactory: PopupFactory;
+    while (start) {
+        popupFactory = (start as any).popupFactory;
+        if (popupFactory) {
+            // stop...
+            break;
+        }
+        start = start.parentElement;
+    }
+
+    if (!start) {
+        return;
+    }
+
+    const control = AtomControl.from(start) as any;
+    const app = control.app as App;
+    const target = start;
+    const element = control.element;
+    let itemIndex;
+    let data;
+    if (control.items && control.itemRenderer) {
+        // this is atom repeater
+        while (start && start !== element) {
+            itemIndex ??= start.dataset.itemIndex;
+            if (itemIndex) {
+                data = control.items[itemIndex];
+                break;
+            }
+            start = start.parentElement;
+        }
+    }
+
+    if (!data) {
+        data = new Proxy(target, {
+            get(t, p, receiver) {
+                let s = target;
+                while (s) {
+                    const v = s.dataset[p as string];
+                    if (v !== void 0) {
+                        return v;
+                    }
+                    s = s.parentElement;
+                }
+            },
+        });
+    }
+
+    const node = popupFactory(data);
+
+    app.runAsync(() => InlinePopup.show(target, node));
+
+
+});
+
+ElementValueSetters["data-popup-class"] =  (c, e, v) => {
+    (e as any).popupFactory = v;
+};
+
 export function InlinePopupButton(
     {
         text,
@@ -178,9 +274,24 @@ export function InlinePopupButton(
         hasBorder = false,
         nodes = [],
         onClick = "close",
+        popup,
         ... a
     }: IInlinePopupButtonOptions,
     ... popupNodes: XNode[]) {
+
+    if (popup) {
+        return <button
+            data-popup-class={popup}
+            data-has-border={!!hasBorder}
+            data-inline-popup-button="inline-popup-button"
+            { ... a}>
+            {icon && <i class={icon}/>}
+            {text && <span text={text}/>}
+            {label && <label text={text}/>}
+            { ... nodes}
+        </button>;
+    }
+
     let isOpen = false;
     const done = () => isOpen = false;
     const click = async (e: MouseEvent) => {
