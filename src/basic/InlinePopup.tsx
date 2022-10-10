@@ -50,13 +50,10 @@ function closeHandler(
     return () => document.body.removeEventListener("click", handler, true);
 }
 
-export interface IInlinePopupOptions extends IPopupOptions {
-}
-
 export default class InlinePopup extends AtomControl {
 
     public static async show<T = void>(
-        target: HTMLElement | AtomControl, node: XNode, options: IInlinePopupOptions = {}) {
+        target: HTMLElement | AtomControl, node: XNode, options: IPopupOptions = {}) {
 
         const targetElement = ((target as any).element ?? target) as HTMLElement;
 
@@ -258,7 +255,6 @@ document.body.addEventListener("click", (e) => {
     const node = popupFactory(data);
 
     app.runAsync(() => InlinePopup.show(target, node));
-
 
 });
 
