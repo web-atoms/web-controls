@@ -50,10 +50,14 @@ function closeHandler(
     return () => document.body.removeEventListener("click", handler, true);
 }
 
+export interface IInlinePopupOptions extends IPopupOptions {
+    defaultOnClick?: "close" | "cancel" | null | undefined;
+}
+
 export default class InlinePopup extends AtomControl {
 
     public static async show<T = void>(
-        target: HTMLElement | AtomControl, node: XNode, options: IPopupOptions = {}) {
+        target: HTMLElement | AtomControl, node: XNode, options: IInlinePopupOptions = {}) {
 
         const targetElement = ((target as any).element ?? target) as HTMLElement;
 
@@ -125,6 +129,10 @@ export default class InlinePopup extends AtomControl {
             if (firstChild instanceof InlinePopup) {
                 firstChild.cancel = cancel;
                 firstChild.close = close;
+            } else {
+                if (options.onClick === void 0) {
+                    options.onClick = options.defaultOnClick;
+                }
             }
 
             const defaultClose = options.onClick === "close" ? close : cancel;
@@ -184,7 +192,7 @@ export interface IInlinePopupButtonOptions extends IElement {
     icon?: any;
     hasBorder?: boolean;
     nodes?: XNode[];
-    onClick?: "close" | "cancel";
+    defaultOnClick?: "close" | "cancel";
     popup?: PopupFactory;
 }
 
@@ -269,7 +277,7 @@ export function InlinePopupButton(
         icon,
         hasBorder = false,
         nodes = [],
-        onClick = "close",
+        defaultOnClick = "close",
         popup,
         ... a
     }: IInlinePopupButtonOptions,
@@ -298,7 +306,7 @@ export function InlinePopupButton(
         try {
             isOpen = true;
             await InlinePopup.show(
-                e.currentTarget as any, popupNode, { onClick });
+                e.currentTarget as any, popupNode, { defaultOnClick });
         } finally {
             done();
         }

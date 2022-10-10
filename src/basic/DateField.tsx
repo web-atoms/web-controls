@@ -6,8 +6,9 @@ import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
+import DateTime from "@web-atoms/date-time/dist/DateTime";
 import Calendar, { ICalendarDate } from "./Calendar";
-import { InlinePopupButton } from "./InlinePopup";
+import InlinePopup, { InlinePopupButton } from "./InlinePopup";
 import PopupButton from "./PopupButton";
 
 CSS(StyleRule()
@@ -50,34 +51,34 @@ export default class DateField extends AtomControl {
             }) ?? "Select";
 
         const owner = this;
-        class CalendarPopup extends Calendar {
+        class CalendarPopup extends InlinePopup {
 
             public owner: DateField;
 
             protected create(): void {
                 this.owner = owner;
                 super.create();
-                if (typeof owner.yearStart === "number") {
-                    this.yearStart = owner.yearStart;
-                }
-                if (typeof owner.yearEnd === "number") {
-                    this.yearEnd = owner.yearEnd;
-                }
-                if (typeof owner.year === "number") {
-                    this.year = owner.year;
-                }
-                this.render(<Calendar
-                    event-item-select={Bind.event((s, e) => {
-                        if (e.detail.disabled) {
-                            return;
-                        }
-                        this.selectedItem = e.detail;
-                        this.owner.value = e.detail.value;
-                        // setTimeout(() => this.owner.element.click() , 100);
-                    })}
-                    enableFunc={Bind.oneTime(() => this.owner.enableFunc)}
-                    value={Bind.oneWay(() => this.owner.value)}
-                />);
+                const now = DateTime.utcNow;
+                const yearStart = typeof this.owner.yearStart === "number" ? this.owner.yearStart : -10;
+                const yearEnd = typeof this.owner.yearEnd === "number" ? this.owner.yearEnd : 10;
+                const year = typeof this.owner.year === "number" ? this.owner.year : now.year;
+                this.render(<div>
+                    <Calendar
+                        yearStart={yearStart}
+                        yearEnd={yearEnd}
+                        year={year}
+                        event-item-select={Bind.event((s, e) => {
+                            if (e.detail.disabled) {
+                                return;
+                            }
+                            // this.selectedItem = e.detail;
+                            this.owner.value = e.detail.value;
+                            this.close(e.detail.value);
+                            // setTimeout(() => this.owner.element.click() , 100);
+                        })}
+                        enableFunc={Bind.oneTime(() => this.owner.enableFunc)}
+                        value={Bind.oneWay(() => this.owner.value)}
+                /></div>);
             }
         }
 
