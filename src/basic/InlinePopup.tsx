@@ -193,11 +193,12 @@ export interface IInlinePopupButtonOptions extends IElement {
     hasBorder?: boolean;
     nodes?: XNode[];
     defaultOnClick?: "close" | "cancel";
+    anchorRight?: boolean;
     popup?: PopupFactory;
 }
 
 CSS(StyleRule()
-    .flexLayout({ alignItems: "center", inline: true, justifyContent: "default"})
+    .flexLayout({ alignItems: "center", inline: true, justifyContent: "center"})
     .flexWrap("wrap")
     .padding(3)
     .paddingLeft(5)
@@ -278,6 +279,7 @@ export function InlinePopupButton(
         hasBorder = false,
         nodes = [],
         defaultOnClick = "close",
+        anchorRight = false,
         popup,
         ... a
     }: IInlinePopupButtonOptions,
@@ -305,8 +307,11 @@ export function InlinePopupButton(
         const popupNode = popupNodes.length > 1 ? <div>{... popupNodes }</div> : popupNodes[0];
         try {
             isOpen = true;
+
+            const alignment = anchorRight ? "bottomRight" : "bottomLeft";
+
             await InlinePopup.show(
-                e.currentTarget as any, popupNode, { defaultOnClick });
+                e.currentTarget as any, popupNode, { defaultOnClick, alignment });
         } finally {
             done();
         }

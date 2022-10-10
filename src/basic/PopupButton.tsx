@@ -5,7 +5,7 @@ import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import PopupService, { IPopup, IPopupOptions } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
-import InlinePopup, { InlinePopupButton } from "./InlinePopup";
+import InlinePopup, { IInlinePopupButtonOptions, InlinePopupButton } from "./InlinePopup";
 
 CSS(StyleRule()
     .padding(5)
@@ -68,6 +68,11 @@ const iconLabelCss = CSS(
 );
 
 export default InlinePopupButton;
+
+export function PopupActionButton(a: IInlinePopupButtonOptions, ... nodes: XNode[]) {
+    a.anchorRight = true;
+    return InlinePopupButton(a, ... nodes);
+}
 
 // export default function PopupButton(
 // {
