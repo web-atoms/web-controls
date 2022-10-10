@@ -18,6 +18,7 @@ CSS(StyleRule()
     .defaultBoxShadow()
     .zIndex(5000)
     .backgroundColor("var(--primary-bg, white)")
+    .color("var(--primary-color, darkgray)")
 , "*[data-inline-popup=inline-popup]");
 
 function closeHandler(
