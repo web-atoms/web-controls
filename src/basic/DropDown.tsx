@@ -41,6 +41,8 @@ export default class DropDown extends AtomRepeater {
     @BindableProperty
     public suggestionRenderer: (item) => XNode;
 
+    private isPopupOpen = false;
+
     public updateItems(container?: HTMLElement): void {
         // don't do anything...
     }
@@ -61,7 +63,7 @@ export default class DropDown extends AtomRepeater {
         // super.preCreate();
         this.prompt = "Select";
         this.popupSuggestions = true;
-        this.bindEvent(this.element, "click", () => this.openPopup());
+        this.bindEvent(this.element, "click", (e) => this.openPopup(e));
         this.valuePath = (item) => item?.value ?? item;
         this.labelPath = (item) => item?.label ?? item;
         this.itemRenderer = (item) => <div text={this.labelPath(item)}/>;
@@ -72,33 +74,41 @@ export default class DropDown extends AtomRepeater {
         </div>);
     }
 
-    protected async openPopup() {
-        if (!this.popupSuggestions) {
-            const selected = await askSuggestion(
+    protected async openPopup(e: Event) {
+        if (this.isPopupOpen) {
+            return;
+        }
+        this.isPopupOpen = true;
+        try {
+            if (!this.popupSuggestions) {
+                const selected = await askSuggestion(
+                    this.items,
+                    this.suggestionRenderer ?? this.itemRenderer,
+                    this.match ?? MatchAnyCaseInsensitive(this.labelPath),
+                    { title: this.suggestionPrompt ?? this.prompt });
+                this.selectedItem = selected;
+                return;
+            }
+
+            const selectedItem = await askSuggestionPopup(
+                this,
                 this.items,
                 this.suggestionRenderer ?? this.itemRenderer,
                 this.match ?? MatchAnyCaseInsensitive(this.labelPath),
-                { title: this.suggestionPrompt ?? this.prompt });
-            this.selectedItem = selected;
-            return;
-        }
-
-        const selectedItem = await askSuggestionPopup(
-            this,
-            this.items,
-            this.suggestionRenderer ?? this.itemRenderer,
-            this.match ?? MatchAnyCaseInsensitive(this.labelPath),
-            this.selectedItem);
-        if (this.selectedItem !== selectedItem) {
-            this.selectedItem = selectedItem;
-            this.element.dispatchEvent(new CustomEvent(
-                "selectionChanged",
-                {
-                    bubbles: true,
-                    detail: selectedItem,
-                    cancelable: true
-                }
-            ));
+                this.selectedItem);
+            if (this.selectedItem !== selectedItem) {
+                this.selectedItem = selectedItem;
+                this.element.dispatchEvent(new CustomEvent(
+                    "selectionChanged",
+                    {
+                        bubbles: true,
+                        detail: selectedItem,
+                        cancelable: true
+                    }
+                ));
+            }
+        } finally {
+            this.isPopupOpen = false;
         }
     }
 

@@ -240,7 +240,9 @@ export function askSuggestionPopup<T>(
                             itemRenderer={itemRenderer}
                             visibilityFilter={Bind.oneWay(() => match(this.search))}
                             eventItemClick={(e) => {
-                                this.close(e.detail);
+                                this.anchorItem = e.detail;
+                                setTimeout(() =>
+                                    this.close(e.detail), 100);
                             }}
                             items={Bind.oneWay(() => this.opener.items)}/>
                     </div>
