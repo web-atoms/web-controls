@@ -68,6 +68,8 @@ export default class AtomSuggestions extends AtomRepeater {
 
     private selectedItemsWatcher: IDisposable;
 
+    private isPopupOpen = false;
+
     public onPropertyChanged(name: keyof AtomSuggestions): void {
         super.onPropertyChanged(name);
         switch (name) {
@@ -116,24 +118,32 @@ export default class AtomSuggestions extends AtomRepeater {
     }
 
     protected async more() {
-        const vf = this.visibilityFilter ?? ((item) => true);
-        if (!this.popupSuggestions) {
-            const selected = await askSuggestion(
-                this.items.filter(vf),
-                this.suggestionRenderer ?? this.itemRenderer,
-                (text: string) => this.match(text),
-                { title: this.title });
-            this.addItem(selected);
+        if (this.isPopupOpen) {
             return;
         }
+        this.isPopupOpen = true;
+        try {
+            const vf = this.visibilityFilter ?? ((item) => true);
+            if (!this.popupSuggestions) {
+                const selected = await askSuggestion(
+                    this.items.filter(vf),
+                    this.suggestionRenderer ?? this.itemRenderer,
+                    (text: string) => this.match(text),
+                    { title: this.title });
+                this.addItem(selected);
+                return;
+            }
 
-        const selectedItem = await askSuggestionPopup(
-            this,
-            this.items,
-            this.suggestionRenderer ?? this.itemRenderer,
-            (text: string) => this.match(text),
-            this.selectedItem);
-        this.addItem(selectedItem);
+            const selectedItem = await askSuggestionPopup(
+                this,
+                this.items,
+                this.suggestionRenderer ?? this.itemRenderer,
+                (text: string) => this.match(text),
+                this.selectedItem);
+            this.addItem(selectedItem);
+        } finally {
+            this.isPopupOpen = false;
+        }
     }
 
     protected addItem(selectedItem: any) {
