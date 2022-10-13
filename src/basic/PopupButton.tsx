@@ -51,7 +51,7 @@ export function MenuItem({
     if (label) {
         return <div data-menu-item="menu-item" eventClick={eventClick} { ... others }>
             <i class={icon}/>
-            <span>{label}</span>
+            <span text={label}/>
         </div>;
     }
     return <div data-menu-item="menu-item" eventClick={eventClick} { ... others }>
