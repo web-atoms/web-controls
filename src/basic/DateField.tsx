@@ -52,7 +52,7 @@ export default class DateField extends AtomControl {
                 year: "numeric",
                 day: "numeric",
                 weekday: "short"
-            }) ?? "Select";
+            });
 
         const owner = this;
         class CalendarPopup extends InlinePopup {
