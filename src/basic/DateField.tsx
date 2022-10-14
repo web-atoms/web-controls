@@ -40,7 +40,11 @@ export default class DateField extends AtomControl {
     @BindableProperty
     public year: number;
 
+    @BindableProperty
+    public prompt: string;
+
     protected preCreate(): void {
+        this.prompt = "Select";
         this.value = null;
         this.format = (d) => d?.toLocaleDateString(
             navigator.language, {
@@ -84,7 +88,7 @@ export default class DateField extends AtomControl {
 
         this.render(<InlinePopupButton
             data-date-field="date-field"
-            text={Bind.oneWay(() => this.format?.(this.value) ?? this.value?.toLocaleDateString() ?? "Select" )}>
+            text={Bind.oneWay(() => this.format?.(this.value) ?? this.value?.toLocaleDateString() ?? this.prompt )}>
             <CalendarPopup/>
         </InlinePopupButton>);
     }
