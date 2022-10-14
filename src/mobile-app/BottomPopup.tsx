@@ -25,7 +25,13 @@ export interface IBottomPopupOptions extends IPopupOptions {
     parameters?: {[key: string]: any};
 }
 
+
+
 export default class BottomPopup extends AtomControl {
+
+    public static showModal<T>(options: IBottomPopupOptions) {
+        return this.show<T>(options);
+    }
 
     public static async show<T>({
         parameters,
