@@ -667,8 +667,10 @@ export default class AtomRepeater extends AtomControl {
                         case "set":
                             this.updatePartial(type, index, item);
                             break;
+                        default:
+                            this.updateItems();
+                            break;
                     }
-                    this.updateItems();
                     this.dispatchCustomEvent("items-updated", { type, items, index });
                     AtomBinder.refreshValue(this, "selectedItem");
                     AtomBinder.refreshValue(this, "value");
