@@ -2,7 +2,7 @@ import Colors from "@web-atoms/core/dist/core/Colors";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { IPopupOptions, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
+import PopupService, { IPopupOptions, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 export * as zDoNotUse from "../animations/Animations";
 import MobileApp from "./MobileApp";
@@ -37,6 +37,7 @@ class BottomPopupWindow extends AtomControl {
         parameters,
         cancelToken
     }: IBottomPopupOptions = {}): Promise<T> {
+        const last = PopupService.lastTarget;
         const popup = new this(MobileApp.current.app);
         popup.bindEvent(window as any, "backButton", (ce: CustomEvent) => {
             ce.preventDefault();
@@ -60,6 +61,7 @@ class BottomPopupWindow extends AtomControl {
                 disposed = true;
                 popup.dispose();
                 resolve(r);
+                PopupService.lastTarget = last;
             };
             popup.cancel = (reason = "cancelled") => {
                 if (disposed) {
@@ -68,6 +70,7 @@ class BottomPopupWindow extends AtomControl {
                 disposed = true;
                 popup.dispose();
                 reject(reason);
+                PopupService.lastTarget = last;
             };
         });
         const pr = popup.init?.();
