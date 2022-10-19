@@ -2,7 +2,7 @@ import Colors from "@web-atoms/core/dist/core/Colors";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { IPopupOptions, PopupControl } from "@web-atoms/core/dist/web/services/PopupService";
+import { IPopupOptions, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 export * as zDoNotUse from "../animations/Animations";
 import MobileApp from "./MobileApp";
@@ -27,7 +27,7 @@ export interface IBottomPopupOptions extends IPopupOptions {
 
 
 
-export default class BottomPopup extends AtomControl {
+class BottomPopupWindow extends AtomControl {
 
     public static showModal<T>(options: IBottomPopupOptions) {
         return this.show<T>(options);
@@ -129,4 +129,8 @@ export default class BottomPopup extends AtomControl {
 
 }
 
-delete BottomPopup.prototype.init;
+delete BottomPopupWindow.prototype.init;
+
+const BottomPopup = /mobile|iPhone|iOS/i.test(navigator.userAgent) ? BottomPopupWindow : PopupWindow;
+
+export default BottomPopup;
