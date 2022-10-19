@@ -27,7 +27,7 @@ export interface IBottomPopupOptions extends IPopupOptions {
 
 
 
-class BottomPopupWindow extends AtomControl {
+export default class BottomPopup extends AtomControl {
 
     public static showModal<T>(options: IBottomPopupOptions) {
         return this.show<T>(options);
@@ -38,7 +38,8 @@ class BottomPopupWindow extends AtomControl {
         cancelToken
     }: IBottomPopupOptions = {}): Promise<T> {
         const last = PopupService.lastTarget;
-        const popup = new this(MobileApp.current.app);
+        const current = MobileApp.current;
+        const popup = new this(current.app);
         popup.bindEvent(window as any, "backButton", (ce: CustomEvent) => {
             ce.preventDefault();
             popup.cancel();
@@ -47,7 +48,7 @@ class BottomPopupWindow extends AtomControl {
             popup.cancel();
         });
         popup.element.dataset.clickEvent = "cancelPopup";
-        document.body.append(popup.element);
+        current.element.append(popup.element);
         popup.parameters = parameters;
         if (cancelToken) {
             cancelToken.registerForCancel(popup.cancel);
@@ -132,8 +133,4 @@ class BottomPopupWindow extends AtomControl {
 
 }
 
-delete BottomPopupWindow.prototype.init;
-
-const BottomPopup = /mobile|iPhone|iOS/i.test(navigator.userAgent) ? BottomPopupWindow : PopupWindow;
-
-export default BottomPopup;
+delete BottomPopup.prototype.init;
