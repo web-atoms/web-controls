@@ -7,7 +7,7 @@ import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
-import AtomRepeater, { Match } from "./AtomRepeater";
+import AtomRepeater, { Match, MatchTrue } from "./AtomRepeater";
 import IElement from "./IElement";
 import InlinePopup from "./InlinePopup";
 import InlinePopupControl from "./InlinePopupControl";
@@ -76,6 +76,7 @@ function askSuggestionPopup<T>(
     host: HTMLElement,
     opener: AtomChips,
     itemRenderer: (item: T, index: number, repeater: AtomRepeater) => XNode,
+    suggestionFilter: (item) => boolean,
     cancelToken: CancelToken): Promise<T> {
 
     class Suggestions extends InlinePopup {
@@ -91,6 +92,7 @@ function askSuggestionPopup<T>(
                         selectedItem={Bind.oneWay(() => this.opener.anchorItem)}
                         itemRenderer={itemRenderer}
                         eventDeleteSuggestion={(e) => opener.element.dispatchEvent(e) }
+                        visibilityFilter={suggestionFilter ?? MatchTrue}
                         eventItemClick={(e) => {
                             this.close(e.detail);
                         }}
@@ -278,6 +280,9 @@ export default class AtomChips extends AtomRepeater {
     @BindableProperty
     public suggestionRenderer: (item, index: number, repeater: AtomRepeater) => XNode;
 
+    @BindableProperty
+    public suggestionFilter: (item) => boolean;
+
     public itemToChip: (item, search) => any;
 
     @BindableProperty
@@ -324,6 +329,7 @@ export default class AtomChips extends AtomRepeater {
         this.prompt = "Search";
         this.element.dataset.atomChips = "atom-chips";
         this.element.dataset.mode = "search";
+        this.suggestionFilter = MatchTrue;
         // this.bindEvent(this.element, "click", () => this.searchInput.focus());
         this.valuePath = (item) => item?.value ?? item;
         this.labelPath = (item) => item?.label ?? item;
@@ -375,6 +381,7 @@ export default class AtomChips extends AtomRepeater {
                 this.element,
                 this,
                 this.suggestionRenderer ?? this.itemRenderer,
+                this.suggestionFilter,
                 cancelToken);
             const itemToChip = this.itemToChip;
             if (itemToChip) {
