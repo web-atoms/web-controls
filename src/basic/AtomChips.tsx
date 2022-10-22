@@ -372,29 +372,32 @@ export default class AtomChips extends AtomRepeater {
             this.popupCancelToken = null;
             return;
         }
+        if (this.popupCancelToken) {
+            return;
+        }
+
+        const detail = this.suggestions;
+        const ce = new CustomEvent("suggestions-requested", { detail });
+        this.element.dispatchEvent(ce);
+        if (ce.defaultPrevented) {
+            return;
+        }
+        const { promise } = ce as any;
+        if (promise) {
+            await promise;
+        }
+        if (ce.detail !== this.suggestions) {
+            this.suggestions = ce.detail;
+        }
+
         if (!suggestions || !suggestions.length) {
             this.popupCancelToken?.cancel();
             this.popupCancelToken = null;
             return;
         }
-        if (this.popupCancelToken) {
-            return;
-        }
+
         const cancelToken = this.popupCancelToken = new CancelToken();
         try {
-            const detail = this.suggestions;
-            const ce = new CustomEvent("suggestions-requested", { detail });
-            this.element.dispatchEvent(ce);
-            if (ce.defaultPrevented) {
-                return;
-            }
-            const { promise } = ce as any;
-            if (promise) {
-                await promise;
-            }
-            if (ce.detail !== this.suggestions) {
-                this.suggestions = ce.detail;
-            }
             let selectedItem = await askSuggestionPopup(
                 this.element,
                 this,
