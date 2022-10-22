@@ -254,6 +254,11 @@ export default class AtomChips extends AtomRepeater {
     public "event-suggestion-chosen"?: (e: CustomEvent) => any;
 
     /**
+     * Fired just before suggestions are about to be displayed
+     */
+    public "event-suggestions-requested"?: (ce: CustomEvent<any[]>) => any;
+
+    /**
      * Fired when user tries to remove the chip, you can call
      * preventDefault() to prevent chip from being removed.
      */
@@ -377,6 +382,19 @@ export default class AtomChips extends AtomRepeater {
         }
         const cancelToken = this.popupCancelToken = new CancelToken();
         try {
+            const detail = this.suggestions;
+            const ce = new CustomEvent("suggestions-requested", { detail });
+            this.element.dispatchEvent(ce);
+            if (ce.defaultPrevented) {
+                return;
+            }
+            const { promise } = ce as any;
+            if (promise) {
+                await promise;
+            }
+            if (ce.detail !== this.suggestions) {
+                this.suggestions = ce.detail;
+            }
             let selectedItem = await askSuggestionPopup(
                 this.element,
                 this,
