@@ -6,13 +6,14 @@ import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import Colors from "@web-atoms/core/dist/core/Colors";
 import { CancelToken, IClassOf, IDisposable } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import { NavigationService } from "@web-atoms/core/dist/services/NavigationService";
+import { IPageOptions, NavigationService } from "@web-atoms/core/dist/services/NavigationService";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomWindowViewModel } from "@web-atoms/core/dist/view-model/AtomWindowViewModel";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { AtomUI, ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import PopupService, { ConfirmPopup, IPopup, PopupControl } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
+import PageNavigator from "../PageNavigator";
 
 CSS(StyleRule()
     .absolutePosition({ left: 0, top: 0, right: 0, bottom: 0})
@@ -631,6 +632,13 @@ delete (Drawer.prototype as any).init;
 
 export default class MobileApp extends AtomControl {
 
+    public static async pushPage<T>(pageUri: string | any, parameters: {[key: string]: any} = {}, clearHistory: boolean = false) {
+        const mobileApp = this.current;
+        const page = await AtomLoader.loadClass<BasePage>(pageUri, parameters, mobileApp.app);
+        const result = await mobileApp.loadPage(page, clearHistory);
+        return result as T;
+    }
+
     public static current: MobileApp;
 
     public static drawer = XNode.prepare("drawer", true, true);
@@ -749,7 +757,11 @@ export default class MobileApp extends AtomControl {
     }
 
     protected async loadPageForReturn(url: AtomUri, clearHistory: boolean): Promise<any> {
-        const p = await this.loadPage(url, clearHistory);
+        const page = await AtomLoader.loadControl<BasePage>(url, this.app);
+        if (url.query && url.query.title) {
+            page.title = url.query.title.toString();
+        }
+        const p = await this.loadPage(page, clearHistory);
         try {
             return await (p as any);
         } catch (ex) {
@@ -763,13 +775,8 @@ export default class MobileApp extends AtomControl {
         }
     }
 
-    protected async loadPage(url: AtomUri, clearHistory: boolean) {
-        const page = await AtomLoader.loadControl<BasePage>(url, this.app);
+    protected async loadPage(page: BasePage, clearHistory: boolean) {
         page.title ??= "Title";
-        if (url.query && url.query.title) {
-            page.title = url.query.title.toString();
-        }
-
         const selectedPage = this.selectedPage;
         if (selectedPage) {
             (selectedPage as any).hide();
@@ -838,3 +845,5 @@ export default class MobileApp extends AtomControl {
 
     }
 }
+
+PageNavigator.pushPageForResult = MobileApp.pushPage;
