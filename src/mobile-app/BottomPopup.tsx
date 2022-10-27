@@ -91,6 +91,8 @@ export default class BottomPopup extends AtomControl {
 
     public cancel: (reason?: any) => void;
 
+    private animate: boolean;
+
     public dispose(e?: HTMLElement) {
         if (e) {
             super.dispose(e);
@@ -112,6 +114,7 @@ export default class BottomPopup extends AtomControl {
     protected preCreate() {
         const element = this.element;
         element.dataset.bottomPopup = "bottom-popup";
+        this.animate = true;
         super.preCreate();
     }
 
@@ -125,6 +128,10 @@ export default class BottomPopup extends AtomControl {
             { node }
         </div>);
         const child = this.element.firstElementChild as HTMLElement;
+        if (!this.animate) {
+            return;
+        }
+        this.animate = false;
         child.dataset.animationState = "down";
         setTimeout(() => {
             child.dataset.animationState = "normal";
