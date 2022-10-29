@@ -632,16 +632,19 @@ delete (Drawer.prototype as any).init;
 
 export default class MobileApp extends AtomControl {
 
-    public static async pushPage<T>(pageUri: string | any, parameters: {[key: string]: any} = {}, clearHistory: boolean = false) {
+    public static current: MobileApp;
+
+    public static drawer = XNode.prepare("drawer", true, true);
+
+    public static async pushPage<T>(
+        pageUri: string | any,
+        parameters: {[key: string]: any} = {},
+        clearHistory: boolean = false) {
         const mobileApp = this.current;
         const page = await AtomLoader.loadClass<BasePage>(pageUri, parameters, mobileApp.app);
         const result = await mobileApp.loadPage(page, clearHistory);
         return result as T;
     }
-
-    public static current: MobileApp;
-
-    public static drawer = XNode.prepare("drawer", true, true);
 
     public drawer: typeof Drawer;
 
@@ -746,20 +749,23 @@ export default class MobileApp extends AtomControl {
             this.hideDrawer?.();
         });
         const navigationService = this.app.resolve(NavigationService);
-        navigationService.registerNavigationHook(
-            (uri, { target, clearHistory }) => {
+        navigationService.registerPreNavigationHook(
+            (uri, parameters, { target, clearHistory }) => {
                 if (/^(app|root)$/.test(target)) {
-                    return this.loadPageForReturn(uri, clearHistory);
+                    return this.loadPageForReturn(uri, parameters, clearHistory);
                 }
             }
         );
         this.runAfterInit(() => this.app.runAsync(() => this.init()));
     }
 
-    protected async loadPageForReturn(url: AtomUri, clearHistory: boolean): Promise<any> {
-        const page = await AtomLoader.loadControl<BasePage>(url, this.app);
-        if (url.query && url.query.title) {
-            page.title = url.query.title.toString();
+    protected async loadPageForReturn(
+        url: string | any,
+        { title, ... parameters}: any = {},
+        clearHistory: boolean): Promise<any> {
+        const page = await AtomLoader.loadClass<BasePage>(url, parameters, this.app);
+        if (title) {
+            page.title = title.toString();
         }
         const p = await this.loadPage(page, clearHistory);
         try {

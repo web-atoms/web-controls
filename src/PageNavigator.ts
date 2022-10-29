@@ -7,7 +7,8 @@ export default class PageNavigator {
         parameters: {[key: string]: any} = {},
         clearHistory: boolean = true) {
         this.pushPageForResult(page, parameters, clearHistory).catch((e) => {
-            if(!CancelToken.isCancelled(e)) {
+            if (!CancelToken.isCancelled(e)) {
+                // tslint:disable-next-line: no-console
                 console.error(e);
             }
         });
@@ -18,13 +19,17 @@ export default class PageNavigator {
         parameters: {[key: string]: any} = {},
         clearHistory: boolean = false) {
         this.pushPageForResult(page, parameters, clearHistory).catch((e) => {
-            if(!CancelToken.isCancelled(e)) {
+            if (!CancelToken.isCancelled(e)) {
+                // tslint:disable-next-line: no-console
                 console.error(e);
             }
         });
     }
 
-    public static async pushPageForResult<T>(page: string | any, parameters: {[key: string]: any} = {}, clearHistory: boolean = false) {
+    public static async pushPageForResult<T>(
+        page: string | any,
+        parameters: {[key: string]: any} = {},
+        clearHistory: boolean = false) {
         return null;
     }
 
