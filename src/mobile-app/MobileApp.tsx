@@ -631,7 +631,6 @@ export class Drawer extends AtomControl {
 delete (Drawer.prototype as any).init;
 
 export default class MobileApp extends AtomControl {
-
     public static current: MobileApp;
 
     public static drawer = XNode.prepare("drawer", true, true);
@@ -749,23 +748,20 @@ export default class MobileApp extends AtomControl {
             this.hideDrawer?.();
         });
         const navigationService = this.app.resolve(NavigationService);
-        navigationService.registerPreNavigationHook(
-            (uri, parameters, { target, clearHistory }) => {
+        navigationService.registerNavigationHook(
+            (uri, { target, clearHistory }) => {
                 if (/^(app|root)$/.test(target)) {
-                    return this.loadPageForReturn(uri, parameters, clearHistory);
+                    return this.loadPageForReturn(uri, clearHistory);
                 }
             }
         );
         this.runAfterInit(() => this.app.runAsync(() => this.init()));
     }
 
-    protected async loadPageForReturn(
-        url: string | any,
-        { title, ... parameters}: any = {},
-        clearHistory: boolean): Promise<any> {
-        const page = await AtomLoader.loadClass<BasePage>(url, parameters, this.app);
-        if (title) {
-            page.title = title.toString();
+    protected async loadPageForReturn(url: AtomUri, clearHistory: boolean): Promise<any> {
+        const page = await AtomLoader.loadControl<BasePage>(url, this.app);
+        if (url.query && url.query.title) {
+            page.title = url.query.title.toString();
         }
         const p = await this.loadPage(page, clearHistory);
         try {
