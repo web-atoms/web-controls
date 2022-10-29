@@ -848,4 +848,6 @@ export default class MobileApp extends AtomControl {
     }
 }
 
-PageNavigator.pushPageForResult = MobileApp.pushPage;
+PageNavigator.pushPageForResult =
+    (page, parameters, clearHistory) =>
+        MobileApp.pushPage(page, parameters, clearHistory);
