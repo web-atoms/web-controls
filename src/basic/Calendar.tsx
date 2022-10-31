@@ -221,6 +221,7 @@ export default class Calendar extends AtomRepeater {
     }
 
     protected preCreate(): void {
+        super.preCreate();
         const now = new Date();
         this.selectedItems = [];
         this.valuePath = (i) => i?.value;

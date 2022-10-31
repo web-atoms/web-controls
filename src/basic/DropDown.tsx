@@ -60,7 +60,7 @@ export default class DropDown extends AtomRepeater {
     }
 
     protected preCreate(): void {
-        // super.preCreate();
+        super.preCreate();
         this.prompt = "Select";
         this.popupSuggestions = true;
         this.bindEvent(this.element, "click", (e) => this.openPopup(e));

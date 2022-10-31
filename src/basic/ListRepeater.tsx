@@ -33,6 +33,7 @@ export default class ListRepeater extends AtomRepeater {
     public autoSelectOnClick: boolean;
 
     protected preCreate() {
+        super.preCreate();
         this.autoSelectOnClick = true;
         this.element.setAttribute("data-list-repeater", "list-repeater");
     }

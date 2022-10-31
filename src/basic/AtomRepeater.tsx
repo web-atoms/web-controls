@@ -958,6 +958,10 @@ export default class AtomRepeater extends AtomControl {
         this.onPropertyChanged("footer");
     }
 
+    protected preCreate() {
+        this.element.setAttribute("data-click-event", "item-click");
+    }
+
     protected dispatchCustomEvent(type: string, detail: any) {
         type = StringHelper.fromHyphenToCamel(type);
         this.element?.dispatchEvent(new CustomEvent(type, {

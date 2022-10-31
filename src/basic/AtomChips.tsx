@@ -250,7 +250,7 @@ export default class AtomChips extends AtomRepeater {
     }
 
     protected preCreate(): void {
-        // super.preCreate();
+        super.preCreate();
         this.prompt = "Search";
         this.element.dataset.atomChips = "atom-chips";
         this.element.dataset.mode = "search";
