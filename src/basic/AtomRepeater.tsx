@@ -223,6 +223,9 @@ export function askSuggestionPopup<T>(
         protected create(): void {
             this.anchorItem = selectedItem;
             this.opener = opener;
+            if (this.opener.search) {
+                this.search = this.opener.search;
+            }
             if (selectedItem) {
                 this.anchorIndex = items.indexOf(selectedItem);
             }
