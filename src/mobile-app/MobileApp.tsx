@@ -4,6 +4,7 @@ import { AtomUri } from "@web-atoms/core/dist/core/AtomUri";
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import Colors from "@web-atoms/core/dist/core/Colors";
+import sleep from "@web-atoms/core/dist/core/sleep";
 import { CancelToken, IClassOf, IDisposable } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import { IPageOptions, NavigationService } from "@web-atoms/core/dist/services/NavigationService";
@@ -654,6 +655,15 @@ export default class MobileApp extends AtomControl {
     public selectedPage: BasePage;
 
     private container: HTMLDivElement;
+
+    public popTo(w: any) {
+        this.app.runAsync(async () => {
+            while (this.selectedPage !== w) {
+                this.selectedPage.cancel();
+                await sleep(500);
+            }
+        });
+    }
 
     public async back() {
         if (this.pages.length === 0) {
