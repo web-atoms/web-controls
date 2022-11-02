@@ -48,7 +48,24 @@ function closeHandler(
         e.stopImmediatePropagation?.();
     };
     document.body.addEventListener("click", handler, true);
-    return () => document.body.removeEventListener("click", handler, true);
+
+    let ce = container as HTMLElement;
+    const containNoneList: HTMLElement[] = [];
+    while (ce) {
+        const isNotNone = window.getComputedStyle(ce).contain !== "none";
+        if (isNotNone) {
+            ce.setAttribute("data-force-contain", "none");
+            containNoneList.push(ce);
+        }
+        ce = ce.parentElement;
+    }
+
+    return () => {
+        document.body.removeEventListener("click", handler, true);
+        for (const iterator of containNoneList) {
+            iterator.removeAttribute("data-force-contain");
+        }
+    };
 }
 
 export interface IInlinePopupOptions extends IPopupOptions {
