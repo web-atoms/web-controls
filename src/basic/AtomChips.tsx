@@ -276,8 +276,8 @@ export default class AtomChips extends AtomRepeater {
         this.itemsPresenter = this.element.children[0];
         this.searchInput = this.element.children[1] as HTMLInputElement;
         this.footerPresenter = this.element.children[2] as HTMLInputElement;
-        this.bindEvent(this.element, "removeChip", (e: CustomEvent) => this.removeItem(e));
-        this.bindEvent(this.element, "undoRemoveChip", (e: CustomEvent) => this.undoRemoveItem(e));
+        this.bindEvent(this.element, "removeChip", (e: CustomEvent) => e.defaultPrevented || this.removeItem(e.detail));
+        this.bindEvent(this.element, "undoRemoveChip", (e: CustomEvent) => e.defaultPrevented || this.undoRemoveItem(e.detail));
     }
 
     protected setFocus(hasFocus) {
@@ -358,26 +358,20 @@ export default class AtomChips extends AtomRepeater {
         }
     }
 
-    protected undoRemoveItem(ce: CustomEvent) {
-        if (ce.defaultPrevented) {
-            return;
-        }
+    protected undoRemoveItem(item) {
         const { softDeleteProperty } = this;
-        ce.detail[softDeleteProperty] = false;
-        this.refreshItem(ce.detail);
+        item[softDeleteProperty] = false;
+        this.refreshItem(item);
     }
 
-    protected removeItem(ce: CustomEvent) {
+    protected removeItem(item) {
 
-        if (ce.defaultPrevented) {
-            return;
-        }
         const { softDeleteProperty } = this;
         if(softDeleteProperty) {
-            ce.detail[softDeleteProperty] = true;
-            this.refreshItem(ce.detail);
+            item[softDeleteProperty] = true;
+            this.refreshItem(item);
         } else {
-            this.items.remove(ce.detail);
+            this.items.remove(item);
         }
     }
 
