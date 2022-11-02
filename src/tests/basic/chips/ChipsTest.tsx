@@ -32,6 +32,7 @@ export default class ChipsTest extends AtomControl {
                 itemRenderer={(item: ICurrencyInfo) =>
                     <Chip
                         draggable={true}
+                        deleted={item.$deleted}
                         header={item.currency}
                         label={item.currencyCode}
                     />}

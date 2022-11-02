@@ -2,6 +2,7 @@ import { AtomViewModel } from "@web-atoms/core/dist/view-model/AtomViewModel";
 
 export interface ICurrencyInfo {
   id: number;
+  $deleted?: boolean;
   flag: string;
   currencyCode: string;
   currency: string;

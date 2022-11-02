@@ -197,6 +197,9 @@ export default class AtomChips extends AtomRepeater {
     public suggestionPrompt: string;
 
     @BindableProperty
+    public softDeleteProperty: string;
+
+    @BindableProperty
     public labelPath: (item) => string;
 
     @BindableProperty
@@ -251,6 +254,7 @@ export default class AtomChips extends AtomRepeater {
 
     protected preCreate(): void {
         super.preCreate();
+        this.softDeleteProperty = null;
         this.prompt = "Search";
         this.element.dataset.atomChips = "atom-chips";
         this.element.dataset.mode = "search";
@@ -272,7 +276,8 @@ export default class AtomChips extends AtomRepeater {
         this.itemsPresenter = this.element.children[0];
         this.searchInput = this.element.children[1] as HTMLInputElement;
         this.footerPresenter = this.element.children[2] as HTMLInputElement;
-        this.bindEvent(this.element, "removeChip", (e: CustomEvent) => this.removeItem(e.detail));
+        this.bindEvent(this.element, "removeChip", (e: CustomEvent) => this.removeItem(e));
+        this.bindEvent(this.element, "undoRemoveChip", (e: CustomEvent) => this.undoRemoveItem(e));
     }
 
     protected setFocus(hasFocus) {
@@ -353,13 +358,25 @@ export default class AtomChips extends AtomRepeater {
         }
     }
 
-    protected removeItem(detail) {
-        const ce = new CustomEvent("removeChip", {
-            detail,
-            cancelable: true,
-            bubbles: true
-        });
-        if (!ce.defaultPrevented) {
+    protected undoRemoveItem(ce: CustomEvent) {
+        if (ce.defaultPrevented) {
+            return;
+        }
+        const { softDeleteProperty } = this;
+        ce.detail[softDeleteProperty] = false;
+        this.refreshItem(ce.detail);
+    }
+
+    protected removeItem(ce: CustomEvent) {
+
+        if (ce.defaultPrevented) {
+            return;
+        }
+        const { softDeleteProperty } = this;
+        if(softDeleteProperty) {
+            ce.detail[softDeleteProperty] = true;
+            this.refreshItem(ce.detail);
+        } else {
             this.items.remove(ce.detail);
         }
     }

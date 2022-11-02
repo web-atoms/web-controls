@@ -9,6 +9,7 @@ export interface IChip extends IElement {
     header?: string;
     label?: string;
     deleteIcon?: string;
+    undoDeleteIcon?: string;
     draggable?: boolean;
     recreate?: boolean;
     deleted?: boolean;
@@ -60,8 +61,18 @@ CSS(StyleRule()
         .gridRowStart("2")
         .gridColumnStart("2")
     )
-    .and(StyleRule("[data-deleted=true]")
+    .child(StyleRule(".delete-strike")
+        .gridRow("1 / span 2")
+        .gridColumn("1 / span 2")
+        .height(2)
+        .backgroundColor(Colors.red)
+        .alignSelf("center")
+    )
+    .and(StyleRule("[data-deleted=false] > .delete-strike")
         .display("none")
+    ).and(StyleRule("[data-deleted=true]")
+        .border("solid 1px red")
+        .backgroundImage(`url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' preserveAspectRatio='none' viewBox='0 0 100 100'><path d='M100 0 L0 100 ' stroke='red' stroke-width='1'/><path d='M0 0 L100 100 ' stroke='red' stroke-width='1'/></svg>")`)
     )
 , "*[data-item-chip]");
 
@@ -71,6 +82,7 @@ export default function Chip(
         label,
         header,
         deleteIcon = "fa-solid fa-xmark",
+        undoDeleteIcon = "fa-solid fa-undo",
         draggable,
         recreate = true,
         deleted,
@@ -85,6 +97,10 @@ export default function Chip(
         { header && <label class="header" text={header}/>}
         { label && <label class="label" text={label}/>}
         { ... nodes }
-        { deleteIcon && <i class={"delete " + deleteIcon} data-click-event="remove-chip"/> }
+        { deleted && <div class="delete-strike"/>}
+        { undoDeleteIcon && deleted && <i
+            class={"undo delete " + undoDeleteIcon} data-click-event="undo-remove-chip"/> }
+        { deleteIcon && !deleted && <i
+            class={"delete " + deleteIcon} data-click-event="remove-chip"/> }
     </div>;
 }
