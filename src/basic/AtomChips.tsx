@@ -196,6 +196,9 @@ export default class AtomChips extends AtomRepeater {
     @BindableProperty
     public suggestionPrompt: string;
 
+    /**
+     * boolean or string, if it is a string it should be the name of property. default is `$deleted` if set to true
+     */
     @BindableProperty
     public softDeleteProperty: string;
 
@@ -359,14 +362,16 @@ export default class AtomChips extends AtomRepeater {
     }
 
     protected undoRemoveItem(item) {
-        const { softDeleteProperty } = this;
+        let { softDeleteProperty } = this;
+        softDeleteProperty = typeof softDeleteProperty !== "string" ? "$deleted" : softDeleteProperty;
         item[softDeleteProperty] = false;
         this.refreshItem(item);
     }
 
     protected removeItem(item) {
 
-        const { softDeleteProperty } = this;
+        let { softDeleteProperty } = this;
+        softDeleteProperty = typeof softDeleteProperty !== "string" ? "$deleted" : softDeleteProperty;
         if(softDeleteProperty) {
             item[softDeleteProperty] = true;
             this.refreshItem(item);
