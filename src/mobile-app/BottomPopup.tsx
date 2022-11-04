@@ -42,11 +42,9 @@ export default class BottomPopup extends AtomControl {
         const popup = new this(current.app);
         popup.bindEvent(window as any, "backButton", (ce: CustomEvent) => {
             ce.preventDefault();
-            popup.cancel();
+            return popup.cancelRequested();
         }, void 0, true);
-        popup.bindEvent(popup.element, "cancelPopup", () => {
-            popup.cancel();
-        });
+        popup.bindEvent(popup.element, "cancelPopup", () => popup.cancelRequested());
         popup.element.dataset.clickEvent = "cancelPopup";
         current.element.append(popup.element);
         popup.parameters = parameters;
@@ -136,6 +134,10 @@ export default class BottomPopup extends AtomControl {
         setTimeout(() => {
             child.dataset.animationState = "normal";
         }, 10);
+    }
+
+    protected cancelRequested() {
+        return this.cancel();
     }
 
 }
