@@ -371,8 +371,8 @@ export default class AtomChips extends AtomRepeater {
     protected removeItem(item) {
 
         let { softDeleteProperty } = this;
-        softDeleteProperty = typeof softDeleteProperty !== "string" ? "$deleted" : softDeleteProperty;
         if(softDeleteProperty) {
+            softDeleteProperty = typeof softDeleteProperty !== "string" ? "$deleted" : softDeleteProperty;
             item[softDeleteProperty] = true;
             this.refreshItem(item);
         } else {
