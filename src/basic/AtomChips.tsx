@@ -216,6 +216,8 @@ export default class AtomChips extends AtomRepeater {
 
     public itemToChip: (item, search) => any;
 
+    public preventDuplicates: boolean;
+
     @BindableProperty
     public focused: boolean;
 
@@ -257,6 +259,7 @@ export default class AtomChips extends AtomRepeater {
 
     protected preCreate(): void {
         super.preCreate();
+        this.preventDuplicates = true;
         this.softDeleteProperty = null;
         this.prompt = "Search";
         this.element.dataset.atomChips = "atom-chips";
@@ -357,6 +360,14 @@ export default class AtomChips extends AtomRepeater {
         });
         this.element.dispatchEvent(ce);
         if (!ce.defaultPrevented) {
+            const item = ce.detail;
+            const vp = this.valuePath ?? ((x) => x);
+            const v = vp(item); 
+            for (const iterator of this.selectedItems) {
+                if (v == vp(iterator)) {
+                    return;
+                }
+            }
             this.items.add(ce.detail);
         }
     }
