@@ -362,9 +362,9 @@ export default class AtomChips extends AtomRepeater {
         if (!ce.defaultPrevented) {
             const item = ce.detail;
             const vp = this.valuePath ?? ((x) => x);
-            const v = vp(item); 
-            for (const iterator of this.selectedItems) {
-                if (v == vp(iterator)) {
+            const v = vp(item);
+            for (const iterator of this.items) {
+                if (v === vp(iterator)) {
                     return;
                 }
             }
