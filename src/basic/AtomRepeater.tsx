@@ -905,6 +905,8 @@ export default class AtomRepeater extends AtomControl {
                 : "false";
             start = start.nextElementSibling as HTMLElement;
         }
+
+        this.onPropertyChanged("footer");
     }
 
     public updateItems(container?: HTMLElement, force?: boolean) {
