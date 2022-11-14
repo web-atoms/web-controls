@@ -95,7 +95,10 @@ function askSuggestionPopup<T>(
                         itemRenderer={itemRenderer}
                         eventDeleteSuggestion={(e) => opener.element.dispatchEvent(e) }
                         visibilityFilter={suggestionFilter ?? MatchTrue}
-                        eventItemClick={(e) => {
+                        event-item-click={(e: CustomEvent) => {
+                            e.preventDefault();
+                            e.stopImmediatePropagation();
+                            e.stopPropagation();
                             this.close(e.detail);
                         }}
                         items={Bind.oneWay(() => this.opener.suggestions)}/>
