@@ -19,6 +19,9 @@ CSS(StyleRule()
             bottom: 0
         })
     )
+    .and(StyleRule("[data-background=transparent]")
+        .backgroundColor(Colors.transparent)
+    )
 , "div[data-bottom-popup]");
 
 export interface IBottomPopupOptions extends IPopupOptions {
