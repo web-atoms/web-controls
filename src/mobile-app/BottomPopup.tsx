@@ -24,6 +24,8 @@ CSS(StyleRule()
         right: 0,
         bottom: 0
     })
+    .marginLeft(2)
+    .marginRight(2)
     .borderTopLeftRadius(5)
     .borderTopRightRadius(5)
     .display("grid")
@@ -91,28 +93,35 @@ export default class BottomPopup extends AtomControl {
     }: IBottomPopupOptions = {}): Promise<T> {
         const last = PopupService.lastTarget;
         const current = MobileApp.current;
-        const container = document.createElement("div");
-        container.setAttribute("data-bottom-popup-container", "1");
+
         const popup = new this(current.app);
-        popup.bindEvent(container, "click", (e) => {
-            if (e.target === e.currentTarget) {
-                e.preventDefault();
-                e.stopImmediatePropagation();
-                e.stopPropagation();
-                popup.element.dispatchEvent(new CustomEvent("cancelPopup"));
-            }
-        });
-        popup.registerDisposable({ dispose: () => {
-            container.remove();
-        }});
+        popup.parameters = parameters;
         popup.bindEvent(window as any, "backButton", (ce: CustomEvent) => {
             ce.preventDefault();
             return popup.cancelRequested();
         }, void 0, true);
         popup.bindEvent(popup.element, "cancelPopup", () => popup.cancelRequested());
-        container.append(popup.element);
-        current.element.append(container);
-        popup.parameters = parameters;
+    
+        if (popup.modal) {
+            const container = document.createElement("div");
+            container.setAttribute("data-bottom-popup-container", "1");
+            popup.bindEvent(container, "click", (e) => {
+                if (e.target === e.currentTarget) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    e.stopPropagation();
+                    popup.element.dispatchEvent(new CustomEvent("cancelPopup"));
+                }
+            });
+            popup.registerDisposable({ dispose: () => {
+                container.remove();
+            }});
+            container.append(popup.element);
+            current.element.append(container);
+        } else {
+            current.element.append(popup.element);
+        }
+
         if (cancelToken) {
             cancelToken.registerForCancel(popup.cancel);
         }
@@ -149,6 +158,8 @@ export default class BottomPopup extends AtomControl {
     }
 
     public parameters: any;
+
+    public modal: boolean;
 
     public close: (r?: any) => void;
 
@@ -187,6 +198,7 @@ export default class BottomPopup extends AtomControl {
     public async init() {}
 
     protected preCreate() {
+        this.modal = true;
         const element = this.element;
         element.dataset.bottomPopup = "bottom-popup";
         this.animate = true;

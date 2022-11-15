@@ -77,6 +77,7 @@ class PopupMenu extends BottomPopup {
     protected create() {
         this.titleRenderer = () => <span text="Choose"/>;
         this.closeRenderer = () => <i class="fas fa-times" />;
+        // this.modal = false;
         this.render(<div>
             <MenuItem label="One"/>
             <MenuItem label="Two"/>
