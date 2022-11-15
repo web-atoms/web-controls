@@ -1,7 +1,9 @@
+import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import Colors from "@web-atoms/core/dist/core/Colors";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
+import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import PopupService, { IPopupOptions, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 export * as zDoNotUse from "../animations/Animations";
@@ -11,13 +13,45 @@ CSS(StyleRule()
     .maximizeAbsolute()
     .backgroundColor(Colors.black.withAlphaPercent(0.3))
     .zIndex("500")
-    .child(StyleRule("[data-element=content]")
+    .display("grid")
+    .gridTemplateColumns("auto 1fr auto")
+    .gridTemplateRows("1fr auto auto auto")
+    .child(StyleRule("[data-element=background]")
+        .gridRow("2 / span 3")
+        .gridColumn("1 / span 3")
         .backgroundColor(Colors.white)
-        .absolutePosition({
-            left: 0,
-            right: 0,
-            bottom: 0
-        })
+        .zIndex(10)
+    )
+    .child(StyleRule("[data-element=icon]")
+        .gridRow("2")
+        .gridColumn("1")
+        .marginRight(5)
+        .marginBottom(5)
+        .zIndex(11)
+    )
+    .child(StyleRule("[data-element=close]")
+        .gridRow("2")
+        .gridColumn("3")
+        .marginLeft(5)
+        .marginBottom(5)
+        .zIndex(11)
+    )
+    .child(StyleRule("[data-element=title]")
+        .gridRow("2")
+        .gridColumn("2")
+        .marginBottom(5)
+        .zIndex(11)
+    )
+    .child(StyleRule("[data-element=content]")
+        .gridRow("3")
+        .gridColumn("1 / span 3")
+        .zIndex(11)
+    )
+    .child(StyleRule("[data-element=footer]")
+        .gridRow("4")
+        .gridColumn("1 / span 3")
+        .marginTop(5)
+        .zIndex(11)
     )
     .and(StyleRule("[data-background=transparent]")
         .backgroundColor(Colors.transparent)
@@ -27,8 +61,6 @@ CSS(StyleRule()
 export interface IBottomPopupOptions extends IPopupOptions {
     parameters?: {[key: string]: any};
 }
-
-
 
 export default class BottomPopup extends AtomControl {
 
@@ -92,6 +124,21 @@ export default class BottomPopup extends AtomControl {
 
     public cancel: (reason?: any) => void;
 
+    @BindableProperty
+    public titleRenderer: () => XNode;
+
+    @BindableProperty
+    public headerRenderer: () => XNode;
+
+    @BindableProperty
+    public closeRenderer: () => XNode;
+
+    @BindableProperty
+    public footerRenderer: () => XNode;
+
+    @BindableProperty
+    public backgroundRenderer: () => XNode;
+
     private animate: boolean;
 
     public dispose(e?: HTMLElement) {
@@ -100,9 +147,8 @@ export default class BottomPopup extends AtomControl {
             return;
         }
         const element = this.element;
-        const child = element?.firstElementChild as HTMLElement;
-        if (child) {
-            child.dataset.animationState = "down";
+        for (const iterator of ChildEnumerator.enumerate(this.element)) {
+            iterator.dataset.animationState = "down";
         }
         setTimeout(() => {
             super.dispose(e);
@@ -117,30 +163,57 @@ export default class BottomPopup extends AtomControl {
         element.dataset.bottomPopup = "bottom-popup";
         this.animate = true;
         super.preCreate();
+        this.backgroundRenderer = () => <div/>;
+        this.bindEvent(this.element, "closeClick", () => this.cancelRequested());
     }
 
     protected render(node: XNode, e?: any, creator?: any) {
         this.render = super.render;
         const na = node.attributes ??= {};
-        na["data-animate-slide"] = this.animate ? "from-bottom" : "normal";
         na["data-element"] = "content";
         na["data-click-event"] ??= "popupClick";
         this.render(<div>
             { node }
         </div>);
-        const child = this.element.firstElementChild as HTMLElement;
+        this.updateElement("background");
+        this.updateElement("title");
+        this.updateElement("icon");
+        this.updateElement("close");
+        this.updateElement("footer");
         if (!this.animate) {
             return;
         }
+        for (const iterator of ChildEnumerator.enumerate(this.element)) {
+            iterator.setAttribute("data-animate-slide", this.animate ? "from-bottom" : "normal");
+            iterator.dataset.animationState = "down";
+        }
         this.animate = false;
-        child.dataset.animationState = "down";
         setTimeout(() => {
-            child.dataset.animationState = "normal";
+            for (const iterator of ChildEnumerator.enumerate(this.element)) {
+                iterator.dataset.animationState = "normal";
+            }
         }, 10);
     }
 
     protected cancelRequested() {
         return this.cancel();
+    }
+
+    protected updateElement(name: string, property: string = name + "Renderer") {
+        const r = this[property] as () => XNode;
+        const child = ChildEnumerator.find(this.element, (e) => e.dataset.element === name);
+        if (child) {
+            this.dispose(child);
+            child.remove();
+        }
+        const node = r?.();
+        if (!node) {
+            return;
+        }
+        const na = (node.attributes ??= {});
+        na["data-element"] = name;
+        na["data-click-event"] ??= name + "-click";
+        this.render(<div>{node}</div>);
     }
 
 }
