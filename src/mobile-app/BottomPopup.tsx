@@ -13,44 +13,64 @@ CSS(StyleRule()
     .maximizeAbsolute()
     .backgroundColor(Colors.black.withAlphaPercent(0.3))
     .zIndex("500")
+    .and(StyleRule("[data-background=transparent]")
+        .backgroundColor(Colors.transparent)
+    )
+, "div[data-bottom-popup-container]");
+
+CSS(StyleRule()
+    .absolutePosition({
+        left: 0,
+        right: 0,
+        bottom: 0
+    })
+    .borderTopLeftRadius(5)
+    .borderTopRightRadius(5)
     .display("grid")
     .gridTemplateColumns("auto 1fr auto")
-    .gridTemplateRows("1fr auto auto auto")
-    .child(StyleRule("[data-element=background]")
-        .gridRow("2 / span 3")
+    .gridTemplateRows("auto auto auto")
+    .backgroundColor(Colors.white)
+    .child(StyleRule("[data-element=bar]")
+        .borderTopLeftRadius(5)
+        .borderTopRightRadius(5)
+        .gridRow("1")
         .gridColumn("1 / span 3")
-        .backgroundColor(Colors.white)
+        .backgroundColor(Colors.lightGray)
         .zIndex(10)
     )
     .child(StyleRule("[data-element=icon]")
-        .gridRow("2")
+        .gridRow("1")
         .gridColumn("1")
+        .padding(5)
+        .alignSelf("center")
         .marginRight(5)
-        .marginBottom(5)
         .zIndex(11)
     )
     .child(StyleRule("[data-element=close]")
-        .gridRow("2")
+        .gridRow("1")
         .gridColumn("3")
+        .padding(5)
         .marginLeft(5)
-        .marginBottom(5)
+        .alignSelf("center")
         .zIndex(11)
     )
     .child(StyleRule("[data-element=title]")
-        .gridRow("2")
+        .gridRow("1")
         .gridColumn("2")
-        .marginBottom(5)
+        .padding(5)
         .zIndex(11)
     )
     .child(StyleRule("[data-element=content]")
-        .gridRow("3")
+        .padding(5)
+        .gridRow("2")
         .gridColumn("1 / span 3")
         .zIndex(11)
     )
     .child(StyleRule("[data-element=footer]")
-        .gridRow("4")
+        .gridRow("3")
         .gridColumn("1 / span 3")
         .marginTop(5)
+        .padding(5)
         .zIndex(11)
     )
     .and(StyleRule("[data-background=transparent]")
@@ -74,14 +94,27 @@ export default class BottomPopup extends AtomControl {
     }: IBottomPopupOptions = {}): Promise<T> {
         const last = PopupService.lastTarget;
         const current = MobileApp.current;
+        const container = document.createElement("div");
+        container.setAttribute("data-bottom-popup-container", "1");
         const popup = new this(current.app);
+        popup.bindEvent(container, "click", (e) => {
+            if (e.target === e.currentTarget) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                e.stopPropagation();
+                popup.element.dispatchEvent(new CustomEvent("cancelPopup"));
+            }
+        });
+        popup.registerDisposable({ dispose: () => {
+            container.remove();
+        }});
         popup.bindEvent(window as any, "backButton", (ce: CustomEvent) => {
             ce.preventDefault();
             return popup.cancelRequested();
         }, void 0, true);
         popup.bindEvent(popup.element, "cancelPopup", () => popup.cancelRequested());
-        popup.element.dataset.clickEvent = "cancelPopup";
-        current.element.append(popup.element);
+        container.append(popup.element);
+        current.element.append(container);
         popup.parameters = parameters;
         if (cancelToken) {
             cancelToken.registerForCancel(popup.cancel);
@@ -137,7 +170,7 @@ export default class BottomPopup extends AtomControl {
     public footerRenderer: () => XNode;
 
     @BindableProperty
-    public backgroundRenderer: () => XNode;
+    public barRenderer: () => XNode;
 
     private animate: boolean;
 
@@ -147,9 +180,7 @@ export default class BottomPopup extends AtomControl {
             return;
         }
         const element = this.element;
-        for (const iterator of ChildEnumerator.enumerate(this.element)) {
-            iterator.dataset.animationState = "down";
-        }
+        this.element.setAttribute("data-animation-state", "down");
         setTimeout(() => {
             super.dispose(e);
             element.remove();
@@ -163,7 +194,7 @@ export default class BottomPopup extends AtomControl {
         element.dataset.bottomPopup = "bottom-popup";
         this.animate = true;
         super.preCreate();
-        this.backgroundRenderer = () => <div/>;
+        this.barRenderer = () => <div/>;
         this.bindEvent(this.element, "closeClick", () => this.cancelRequested());
     }
 
@@ -175,23 +206,19 @@ export default class BottomPopup extends AtomControl {
         this.render(<div>
             { node }
         </div>);
-        this.updateElement("background");
         this.updateElement("title");
+        this.updateElement("bar");
         this.updateElement("icon");
         this.updateElement("close");
         this.updateElement("footer");
         if (!this.animate) {
             return;
         }
-        for (const iterator of ChildEnumerator.enumerate(this.element)) {
-            iterator.setAttribute("data-animate-slide", this.animate ? "from-bottom" : "normal");
-            iterator.dataset.animationState = "down";
-        }
+        this.element.setAttribute("data-animate-slide", this.animate ? "from-bottom" : "normal");
+        this.element.setAttribute("data-animation-state", "down");
         this.animate = false;
         setTimeout(() => {
-            for (const iterator of ChildEnumerator.enumerate(this.element)) {
-                iterator.dataset.animationState = "normal";
-            }
+            this.element.setAttribute("data-animation-state", "normal");
         }, 10);
     }
 
