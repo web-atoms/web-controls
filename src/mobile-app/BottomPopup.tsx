@@ -1,5 +1,6 @@
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import Colors from "@web-atoms/core/dist/core/Colors";
+import { CancelToken } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
@@ -180,6 +181,12 @@ export default class BottomPopup extends AtomControl {
     @BindableProperty
     public barRenderer: () => XNode;
 
+    /**
+     * This will be set to cancelled when popup is closed.
+     * You can override cancelRequested method to intercept cancellation.
+     */
+    public popupCancelToken: CancelToken;
+
     private animate: boolean;
 
     public dispose(e?: HTMLElement) {
@@ -204,6 +211,10 @@ export default class BottomPopup extends AtomControl {
         this.animate = true;
         super.preCreate();
         this.barRenderer = () => <div/>;
+        this.popupCancelToken = new CancelToken();
+        this.registerDisposable({ dispose: () => {
+            this.popupCancelToken.cancel();
+        }});
         this.bindEvent(this.element, "closeClick", () => this.cancelRequested());
     }
 
