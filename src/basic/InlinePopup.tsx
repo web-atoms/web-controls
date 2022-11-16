@@ -233,9 +233,12 @@ document.body.addEventListener("click", (e) => {
 
     let start = e.target as HTMLElement;
     let popupFactory: PopupFactory;
+    let alignment;
     while (start) {
         popupFactory = (start as any).popupFactory;
         if (popupFactory) {
+
+            alignment = start.dataset.alignment;
             // stop...
             break;
         }
@@ -281,7 +284,7 @@ document.body.addEventListener("click", (e) => {
 
     const node = popupFactory(data);
 
-    app.runAsync(() => InlinePopup.show(target, node));
+    app.runAsync(() => InlinePopup.show(target, node, { alignment }));
 
 });
 
@@ -308,6 +311,7 @@ export function InlinePopupButton(
             data-popup-class={popup}
             data-has-border={!!hasBorder}
             data-inline-popup-button="inline-popup-button"
+            data-alignment={anchorRight ? "bottomRight" : "bottomLeft"}
             { ... a}>
             {icon && <i class={icon}/>}
             {text && <span text={text}/>}
