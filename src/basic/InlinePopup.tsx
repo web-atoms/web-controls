@@ -19,7 +19,13 @@ CSS(StyleRule()
     .zIndex(5000)
     .backgroundColor("var(--primary-bg, white)")
     .color("var(--primary-color, darkgray)")
+    .left(0)
 , "*[data-inline-popup=inline-popup]");
+
+CSS(StyleRule()
+    .right(0)
+    .left("unset")
+, "*[data-alignment=bottomRight] > [data-inline-popup=inline-popup]");
 
 function closeHandler(
     opener: HTMLElement,
@@ -91,7 +97,7 @@ export default class InlinePopup extends AtomControl {
         const container = document.createElement("div");
         container.setAttribute("data-inline-popup", "inline-popup");
 
-        const alignment = options.alignment ?? "bottomLeft";
+        const alignment = options.alignment ?? "none";
         switch (alignment) {
             case "bottomLeft":
                 container.style.top = `${targetElement.offsetHeight}px`;
@@ -107,7 +113,6 @@ export default class InlinePopup extends AtomControl {
                 break;
             default:
                 container.style.top = `${targetElement.offsetHeight}px`;
-                container.style.left = "0px";
                 break;
         }
 
@@ -183,6 +188,7 @@ export default class InlinePopup extends AtomControl {
 
     public static showControl<T>(target: HTMLElement | AtomControl, options: IPopupOptions = {}) {
         const node = XNode.create(this, {});
+        const 
         return this.show<T>(target, node, options);
     }
 
@@ -330,10 +336,8 @@ export function InlinePopupButton(
         try {
             isOpen = true;
 
-            const alignment = anchorRight ? "bottomRight" : "bottomLeft";
-
             await InlinePopup.show(
-                e.currentTarget as any, popupNode, { defaultOnClick, alignment });
+                e.currentTarget as any, popupNode, { defaultOnClick });
         } finally {
             done();
         }
@@ -341,6 +345,7 @@ export function InlinePopupButton(
     return <button
         event-click={click}
         data-has-border={!!hasBorder}
+        data-alignment={anchorRight ? "bottomRight" : "bottomLeft"}
         data-inline-popup-button="inline-popup-button"
         { ... a}>
         {icon && <i class={icon}/>}
