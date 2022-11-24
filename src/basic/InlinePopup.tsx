@@ -188,7 +188,6 @@ export default class InlinePopup extends AtomControl {
 
     public static showControl<T>(target: HTMLElement | AtomControl, options: IPopupOptions = {}) {
         const node = XNode.create(this, {});
-        const 
         return this.show<T>(target, node, options);
     }
 
