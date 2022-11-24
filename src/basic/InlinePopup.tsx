@@ -25,7 +25,7 @@ CSS(StyleRule()
 CSS(StyleRule()
     .right(0)
     .left("unset")
-, "*[data-alignment=bottomRight] > [data-inline-popup=inline-popup]");
+, "*[data-alignment=bottom-right] > [data-inline-popup=inline-popup]");
 
 function closeHandler(
     opener: HTMLElement,

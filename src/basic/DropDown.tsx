@@ -20,7 +20,7 @@ export default class DropDown extends AtomRepeater {
 
     public "event-selection-changed"?: (e: CustomEvent) => void;
 
-    public "data-alignment"?: "bottomRight" | "bottomLeft";
+    public "data-alignment"?: "bottom-right" | "bottom-left";
 
     @BindableProperty
     public popupSuggestions: boolean;
