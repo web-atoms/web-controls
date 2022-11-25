@@ -25,8 +25,8 @@ export interface IItemPair<ParentItem = any, ChildItem = any> {
 }
 
 const popupCSS = CSS(StyleRule()
-    .height(500)
-    .width(300)
+    .minHeight(300)
+    .minWidth(200)
     .verticalFlexLayout({ alignItems: "stretch" })
     .child(StyleRule(".items")
         .flexStretch()
