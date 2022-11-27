@@ -605,7 +605,9 @@ export class BasePage extends AtomControl {
 
 delete (BasePage.prototype as any).init;
 
-export class ContentPage extends BasePage {
+export class ContentPage<T = any, TResult = any> extends BasePage {
+    public parameters: T;
+    public close: (result: TResult) => any;
 }
 
 export class TabbedPage extends BasePage {
