@@ -3,6 +3,7 @@ import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder";
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import Colors from "@web-atoms/core/dist/core/Colors";
+import EventScope from "@web-atoms/core/dist/core/EventScope";
 import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
 import { CancelToken, IDisposable } from "@web-atoms/core/dist/core/types";
 import WatchProperty from "@web-atoms/core/dist/core/WatchProperty";
@@ -11,9 +12,8 @@ import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { IDialogOptions, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
-import EventScope from "@web-atoms/core/dist/core/EventScope";
-import InlinePopupControl from "./InlinePopupControl";
 import InlinePopup from "./InlinePopup";
+import InlinePopupControl from "./InlinePopupControl";
 
 CSS(StyleRule()
     .display("none")
@@ -518,9 +518,9 @@ function updateDragDrop(e: HTMLElement, force: boolean = false) {
     }
 }
 
-export default class AtomRepeater extends AtomControl {
+export default class AtomRepeater<T = any> extends AtomControl {
 
-    public static from<T = AtomRepeater>(element: any): T {
+    public static from<TR = AtomRepeater>(element: any): TR {
         while (element) {
             const { atomControl } = element;
             if (atomControl instanceof AtomRepeater) {
@@ -542,31 +542,31 @@ export default class AtomRepeater extends AtomControl {
     public allowMultipleSelection: boolean;
 
     @BindableProperty
-    public selectedItems: any[];
+    public selectedItems: T[];
 
     @BindableProperty
     public itemsPresenter: any;
 
     @BindableProperty
-    public items: any[];
+    public items: T[];
 
     @BindableProperty
     public watch: any;
 
     @BindableProperty
-    public visibilityFilter: (item: any) => boolean;
+    public visibilityFilter: (item: T) => boolean;
 
     @BindableProperty
-    public enableFunc: (item: any) => boolean;
+    public enableFunc: (item: T) => boolean;
 
     @BindableProperty
-    public itemRenderer: (item, index: number, repeater: AtomRepeater) => XNode;
+    public itemRenderer: (item: T, index: number, repeater: AtomRepeater) => XNode;
 
     @BindableProperty
-    public valuePath: (a) => any;
+    public valuePath: (a: T) => any;
 
     @BindableProperty
-    public comparer: (left, right) => boolean;
+    public comparer: (left: T, right: T) => boolean;
 
     @BindableProperty
     public deferUpdates: boolean;
@@ -752,7 +752,7 @@ export default class AtomRepeater extends AtomControl {
         }, 100);
     }
 
-    public forEach<T>(action: (item: T, element: HTMLElement) => void, container?: HTMLElement) {
+    public forEach(action: (item: T, element: HTMLElement) => void, container?: HTMLElement) {
         container ??= this.itemsPresenter ?? this.element;
         const items = this.items;
         let start = getFirstChild(container);

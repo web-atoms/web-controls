@@ -16,7 +16,7 @@ CSS(StyleRule()
     )
 , "div[data-drop-down=drop-down]");
 
-export default class DropDown extends AtomRepeater {
+export default class DropDown<T = any> extends AtomRepeater<T> {
 
     public "event-selection-changed"?: (e: CustomEvent) => void;
 
@@ -37,13 +37,13 @@ export default class DropDown extends AtomRepeater {
     public suggestionPrompt: string;
 
     @BindableProperty
-    public labelPath: (item) => string;
+    public labelPath: (item: T) => string;
 
     @BindableProperty
     public match: Match<any>;
 
     @BindableProperty
-    public suggestionRenderer: (item) => XNode;
+    public suggestionRenderer: (item: T) => XNode;
 
     private isPopupOpen = false;
 
@@ -69,8 +69,8 @@ export default class DropDown extends AtomRepeater {
         this.prompt = "Select";
         this.popupSuggestions = true;
         this.bindEvent(this.element, "click", (e) => this.openPopup(e));
-        this.valuePath = (item) => item?.value ?? item;
-        this.labelPath = (item) => item?.label ?? item;
+        this.valuePath = (item: any) => item?.value ?? item;
+        this.labelPath = (item: any) => item?.label ?? item;
         this.itemRenderer = (item) => <div text={this.labelPath(item)}/>;
         this.element.dataset.dropDown = "drop-down";
         this.render(<div>

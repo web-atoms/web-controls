@@ -27,7 +27,7 @@ CSS(StyleRule()
     )
 , "*[data-list-repeater=list-repeater]");
 
-export default class ListRepeater extends AtomRepeater {
+export default class ListRepeater<T = any> extends AtomRepeater<T> {
 
     @BindableProperty
     public autoSelectOnClick: boolean;

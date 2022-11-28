@@ -165,7 +165,7 @@ export function Suggestion(
     </div>;
 }
 
-export default class AtomChips extends AtomRepeater {
+export default class AtomChips<T = any> extends AtomRepeater<T> {
 
     /**
      * Fired when user chooses an item from suggestions displayed,
@@ -174,21 +174,21 @@ export default class AtomChips extends AtomRepeater {
      * change the item by changing detail or by assigning to new
      * object
      */
-    public "event-suggestion-chosen"?: (e: CustomEvent) => any;
+    public "event-suggestion-chosen"?: (e: CustomEvent<T>) => any;
 
     /**
      * Fired just before suggestions are about to be displayed
      */
-    public "event-suggestions-requested"?: (ce: CustomEvent<any[]>) => any;
+    public "event-suggestions-requested"?: (ce: CustomEvent<T[]>) => any;
 
     /**
      * Fired when user tries to remove the chip, you can call
      * preventDefault() to prevent chip from being removed.
      */
-    public "event-remove-chip"?: (e: CustomEvent) => any;
+    public "event-remove-chip"?: (e: CustomEvent<T>) => any;
 
     @BindableProperty
-    public suggestions: any[];
+    public suggestions: T[];
 
     @BindableProperty
     public search: string;
@@ -206,13 +206,13 @@ export default class AtomChips extends AtomRepeater {
     public softDeleteProperty: string;
 
     @BindableProperty
-    public labelPath: (item) => string;
+    public labelPath: (item: T) => string;
 
     @BindableProperty
     public match: Match<any>;
 
     @BindableProperty
-    public suggestionRenderer: (item, index: number, repeater: AtomRepeater) => XNode;
+    public suggestionRenderer: (item: T, index: number, repeater: AtomRepeater) => XNode;
 
     @BindableProperty
     public suggestionFilter: (item) => boolean;
@@ -269,8 +269,8 @@ export default class AtomChips extends AtomRepeater {
         this.element.dataset.mode = "search";
         this.suggestionFilter = MatchTrue;
         // this.bindEvent(this.element, "click", () => this.searchInput.focus());
-        this.valuePath = (item) => item?.value ?? item;
-        this.labelPath = (item) => item?.label ?? item;
+        this.valuePath = (item: any) => item?.value ?? item;
+        this.labelPath = (item: any) => item?.label ?? item;
         this.itemRenderer = (item) => <div text={this.labelPath(item)}/>;
         this.element.dataset.dropDown = "drop-down";
         this.render(<div>
