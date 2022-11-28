@@ -22,6 +22,8 @@ export default class DropDown extends AtomRepeater {
 
     public "data-alignment"?: "bottom-right" | "bottom-left";
 
+    public disableSearch: boolean;
+
     @BindableProperty
     public popupSuggestions: boolean;
 
@@ -63,6 +65,7 @@ export default class DropDown extends AtomRepeater {
 
     protected preCreate(): void {
         super.preCreate();
+        this.disableSearch = false;
         this.prompt = "Select";
         this.popupSuggestions = true;
         this.bindEvent(this.element, "click", (e) => this.openPopup(e));

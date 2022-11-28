@@ -25,7 +25,7 @@ export interface IItemPair<ParentItem = any, ChildItem = any> {
 }
 
 const popupCSS = CSS(StyleRule()
-    .minHeight(300)
+    // .minHeight(300)
     .minWidth(200)
     .verticalFlexLayout({ alignItems: "stretch" })
     .child(StyleRule(".items")
@@ -165,7 +165,7 @@ export function askSuggestion<T>(
 
 CSS(StyleRule()
     .height(250)
-    .width(300)
+    .minWidth(80)
     .verticalFlexLayout({ alignItems: "stretch" })
     .child(StyleRule(".items")
         .flexStretch()
@@ -229,13 +229,14 @@ export function askSuggestionPopup<T>(
             if (selectedItem) {
                 this.anchorIndex = items.indexOf(selectedItem);
             }
+            const disableSearch = (opener as any).disableSearch;
             if (itemsInOpener) {
                 this.render(<div data-suggestion-popup="suggestion-popup">
-                    <input
+                    {!disableSearch && <input
                         type="search"
                         value={Bind.twoWaysImmediate(() => this.search)}
                         eventKeydown={(e) => this.onKey(e)}
-                        autofocus={true}/>
+                        autofocus={true}/>}
                     <div class="items">
                         <AtomRepeater
                             class="presenter"
@@ -253,11 +254,11 @@ export function askSuggestionPopup<T>(
                 return;
             }
             this.render(<div data-suggestion-popup="suggestion-popup">
-                <input
+                {!disableSearch && <input
                     type="search"
                     value={Bind.twoWaysImmediate(() => this.search)}
                     eventKeydown={(e) => this.onKey(e)}
-                    autofocus={true}/>
+                    autofocus={true}/> }
                 <div class="items">
                     <AtomRepeater
                         class="presenter"
