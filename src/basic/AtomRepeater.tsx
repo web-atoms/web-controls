@@ -164,7 +164,7 @@ export function askSuggestion<T>(
 }
 
 CSS(StyleRule()
-    .height(250)
+    .maxHeight("90%")
     .minWidth(80)
     .verticalFlexLayout({ alignItems: "stretch" })
     .child(StyleRule(".items")
