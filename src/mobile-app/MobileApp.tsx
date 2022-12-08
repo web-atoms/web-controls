@@ -293,7 +293,7 @@ export class BasePage extends AtomControl {
     }
 
     protected rendererChanged() {
-        for(const content of ChildEnumerator.where(this.element, (e) => !e.dataset.element || e.dataset.element === "content")){
+        for(const content of ChildEnumerator.where(this.element, ({ dataset: { pageElement }}) => !pageElement || pageElement === "content")){
             this.dispose(content);
             content.remove();
         }
