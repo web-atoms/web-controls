@@ -339,64 +339,37 @@ export class BasePage extends AtomControl {
         setTimeout((p) => {
             p.dataset.pageState = "ready";
         }, 10, this.element);
+
+        this.titleRenderer = <span
+            class="title-text" text={Bind.oneWay(() => this.viewModelTitle || this.title)}/>;
+
+        this.iconRenderer = <i
+            data-icon-button="icon-button"
+            class={Bind.oneWay(() => this.iconClass)}
+            eventClick={(e1) => this.dispatchIconClickEvent(e1)}/>;
+
+        this.actionBarRenderer = <div/>;
+
+        this.runAfterInit(() => {
+            // we will not keep in the dom
+            // this is to prevent any heavy animation classes slowing down performance
+            this.pullToRefreshElement?.remove?.();
+            this.initialized = true;
+            this.enablePullToRefreshEvents();
+        })
+
     }
 
     protected render(node: XNode, e?: any, creator?: any): void {
         this.render = super.render;
-        const titleContent = this.titleRenderer?.() ?? <span
-            class="title-text" text={Bind.oneWay(() => this.viewModelTitle || this.title)}/>;
-        const icon = this.iconRenderer?.() ?? <i
-            data-icon-button="icon-button"
-            class={Bind.oneWay(() => this.iconClass)}
-            eventClick={(e1) => this.dispatchIconClickEvent(e1)}/>;
-        const action = this.actionRenderer?.() ?? undefined;
-        const footer = this.footerRenderer?.() ?? undefined;
-        const actionBar = this.actionBarRenderer?.() ?? <div/>;
-        const header = this.headerRenderer?.() ?? undefined;
-        const pullToRefresh = this.pullToRefreshRenderer?.() ?? undefined;
         (node.attributes ??= {})["data-page-element"] = "content";
-        if (actionBar) {
-            (actionBar.attributes ??= {})["data-page-element"] = "action-bar";
-        }
-        if (icon) {
-            (icon.attributes ??= {})["data-page-element"] = "icon";
-        }
-        if (titleContent) {
-            (titleContent.attributes ??= {})["data-page-element"] = "title";
-        }
-        if (action) {
-            (action.attributes ??= {})["data-page-element"] = "action";
-        }
-        if (footer) {
-            (footer.attributes ??= {})["data-page-element"] = "footer";
-        }
-        if (header) {
-            (header.attributes ??= {})["data-page-element"] = "header";
-        }
-        if (pullToRefresh) {
-            (pullToRefresh.attributes ??= {})["data-page-element"] = "pull-to-refresh";
-        }
         const extracted = this.extractControlProperties(node);
         super.render(<div
             viewModelTitle={Bind.oneWay(() => this.viewModel.title)}
             { ... extracted }>
-            { actionBar }
-            { icon }
-            { titleContent }
-            { action }
-            { header }
-            { pullToRefresh }
-            { node }
-            { footer }
         </div>);
         this.contentElement = this.element.querySelector("[data-page-element='content']");
-        this.pullToRefreshElement = this.element.querySelector("[data-page-element='pull-to-refresh']");
-        // we will not keep in the dom
-        // this is to prevent any heavy animation classes slowing down performance
-        this.pullToRefreshElement?.remove?.();
-        this.initialized = true;
-        this.enablePullToRefreshEvents();
-
+        
         setTimeout(() => this.contentElement.scrollTo(0, 0), 100);
     }
 
