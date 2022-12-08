@@ -304,7 +304,7 @@ export class BasePage extends AtomControl {
         if (node) {
             const na = node.attributes ??= {};
             na["data-page-element"] = name;
-            this.render(<div>{node}</div>);
+            super.render(<div>{node}</div>);
             return this.element.querySelector(`[data-page-element="${name}"]`);
         }
         return null;
@@ -336,15 +336,15 @@ export class BasePage extends AtomControl {
             p.dataset.pageState = "ready";
         }, 10, this.element);
 
-        this.titleRenderer = <span
+        this.titleRenderer = () => <span
             class="title-text" text={Bind.oneWay(() => this.viewModelTitle || this.title)}/>;
 
-        this.iconRenderer = <i
+        this.iconRenderer = () => <i
             data-icon-button="icon-button"
             class={Bind.oneWay(() => this.iconClass)}
             eventClick={(e1) => this.dispatchIconClickEvent(e1)}/>;
 
-        this.actionBarRenderer = <div/>;
+        this.actionBarRenderer = () => <div/>;
 
         this.runAfterInit(() => {
             // we will not keep in the dom
@@ -357,13 +357,24 @@ export class BasePage extends AtomControl {
     }
 
     protected render(node: XNode, e?: any, creator?: any): void {
+
+        if (e || node?.attributes?.["data-page-element"]) {
+            super.render(node, e, creator);
+            return;
+        }
+
         this.render = super.render;
-        (node.attributes ??= {})["data-page-element"] = "content";
-        const extracted = this.extractControlProperties(node);
+        const na = (node.attributes ??= {});
+        let extracted = {};
+        if (!na["data-page-element"]) {
+            na["data-page-element"] = "content";
+            extracted = this.extractControlProperties(node);
+        }
         super.render(<div
             viewModelTitle={Bind.oneWay(() => this.viewModel.title)}
             { ... extracted }>
-        </div>);
+            { node }
+        </div>, e, creator);
         this.contentElement = this.element.querySelector("[data-page-element='content']");
         
         setTimeout(() => this.contentElement.scrollTo(0, 0), 100);
@@ -478,74 +489,6 @@ export class BasePage extends AtomControl {
         ed.add(this.bindEvent(this.contentElement, "touchstart", touchStart, null, { passive: true }));
 
         this.pullToRefreshDisposable = ed;
-
-        // this.pullToRefreshDisposable = this.bindEvent(this.contentElement, "pointerdown", (de: MouseEvent) => {
-        //     if (!this.pullToRefreshElement) {
-        //         this.pullToRefreshDisposable?.dispose();
-        //         this.pullToRefreshDisposable = null;
-        //         return;
-        //     }
-
-        //     if (this.contentElement.scrollTop > 0) {
-        //         return;
-        //     }
-
-        //     this.element.appendChild(this.pullToRefreshElement);
-        //     this.pullToRefreshElement.dataset.mode = "down";
-
-        //     const d = new AtomDisposableList();
-        //     const startY = de.screenY;
-        //     this.contentElement.style.touchAction = "none";
-        //     d.add(() => {
-        //         this.contentElement.style.removeProperty("touch-action");
-        //     });
-        //     d.add(this.bindEvent(this.contentElement, "pointermove", (me: MouseEvent) => {
-
-        //         const diffX = Math.min(75, me.screenY - startY);
-        //         this.contentElement.style.transform = `translateY(${diffX}px)`;
-        //         if (diffX > 50) {
-        //             this.pullToRefreshElement.dataset.mode = "up";
-        //         } else {
-        //             this.pullToRefreshElement.dataset.mode = "down";
-        //         }
-        //     }));
-        //     d.add(this.bindEvent(this.contentElement, "pointerup", (ue: MouseEvent) => {
-        //         ue.stopPropagation();
-        //         ue.preventDefault();
-        //         d.dispose();
-
-        //         const done = () => {
-        //             delete this.pullToRefreshElement.dataset.mode;
-        //             this.contentElement.style.transform = ``;
-        //             this.pullToRefreshElement.style.transform = "";
-        //             this.pullToRefreshElement.remove();
-        //         };
-
-        //         const diffX = ue.screenY - startY;
-        //         if (diffX <= 50) {
-        //             done();
-        //             return;
-        //         }
-
-        //         const ce = new CustomEvent("reloadPage", { detail: this, bubbles: true, cancelable: true});
-        //         this.contentElement.dispatchEvent(ce);
-        //         if (ce.defaultPrevented) {
-        //             done();
-        //             return;
-        //         }
-
-        //         this.pullToRefreshElement.dataset.mode = "loading";
-
-        //         const promise = (ce as any).promise as PromiseLike<void>;
-        //         if (!promise) {
-        //             done();
-        //             return;
-        //         }
-
-        //         promise.then(done, done);
-
-        //     }));
-        // });
     }
 
     protected dispatchIconClickEvent(e: Event) {

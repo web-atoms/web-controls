@@ -65,6 +65,8 @@ export class Home extends ContentPage {
 
         this.pullToRefreshRenderer = PullToRefresh;
 
+        this.title = "App";
+
         this.render(<div>
             Home
         </div>);
