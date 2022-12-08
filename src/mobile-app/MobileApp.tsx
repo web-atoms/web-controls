@@ -292,6 +292,21 @@ export class BasePage extends AtomControl {
 
     }
 
+    protected rendererChanged() {
+        const content = ChildEnumerator.find(this.element, (e) => e.dataset.element === "content");
+        if (content) {
+            this.dispose(content);
+            content.remove();
+        }
+        const r = this.renderer;
+        if (!r) {
+            return;
+        }
+        delete this.render;
+        this.render(r);
+    }
+
+
     protected recreate(renderer, name): HTMLElement {
         const node = this[renderer]?.() ?? undefined;
         for (const e of ChildEnumerator.enumerate(this.element)) {
