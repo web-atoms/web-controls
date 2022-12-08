@@ -260,10 +260,6 @@ export class BasePage extends AtomControl {
 
     public onPropertyChanged(name) {
         super.onPropertyChanged(name);
-
-        if (!this.initialized) {
-            return;
-        }
         switch (name) {
             case "footerRenderer":
                 this.recreate(name, "footer");
