@@ -192,6 +192,21 @@ export default class Calendar extends AtomRepeater {
         return years;
     }
 
+    public set value(v) {
+        // change the date....
+        if (v instanceof Date) {
+            const year = v.getFullYear();
+            const month = v.getMonth();
+            if (this.year !== year) {
+                this.year = year;
+            }
+            if (this.month !== month) {
+                this.month = month;
+            }
+        }
+        super.value = v;
+    }
+
     public onPropertyChanged(name: keyof Calendar): void {
         super.onPropertyChanged(name);
         switch (name) {
@@ -229,6 +244,8 @@ export default class Calendar extends AtomRepeater {
         this.yearEnd = 10;
         this.year = now.getFullYear();
         this.month = now.getMonth();
+        this.comparer = (left: ICalendarDate, right: ICalendarDate) =>
+            left.value?.date?.msSinceEpoch === right.value?.date?.msSinceEpoch;
         this.render(<div
             data-calendar="calendar"
             items={Bind.oneWay(() => this.dates)}>
