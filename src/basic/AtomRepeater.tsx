@@ -163,8 +163,10 @@ export function askSuggestion<T>(
     return Suggestions.showModal(options);
 }
 
+const maxHeight = (window.screen.availHeight / 2) > 250 ? "250px" : "90%";
+
 CSS(StyleRule()
-    .maxHeight("90%")
+    .maxHeight(maxHeight)
     .minWidth(80)
     .verticalFlexLayout({ alignItems: "stretch" })
     .child(StyleRule(".items")
