@@ -244,8 +244,8 @@ export default class Calendar extends AtomRepeater {
         this.yearEnd = 10;
         this.year = now.getFullYear();
         this.month = now.getMonth();
-        this.comparer = (left: ICalendarDate, right: ICalendarDate) =>
-            left.value?.date?.msSinceEpoch === right.value?.date?.msSinceEpoch;
+        this.comparer = (left: Date, right: Date) =>
+            DateTime.from(left).date?.msSinceEpoch === DateTime.from(right).date?.msSinceEpoch;
         this.render(<div
             data-calendar="calendar"
             items={Bind.oneWay(() => this.dates)}>
