@@ -137,6 +137,20 @@ export default class Calendar extends AtomRepeater {
     @BindableProperty
     public yearEnd: number;
 
+    public set startDate(v) {
+        if (this.dateModified) {
+            return;
+        }
+        const year = v.getFullYear();
+        const month = v.getMonth();
+        if (this.year !== year) {
+            this.year = year;
+        }
+        if (this.month !== month) {
+            this.month = month;
+        }
+    }
+
     public enableFunc: (item: ICalendarDate) => boolean;
 
     public dateRenderer: (item: ICalendarDate) => XNode;
@@ -195,17 +209,16 @@ export default class Calendar extends AtomRepeater {
     public set value(v) {
         // change the date....
         if (v instanceof Date) {
-            const year = v.getFullYear();
-            const month = v.getMonth();
-            if (this.year !== year) {
-                this.year = year;
-            }
-            if (this.month !== month) {
-                this.month = month;
-            }
+            this.startDate = v;
         }
         super.value = v;
     }
+
+    /**
+     * Date is modified by user, so do not auto select
+     * start Date
+     */
+    private dateModified = false;
 
     public onPropertyChanged(name: keyof Calendar): void {
         super.onPropertyChanged(name);
@@ -246,6 +259,7 @@ export default class Calendar extends AtomRepeater {
         this.month = now.getMonth();
         this.comparer = (left: Date, right: Date) =>
             DateTime.from(left).date?.msSinceEpoch === DateTime.from(right).date?.msSinceEpoch;
+        this.bindEvent(this.element, "change", () => this.dateModified = true, null, { capture: true });
         this.render(<div
             data-calendar="calendar"
             items={Bind.oneWay(() => this.dates)}>
@@ -255,7 +269,9 @@ export default class Calendar extends AtomRepeater {
                     title="Previous Month"/>
                 <ComboBox
                     items={monthItems}
-                    value={Bind.twoWays(() => this.month)} />
+                    value={Bind.twoWays(() => this.month)}
+                    event
+                    />
                 <ComboBox
                     items={Bind.oneWay(() => this.years)}
                     value={Bind.twoWays(() => this.year)}/>
@@ -290,6 +306,11 @@ export default class Calendar extends AtomRepeater {
             a.styleGridRowStart = (item.row + 1);
             return d;
         };
+    }
+
+    protected dispatchItemEvent(eventName: any, item: any, recreate: any, originalTarget: any, nestedItem?: any): void {
+        this.dateModified = true;
+        super.dispatchItemEvent(eventName, item, recreate, originalTarget, nestedItem);
     }
 
 }
