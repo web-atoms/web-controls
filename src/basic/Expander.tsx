@@ -75,21 +75,26 @@ document.body.addEventListener("click", (e: MouseEvent) => {
         start = start.parentElement;
     }
     start = start?.parentElement;
-    if (!/^(menu|expander)$/i.test(start?.dataset?.isExpander)) {
+    if (!start) {
         return;
     }
+    const isExpander = start.dataset?.isExpander;
+    if (!/^(menu|expander)$/i.test(isExpander)) {
+        return;
+    }
+
     const ds = start.dataset;
-    if (ds.isExpanded === "false") {
-        // ds.isExpanded = "true";
+    if (/menu/i.test(isExpander)) {
         e.preventDefault();
         e.stopImmediatePropagation();
+    }
+
+    if (ds.isExpanded === "false") {
         start.dispatchEvent(new CustomEvent("expanded", { bubbles: true, cancelable: true }));
     } else {
-        // ds.isExpanded = "false";
-        e.preventDefault();
-        e.stopImmediatePropagation();
         start.dispatchEvent(new CustomEvent("collapsed", { bubbles: true, cancelable: true }));
     }
+
 }, { capture: true });
 
 document.body.addEventListener("expanded", (ce) => {
