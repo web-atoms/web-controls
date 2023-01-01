@@ -3,7 +3,7 @@ import type { ContentPage } from "./mobile-app/MobileApp";
 
 export default class PageNavigator {
 
-    public static openPage<T>(page: typeof ContentPage<T>, parameters?: T, clearHistory?: boolean): void;
+    public static openPage<T>(page: typeof ContentPage<T, any>, parameters?: T, clearHistory?: boolean): void;
     public static openPage(
         page: string | any,
         parameters: {[key: string]: any} = {},
@@ -16,7 +16,7 @@ export default class PageNavigator {
         });
     }
 
-    public static pushPage<T>(page: typeof ContentPage<T>, parameters?: T, clearHistory?: boolean);
+    public static pushPage<T>(page: typeof ContentPage<T, any>, parameters?: T, clearHistory?: boolean);
     public static pushPage(
         page: string | any,
         parameters: {[key: string]: any} = {},
