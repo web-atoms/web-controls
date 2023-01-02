@@ -36,7 +36,11 @@ const css = CSS(StyleRule()
     .alignItems("center")
     .gridTemplateColumns("auto 1fr auto auto")
     .gridTemplateRows("auto auto auto")
-    .child(StyleRule("[data-content=content]")
+    .child(StyleRule("[data-element=label]")
+        .gridRow("1")
+        .gridColumn("2")
+    )
+    .child(StyleRule("[data-element=content]")
         .gridRowStart("2")
         .gridColumnStart("1")
         .gridColumnEnd("span 2")
@@ -183,7 +187,7 @@ export default function FormField(
 
     if (node) {
         const na = node.attributes ??= {};
-        na["data-content"] = "content";
+        na["data-element"] = "content";
     }
 
     if (!helpEventClick && help) {
