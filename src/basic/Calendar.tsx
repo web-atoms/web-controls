@@ -260,6 +260,8 @@ export default class Calendar extends AtomRepeater {
         this.comparer = (left: Date, right: Date) =>
             DateTime.from(left).date?.msSinceEpoch === DateTime.from(right).date?.msSinceEpoch;
         this.bindEvent(this.element, "change", () => this.dateModified = true, null, { capture: true });
+        this.bindEvent(this.element, "itemSelect",
+            (e: CustomEvent<ICalendarDate>) => e.detail.disabled ? e.preventDefault() : null);
         this.render(<div
             data-calendar="calendar"
             items={Bind.oneWay(() => this.dates)}>

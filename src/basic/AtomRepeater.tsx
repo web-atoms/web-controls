@@ -1084,6 +1084,23 @@ export default class AtomRepeater<T = any> extends AtomControl {
             cancelable: true
         });
         originalTarget.dispatchEvent(ce);
+        if (!ce.defaultPrevented) {
+            if (eventName === "itemSelect" || eventName === "itemDeselect") {
+                const si = this.selectedItems ??= [];
+                if (si) {
+                    const index = si.indexOf(item);
+                    if (index === -1) {
+                        if (this.allowMultipleSelection) {
+                            si.add(item);
+                        } else {
+                            si.set(0, item);
+                        }
+                    } else {
+                        si.removeAt(index);
+                    }
+                }
+            }
+        }
         if (recreate && (ce as any).executed && !ce.defaultPrevented) {
             this.refreshItem(item, (ce as any).promise);
         }
@@ -1118,21 +1135,6 @@ export default class AtomRepeater<T = any> extends AtomControl {
         // tslint:disable-next-line: no-bitwise
         let index = ~~itemIndex;
         const item = this.items[index];
-        if (clickEvent === "itemSelect" || clickEvent === "itemDeselect") {
-            const si = this.selectedItems ??= [];
-            if (si) {
-                index = si.indexOf(item);
-                if (index === -1) {
-                    if (this.allowMultipleSelection) {
-                        si.add(item);
-                    } else {
-                        si.set(0, item);
-                    }
-                } else {
-                    si.removeAt(index);
-                }
-            }
-        }
         if (item) {
             if (itemPath) {
                 // check path...
