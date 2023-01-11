@@ -207,7 +207,7 @@ export default function FormField(
                     </div>);
                 }
             }
-            HelpPopup.showWindow({ title : helpTitle ?? "Help" });
+            HelpPopup.showWindow({ title : helpTitle ?? "Help", modal: true });
         });
     }
 
