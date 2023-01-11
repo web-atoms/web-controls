@@ -12,7 +12,7 @@ import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomWindowViewModel } from "@web-atoms/core/dist/view-model/AtomWindowViewModel";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { AtomUI, ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
-import PopupService, { ConfirmPopup, IPopup, PopupControl } from "@web-atoms/core/dist/web/services/PopupService";
+import PopupService, { IPopup, PopupControl } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import PageNavigator from "../PageNavigator";
 
@@ -247,10 +247,8 @@ export class BasePage extends AtomControl {
 
     public async requestCancel() {
         if (this.closeWarning) {
-            if (!await ConfirmPopup.showModal<boolean>({
-                parameters: {
-                    message : this.closeWarning
-                }
+            if (!await PopupService.confirm({
+                message : this.closeWarning
             })) {
                 return;
             }
