@@ -143,8 +143,6 @@ const css = CSS(StyleRule()
 , "div[data-wa-form-field=wa-form-field]");
 
 CSS(StyleRule()
-    .width(300)
-    .maxHeight(500)
     .overflow("auto")
     .padding(10)
     .verticalFlexLayout({ alignItems: "center", justifyContent: "flex-start"})
