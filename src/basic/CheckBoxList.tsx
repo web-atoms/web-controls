@@ -3,7 +3,7 @@ import Colors from "@web-atoms/core/dist/core/Colors";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
-import AtomRepeater from "./AtomRepeater";
+import AtomRepeater, { SameObjectValue } from "./AtomRepeater";
 
 CSS(StyleRule()
     .flexLayout({ inline: true, justifyContent: "flex-start"})
@@ -37,7 +37,9 @@ export default class CheckBoxList extends AtomRepeater {
                 return;
             }
             const item = e.detail;
-            if (s.indexOf(item) === -1) {
+            const vp = this.valuePath ?? SameObjectValue;
+            const value = vp(item);
+            if (!s.some((i) => vp(i) === value)) {
                 s.add(item);
                 this.element.dispatchEvent(new CustomEvent("itemSelect", { detail: item, bubbles: false }));
             } else {
