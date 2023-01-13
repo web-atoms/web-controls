@@ -39,12 +39,13 @@ export default class CheckBoxList extends AtomRepeater {
             const item = e.detail;
             const vp = this.valuePath ?? SameObjectValue;
             const value = vp(item);
-            if (!s.some((i) => vp(i) === value)) {
+            const existing = s.find((i) => vp(i) === value);
+            if (!existing) {
                 s.add(item);
                 this.element.dispatchEvent(new CustomEvent("itemSelect", { detail: item, bubbles: false }));
             } else {
-                this.element.dispatchEvent(new CustomEvent("itemDeselect", { detail: item, bubbles: false }));
-                s.remove(item);
+                this.element.dispatchEvent(new CustomEvent("itemDeselect", { detail: existing, bubbles: false }));
+                s.remove(existing);
             }
         });
 
