@@ -177,6 +177,20 @@ CSS(StyleRule()
     .and(StyleRule("[data-page-state=hidden]")
         .transform("translate(-100%,0)" as any)
     )
+    .and(StyleRule("[data-hide-toolbar=true]")
+        .child(StyleRule("[data-page-element=icon]")
+            .display("none")
+        )
+        .child(StyleRule("[data-page-element=title]")
+            .display("none")
+        )
+        .child(StyleRule("[data-page-element=action-bar]")
+            .display("none")
+        )
+        .child(StyleRule("[data-page-element=action]")
+            .display("none")
+        )
+    )
 , "div[data-base-page=base-page]");
 
 // CSS(StyleRule()
@@ -244,6 +258,13 @@ export class BasePage extends AtomControl {
     private pullToRefreshDisposable: IDisposable;
 
     private scrollTop: number;
+
+    public get hideToolbar() {
+        return this.element?.dataset?.hideToolbar ? true : false;
+    }
+    public set hideToolbar(v: boolean) {
+        this.element.dataset.hideToolbar = v ? "true" : "false";
+    }
 
     public async requestCancel() {
         if (this.closeWarning) {
