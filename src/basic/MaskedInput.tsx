@@ -54,13 +54,12 @@ const updateMask = (e: Event) => {
     }
 };
 
-document.body.addEventListener("change", updateMask, true);
-document.body.addEventListener("keypress", updateMask, true);
-document.body.addEventListener("keyup", updateMask, true);
-
 export default function MaskedInput({ mask, ... a}: IMaskedInput) {
     return <input
         data-mask={mask}
+        event-change={updateMask}
+        event-keypress={updateMask}
+        event-keyup={updateMask}
         { ... a}
         />;
 }
