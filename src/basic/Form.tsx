@@ -6,6 +6,7 @@ import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import FormField from "./FormField";
 import IElement from "./IElement";
 import ToggleButtonBar from "./ToggleButtonBar";
+import Command from "@web-atoms/core/dist/core/Command";
 export const FormButtonBar = ToggleButtonBar;
 
 const css = CSS(StyleRule()
@@ -227,6 +228,8 @@ export interface IForm {
      */
     focusNextOnEnter?: boolean;
     [key: string]: any;
+
+    submitCommand: Command;
 }
 
 let formId = 0;
@@ -256,6 +259,7 @@ export default function Form(
         focusNextOnEnter = true,
         scrollable,
         eventSubmit,
+        submitCommand,
         ... a
     }: IForm,
     ... nodes: XNode[]) {
@@ -267,7 +271,9 @@ export default function Form(
     if (!eventSubmit) {
         a["data-wa-show-errors"] = "yes";
     }
-
+    if (submitCommand) {
+        a["event-" + submitCommand.name] = checkValidity(eventSubmit);
+    }
     const fields = [];
     for (const iterator of nodes) {
         if (!iterator) {
