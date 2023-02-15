@@ -1,4 +1,5 @@
 import Bind from "@web-atoms/core/dist/core/Bind";
+import Command from "@web-atoms/core/dist/core/Command";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
@@ -6,7 +7,6 @@ import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import FormField from "./FormField";
 import IElement from "./IElement";
 import ToggleButtonBar from "./ToggleButtonBar";
-import Command from "@web-atoms/core/dist/core/Command";
 export const FormButtonBar = ToggleButtonBar;
 
 const css = CSS(StyleRule()
@@ -229,7 +229,7 @@ export interface IForm {
     focusNextOnEnter?: boolean;
     [key: string]: any;
 
-    submitCommand: Command;
+    submitCommand?: Command;
 }
 
 let formId = 0;

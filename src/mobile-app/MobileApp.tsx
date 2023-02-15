@@ -55,6 +55,7 @@ CSS(StyleRule()
     .width("100%")
     .height("100%")
     .overflow("hidden")
+    .custom("contain", "content")
     .transition("transform 0.3s ease-out")
     .display("grid")
     .gridTemplateRows("auto auto 1fr auto")
@@ -312,7 +313,8 @@ export class BasePage extends AtomControl {
     }
 
     protected rendererChanged() {
-        for(const content of ChildEnumerator.where(this.element, ({ dataset: { pageElement }}) => !pageElement || pageElement === "content")){
+        for (const content of ChildEnumerator.where(this.element,
+            ({ dataset: { pageElement }}) => !pageElement || pageElement === "content")) {
             this.dispose(content);
             content.remove();
         }
@@ -323,7 +325,6 @@ export class BasePage extends AtomControl {
         delete this.render;
         this.render(r);
     }
-
 
     protected recreate(renderer, name): HTMLElement {
         const node = this[renderer]?.() ?? undefined;
@@ -385,7 +386,7 @@ export class BasePage extends AtomControl {
             this.pullToRefreshElement?.remove?.();
             this.initialized = true;
             this.enablePullToRefreshEvents();
-        })
+        });
 
     }
 
@@ -409,7 +410,7 @@ export class BasePage extends AtomControl {
             { node }
         </div>, e, creator);
         this.contentElement = this.element.querySelector("[data-page-element='content']");
-        
+
         setTimeout(() => this.contentElement.scrollTo(0, 0), 100);
     }
 
