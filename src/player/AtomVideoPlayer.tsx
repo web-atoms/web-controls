@@ -264,6 +264,7 @@ export default class AtomVideoPlayer extends AtomControl {
                 event-waiting={() => this.element.dataset.state = "waiting"}
                 event-volumechange={() => this.updateVolume()}
                 autoplay={false}
+                playsInline={true}
                 data-element="video"/>
             <canvas
                 data-element="progress"
