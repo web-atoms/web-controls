@@ -2,6 +2,10 @@ const empty = [];
 
 export default class MergeNode {
 
+    public static none() {
+        return new MergeNode(empty);
+    }
+
     public static childSelector(name: string) {
         return new MergeNode(["* > " + name]);
     }
