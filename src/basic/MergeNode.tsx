@@ -2,8 +2,8 @@ const empty = [];
 
 export default class MergeNode {
 
-    public static create() {
-        return new MergeNode();
+    public static childSelector(name: string) {
+        return new MergeNode(["* > " + name]);
     }
 
     private constructor(public classes: string[] = empty) {
