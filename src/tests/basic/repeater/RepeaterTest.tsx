@@ -4,6 +4,7 @@ import XNode from "@web-atoms/core/dist/core/XNode";
 import Pack from "@web-atoms/core/dist/Pack";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import AtomRepeater, { SelectAll, SelectorCheckBox } from "../../../basic/AtomRepeater";
+import MergeNode from "../../../basic/MergeNode";
 import ToggleButtonBar from "../../../basic/ToggleButtonBar";
 
 const allOptions = [
@@ -36,7 +37,7 @@ export default class RepeaterTest extends AtomControl {
                 items={allOptions}
                 itemRenderer={(item) => <div>
                     <SelectorCheckBox/>
-                    <span text={item.label}/>
+                    <span style-font-weight={item.label.indexOf('*') !== -1 ? "bold" : ""} text={item.label}/>
                     <button data-click-event="change-name">Change</button>
                 </div>}
                 />
@@ -54,8 +55,9 @@ export default class RepeaterTest extends AtomControl {
         </div>);
     }
 
-    changeName(data): void {
+    changeName(data) {
         data.label = data.label + "*";
+        return MergeNode.create().childElement("span");
     }
 
 }

@@ -14,6 +14,7 @@ import { IDialogOptions, PopupControl, PopupWindow } from "@web-atoms/core/dist/
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import InlinePopup from "./InlinePopup";
 import InlinePopupControl from "./InlinePopupControl";
+import MergeNode from "./MergeNode";
 
 CSS(StyleRule()
     .display("none")
@@ -649,6 +650,8 @@ export default class AtomRepeater<T = any> extends AtomControl {
 
     public scrollToSelection: boolean;
 
+    public mergeOnRefresh: boolean;
+
     protected footerPresenter: HTMLElement;
 
     protected headerPresenter: HTMLElement;
@@ -806,6 +809,19 @@ export default class AtomRepeater<T = any> extends AtomControl {
         }
     }
 
+    public elementAt(index: number) {
+        const container = this.itemsPresenter ?? this.element;
+        let element = getFirstChild(container);
+        let ci = 0;
+        do {
+            if (index === ci++) {
+                break;
+            }
+            element = element.nextElementSibling as HTMLElement;
+        } while (true);
+        return element;
+    }
+
     public elementForItem(itemToFind: any, container?: HTMLElement) {
         container ??= this.itemsPresenter ?? this.element;
         const items = this.items;
@@ -826,13 +842,60 @@ export default class AtomRepeater<T = any> extends AtomControl {
             index = this.items.indexOf(item);
         }
         if (fx?.then) {
-            const finalize = () => {
-                this.refreshItem(item, undefined, index);
+            const finalize = (v) => {
+                this.refreshItem(item, v, index);
             };
             fx.then(finalize, finalize);
             return;
         }
+
+        if (fx instanceof MergeNode) {
+            // merge items from newly generated node
+            this.mergeItem(index, fx);
+            return;
+        }
+
         this.updatePartial("set", index, item);
+    }
+
+    public mergeItem(index: number, m: MergeNode) {
+        const item = this.items[index];
+        if (!item) {
+            return;
+        }
+
+        const container = this.itemsPresenter ?? this.element;
+
+        const node = this.itemRenderer(item, index, this);
+
+        const sourceElement = document.createElement("div");
+        sourceElement.style.display = "none";
+        container.appendChild(sourceElement);
+        this.render(node, sourceElement);
+
+        const targetElement = this.elementAt(index);
+
+        for (const iterator of m.classes) {
+            const source = sourceElement.querySelectorAll(iterator);
+            const target = targetElement.querySelectorAll(iterator);
+            for (let index = 0; index < source.length && index < target.length; index++) {
+                const element = source[index]; 
+                const te = target[index];
+                for (const name of te.getAttributeNames()) {
+                    te.removeAttribute(name);
+                }
+                te.innerHTML = element.innerHTML;
+                for (const name of element.getAttributeNames()) {
+                    te.setAttribute(name, element.getAttribute(name));
+                }
+            }
+        }
+
+        // we need to remove when done...
+        // to unbind events... if any...
+        this.dispose(sourceElement);
+        sourceElement.remove();
+        
     }
 
     public updatePartial(key, index, item, container?: HTMLElement) {
@@ -969,6 +1032,7 @@ export default class AtomRepeater<T = any> extends AtomControl {
     }
 
     protected preCreate() {
+        this.mergeOnRefresh = false;
         this.element.setAttribute("data-click-event", "item-click");
     }
 
