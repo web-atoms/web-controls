@@ -57,7 +57,7 @@ export default class RepeaterTest extends AtomControl {
 
     changeName(data) {
         data.label = data.label + "*";
-        return MergeNode.create().childElement("span");
+        return MergeNode.create().childSelector("span");
     }
 
 }
