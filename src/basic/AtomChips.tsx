@@ -325,7 +325,7 @@ export default class AtomChips<T = any> extends AtomRepeater<T> {
             this.suggestions = ce.detail;
         }
 
-        if (!suggestions || !suggestions.length) {
+        if (!(suggestions?.length)) {
             this.popupCancelToken?.cancel();
             this.popupCancelToken = null;
             return;
