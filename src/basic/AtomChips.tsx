@@ -1,3 +1,4 @@
+import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder";
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import Colors from "@web-atoms/core/dist/core/Colors";
@@ -379,6 +380,7 @@ export default class AtomChips<T = any> extends AtomRepeater<T> {
         let { softDeleteProperty } = this;
         softDeleteProperty = typeof softDeleteProperty !== "string" ? "$deleted" : softDeleteProperty;
         item[softDeleteProperty] = false;
+        AtomBinder.refreshValue(this.items, "length");
         this.refreshItem(item);
     }
 
@@ -388,6 +390,7 @@ export default class AtomChips<T = any> extends AtomRepeater<T> {
         if(softDeleteProperty) {
             softDeleteProperty = typeof softDeleteProperty !== "string" ? "$deleted" : softDeleteProperty;
             item[softDeleteProperty] = true;
+            AtomBinder.refreshValue(this.items, "length");
             this.refreshItem(item);
         } else {
             this.items.remove(item);
