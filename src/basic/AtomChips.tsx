@@ -307,9 +307,6 @@ export default class AtomChips<T = any> extends AtomRepeater<T> {
             this.popupCancelToken = null;
             return;
         }
-        if (this.popupCancelToken) {
-            return;
-        }
 
         const detail = this.suggestions;
         const ce = new CustomEvent("suggestions-requested", { detail });
@@ -328,6 +325,10 @@ export default class AtomChips<T = any> extends AtomRepeater<T> {
         if (!(suggestions?.length)) {
             this.popupCancelToken?.cancel();
             this.popupCancelToken = null;
+            return;
+        }
+
+        if (this.popupCancelToken) {
             return;
         }
 
