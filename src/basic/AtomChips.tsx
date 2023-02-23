@@ -287,7 +287,8 @@ export default class AtomChips<T = any> extends AtomRepeater<T> {
         this.searchInput = this.element.children[1] as HTMLInputElement;
         this.footerPresenter = this.element.children[2] as HTMLInputElement;
         this.bindEvent(this.element, "removeChip", (e: CustomEvent) => e.defaultPrevented || this.removeItem(e.detail));
-        this.bindEvent(this.element, "undoRemoveChip", (e: CustomEvent) => e.defaultPrevented || this.undoRemoveItem(e.detail));
+        this.bindEvent(this.element, "undoRemoveChip", (e: CustomEvent) =>
+            e.defaultPrevented || this.undoRemoveItem(e.detail));
     }
 
     protected setFocus(hasFocus) {
@@ -388,7 +389,7 @@ export default class AtomChips<T = any> extends AtomRepeater<T> {
     protected removeItem(item) {
 
         let { softDeleteProperty } = this;
-        if(softDeleteProperty) {
+        if (softDeleteProperty) {
             softDeleteProperty = typeof softDeleteProperty !== "string" ? "$deleted" : softDeleteProperty;
             item[softDeleteProperty] = true;
             AtomBinder.refreshValue(this.items, "length");
