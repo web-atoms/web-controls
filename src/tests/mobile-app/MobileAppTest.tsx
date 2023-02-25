@@ -102,7 +102,7 @@ export default class MobileAppTest extends MobileApp {
         this.app.runAsync(async () => {
             await sleep(1);
             PageNavigator.pushPage(Detail);
-        );
+        });
     }
 
 }
