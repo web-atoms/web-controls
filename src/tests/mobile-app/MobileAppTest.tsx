@@ -7,6 +7,7 @@ import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { MenuItem } from "../../basic/PopupButton";
 import BottomPopup from "../../mobile-app/BottomPopup";
 import MobileApp, { ContentPage, Drawer, PullToRefresh } from "../../mobile-app/MobileApp";
+import PageNavigator from "../../PageNavigator";
 
 class Detail extends ContentPage {
     protected create(): void {
@@ -97,6 +98,11 @@ export default class MobileAppTest extends MobileApp {
         this.drawer = DrawerMenu;
 
         this.navigationService.openPage(Home, { title: "Home" }, { target: "app"});
+
+        this.app.runAsync(async () => {
+            await sleep(1);
+            PageNavigator.pushPage(Detail);
+        );
     }
 
 }

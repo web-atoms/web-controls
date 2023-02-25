@@ -260,8 +260,6 @@ export class BasePage extends AtomControl {
 
     private scrollTop: number;
 
-    private animated = false;
-
     public get hideToolbar() {
         return this.element?.dataset?.hideToolbar ? true : false;
     }
@@ -369,13 +367,8 @@ export class BasePage extends AtomControl {
         });
 
         setTimeout((p) => {
-            if (p.dataset.pageState === "ready") {
-                this.animated = true;
-                return;
-            }
             p.dataset.pageState = "ready";
-            setTimeout(() => this.animated = true, 300);
-        }, 10, this.element);
+        }, 1, this.element);
 
         this.titleRenderer = () => <span
             class="title-text" text={Bind.oneWay(() => this.viewModelTitle || this.title)}/>;
@@ -538,18 +531,11 @@ export class BasePage extends AtomControl {
     }
 
     protected hide() {
-        const element = this.element;
-        element._logicalParent = element.parentElement;
+        this.element.dataset.pageState = "hidden";
+        this.element._logicalParent = this.element.parentElement;
         this.scrollTop = this.contentElement?.scrollTop;
-        if (!this.animated) {
-            element.remove();
-            element.dataset.pageState = "hidden";
-            return;
-        }
-        element.dataset.pageState = "hidden";
         setTimeout(() => {
-            element?.remove();
-            this.animated = true;
+            this.element?.remove();
         }, 400);
     }
 
@@ -560,8 +546,7 @@ export class BasePage extends AtomControl {
                 this.contentElement.scrollTop = this.scrollTop;
             }
             this.element.dataset.pageState = "ready";
-            setTimeout(() => this.animated = true, 300);
-        }, 10);
+        }, 1);
     }
 }
 
