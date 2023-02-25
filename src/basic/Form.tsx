@@ -179,7 +179,7 @@ const moveNext = (handler) => (e: KeyboardEvent) => {
         return;
     }
     if  (handler) {
-        if (element.tagName !== "TEXTAREA") {
+        if (/^INPUT$/.test(element.tagName)) {
             submitFormHandler(e.currentTarget as HTMLElement);
         }
         return;
