@@ -12,6 +12,7 @@ import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { IDialogOptions, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
+import ArrayLike from "../ArrayLike";
 import InlinePopup from "./InlinePopup";
 import InlinePopupControl from "./InlinePopupControl";
 import MergeNode from "./MergeNode";
@@ -876,18 +877,35 @@ export default class AtomRepeater<T = any> extends AtomControl {
         const targetElement = this.elementAt(index);
 
         for (const iterator of m.classes) {
-            const source = sourceElement.querySelectorAll(iterator);
-            const target = targetElement.querySelectorAll(iterator);
-            for (let index = 0; index < source.length && index < target.length; index++) {
-                const element = source[index]; 
-                const te = target[index];
-                for (const name of te.getAttributeNames()) {
-                    te.removeAttribute(name);
+            if (typeof iterator === "string") {
+                const source = sourceElement.querySelectorAll(iterator);
+                const target = targetElement.querySelectorAll(iterator);
+                for (let i = 0; i < source.length && i < target.length; i++) {
+                    const element = source[i];
+                    const te = target[i];
+                    for (const name of te.getAttributeNames()) {
+                        te.removeAttribute(name);
+                    }
+                    te.innerHTML = element.innerHTML;
+                    for (const name of element.getAttributeNames()) {
+                        te.setAttribute(name, element.getAttribute(name));
+                    }
                 }
-                te.innerHTML = element.innerHTML;
-                for (const name of element.getAttributeNames()) {
-                    te.setAttribute(name, element.getAttribute(name));
-                }
+                continue;
+            }
+
+            // parent should be single...
+            // and both parent must exist...
+            const sourceParent = sourceElement.querySelector(iterator.parent);
+            const targetParent = targetElement.querySelector(iterator.parent);
+            if (!(sourceParent && targetParent)) {
+                continue;
+            }
+            for (const i of Array.from(targetElement.querySelectorAll(iterator.replace))) {
+                i.remove();
+            }
+            for (const i of Array.from(sourceElement.querySelectorAll(iterator.replace))) {
+                targetParent.appendChild(i);
             }
         }
 
@@ -895,7 +913,6 @@ export default class AtomRepeater<T = any> extends AtomControl {
         // to unbind events... if any...
         this.dispose(sourceElement);
         sourceElement.remove();
-        
     }
 
     public updatePartial(key, index, item, container?: HTMLElement) {

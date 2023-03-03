@@ -1,5 +1,7 @@
 const empty = [];
 
+export type IReplaceClass = string | { replace?: string, parent?: string };
+
 export default class MergeNode {
 
     public static none() {
@@ -10,7 +12,7 @@ export default class MergeNode {
         return new MergeNode(["* > " + name]);
     }
 
-    private constructor(public classes: string[] = empty) {
+    private constructor(public classes: IReplaceClass[] = empty) {
     }
 
     public childSelector(name: string) {
