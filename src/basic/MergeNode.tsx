@@ -1,6 +1,10 @@
 const empty = [];
 
-export type IReplaceClass = string | { replace?: string, parent?: string };
+export type IReplaceClass = string | {
+    replace?: string,
+    parent?: string,
+    after?: string
+};
 
 export default class MergeNode {
 
@@ -8,9 +12,10 @@ export default class MergeNode {
         return new MergeNode(empty);
     }
 
-    public static childSelector(name: string, parent?: string) {
-        if (parent !== void 0) {
-            return new MergeNode([{ replace: "* > " + name, parent }]);
+    public static childSelector(name: string, p?: { after?: string, parent?: string }) {
+        if (p !== void 0) {
+            const { parent, after } = p;
+            return new MergeNode([{ replace: "* > " + name, parent, after }]);
         }
         return new MergeNode(["* > " + name]);
     }
@@ -18,9 +23,10 @@ export default class MergeNode {
     private constructor(public classes: IReplaceClass[] = empty) {
     }
 
-    public childSelector(name: string, parent?: string) {
-        if (parent !== void 0) {
-            return new MergeNode([ ... this.classes, { replace: "* > " + name, parent }]);
+    public childSelector(name: string, p?: { after?: string, parent?: string }) {
+        if (p !== void 0) {
+            const { parent, after } = p;
+            return new MergeNode([ ... this.classes, { replace: "* > " + name, parent, after }]);
         }
         return new MergeNode([... this.classes, "* > " + name]);
     }

@@ -894,20 +894,33 @@ export default class AtomRepeater<T = any> extends AtomControl {
                 continue;
             }
 
-            // parent should be single...
-            // and both parent must exist...
-            const sourceParent = sourceElement.querySelector(iterator.parent);
-            const targetParent = targetElement.querySelector(iterator.parent);
-            if (!(sourceParent && targetParent)) {
+            if (iterator.parent) {
+                // parent should be single...
+                // and both parent must exist...
+                const targetParent = /self|\*/.test(iterator.parent)
+                    ? targetElement
+                    : targetElement.querySelector(iterator.parent);
+                if (!targetParent) {
+                    continue;
+                }
+                for (const i of Array.from(targetElement.querySelectorAll(iterator.replace))) {
+                    i.remove();
+                }
+                for (const i of Array.from(sourceElement.querySelectorAll(iterator.replace))) {
+                    targetParent.appendChild(i);
+                }
                 continue;
             }
+
+            let targetPrevious = targetElement.querySelector(iterator.after);
             for (const i of Array.from(targetElement.querySelectorAll(iterator.replace))) {
                 i.remove();
             }
             for (const i of Array.from(sourceElement.querySelectorAll(iterator.replace))) {
-                targetParent.appendChild(i);
+                targetPrevious.insertAdjacentElement("afterend", i);
+                targetPrevious = i;
             }
-        }
+    }
 
         // we need to remove when done...
         // to unbind events... if any...
