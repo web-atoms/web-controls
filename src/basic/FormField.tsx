@@ -148,6 +148,41 @@ CSS(StyleRule()
     .verticalFlexLayout({ alignItems: "center", justifyContent: "flex-start"})
 , "div[data-form-field-help=help-window]");
 
+let id = 1;
+const generateId = (name: string) => {
+    return `${name.replace(/[\W_]+/g, "-")}-${id++}`;
+};
+
+const associateLabel = AtomControl.registerProperty("assign-label", "for", (ctrl, e, value) => {
+    if (!/TEXTAREA|INPUT/.test(e.tagName)) {
+        return;
+    }
+
+    if (e.ariaLabel) {
+        return;
+    }
+
+    // travel up till we find waFormField...
+    let start = e;
+    while (start) {
+        if (start.getAttribute("data-wa-form-field")) {
+            break;
+        }
+        start = start.parentElement;
+    }
+    if (!start) {
+        return;
+    }
+    const label = start.querySelector("label");
+    if (!label) {
+        return;
+    }
+
+    const eid = e.id ||= generateId(label.textContent);
+
+    label.htmlFor = eid;
+});
+
 document.addEventListener("focusin", (e) => {
     let { target } = e as any;
     while (target) {
@@ -217,6 +252,10 @@ export default function FormField(
         labelIsNode = true;
     }
 
+    if (!(node.attributes?.ariaLabel || node.attributes?.["aria-label"])) {
+        (node.attributes ??= {})[associateLabel.toString()] = "1";
+    }
+
     return <div
         data-wa-form-field="wa-form-field"
         data-border={border}
@@ -276,6 +315,10 @@ export function HorizontalFormField(
             }
             HelpPopup.showWindow({ title : helpTitle ?? "Help" });
         });
+    }
+
+    if (!(node.attributes?.ariaLabel || node.attributes?.["aria-label"])) {
+        (node.attributes ??= {})[associateLabel.toString()] = "1";
     }
 
     return <div
