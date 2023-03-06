@@ -255,8 +255,10 @@ export default function FormField(
             la["data-element"] = "label";
             labelIsNode = true;
         } else {
-            if (!(node.attributes?.ariaLabel || node.attributes?.["aria-label"])) {
-                (node.attributes ??= {})["aria-label"] = label;
+            if (node) {
+                if (!(node.attributes?.ariaLabel || node.attributes?.["aria-label"])) {
+                    (node.attributes ??= {})["aria-label"] = label;
+                }
             }
         }
     }
@@ -322,8 +324,10 @@ export function HorizontalFormField(
         });
     }
 
-    if (!(node.attributes?.ariaLabel || node.attributes?.["aria-label"])) {
-        (node.attributes ??= {})["aria-label"] = label;
+    if (node) {
+        if (!(node.attributes?.ariaLabel || node.attributes?.["aria-label"])) {
+            (node.attributes ??= {})["aria-label"] = label;
+        }
     }
 
     return <div
