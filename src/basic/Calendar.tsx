@@ -31,21 +31,33 @@ const getMonths = (locale, type: "short" | "long") => {
     return weekDays;
 };
 
+function setValue(target, name, value) {
+    Object.defineProperty(target, name, { value });
+    return value;
+}
+
 export const weekdays = {
 
-    short: getWeekDays(navigator.language, "short"),
-    long: getWeekDays(navigator.language, "long"),
+    get short() {
+        return setValue(this, "short", getWeekDays(navigator.language, "short"));
+    },
+    get long() {
+        return setValue(this, "long", getWeekDays(navigator.language, "long"));
+    }
 };
 
 export const months = {
-    short: getMonths(navigator.language, "short"),
-    long: getMonths(navigator.language, "long")
-};
+    get short() {
+        return setValue(this, "short", getMonths(navigator.language, "short"));
+    },
+    get long() {
+        return setValue(this, "long", getMonths(navigator.language, "long"));
+    },
 
-const monthItems = months.long.map((x, i) => ({
-    label: x,
-    value: i
-}));
+    get items() {
+        return setValue(this, "items", this.long.map((x, i) => ({label: x, value: i})));
+    }
+};
 
 CSS(StyleRule()
     .display("inline-grid")
@@ -270,7 +282,7 @@ export default class Calendar extends AtomRepeater {
                     class="fa-solid fa-angle-left"
                     title="Previous Month"/>
                 <ComboBox
-                    items={monthItems}
+                    items={months.items}
                     value={Bind.twoWays(() => this.month)}
                     event
                     />
