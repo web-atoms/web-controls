@@ -31,7 +31,12 @@ import UnorderedList from "./commands/UnorderedList";
 
 const link = document.createElement("link");
 link.href = "https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css";
-link.rel = "stylesheet";
+link.rel = "preload";
+link.as = "style";
+link.onload = () => {
+    link.onload = null;
+    link.rel = "stylesheet";
+};
 document.head.appendChild(link);
 
 const css = CSS(StyleRule()
