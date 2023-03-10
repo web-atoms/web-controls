@@ -4,9 +4,8 @@ import Colors from "@web-atoms/core/dist/core/Colors";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
-
+import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
 CSS(StyleRule()
     .display("grid")
@@ -124,10 +123,10 @@ CSS(StyleRule()
         .and(StyleRule("[data-controls=false]")
             .child(StyleRule("[data-element=toolbar]")
                 .display("none")
-            )  
+            )
             .child(StyleRule("[data-element=progress]")
                 .display("none")
-            )  
+            )
         )
     )
     .and(StyleRule("[data-state=waiting]")
@@ -142,10 +141,10 @@ CSS(StyleRule()
         .and(StyleRule("[data-controls=false]")
             .child(StyleRule("[data-element=toolbar]")
                 .display("none")
-            )  
+            )
             .child(StyleRule("[data-element=progress]")
                 .display("none")
-            )  
+            )
         )
     )
 , "*[data-video-player=video-player]");
@@ -160,7 +159,7 @@ const gatherElements = (e: HTMLElement, data = {}) => {
         gatherElements(iterator, data);
     }
     return data;
-}
+};
 
 const numberToText = (n: number) => {
     if (n < 10) {
@@ -180,11 +179,11 @@ const durationText = (n: number, total: number) => {
     return `${minutes}:${seconds} / ${totalMinutes}:${totalSeconds}`;
 };
 
-const noSoundIcon =  "fa-duotone fa-volume-slash",
-    mute = "fa-duotone fa-volume-xmark",
-    low = "fa-duotone fa-volume-low",
-    mid = "fa-duotone fa-volume",
-    high = "fa-duotone fa-volume-high";
+const noSoundIcon =  "fa-duotone fa-volume-slash";
+const mute = "fa-duotone fa-volume-xmark";
+const low = "fa-duotone fa-volume-low";
+const mid = "fa-duotone fa-volume";
+const high = "fa-duotone fa-volume-high";
 
 export default class AtomVideoPlayer extends AtomControl {
 
@@ -333,6 +332,10 @@ export default class AtomVideoPlayer extends AtomControl {
         });
     }
 
+    protected updateSource() {
+        this.video.src = this.source;
+    }
+
     private updateProgress() {
         const context = this.progress.getContext("2d");
         // context.fillStyle = "rgba(0,0,0,0)";
@@ -341,7 +344,7 @@ export default class AtomVideoPlayer extends AtomControl {
         const height = this.progress.clientHeight;
         this.progress.width = width;
         this.progress.height = height;
-        context.clearRect(0,0, width, height);
+        context.clearRect(0, 0, width, height);
         const max = this.video.duration;
         const seekable = this.video.buffered;
         const scale = width / max;
@@ -375,10 +378,6 @@ export default class AtomVideoPlayer extends AtomControl {
             return;
         }
         this.soundIcon.className = mid;
-    }
-
-    protected updateSource() {
-        this.video.src = this.source;
     }
 
 }
