@@ -7,6 +7,9 @@ import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
+// check if it is a mobile..
+const isTouchEnabled = /android|iPhone|iPad/i.test(navigator.userAgent);
+
 CSS(StyleRule()
     .display("grid")
     .gridTemplateRows("auto 1fr auto")
@@ -215,6 +218,19 @@ export default class AtomVideoPlayer extends AtomControl {
     protected create(): void {
         this.element.dataset.videoPlayer = "video-player";
         this.bindEvent(this.element, "togglePlay", (e: CustomEvent) => {
+
+            if (isTouchEnabled) {
+                if (e.target === e.currentTarget) {
+                    if (this.element.dataset.controls === "true") {
+                        this.element.dataset.controls = "false";
+                    } else {
+                        this.element.dataset.controls = "true";
+                    }
+                    return;
+                }
+                return;
+            }
+
             if (this.video.paused) {
                 this.video.play();
             } else {
