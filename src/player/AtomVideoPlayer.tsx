@@ -6,6 +6,7 @@ import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
+import { installInputRangeStyle } from "./input-range-style";
 
 // check if it is a mobile..
 const isTouchEnabled = /android|iPhone|iPad/i.test(navigator.userAgent);
@@ -28,8 +29,8 @@ CSS(StyleRule()
         .gridRowEnd("span 3")
         .gridColumnStart("1")
         .gridColumnEnd("span 3")
-        .alignSelf("stretch")
-        .justifySelf("stretch")
+        .alignSelf("center")
+        .justifySelf("center")
         .flexLayout({ justifyContent: "center"})
         .child(StyleRule("button.play")
             .display("inline-flex")
@@ -55,8 +56,11 @@ CSS(StyleRule()
         .gridColumnStart("1")
         .gridColumnEnd("span 3")
         .alignSelf("flex-end")
-        .height(4)
+        .height(15)
+        .paddingTop(5)
+        .paddingBottom(5)
         .justifySelf("stretch" as any)
+        .backgroundColor(Colors.black.withAlphaPercent(0.3))
         .width("100%")
         .cursor("pointer")
     )
@@ -215,6 +219,11 @@ export default class AtomVideoPlayer extends AtomControl {
         }
     }
 
+    protected setCurrentTime(n: number) {
+        // n = Math.round(n * 100) / 100;
+        this.video.currentTime = n * this.video.duration;
+    }
+
     protected create(): void {
         this.element.dataset.videoPlayer = "video-player";
         this.bindEvent(this.element, "togglePlay", (e: CustomEvent) => {
@@ -341,10 +350,24 @@ export default class AtomVideoPlayer extends AtomControl {
         this.bindEvent(this.element, "pointerleave", () => {
             this.element.dataset.controls = "false";
         });
-        this.bindEvent(this.progress, "click", (e: MouseEvent) => {
+        this.bindEvent(this.progress, "pointerdown", (e: PointerEvent) => {
             e.preventDefault();
-            const scale = e.clientX / this.progress.clientWidth;
-            this.video.currentTime = this.video.duration * scale;
+            // const scale = this.progress.clientWidth / this.video.duration ;
+            this.setCurrentTime(e.offsetX / this.progress.clientWidth);
+
+            const move = (e1: PointerEvent) => {
+                e1.preventDefault();
+                this.setCurrentTime(e1.offsetX / this.progress.clientWidth);
+            };
+
+            const up = (e1: PointerEvent) => {
+                e1.preventDefault();
+                this.progress.removeEventListener("pointermove", move);
+                this.progress.removeEventListener("pointerup", up);
+            };
+
+            this.progress.addEventListener("pointermove", move);
+            this.progress.addEventListener("pointerup", up);
         });
     }
 
@@ -364,7 +387,9 @@ export default class AtomVideoPlayer extends AtomControl {
         const max = this.video.duration;
         const seekable = this.video.buffered;
         const scale = width / max;
-        context.fillStyle = "rgba(255,255,255,0.5)";
+        context.fillStyle = "rgba(255,255,255,0.3)";
+        context.fillRect(0, 0, width, height);
+        context.fillStyle = "rgba(255,255,255,0.6)";
         for (let index = 0; index < seekable.length; index++) {
             const start = seekable.start(index) * scale;
             const end = seekable.end(index) * scale;
