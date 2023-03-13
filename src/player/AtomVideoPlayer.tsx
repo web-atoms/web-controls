@@ -56,9 +56,9 @@ CSS(StyleRule()
         .gridColumnStart("1")
         .gridColumnEnd("span 3")
         .alignSelf("flex-end")
-        .height(15)
-        .paddingTop(5)
-        .paddingBottom(5)
+        .height( isTouchEnabled ? 50 : 15)
+        .paddingTop(isTouchEnabled ? 20 : 5)
+        .paddingBottom(isTouchEnabled ? 20 : 5)
         .justifySelf("stretch" as any)
         .backgroundColor(Colors.black.withAlphaPercent(0.3))
         .width("100%")
@@ -227,8 +227,14 @@ export default class AtomVideoPlayer extends AtomControl {
     protected create(): void {
         this.element.dataset.videoPlayer = "video-player";
         this.bindEvent(this.element, "togglePlay", (e: CustomEvent) => {
-
+            if (e.defaultPrevented) {
+                return;
+            }
+            e.preventDefault();
             if (isTouchEnabled) {
+                if ((e.target as HTMLCanvasElement).tagName === "CANVAS") {
+                    return;
+                }
                 if (e.target === e.currentTarget) {
                     if (this.element.dataset.controls === "true") {
                         this.element.dataset.controls = "false";
@@ -237,13 +243,14 @@ export default class AtomVideoPlayer extends AtomControl {
                     }
                     return;
                 }
-                return;
             }
 
             if (this.video.paused) {
                 this.video.play();
+                this.element.dataset.controls = "false";
             } else {
                 this.video.pause();
+                this.element.dataset.controls = "true";
             }
         });
         this.bindEvent(this.element, "volume", (e: CustomEvent) => {
@@ -344,10 +351,10 @@ export default class AtomVideoPlayer extends AtomControl {
                 this.video.volume = parseFloat(this.volumeRange.value);
             }, 1);
         });
-        this.bindEvent(this.element, "pointerenter", () => {
+        this.bindEvent(this.element, "mouseenter", () => {
             this.element.dataset.controls = "true";
         });
-        this.bindEvent(this.element, "pointerleave", () => {
+        this.bindEvent(this.element, "mouseleave", () => {
             this.element.dataset.controls = "false";
         });
         this.bindEvent(this.progress, "pointerdown", (e: PointerEvent) => {
