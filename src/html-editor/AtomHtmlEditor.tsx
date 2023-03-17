@@ -365,6 +365,9 @@ export default class AtomHtmlEditor extends AtomControl {
         #editor {
             min-height: 500px;
         }
+        *[data-prompt] {
+            background: yellow
+        }
         `;
         doc.head.appendChild(style);
 
@@ -410,7 +413,23 @@ export default class AtomHtmlEditor extends AtomControl {
         });
 
         this.bindEvent(this.element, "editorClick", (ce: CustomEvent) => {
-            const { detail: { data} } = ce;
+            const { detail: { data, target} } = ce;
+            if (data.prompt) {
+                const element = target as HTMLElement;
+                const result = prompt("Enter " + (data.promptTitle ?? data.prompt), data.promptDefault);
+                if (result) {
+                    const replace = ((data.attributes ?? "textContent") as string).split(",").map((x) => x.trim());
+                    for (const iterator of replace) {
+                        const template = element.getAttribute("data-" + iterator + "-template") || element.getAttribute("data-template");
+                        if (template) {
+                            element[iterator] = template.replace(data.prompt, result);
+                        } else {
+                            element[iterator] = result;
+                        }
+                    }
+                }
+                return;
+            }
             for (const { name, handler } of this.tags) {
                 if (name === data.command || name === data.clickEvent) {
                     handler(ce);
