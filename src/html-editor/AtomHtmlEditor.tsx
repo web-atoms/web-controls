@@ -96,6 +96,9 @@ function preventLinkClick(e: Event, editor: HTMLElement, doc: Document) {
     let target = e.target as HTMLElement;
     const body = doc.body;
     while (target) {
+        if (target.getAttribute("data-prompt")) {
+            break;
+        }
         if (target === body) {
             break;
         }
@@ -418,7 +421,7 @@ export default class AtomHtmlEditor extends AtomControl {
                 const element = target as HTMLElement;
                 const result = prompt("Enter " + (data.promptTitle ?? data.prompt), data.promptDefault);
                 if (result) {
-                    const replace = ((data.attributes ?? "textContent") as string).split(",").map((x) => x.trim());
+                    const replace = ((data.replace ?? "textContent") as string).split(",").map((x) => x.trim());
                     for (const iterator of replace) {
                         const template = element.getAttribute("data-" + iterator + "-template") || element.getAttribute("data-template");
                         if (template) {
