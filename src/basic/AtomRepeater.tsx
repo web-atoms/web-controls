@@ -1195,8 +1195,16 @@ export default class AtomRepeater<T = any> extends AtomControl {
                 }
             }
         }
-        if (recreate && (ce as any).executed && !ce.defaultPrevented) {
-            this.refreshItem(item, (ce as any).promise);
+        if (ce.defaultPrevented || !(ce as any).executed) {
+            return;
+        }
+        const promise = (ce as any).promise;
+        if (recreate) {
+            this.refreshItem(item, promise);
+            return;
+        }
+        if (promise) {
+            promise.then((r) => r instanceof MergeNode && this.refreshItem(item, r));
         }
     }
 
