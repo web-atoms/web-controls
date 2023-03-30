@@ -205,6 +205,9 @@ export default class AtomVideoPlayer extends AtomControl {
     public get time() {
         return this.video.currentTime;
     }
+    public set time(v) {
+        this.video.currentTime = v;
+    }
 
     public get paused() {
         return this.video.paused;
