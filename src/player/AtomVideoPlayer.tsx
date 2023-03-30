@@ -294,7 +294,10 @@ export default class AtomVideoPlayer extends AtomControl {
             <video
                 event-abort={() => this.element.dataset.state = "abort"}
                 event-durationchange={(e: Event) => AtomBinder.refreshValue(this, "duration")}
-                event-ended={() => this.element.dataset.state = "ended"}
+                event-ended={(e: Event) => {
+                    this.element.dataset.state = "ended";
+                    e.target.dispatchEvent(new CustomEvent("videoEnded", { bubbles: true }));
+                }}
                 event-loadedmetadata={() => {
                     // this.duration = this.video.duration;
                     this.updateVolume();
