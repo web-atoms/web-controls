@@ -1,3 +1,4 @@
+import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder";
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import Colors from "@web-atoms/core/dist/core/Colors";
@@ -197,9 +198,13 @@ export default class AtomVideoPlayer extends AtomControl {
     @BindableProperty
     public source: any;
 
-    public duration: number;
+    public get duration() {
+        return this.video.duration;
+    }
 
-    public time: number;
+    public get time() {
+        return this.video.currentTime;
+    }
 
     public get paused() {
         return this.video.paused;
@@ -288,22 +293,23 @@ export default class AtomVideoPlayer extends AtomControl {
         this.render(<div data-click-event="toggle-play" data-state="pause">
             <video
                 event-abort={() => this.element.dataset.state = "abort"}
-                event-durationchange={(e: Event) => this.duration = this.video.duration}
+                event-durationchange={(e: Event) => AtomBinder.refreshValue(this, "duration")}
                 event-ended={() => this.element.dataset.state = "ended"}
                 event-loadedmetadata={() => {
-                    this.duration = this.video.duration;
+                    // this.duration = this.video.duration;
                     this.updateVolume();
                     this.currentTimeSpan.textContent = durationText(0, this.duration);
                     this.updateProgress();
+                    AtomBinder.refreshValue(this, "duration");
                 }}
                 event-pause={() => this.element.dataset.state = "pause"}
                 event-play={() => this.element.dataset.state = "play"}
                 event-progress={(e) => this.updateProgress()}
                 event-timeupdate={() => {
-                    this.time = this.video.currentTime;
                     this.currentTimeSpan.textContent = durationText(this.time, this.duration);
                     this.element.dataset.state = "play";
                     this.updateProgress();
+                    AtomBinder.refreshValue(this, "time");
                 }}
                 event-waiting={() => this.element.dataset.state = "waiting"}
                 event-volumechange={() => this.updateVolume()}
