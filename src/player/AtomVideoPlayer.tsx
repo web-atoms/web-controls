@@ -309,8 +309,8 @@ export default class AtomVideoPlayer extends AtomControl {
                 event-volumechange={() => this.updateVolume()}
                 autoplay={false}
                 playsInline={true}
-                style-width="100%"
-                style-height="100%"
+                style-max-width="100%"
+                style-max-height="100%"
                 data-element="video"/>
             <canvas
                 data-element="progress"
