@@ -201,6 +201,10 @@ export default class AtomVideoPlayer extends AtomControl {
 
     public time: number;
 
+    public get paused() {
+        return this.video.paused;
+    }
+
     private video: HTMLVideoElement;
 
     private progress: HTMLCanvasElement;
@@ -210,6 +214,15 @@ export default class AtomVideoPlayer extends AtomControl {
     private currentTimeSpan: HTMLSpanElement;
     private soundIcon: HTMLElement;
     private volumeRange: HTMLInputElement;
+
+    public pause() {
+        this.video.pause();
+    }
+
+    public play() {
+        // tslint:disable-next-line: no-console
+        this.video.play().catch(console.error);
+    }
 
     public onPropertyChanged(name: keyof AtomVideoPlayer): void {
         switch (name) {
