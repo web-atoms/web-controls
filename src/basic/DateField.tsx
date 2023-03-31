@@ -235,6 +235,12 @@ export default class DateField extends AtomControl {
                             this.save(DateTime.today.asJSDate);
                         }}/>
                 </div>);
+
+                this.runAfterInit(() => {
+                    if (this.element) {
+                        (this.element as HTMLElement).scrollIntoView();
+                    }
+                });
             }
 
             private save(d?: Date) {
