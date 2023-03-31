@@ -17,7 +17,7 @@ export default class DateFieldTest extends AtomControl {
             <Form>
                 <FormField label="Date">
                     <DateField
-                        enableFunc={(item: ICalendarDate) => item.value > today}
+                        enableFunc={(item: ICalendarDate) => item.value >= today}
                         />
                 </FormField>
             </Form>
