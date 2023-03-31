@@ -88,7 +88,9 @@ const formatText = (input: HTMLInputElement, capitalize: Capitalize, all = true)
     input.value = value;
 }
 
-const capitalizeText = (e: InputEvent) => {
+const capitalizeText = /android|iPhone|iOS/i.test(navigator.userAgent)
+    ? () => undefined
+    : (e: InputEvent) => {
     const input = e.target as HTMLInputElement;
     const capitalize = input.autocapitalize as Capitalize;
     if (!capitalize || capitalize === "off" || capitalize === "none") {
