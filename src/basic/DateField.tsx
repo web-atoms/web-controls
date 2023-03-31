@@ -107,6 +107,18 @@ export default class DateField extends AtomControl {
     @BindableProperty
     public year: number;
 
+    /**
+     * Default hour in selecting time
+     */
+    @BindableProperty
+    public hour: number;
+
+    /**
+     * Default minute in selecting time
+     */
+    @BindableProperty
+    public minute: number;
+
     @BindableProperty
     public prompt: string;
 
@@ -151,8 +163,13 @@ export default class DateField extends AtomControl {
             protected create(): void {
                 this.owner = owner;
                 this.type = "AM";
-                this.hour = 9;
-                this.minute = 0;
+                let h = this.owner.hour;
+                if (h > 12) {
+                    h -= 12;
+                    this.type = "PM";
+                }
+                this.hour = h || 9;
+                this.minute = this.owner.minute || 0;
                 super.create();
                 const now = DateTime.utcNow;
                 const yearStart = typeof this.owner.yearStart === "number" ? this.owner.yearStart : -10;
