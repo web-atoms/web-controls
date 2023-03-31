@@ -25,11 +25,13 @@ CSS(StyleRule()
         .display("grid")
         .gridTemplateColumns("1fr auto")
         .gridTemplateRows("1fr auto auto")
+        .gap(5)
         .child(StyleRule("[data-calendar]")
             .gridRow("1")
-            .gridColumn("1")
+            .gridColumn("1 / span 2")
         )
         .child(StyleRule(".time-editor")
+            .paddingLeft(5)
             .gridRow("2")
             .flexLayout({ direction: "row", alignItems: "center", justifyContent: "start" as any})
             .nested(StyleRule("[data-item-index]")
@@ -49,10 +51,19 @@ CSS(StyleRule()
             .outline("none")
             .backgroundColor(Colors.transparent)
             .color("var(--accent-color, blue)")
+            .paddingLeft(5)
+            .marginLeft(0)
         )
-        .child(StyleRule(".now")
+        .child(StyleRule(".today")
             .gridRow("3")
             .gridColumn("2")
+            .justifySelf("end")
+            .border("none")
+            .outline("none")
+            .backgroundColor(Colors.transparent)
+            .color("var(--accent-color, blue)")
+            .paddingLeft(5)
+            .marginLeft(0)
         )
     )
 , "*[data-date-field=date-field]");
@@ -184,18 +195,7 @@ export default class DateField extends AtomControl {
                             if (e.detail.disabled) {
                                 return;
                             }
-                            // this.selectedItem = e.detail;
-                            let date = DateTime.from((e.detail.value as Date));
-                            if (this.owner.enableTime) {
-                                date = date.addHours(this.hour)
-                                    .addMinutes(this.minute);
-                                if (this.type === "PM") {
-                                    date = date.addHours(12);
-                                }
-                            }
-                            this.owner.value = date.asJSDate;
-                            this.close(date);
-                            // setTimeout(() => this.owner.element.click() , 100);
+                            this.save(e.detail.value);
                         })}
                         enableFunc={Bind.oneTime(() => this.owner.enableFunc)}
                         value={Bind.oneWay(() => this.owner.value)}
@@ -223,9 +223,36 @@ export default class DateField extends AtomControl {
                             e.preventDefault();
                             e.stopImmediatePropagation();
                             e.stopPropagation();
-                            this.owner.value = null; this.close(null);
+                            this.save();
+                        }}/>
+                    <button
+                        class="today"
+                        text="Today"
+                        event-click={(e: Event) => {
+                            e.preventDefault();
+                            e.stopImmediatePropagation();
+                            e.stopPropagation();
+                            this.save(DateTime.today.asJSDate);
                         }}/>
                 </div>);
+            }
+
+            private save(d?: Date) {
+                if (!d) {
+                    this.owner.value = d;
+                    this.close(d);
+                    return;
+                }
+                let date = DateTime.from((d));
+                if (this.owner.enableTime) {
+                    date = date.addHours(this.hour)
+                        .addMinutes(this.minute);
+                    if (this.type === "PM") {
+                        date = date.addHours(12);
+                    }
+                }
+                this.owner.value = date.asJSDate;
+                this.close(date);
             }
         }
 
