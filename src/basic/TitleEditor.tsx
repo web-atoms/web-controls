@@ -35,17 +35,17 @@ CSS(StyleRule()
 
 export type Capitalize = "none" | "off" | "on" | "sentences" | "words" | "characters";
 
-export interface ITitltEditor extends IElement{
+export interface ITitleEditor extends IElement {
     value?: any;
     type?: any;
     placeholder?: any;
     /**
      * Off - turn off,
-     * On - Sentence captialization
+     * On - Sentence capitalization
      * Word - Capitalize first character of every word
      * Characters - Capitalize everything
      */
-    capitalize?: Capitalize
+    capitalize?: Capitalize;
 }
 
 const paste = (e: ClipboardEvent) => {
@@ -57,17 +57,17 @@ const paste = (e: ClipboardEvent) => {
     setTimeout(() => {
         const start = input.selectionStart;
         const end = input.selectionEnd;
-        formatText(input, capitalize)
-        input.setSelectionRange(start, end);    
+        formatText(input, capitalize);
+        input.setSelectionRange(start, end);
     }, 1);
 };
 
 const formatText = (input: HTMLInputElement, capitalize: Capitalize, all = true) => {
     let value = input.value;
-    if(!value) {
+    if (!value) {
         return;
     }
-    switch(capitalize) {
+    switch (capitalize) {
         case "on":
         case "sentences":
             if (value.length === 1) {
@@ -86,12 +86,27 @@ const formatText = (input: HTMLInputElement, capitalize: Capitalize, all = true)
             break;
     }
     input.value = value;
-}
+};
 
 const capitalizeText = /android|iPhone|iOS/i.test(navigator.userAgent)
     ? () => undefined
     : (e: InputEvent) => {
     const input = e.target as HTMLInputElement;
+    if (e.inputType === "deleteContentBackward") {
+        input.setAttribute("data-undo", "true");
+        return;
+    }
+    const undo = input.getAttribute("data-undo");
+    if (undo === "true") {
+        input.removeAttribute("data-undo");
+        return;
+    }
+    if (e.inputType !== "insertText") {
+        return;
+    }
+    if (!(e.data?.length === 1)) {
+        return;
+    }
     const capitalize = input.autocapitalize as Capitalize;
     if (!capitalize || capitalize === "off" || capitalize === "none") {
         return;
@@ -100,10 +115,10 @@ const capitalizeText = /android|iPhone|iOS/i.test(navigator.userAgent)
     const end = input.selectionEnd;
     formatText(input, capitalize, false);
     input.setSelectionRange(start, end);
-}
+};
 
 const toText = (capitalize: Capitalize) => {
-    switch(capitalize) {
+    switch (capitalize) {
         case "off":
         case "none":
             return "Caps Off";
@@ -116,7 +131,7 @@ const toText = (capitalize: Capitalize) => {
             return "Title Case";
     }
     return "";
-}
+};
 
 const  changeCase = (e: MouseEvent) => {
     let element = e.target as HTMLElement;
@@ -126,7 +141,7 @@ const  changeCase = (e: MouseEvent) => {
     const input = element.previousElementSibling as HTMLInputElement;
     const span = element.nextElementSibling;
     let capitalize = input.autocapitalize as Capitalize;
-    switch(capitalize) {
+    switch (capitalize) {
         case "sentences":
             capitalize = "words";
             break;
@@ -151,7 +166,7 @@ export default function TitleEditor({
     placeholder,
     capitalize = "on",
     ... a
-}: ITitltEditor) {
+}: ITitleEditor) {
     return <div
         data-title-editor="title-editor" { ... a}>
         <input
