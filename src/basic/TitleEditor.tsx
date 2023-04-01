@@ -92,21 +92,6 @@ const capitalizeText = /android|iPhone|iOS/i.test(navigator.userAgent)
     ? () => undefined
     : (e: InputEvent) => {
     const input = e.target as HTMLInputElement;
-    if (e.inputType === "deleteContentBackward") {
-        input.setAttribute("data-undo", "true");
-        return;
-    }
-    const undo = input.getAttribute("data-undo");
-    if (undo === "true") {
-        input.removeAttribute("data-undo");
-        return;
-    }
-    if (e.inputType !== "insertText") {
-        return;
-    }
-    if (!(e.data?.length === 1)) {
-        return;
-    }
     const capitalize = input.autocapitalize as Capitalize;
     if (!capitalize || capitalize === "off" || capitalize === "none") {
         return;
