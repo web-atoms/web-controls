@@ -19,8 +19,10 @@ CSS(StyleRule()
     .and(StyleRule("[data-selected-item=true]")
         .color(Colors.blue)
     )
-    .displayNone("[data-selected-item=true] > i.far")
-    .displayNone("[data-selected-item=false] > i.fas")
+    .displayNone("[data-selected-item=true][data-deleted=none] > i.far")
+    .displayNone("[data-selected-item=false][data-deleted=none] > i.fas")
+    .displayNone("[data-deleted=true] > i.fas")
+    .displayNone("[data-deleted=false] > i.far")
 , "div[data-item-type=checkbox]");
 
 export default class CheckBoxList extends AtomRepeater {
@@ -28,8 +30,15 @@ export default class CheckBoxList extends AtomRepeater {
     @BindableProperty
     public labelPath;
 
+    /**
+     * boolean or string, if it is a string it should be the name of property. default is `$deleted` if set to true
+     */
+    @BindableProperty
+    public softDeleteProperty: string;
+
     protected preCreate(): void {
         super.preCreate();
+        
         this.element.dataset.checkboxList = "checkbox-list";
         this.bindEvent(this.element, "itemClick", (e: CustomEvent) => {
             const s = this.selectedItems;
@@ -44,16 +53,40 @@ export default class CheckBoxList extends AtomRepeater {
                 s.add(item);
                 this.element.dispatchEvent(new CustomEvent("itemSelect", { detail: item, bubbles: false }));
             } else {
-                this.element.dispatchEvent(new CustomEvent("itemDeselect", { detail: existing, bubbles: false }));
-                s.remove(existing);
+                if (this.softDeleteProperty) {
+                    if (existing[this.softDeleteProperty] !== false) {
+                        existing[this.softDeleteProperty] = false;
+                        this.element.dispatchEvent(new CustomEvent("itemSelect", { detail: item, bubbles: false }));
+                    } else {
+                        existing[this.softDeleteProperty] = true;
+                        this.element.dispatchEvent(new CustomEvent("itemDeselect", { detail: existing, bubbles: false }));
+                    }
+                    this.refreshItem(existing);
+                } else {
+                    this.element.dispatchEvent(new CustomEvent("itemDeselect", { detail: existing, bubbles: false }));
+                    s.remove(existing);
+                }
             }
         });
 
-        this.itemRenderer = (item) => <div data-item-type="checkbox">
-            <i class="far fa-square"/>
-            <i class="fas fa-check-square"/>
-            <span text={item.label}/>
-        </div>;
+        this.itemRenderer = (item) => {
+            if(this.softDeleteProperty) {
+                return <div
+                    data-deleted={!!item[this.softDeleteProperty]}
+                    data-item-type="checkbox">
+                    <i class="far fa-square"/>
+                    <i class="fas fa-check-square"/>
+                    <span text={item.label}/>
+                </div>;    
+            }
+        return <div
+            data-deleted="none"
+            data-item-type="checkbox">
+                <i class="far fa-square"/>
+                <i class="fas fa-check-square"/>
+                <span text={item.label}/>
+            </div>;
+        };
     }
 
 }

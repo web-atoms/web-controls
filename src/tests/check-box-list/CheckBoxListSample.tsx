@@ -3,14 +3,23 @@ import Pack from "@web-atoms/core/dist/Pack";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import CheckBoxList from "../../basic/CheckBoxList";
 
+const pair = (... x) => x.map((l) => ({
+    label: l,
+    value: l,
+    $deleted: false
+}));
+
+const items = pair("A", "B", "C");
+
 @Pack
 export default class CheckBoxListSample extends AtomControl {
 
     protected create(): void {
         this.render(<div>
             <CheckBoxList
-                items={["A", "B", "C"]}
-                selectedItems={["B"]}
+                items={items}
+                labelPath={(i) => i.label}
+                selectedItems={[items[1]]}
                 />
         </div>)
     }
