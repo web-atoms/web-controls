@@ -21,8 +21,10 @@ CSS(StyleRule()
     )
     .displayNone("[data-selected-item=true][data-deleted=none] > i.far")
     .displayNone("[data-selected-item=false][data-deleted=none] > i.fas")
-    .displayNone("[data-deleted=true] > i.fas")
-    .displayNone("[data-deleted=false] > i.far")
+    .displayNone("[data-selected-item=false][data-deleted=false] > i.fas")
+    .displayNone("[data-selected-item=true][data-deleted=true] > i.fas")
+    .displayNone("[data-selected-item=true][data-deleted=false] > i.far")
+    .displayNone("[data-selected-item=false][data-deleted=true] > i.fas")
 , "div[data-item-type=checkbox]");
 
 export default class CheckBoxList extends AtomRepeater {
@@ -52,9 +54,13 @@ export default class CheckBoxList extends AtomRepeater {
             if (!existing) {
                 s.add(item);
                 this.element.dispatchEvent(new CustomEvent("itemSelect", { detail: item, bubbles: false }));
+                if(this.softDeleteProperty) {
+                    item[this.softDeleteProperty] = false;
+                }
+                this.refreshItem(item);
             } else {
                 if (this.softDeleteProperty) {
-                    if (existing[this.softDeleteProperty] !== false) {
+                    if (existing[this.softDeleteProperty] === true) {
                         existing[this.softDeleteProperty] = false;
                         this.element.dispatchEvent(new CustomEvent("itemSelect", { detail: item, bubbles: false }));
                     } else {
