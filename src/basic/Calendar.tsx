@@ -8,6 +8,7 @@ import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import DateTime from "@web-atoms/date-time/dist/DateTime";
 import AtomRepeater from "./AtomRepeater";
 import ComboBox from "./ComboBox";
+import Select from "./Select";
 
 const start = DateTime.now;
 
@@ -269,7 +270,7 @@ export default class Calendar extends AtomRepeater {
         this.yearEnd = 10;
         this.year = now.getFullYear();
         this.month = now.getMonth();
-        this.comparer = (left: Date, right: Date) =>
+        this.comparer = (left: Date, right: Date) => left && right &&
             DateTime.from(left).date?.msSinceEpoch === DateTime.from(right).date?.msSinceEpoch;
         this.bindEvent(this.element, "change", () => this.dateModified = true, null, { capture: true });
         this.bindEvent(this.element, "itemSelect",
@@ -281,12 +282,11 @@ export default class Calendar extends AtomRepeater {
                     event-click={() => this.prev()}
                     class="fa-solid fa-angle-left"
                     title="Previous Month"/>
-                <ComboBox
+                <Select
                     items={months.items}
                     value={Bind.twoWays(() => this.month)}
-                    event
                     />
-                <ComboBox
+                <Select
                     items={Bind.oneWay(() => this.years)}
                     value={Bind.twoWays(() => this.year)}/>
                 <i

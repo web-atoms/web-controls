@@ -12,6 +12,8 @@ import ComboBox from "./ComboBox";
 import InlinePopup, { InlinePopupButton } from "./InlinePopup";
 import PopupButton from "./PopupButton";
 import ToggleButtonBar from "./ToggleButtonBar";
+import TimeEditor from "./TimeEditor";
+import TimeSpan from "@web-atoms/date-time/dist/TimeSpan";
 
 CSS(StyleRule()
     .display("inline-block")
@@ -165,24 +167,16 @@ export default class DateField extends AtomControl {
 
             public owner: DateField;
 
-            public hour: any;
-
-            public minute: any;
-
             public type;
+
+            public time: TimeSpan;
 
             protected create(): void {
                 this.owner = owner;
                 this.type = "AM";
-                let h = this.owner.hour;
-                if (h > 12) {
-                    h -= 12;
-                    this.type = "PM";
-                }
-                this.hour = h || 9;
-                this.minute = this.owner.minute || 0;
+                const now = DateTime.from(owner.value ?? DateTime.today.addHours(owner.hour || 0).addMinutes(owner.minute || 0));
+                this.time = new TimeSpan(0, now.hour, now.minute);
                 super.create();
-                const now = DateTime.utcNow;
                 const yearStart = typeof this.owner.yearStart === "number" ? this.owner.yearStart : -10;
                 const yearEnd = typeof this.owner.yearEnd === "number" ? this.owner.yearEnd : 10;
                 const year = typeof this.owner.year === "number" ? this.owner.year : now.year;
@@ -200,22 +194,9 @@ export default class DateField extends AtomControl {
                         enableFunc={Bind.oneTime(() => this.owner.enableFunc)}
                         value={Bind.oneWay(() => this.owner.value)}
                     />
-                    { this.owner.enableTime && <div class="time-editor">
-                        <span text="Time"/>
-                        <ComboBox
-                            prompt="-"
-                            items={hours()}
-                            value={Bind.twoWays(() => this.hour)}
-                            />
-                        <ComboBox
-                            prompt="-"
-                            items={minutes()}
-                            value={Bind.twoWays(() => this.minute)}
-                            />
-                        <ToggleButtonBar
-                            value={Bind.twoWays(() => this.type)}
-                            items={[{ label: "AM", value: "AM"}, { label: "PM", value: "PM"}]}/>
-                    </div> }
+                    { this.owner.enableTime && <TimeEditor
+                        time={Bind.twoWays(() => this.time)}
+                    /> }
                     <button
                         class="clear"
                         text="Clear"
@@ -251,11 +232,7 @@ export default class DateField extends AtomControl {
                 }
                 let date = DateTime.from((d));
                 if (this.owner.enableTime) {
-                    date = date.addHours(this.hour)
-                        .addMinutes(this.minute);
-                    if (this.type === "PM") {
-                        date = date.addHours(12);
-                    }
+                    date = date.add(this.time);
                 }
                 this.owner.value = date.asJSDate;
                 this.close(date);
