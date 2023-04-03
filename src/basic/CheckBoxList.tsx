@@ -50,7 +50,7 @@ export default class CheckBoxList extends AtomRepeater {
             const item = e.detail;
             const vp = this.valuePath ?? SameObjectValue;
             const value = vp(item);
-            const existing = s.find((i) => vp(i) === value);
+            let existing = s.find((i) => vp(i) === value);
             if (!existing) {
                 s.add(item);
                 this.element.dispatchEvent(new CustomEvent("itemSelect", { detail: item, bubbles: false }));
@@ -60,11 +60,21 @@ export default class CheckBoxList extends AtomRepeater {
                 this.refreshItem(item);
             } else {
                 if (this.softDeleteProperty) {
+
+                    const existingItem = this.items.find((i) => vp(i) === value);
                     if (existing[this.softDeleteProperty] === true) {
                         existing[this.softDeleteProperty] = false;
+                        if (existingItem && existingItem !== existing) {
+                            existingItem[this.softDeleteProperty] = false;
+                            this.element.dispatchEvent(new CustomEvent("itemSelect", { detail: item, bubbles: false }));
+                        }
                         this.element.dispatchEvent(new CustomEvent("itemSelect", { detail: item, bubbles: false }));
                     } else {
                         existing[this.softDeleteProperty] = true;
+                        if (existingItem && existingItem !== existing) {
+                            existingItem[this.softDeleteProperty] = true;
+                            this.element.dispatchEvent(new CustomEvent("itemDeselect", { detail: item, bubbles: false }));
+                        }
                         this.element.dispatchEvent(new CustomEvent("itemDeselect", { detail: existing, bubbles: false }));
                     }
                     this.refreshItem(existing);
