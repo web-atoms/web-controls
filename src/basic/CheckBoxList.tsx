@@ -61,6 +61,9 @@ export default class CheckBoxList extends AtomRepeater {
             } else {
                 if (this.softDeleteProperty) {
 
+                    // this is because the items may be loaded from constant array
+                    // where else selected items may come from database
+                    // so we need to mirror changes
                     const existingItem = this.items.find((i) => vp(i) === value);
                     if (existing[this.softDeleteProperty] === true) {
                         existing[this.softDeleteProperty] = false;
