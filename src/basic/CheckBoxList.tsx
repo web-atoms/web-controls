@@ -70,6 +70,7 @@ export default class CheckBoxList extends AtomRepeater {
                         if (existingItem && existingItem !== existing) {
                             existingItem[this.softDeleteProperty] = false;
                             this.element.dispatchEvent(new CustomEvent("itemSelect", { detail: item, bubbles: false }));
+                            this.refreshItem(existingItem);
                         }
                         this.element.dispatchEvent(new CustomEvent("itemSelect", { detail: item, bubbles: false }));
                     } else {
@@ -77,6 +78,7 @@ export default class CheckBoxList extends AtomRepeater {
                         if (existingItem && existingItem !== existing) {
                             existingItem[this.softDeleteProperty] = true;
                             this.element.dispatchEvent(new CustomEvent("itemDeselect", { detail: item, bubbles: false }));
+                            this.refreshItem(existingItem);
                         }
                         this.element.dispatchEvent(new CustomEvent("itemDeselect", { detail: existing, bubbles: false }));
                     }
