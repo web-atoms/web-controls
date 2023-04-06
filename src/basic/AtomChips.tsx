@@ -298,7 +298,7 @@ export default class AtomChips<T = any> extends AtomRepeater<T> {
         }
         setTimeout(() => {
             this.focused = false;
-        }, 250);
+        }, 1500);
     }
 
     protected async updatePopup() {
