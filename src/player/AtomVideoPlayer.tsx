@@ -15,7 +15,7 @@ const isTouchEnabled = /android|iPhone|iPad/i.test(navigator.userAgent);
 CSS(StyleRule()
     .display("grid")
     .gridTemplateRows("auto 1fr auto")
-    .gridTemplateColumns("auto 1fr auto auto")
+    .gridTemplateColumns("auto 1fr auto")
     .backgroundColor(Colors.black)
     .child(StyleRule("[data-element=video]")
         .gridRowStart("1")
@@ -81,7 +81,9 @@ CSS(StyleRule()
             .padding(5)
         )
         .child(StyleRule("[data-style=button]")
-            .width(20)
+            .width(30)
+            .height(30)
+            .padding(5)
         )
         .child(StyleRule("[data-font-size=small]")
             .fontSize("x-small")
@@ -98,7 +100,6 @@ CSS(StyleRule()
         )
         .child(StyleRule("[data-element=full-screen]")
             .marginLeft("auto")
-            .marginRight(5)
         )
     )
     .and(StyleRule("[data-controls=true]")
@@ -198,6 +199,11 @@ export default class AtomVideoPlayer extends AtomControl {
     @BindableProperty
     public source: any;
 
+    /**
+     * Use this inside a mobile app
+     */
+    public useStageView: boolean;
+
     public get duration() {
         return this.video.duration;
     }
@@ -214,7 +220,7 @@ export default class AtomVideoPlayer extends AtomControl {
     }
 
     public get isFullScreen() {
-        return document.fullscreenEnabled && this.element === document.fullscreenElement;
+        return (document.fullscreenEnabled && this.element === document.fullscreenElement) ?? false;
     }
 
     private video: HTMLVideoElement;
@@ -226,6 +232,13 @@ export default class AtomVideoPlayer extends AtomControl {
     private currentTimeSpan: HTMLSpanElement;
     private soundIcon: HTMLElement;
     private volumeRange: HTMLInputElement;
+
+    public stopFullscreen() {
+        if(this.isFullScreen) {
+            return document.exitFullscreen();
+        }
+        return Promise.resolve();
+    }
 
     public pause() {
         this.video.pause();
@@ -251,6 +264,7 @@ export default class AtomVideoPlayer extends AtomControl {
 
     protected create(): void {
         this.element.dataset.videoPlayer = "video-player";
+
         this.bindEvent(this.element, "togglePlay", (e: CustomEvent) => {
             if (e.defaultPrevented) {
                 return;
@@ -283,6 +297,12 @@ export default class AtomVideoPlayer extends AtomControl {
             this.updateVolume();
         });
         this.bindEvent(this.element, "fullScreen", async (e: CustomEvent) => {
+
+            if (!this.element.requestFullscreen) {
+                (this.video as any).webkitEnterFullscreen();
+                return;
+            }
+
             if (this.isFullScreen) {
                 await document.exitFullscreen();
                 return;
@@ -345,15 +365,15 @@ export default class AtomVideoPlayer extends AtomControl {
                     data-click-event="volume"
                     data-style="button"
                     data-element="sound"
-                    class="fa-duotone fa-volume-slash"></i>
-                <input
+                    class="fa-duotone fa-volume-slash"/>
+                { !isTouchEnabled && <input
                     data-click-event="none"
                     data-element="volume-range"
                     type="range"
                     min={0}
                     max={1}
                     step={0.1}
-                    />
+                    /> }
                 <span
                     data-font-size="small"
                     data-element="current" text="0:00"/>
@@ -379,11 +399,13 @@ export default class AtomVideoPlayer extends AtomControl {
         this.currentTimeSpan = all.current;
         this.soundIcon = all.sound;
         this.volumeRange = all.volumeRange;
-        this.bindEvent(this.volumeRange, "input", () => {
-            setTimeout(() => {
-                this.video.volume = parseFloat(this.volumeRange.value);
-            }, 1);
-        });
+        if (this.volumeRange) {
+            this.bindEvent(this.volumeRange, "input", () => {
+                setTimeout(() => {
+                    this.video.volume = parseFloat(this.volumeRange.value);
+                }, 1);
+            });
+        }
         this.bindEvent(this.element, "mouseenter", () => {
             this.element.dataset.controls = "true";
         });
@@ -442,13 +464,17 @@ export default class AtomVideoPlayer extends AtomControl {
     private updateVolume() {
         if (this.video.muted) {
             this.soundIcon.className = mute;
-            this.volumeRange.style.display = "none";
             this.soundIcon.title = "Unmute";
+            if (this.volumeRange) {
+                this.volumeRange.style.display = "none";
+            }
             return;
         }
         const audio = this.video.volume;
-        this.volumeRange.style.display = "";
-        this.volumeRange.value = audio?.toString();
+        if (this.volumeRange) {
+            this.volumeRange.style.display = "";
+            this.volumeRange.value = audio?.toString();
+        }
         this.soundIcon.title = "Mute";
         if (audio > 0.8) {
             this.soundIcon.className = high;
