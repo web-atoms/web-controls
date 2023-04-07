@@ -213,6 +213,10 @@ export default class AtomVideoPlayer extends AtomControl {
         return this.video.paused;
     }
 
+    public get isFullScreen() {
+        return document.fullscreenEnabled && this.element === document.fullscreenElement;
+    }
+
     private video: HTMLVideoElement;
 
     private progress: HTMLCanvasElement;
@@ -278,27 +282,27 @@ export default class AtomVideoPlayer extends AtomControl {
             this.video.muted = !this.video.muted;
             this.updateVolume();
         });
-        this.bindEvent(this.element, "fullScreen", (e: CustomEvent) => {
-            const f = e.target as HTMLElement;
-            if (this.element === document.fullscreenElement) {
-                document.exitFullscreen();
+        this.bindEvent(this.element, "fullScreen", async (e: CustomEvent) => {
+            if (this.isFullScreen) {
+                await document.exitFullscreen();
                 return;
             }
-            document.onfullscreenchange = () => {
-                if (document.fullscreenElement !== this.element) {
-                    f.className = "fa-solid fa-expand";
-                    document.onfullscreenchange = undefined;
-                }
-            };
-            this.element.requestFullscreen({ navigationUI: "show" });
-            f.className = "fa-solid fa-compress";
+            await this.element.requestFullscreen({navigationUI: "show" });
         });
-        this.render(<div data-click-event="toggle-play" data-state="pause">
+        this.bindEvent(document as any, "fullscreenchange", () => {
+            AtomBinder.refreshValue(this, "isFullScreen");
+        });
+        this.render(<div
+            data-click-event="toggle-play"
+            data-state="pause">
             <video
                 event-abort={() => this.element.dataset.state = "abort"}
                 event-durationchange={(e: Event) => AtomBinder.refreshValue(this, "duration")}
-                event-ended={(e: Event) => {
+                event-ended={async (e: Event) => {
                     this.element.dataset.state = "ended";
+                    if (document.fullscreenEnabled && this.element === document.fullscreenElement) {
+                        await document.exitFullscreen();
+                    }
                     e.target.dispatchEvent(new CustomEvent("videoEnded", { bubbles: true }));
                 }}
                 event-loadedmetadata={() => {
@@ -357,7 +361,9 @@ export default class AtomVideoPlayer extends AtomControl {
                     data-click-event="full-screen"
                     data-style="button"
                     data-element="full-screen"
-                    class="fa-solid fa-expand"></i>
+                    class={Bind.oneWay(() => this.isFullScreen
+                        ? "fa-solid fa-compress" :
+                        "fa-solid fa-expand")}></i>
             </div>
             <div
                 data-element="play-element">
