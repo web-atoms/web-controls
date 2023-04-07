@@ -433,9 +433,11 @@ export default class AtomHtmlEditor extends AtomControl {
                 }
                 return;
             }
-            for (const { name, handler } of this.tags) {
-                if (name === data.command || name === data.clickEvent) {
-                    handler(ce);
+            if(this.tags) {
+                for (const { name, handler } of this.tags) {
+                    if (name === data.command || name === data.clickEvent) {
+                        handler(ce);
+                    }
                 }
             }
         });
