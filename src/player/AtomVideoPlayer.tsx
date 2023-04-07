@@ -3,7 +3,7 @@ import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import Colors from "@web-atoms/core/dist/core/Colors";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
+import StyleRule, { PlayState } from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
@@ -26,6 +26,7 @@ CSS(StyleRule()
         .justifySelf("stretch")
     )
     .child(StyleRule("[data-element=play-element]")
+        .zIndex("10")
         .gridRowStart("1")
         .gridRowEnd("span 3")
         .gridColumnStart("1")
@@ -110,7 +111,7 @@ CSS(StyleRule()
             .display("flex")
         )
     )
-    .and(StyleRule("[data-state=pause]")
+    .and(StyleRule("[data-state=paused]")
         .child(StyleRule("[data-element=toolbar]")
             .display("flex")
         )
@@ -120,16 +121,11 @@ CSS(StyleRule()
             )
         )
     )
-    .and(StyleRule("[data-state=play]")
-        .child(StyleRule("[data-element=play-element]")
-            .display("none")
-        )
-        .child(StyleRule("[data-element=toolbar]")
-            .child(StyleRule("[data-element=play]")
+    .and(StyleRule("[data-state=playing]")
+        .and(StyleRule("[data-controls=false]")
+            .child(StyleRule("[data-element=play-element]")
                 .display("none")
             )
-        )
-        .and(StyleRule("[data-controls=false]")
             .child(StyleRule("[data-element=toolbar]")
                 .display("none")
             )
@@ -194,6 +190,20 @@ const low = "fa-duotone fa-volume-low";
 const mid = "fa-duotone fa-volume";
 const high = "fa-duotone fa-volume-high";
 
+export type playerState = "playing" | "paused" | "ended" | "waiting" | "aborted" | "none";
+
+const getPlayIcon = (state: playerState) => {
+    switch(state) {
+        case "ended":
+            return "fa-solid fa-refresh";
+        case "paused":
+            return "fa-solid fa-play";
+        case "playing":
+            return "fa-solid fa-pause";
+    }
+    return "fa-solid fa-play";
+};
+
 export default class AtomVideoPlayer extends AtomControl {
 
     @BindableProperty
@@ -203,6 +213,15 @@ export default class AtomVideoPlayer extends AtomControl {
      * Use this inside a mobile app
      */
     public useStageView: boolean;
+
+    public get state() {
+        return this.element.getAttribute("data-state") as playerState;
+    }
+    public set state(v: playerState) {
+        this.element.setAttribute("data-state", v);
+        AtomBinder.refreshValue(this, "paused");
+        AtomBinder.refreshValue(this, "state");
+    }
 
     public get duration() {
         return this.video.duration;
@@ -270,18 +289,32 @@ export default class AtomVideoPlayer extends AtomControl {
                 return;
             }
             e.preventDefault();
+
+
             if (isTouchEnabled) {
+
+                if (this.state === "playing") {
+                    if (e.target === this.video) {
+                        if (this.element.dataset.controls === "true") {
+                            this.element.dataset.controls = "false";
+                        } else {
+                            this.element.dataset.controls = "true";
+                        }
+                        return;
+                    }
+                }
+
                 if ((e.target as HTMLCanvasElement).tagName === "CANVAS") {
                     return;
                 }
-                if (e.target === e.currentTarget) {
-                    if (this.element.dataset.controls === "true") {
-                        this.element.dataset.controls = "false";
-                    } else {
-                        this.element.dataset.controls = "true";
-                    }
-                    return;
-                }
+                // if (e.target === e.currentTarget) {
+                //     if (this.element.dataset.controls === "true") {
+                //         this.element.dataset.controls = "false";
+                //     } else {
+                //         this.element.dataset.controls = "true";
+                //     }
+                //     return;
+                // }
             }
 
             if (this.video.paused) {
@@ -316,10 +349,10 @@ export default class AtomVideoPlayer extends AtomControl {
             data-click-event="toggle-play"
             data-state="pause">
             <video
-                event-abort={() => this.element.dataset.state = "abort"}
+                event-abort={() => this.state = "aborted"}
                 event-durationchange={(e: Event) => AtomBinder.refreshValue(this, "duration")}
                 event-ended={async (e: Event) => {
-                    this.element.dataset.state = "ended";
+                    this.state = "ended";
                     if (document.fullscreenEnabled && this.element === document.fullscreenElement) {
                         await document.exitFullscreen();
                     }
@@ -332,16 +365,16 @@ export default class AtomVideoPlayer extends AtomControl {
                     this.updateProgress();
                     AtomBinder.refreshValue(this, "duration");
                 }}
-                event-pause={() => this.element.dataset.state = "pause"}
-                event-play={() => this.element.dataset.state = "play"}
-                event-progress={(e) => this.updateProgress()}
+                event-pause={() => this.state = "paused"}
+                event-play={() => this.state = "playing"}
+                event-progress={() => this.updateProgress()}
                 event-timeupdate={() => {
                     this.currentTimeSpan.textContent = durationText(this.time, this.duration);
-                    this.element.dataset.state = "play";
+                    this.state = "playing";
                     this.updateProgress();
                     AtomBinder.refreshValue(this, "time");
                 }}
-                event-waiting={() => this.element.dataset.state = "waiting"}
+                event-waiting={() => this.state = "waiting"}
                 event-volumechange={() => this.updateVolume()}
                 autoplay={false}
                 playsInline={true}
@@ -356,11 +389,7 @@ export default class AtomVideoPlayer extends AtomControl {
                 <i
                     data-element="play"
                     data-style="button"
-                    class="fa-solid fa-play"/>
-                <i
-                    data-element="pause"
-                    data-style="button"
-                    class="fa-solid fa-pause"/>
+                    class={ Bind.oneWay(() => getPlayIcon(this.state))}/>
                 <i
                     data-click-event="volume"
                     data-style="button"
@@ -386,9 +415,10 @@ export default class AtomVideoPlayer extends AtomControl {
                         "fa-solid fa-expand")}></i>
             </div>
             <div
+                data-click-event="toggle-play"
                 data-element="play-element">
                 <button class="play">
-                    <i class="fa-solid fa-play"/>
+                    <i class={ Bind.oneWay(() => getPlayIcon(this.state))}/>
                 </button>
             </div>
         </div>);
