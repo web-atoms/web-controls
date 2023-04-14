@@ -209,6 +209,14 @@ export default class AtomVideoPlayer extends AtomControl {
     @BindableProperty
     public source: any;
 
+    public get poster() {
+        return this.video.poster;
+    }
+
+    public set poster(v: string) {
+        this.video.poster = v;
+    }
+
     /**
      * Use this inside a mobile app
      */
@@ -245,8 +253,6 @@ export default class AtomVideoPlayer extends AtomControl {
     private video: HTMLVideoElement;
 
     private progress: HTMLCanvasElement;
-
-    private poster: HTMLImageElement;
 
     private currentTimeSpan: HTMLSpanElement;
     private soundIcon: HTMLElement;
