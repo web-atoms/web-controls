@@ -22,6 +22,11 @@ CSS(StyleRule()
 
 export default class InlineHtmlEditor extends AtomControl {
 
+    /**
+     * Maximum undo limit
+     */
+    public undoLimit = 100;
+
     public "event-content-changed"?: (ce: CustomEvent<string>) => any;
     public "event-content-ready"?: (ce: CustomEvent<HTMLElement>) => any;
     public "event-load-suggestions"?: (ce: CustomEvent<string>) => any;
@@ -67,8 +72,31 @@ export default class InlineHtmlEditor extends AtomControl {
         // restore selection
         const selection = window.getSelection();
         selection.removeAllRanges();
+        // document.execCommand(command, showUI, value);
+        switch(command) {
+            case "bold":
+                const df = this.selection.extractContents();
+                for (let index = 0; index < df.childNodes.length; index++) {
+                    const element = df.childNodes[index];
+                    if (element.nodeType === Node.ELEMENT_NODE) {
+                        for (const iterator of descendentElementIterator(element as HTMLElement)) {
+                            if (iterator.getAttribute("data-bold")) {
+                                iterator.removeAttribute("data-bold");
+                                continue;
+                            }
+                            iterator.setAttribute("data-bold", "true");
+                        }
+                        this.selection.insertNode(element);
+                        continue;
+                    }
+                    const span = document.createElement("span");
+                    span.setAttribute("data-bold", "true");
+                    span.textContent = element.textContent;
+                    this.selection.insertNode(span);
+                }
+                break;
+        }
         selection.addRange(this.selection);
-        document.execCommand(command, showUI, value);
     }
 
     protected queryCommandState(command: string) {
