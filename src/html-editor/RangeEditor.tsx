@@ -92,5 +92,6 @@ const updateAttribute = (name: string, value: string, anyParent = true) => ({
 
 export const RangeEditorCommands: Record<string, IRangeCommand> = {
     bold: updateAttribute("data-font-weight", "bold"),
-    italic: updateAttribute("data-font-style", "italic")
+    italic: updateAttribute("data-font-style", "italic"),
+    underline: updateAttribute("data-text-decoration", "underline")
 };
