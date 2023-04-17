@@ -13,12 +13,14 @@ export const checkAnyParent = (check: (e: HTMLElement) => boolean) => (e: HTMLEl
 export interface IRangeUpdate {
     range: Range;
     check: (e: HTMLElement) => boolean;
-    update: (e: HTMLElement) => HTMLElement
+    update: (e: HTMLElement, v?: any) => HTMLElement;
+    value?: any;
 }
 
 export interface IRangeCommand {
     check: (e: HTMLElement) => boolean;
-    update: (e: HTMLElement) => HTMLElement
+    update: (e: HTMLElement, v?: any) => HTMLElement;
+    value?: any;
 }
 
 export default class RangeEditor {
@@ -50,7 +52,8 @@ export default class RangeEditor {
         {
             range,
             check,
-            update
+            update,
+            value
         }: IRangeUpdate
     ) {
         const df = range.extractContents();
@@ -61,17 +64,16 @@ export default class RangeEditor {
                 if (element.nodeType === Node.ELEMENT_NODE) {
                     for (const iterator of descendentElementIterator(element as HTMLElement)) {
                         if (check(iterator as HTMLElement)) {
-                            iterator.removeAttribute("data-bold");
                             continue;
                         }
-                        update(iterator as HTMLElement);
+                        update(iterator as HTMLElement, value);
                     }
                     range.insertNode(element);
                     continue;
                 }
                 let span = document.createElement("span");
                 span.textContent = element.textContent;
-                span = update(span);
+                span = update(span, value);
                 range.insertNode(span);
             }
             return;
@@ -83,15 +85,38 @@ export default class RangeEditor {
 }
 
 const updateAttribute = (name: string, value: string, anyParent = true) => ({
-    update: (e: HTMLElement) =>
-        (e.setAttribute(name, value), e),
+    update: (e: HTMLElement, v = value) =>
+        (e.setAttribute(name, v), e),
     check: anyParent
         ? checkAnyParent((e: HTMLElement) => e.getAttribute(name) === value)
         : (e: HTMLElement) => e.getAttribute(name) === value
 });
 
+const updateStyle = (name: keyof CSSStyleDeclaration, value: string, anyParent = true) => ({
+    update: (e: HTMLElement, v = value) =>
+        e.style[name as any] = v,
+    check: anyParent
+        ? checkAnyParent((e: HTMLElement) => e.style[name as any] === value)
+        : (e: HTMLElement) => e.style[name as any] === value
+} as any as IRangeCommand);
+
 export const RangeEditorCommands: Record<string, IRangeCommand> = {
-    bold: updateAttribute("data-font-weight", "bold"),
-    italic: updateAttribute("data-font-style", "italic"),
-    underline: updateAttribute("data-text-decoration", "underline")
+    bold: updateStyle("fontWeight", "bold"),
+    italic: updateStyle("fontStyle", "italic"),
+    underline: updateStyle("textDecoration", "underline"),
+    strikeThrough: updateStyle("textDecoration", "line-through"),
+    foreColor: {
+        check: () => true,
+        update: (e, value) => {
+            e.style.color = value;
+            return e;
+        }
+    },
+    removeFormat: {
+        check: () => true,
+        update: (e) => {
+            e.removeAttribute("style");
+            return e;
+        }
+    }
 };

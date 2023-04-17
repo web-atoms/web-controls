@@ -81,6 +81,7 @@ export default class InlineHtmlEditor extends AtomControl {
         if (cmd) {
             RangeEditor.updateRange({
                 ... cmd,
+                value,
                 range,
             });
         }
