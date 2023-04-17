@@ -5,6 +5,9 @@ import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { descendentElementIterator } from "@web-atoms/core/dist/web/core/AtomUI";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
+import RangeEditor, { RangeEditorCommands } from "./RangeEditor";
+
+import "@web-atoms/data-styles/data-styles";
 
 CSS(StyleRule()
     .child(StyleRule("[data-element=toolbar]")
@@ -72,35 +75,27 @@ export default class InlineHtmlEditor extends AtomControl {
         // restore selection
         const selection = window.getSelection();
         selection.removeAllRanges();
+        const range = this.selection;
         // document.execCommand(command, showUI, value);
-        switch(command) {
-            case "bold":
-                const df = this.selection.extractContents();
-                for (let index = 0; index < df.childNodes.length; index++) {
-                    const element = df.childNodes[index];
-                    if (element.nodeType === Node.ELEMENT_NODE) {
-                        for (const iterator of descendentElementIterator(element as HTMLElement)) {
-                            if (iterator.getAttribute("data-bold")) {
-                                iterator.removeAttribute("data-bold");
-                                continue;
-                            }
-                            iterator.setAttribute("data-bold", "true");
-                        }
-                        this.selection.insertNode(element);
-                        continue;
-                    }
-                    const span = document.createElement("span");
-                    span.setAttribute("data-bold", "true");
-                    span.textContent = element.textContent;
-                    this.selection.insertNode(span);
-                }
-                break;
+        const cmd = RangeEditorCommands[command];
+        if (cmd) {
+            RangeEditor.updateRange({
+                ... cmd,
+                range,
+            });
         }
-        selection.addRange(this.selection);
+        selection.addRange(range);
     }
 
     protected queryCommandState(command: string) {
-        return document.queryCommandState(command);
+        const range = window.getSelection().getRangeAt(0);
+        const cmd = RangeEditorCommands[command];
+        if (cmd) {
+            return RangeEditor.checkRange({
+                ... cmd,
+                range,
+            });
+        }
     }
 
     protected onContentSet() {
