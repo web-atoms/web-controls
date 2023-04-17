@@ -3,11 +3,13 @@ import sleep from "@web-atoms/core/dist/core/sleep";
 import { CancelToken } from "@web-atoms/core/dist/core/types";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { descendentElementIterator } from "@web-atoms/core/dist/web/core/AtomUI";
+import { ChildEnumerator, descendentElementIterator } from "@web-atoms/core/dist/web/core/AtomUI";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import RangeEditor, { RangeEditorCommands } from "./RangeEditor";
 
 import "@web-atoms/data-styles/data-styles";
+import { showImageDialog } from "./commands/AddImage";
+import { FilesAvailableEventArgs } from "../basic/UploadEvent";
 
 CSS(StyleRule()
     .child(StyleRule("[data-element=toolbar]")
@@ -33,6 +35,7 @@ export default class InlineHtmlEditor extends AtomControl {
     public "event-content-changed"?: (ce: CustomEvent<string>) => any;
     public "event-content-ready"?: (ce: CustomEvent<HTMLElement>) => any;
     public "event-load-suggestions"?: (ce: CustomEvent<string>) => any;
+    public "event-files-available"?: (ce: FilesAvailableEventArgs) => any;
 
     public editableSelector: string = ".editable";
 
@@ -70,33 +73,58 @@ export default class InlineHtmlEditor extends AtomControl {
     private token: CancelToken;
 
     protected executeCommand(command: string, showUI?: boolean, value?: string) {
-        // document.execCommand(command, showUI, value);
-        // debugger;
-        // restore selection
+        // restore selection...
         const selection = window.getSelection();
         selection.removeAllRanges();
-        const range = this.selection;
-        // document.execCommand(command, showUI, value);
-        const cmd = RangeEditorCommands[command];
-        if (cmd) {
-            RangeEditor.updateRange({
-                ... cmd,
-                value,
-                range,
-            });
+        selection.addRange(this.selection);
+        return document.execCommand(command, showUI, value);
+        // // debugger;
+        // // restore selection
+        // const selection = window.getSelection();
+        // selection.removeAllRanges();
+        // const range = this.selection;
+        // // document.execCommand(command, showUI, value);
+        // const cmd = RangeEditorCommands[command];
+        // if (cmd) {
+        //     RangeEditor.updateRange({
+        //         ... cmd,
+        //         value,
+        //         range,
+        //     });
+        // }
+        // selection.addRange(range);
+    }
+
+    protected getStyle(name: string) {
+        
+        const selection = this.selection;
+        if (!selection) {
+            return void 0;
         }
-        selection.addRange(range);
+        const node = selection;
+        const e = node.startContainer.parentElement as HTMLElement;
+        return window.getComputedStyle(e)[name];        // const range = selection.getRangeAt(0);
+        // const container = range.commonAncestorContainer;
+        // if(container.nodeType === Node.ELEMENT_NODE) {
+        //     return window.getComputedStyle(container as HTMLElement)[name];
+        // }
+        // return void 0;
     }
 
     protected queryCommandState(command: string) {
-        const range = window.getSelection().getRangeAt(0);
-        const cmd = RangeEditorCommands[command];
-        if (cmd) {
-            return RangeEditor.checkRange({
-                ... cmd,
-                range,
-            });
-        }
+        return document.queryCommandState(command);
+        // const selection = this.selection;
+        // if (!selection) {
+        //     return;
+        // }
+        // const range = selection;
+        // const cmd = RangeEditorCommands[command];
+        // if (cmd) {
+        //     return RangeEditor.checkRange({
+        //         ... cmd,
+        //         range,
+        //     });
+        // }
     }
 
     protected onContentSet() {
@@ -114,6 +142,10 @@ export default class InlineHtmlEditor extends AtomControl {
     protected saveSelection() {
         const selection = window.getSelection();
         this.selection = selection.rangeCount === 0 ? null : selection.getRangeAt(0);
+    }
+
+    public insertImage(s: any, e: Event) {
+        return showImageDialog(s, e);
     }
 
     protected preCreate(): void {
