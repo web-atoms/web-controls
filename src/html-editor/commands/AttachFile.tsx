@@ -7,7 +7,7 @@ import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 
 export default function AttachFile({
     accept = "image/*",
-    maxSize = 204800,
+    maxSize = 1024*1024*5,
     authorize = true,
     capture = null as string,
     ariaLabel = "upload"
