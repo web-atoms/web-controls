@@ -15,6 +15,7 @@ import { AtomUI, ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import PopupService, { IPopup, PopupControl } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import PageNavigator from "../PageNavigator";
+import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
 
 CSS(StyleRule()
     .absolutePosition({ left: 0, top: 0, right: 0, bottom: 0})
@@ -720,7 +721,7 @@ export default class MobileApp extends AtomControl {
     protected async loadPageForReturn(url: AtomUri, clearHistory: boolean): Promise<any> {
         const page = await AtomLoader.loadControl<BasePage>(url, this.app);
         if (url.query && url.query.title) {
-            page.title = url.query.title.toString();
+            page.title ||= url.query.title.toString();
         }
         const p = await this.loadPage(page, clearHistory);
         try {
@@ -737,7 +738,7 @@ export default class MobileApp extends AtomControl {
     }
 
     protected async loadPage(page: BasePage, clearHistory: boolean) {
-        page.title ??= "Title";
+        page.title ||= StringHelper.fromPascalToTitleCase(Object.getPrototypeOf(page).constructor.name);
         const selectedPage = this.selectedPage;
         if (selectedPage) {
             (selectedPage as any).hide();
