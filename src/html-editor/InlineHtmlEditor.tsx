@@ -76,7 +76,16 @@ export default class InlineHtmlEditor extends AtomControl {
         // restore selection...
         const selection = window.getSelection();
         selection.removeAllRanges();
-        selection.addRange(this.selection);
+        if (!this.selection) {
+            const range = document.createRange();
+            // find editable...
+            const start = ChildEnumerator.find(this.editor, (x) => x.isContentEditable) ?? this.editor.firstElementChild;
+            range.setEndAfter(start.lastChild);
+            range.setStartAfter(start.lastChild);
+            selection.addRange(range);
+        } else {
+            selection.addRange(this.selection);
+        }
         return document.execCommand(command, showUI, value);
         // // debugger;
         // // restore selection
@@ -129,13 +138,14 @@ export default class InlineHtmlEditor extends AtomControl {
 
     protected onContentSet() {
 
-        const start = this.editor.querySelector(this.editableSelector) as HTMLElement;
+        const start = (
+            this.editor.querySelector(this.editableSelector) as HTMLElement
+            ??
+            this.editor.firstElementChild as HTMLElement
+        );
         if (start) {
             start.contentEditable = "true";
-        } else {
-            (this.editor.firstElementChild as HTMLElement).contentEditable = "true";
         }
-
         this.editor.dispatchEvent(new CustomEvent("contentReady", { detail: this.editor.innerHTML, bubbles: true }));
     }
 
