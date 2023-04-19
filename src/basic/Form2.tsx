@@ -38,7 +38,7 @@ const checkClick = (e: MouseEvent) => {
             }
         }
         form.setAttribute("data-valid", "true");
-        target.dispatchEvent(new CustomEvent(form.getAttribute("data-submit-event")));
+        target.dispatchEvent(new CustomEvent(form.getAttribute("data-submit-event"), { bubbles: true, cancelable: true }));
     }, 100);
 };
 
