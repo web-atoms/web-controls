@@ -5,9 +5,20 @@ import styled from "@web-atoms/core/dist/style/styled";
     styled.css `
     display: flex;
     flex-direction: column;
-    gap: --var(spacing, 5px);
+    gap: var(--spacing, 5px);
 `
+.child(".error-message", styled.css `
+    padding: var(--spacing-small, 2px);
+    padding-left: var(--spacing-large, 10px);
+    padding-right: var(--spacing-large, 10px);
+    background-color: red;
+    border-radius: 9999px;
+    color: white;
+`)
 .and("[data-valid=true] .field-error:not(:empty)", styled.css `
+    display: none;
+`)
+.and("[data-valid=true] > .error-message", styled.css `
     display: none;
 `).installGlobal("[data-form=form]");
 
@@ -22,7 +33,6 @@ const checkClick = (e: MouseEvent) => {
         const all = Array.from(form.getElementsByClassName("field-error"));
         for (const iterator of all) {
             if (iterator.textContent) {
-                alert(form.dataset?.errorMessage ?? "Please fix all validations");
                 form.setAttribute("data-valid", "false");
                 return;
             }
@@ -62,6 +72,7 @@ export default function Form2({
         data-show-validation={showValidation}
         data-error-message={errorMessage}
         event-click={checkClick}>
+        <div class="error-message" text={errorMessage}/>
         { ... nodes}
     </div>;
 }
@@ -79,22 +90,21 @@ export const BindError = ({
     message = (v, l) => `${l} is invalid`,
     isValid = (v, e) => !!v,
 }: IValidator) => {
-    function f2 (sender: { element: HTMLElement }) {
-        const element = sender.element;
+    function f2 (sender, element: HTMLElement) {
+        const isRequired = element.parentElement.querySelector(`[data-required]`);
         const msg = value.call(this, sender);
         if (!msg) {
-            const isRequired = element.getAttribute("data-required") === "true";
             if (!isRequired) {
-                return;
+                return "";
             }
         }
         if (isValid(msg, element)) {
             return "";
         }
-        return message(msg, element.getAttribute("data-label") ?? "this");
+        return message(msg, element.parentElement.querySelector(`[data-element=label]`)?.textContent || "This field ");
     };
     f2.toString = () => value.toString();
-    return f2;
+    return Bind.oneWay(f2);
 }
 
 export const BindEmailError = ({
@@ -104,18 +114,3 @@ export const BindEmailError = ({
 }: IValidator) => {
     return BindError({ value, message, isValid });
 }
-
-export const combineFunction = (fx: Func, message: (text: string, label: string) => string) => {
-    function f2 (sender: { element: HTMLElement }) {
-        const msg = fx.call(this, sender);
-        return message(msg, sender.element.getAttribute("data-label") ?? "this");
-    };
-    f2.toString = () => fx.toString();
-    return f2;
-};
-
-export const Validations = {
-
-    isEmpty: (fx) => Bind.oneWay(combineFunction(fx, (s, l) => `${l} is required`))
-
-};
