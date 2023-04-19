@@ -389,6 +389,21 @@ export default class DataGrid extends TableRepeater {
         if (ce.defaultPrevented) {
             return;
         }
+        if (eventName === "itemSelect" || eventName === "itemDeselect") {
+            const si = this.selectedItems ??= [];
+            if (si) {
+                const index = si.indexOf(item);
+                if (index === -1) {
+                    if (this.allowMultipleSelection) {
+                        si.add(item);
+                    } else {
+                        si.set(0, item);
+                    }
+                } else {
+                    si.removeAt(index);
+                }
+            }
+        }
         if (recreate && (ce as any).executed) {
             this.refreshItem(item, (ce as any).promise);
         }
