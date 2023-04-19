@@ -173,7 +173,7 @@ export default class InlineHtmlEditor extends AtomControl {
         this.bindEvent(this.editor, "input", (e: InputEvent) => this.onContentInput(e));
         this.bindEvent(this.editor, "keydown", (e: KeyboardEvent) => this.updateQueryCommand());
         this.bindEvent(this.editor, "click", (e: KeyboardEvent) => this.updateQueryCommand());
-        this.bindEvent(this.editor, "paste", () => this.onContentInput());
+        this.bindEvent(this.editor, "paste", (e: ClipboardEvent) => this.onPasteEvent(e));
         this.bindEvent(this.editor, "cut", () => this.onContentInput());
         this.bindEvent(this.editor, "drop", (e: DragEvent) => this.onDrop(e));
     }
@@ -198,6 +198,28 @@ export default class InlineHtmlEditor extends AtomControl {
         if (last) {
             last.appendChild(document.createTextNode(text));
         }
+    }
+
+    protected onPasteEvent(e: ClipboardEvent) {
+        // tslint:disable-next-line: no-console
+        if (!e.clipboardData.types.find((x) => x === "text/html")) {
+            return;
+        }
+
+        const d = e.clipboardData.getData("text/plain");
+        if (d) {
+            // we need to sanitize this one...
+            const s = window.getSelection();
+            const r = s.getRangeAt(0);
+            const p = document.createElement("p");
+            const span = document.createElement("span");
+            span.textContent = d;
+            p.appendChild(span);
+            r.insertNode(p);
+            r.setStartAfter(p);
+            this.onContentInput();
+        }
+        e.preventDefault();
     }
 
     protected contentModified() {
