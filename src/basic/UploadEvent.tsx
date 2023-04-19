@@ -173,7 +173,7 @@ let id = 1;
 export default class UploadEvent {
 
     public static AttachUploadAction({
-        uploadEvent = "files-available",
+        uploadEvent = "filesAvailable",
         accept = "*/*",
         capture,
         multiple = false,

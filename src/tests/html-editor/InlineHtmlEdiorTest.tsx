@@ -24,6 +24,7 @@ import UnorderedList from "../../html-editor/commands/UnorderedList";
 import AtomHtmlEditor, { Toolbar } from "../../html-editor/AtomHtmlEditor";
 import AttachFile from "../../html-editor/commands/AttachFile";
 import InlineHtmlEditor from "../../html-editor/InlineHtmlEditor";
+import AttachImage from "../../html-editor/commands/AttachImage";
 
 const sample = `
 <div>
@@ -64,7 +65,7 @@ export default class InlineHtmlEditorTest extends AtomControl {
                 <Separator/>
             </Toolbar>
             <Toolbar>
-                <AddImage/>
+                <AttachImage/>
                 <AttachFile/>
                 <Separator/>
                 <AddLink/>

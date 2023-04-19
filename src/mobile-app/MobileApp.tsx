@@ -15,6 +15,7 @@ import { AtomUI, ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import PopupService, { IPopup, PopupControl } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import PageNavigator from "../PageNavigator";
+import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
 
 CSS(StyleRule()
     .absolutePosition({ left: 0, top: 0, right: 0, bottom: 0})
@@ -68,19 +69,20 @@ CSS(StyleRule()
         .gridRowStart("1")
         .gridColumnStart("1")
         .gridColumnEnd("span 3")
-        .backgroundColor(Colors.silver)
+        .backgroundColor("var(--accent-color, lightgray)")
     )
     .child(StyleRule("[data-page-element=icon]")
         .fontSize(20)
         .zIndex(14)
         .padding(10)
-        .width(40)
-        .height(40)
+        // .width(40)
+        // .height(40)
         .textAlign("center")
         .alignSelf("center")
         .justifySelf("center")
         .gridRowStart("1")
         .gridColumnStart("1")
+        .color("var(--accent-text-color, black)")
     )
     .child(StyleRule("[data-page-element=title]")
         .fontSize(20)
@@ -91,6 +93,7 @@ CSS(StyleRule()
         .gridRowStart("1")
         .gridColumnStart("2")
         .textEllipsis()
+        .color("var(--accent-text-color, black)")
     )
     .child(StyleRule("[data-page-element=action]")
         .fontSize(20)
@@ -98,6 +101,7 @@ CSS(StyleRule()
         .padding(10)
         .gridRowStart("1")
         .gridColumnStart("3")
+        .color("var(--accent-text-color, black)")
         .nested(StyleRule("button")
             .width(30)
             .border("none")
@@ -720,7 +724,7 @@ export default class MobileApp extends AtomControl {
     protected async loadPageForReturn(url: AtomUri, clearHistory: boolean): Promise<any> {
         const page = await AtomLoader.loadControl<BasePage>(url, this.app);
         if (url.query && url.query.title) {
-            page.title = url.query.title.toString();
+            page.title ||= url.query.title.toString();
         }
         const p = await this.loadPage(page, clearHistory);
         try {
@@ -737,7 +741,7 @@ export default class MobileApp extends AtomControl {
     }
 
     protected async loadPage(page: BasePage, clearHistory: boolean) {
-        page.title ??= "Title";
+        page.title ||= StringHelper.fromPascalToTitleCase(Object.getPrototypeOf(page).constructor.name);
         const selectedPage = this.selectedPage;
         if (selectedPage) {
             (selectedPage as any).hide();
