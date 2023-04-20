@@ -13,7 +13,7 @@ import styled from "@web-atoms/core/dist/style/styled";
         right: 0;
         left: 0;
         position: absolute;
-        transform: translateY(-100%)
+        transform: translateY(-100%);
     `.child("button", styled.css `
             padding: 1px;
             padding-left: 10px;
