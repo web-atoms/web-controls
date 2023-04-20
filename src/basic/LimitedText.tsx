@@ -13,18 +13,19 @@ import styled from "@web-atoms/core/dist/style/styled";
         left: 0;
         bottom: 0;
         position: absolute;
-        transform: translateY(-100%);
     `.child("button", styled.css `
             padding: 1px;
             padding-left: 10px;
             padding-right: 10px;
             border-radius: 9999px;
+            border: none;
+            outline: none;
         `)
     )
     .and("[data-mode=collapsed]",
         styled.css ``.child("[data-element=more]", styled.css `
             cursor: pointer;
-            background: linear-gradient(to top, rgba(255,255,255, 1) 1px, rgba(255,255,255, 0) 40px );
+            background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 19%, rgba(255,255,255,1) 65%, rgba(255,255,255,1) 100%);
         `.child("button", styled.css `
             transform: rotate(180deg);
         `)
@@ -33,11 +34,17 @@ import styled from "@web-atoms/core/dist/style/styled";
 
 const toggleDetails = (e: Event) => {
     let start = e.target as HTMLElement;
+    if (e.defaultPrevented) {
+        return;
+    }
     start = start.parentElement;
     start = start?.parentElement;
     if (start.getAttribute("data-limited-text") !== "limited-text") {
         return;
     }
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    e.stopPropagation();
     if(start.getAttribute("data-mode") === "collapsed") {
         start.setAttribute("data-mode", "open");
         start.style.maxHeight = "";
@@ -47,11 +54,19 @@ const toggleDetails = (e: Event) => {
     }
 };
 
+let setEventHandler = () => {
+    document.body.addEventListener("click", toggleDetails);
+    setEventHandler = null;
+};
+
 export default function LimitedText({
     text,
-    height = 200,
+    height = 100,
     ... a
 }) {
+
+    setEventHandler?.();
+
     const h = `${height}px`;
     return <div
         data-mode="collapsed"
@@ -63,7 +78,6 @@ export default function LimitedText({
         <div
             data-element="more">
             <button
-                event-click={toggleDetails}
                 class="fa-solid fa-angles-up"/>
         </div>
     </div>;

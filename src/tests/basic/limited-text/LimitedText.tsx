@@ -15,7 +15,6 @@ export default class LimitedTextTest extends AtomControl {
                 style="position: absolute; left: 0; right: 0; bottom: 0; top: 0;">
                 <LimitedText
                     text={p}
-                    height={200}
                     />
             </div>
         </div>);
