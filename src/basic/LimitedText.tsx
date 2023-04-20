@@ -49,9 +49,9 @@ const toggleDetails = (e: Event) => {
     e.stopPropagation();
     if(start.getAttribute("data-mode") === "collapsed") {
         start.setAttribute("data-mode", "open");
-        start.style.height = "";
+        start.style.maxHeight = "";
     } else {
-        start.style.height = start.getAttribute("data-max-height");
+        start.style.maxHeight = start.getAttribute("data-max-height");
         start.setAttribute("data-mode", "collapsed");
     }
 };
@@ -73,7 +73,7 @@ export default function LimitedText({
     return <div
         data-mode="collapsed"
         data-max-height={h}
-        style-height={h}
+        style-max-height={h}
         data-limited-text="limited-text"
         {... a}>
         <p text={text}/>
