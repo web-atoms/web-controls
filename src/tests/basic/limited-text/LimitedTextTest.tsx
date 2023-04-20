@@ -16,6 +16,9 @@ export default class LimitedTextTest extends AtomControl {
                 <LimitedText
                     text={p}
                     />
+                <LimitedText
+                    text={"One line of text"}
+                    />
             </div>
         </div>);
     }

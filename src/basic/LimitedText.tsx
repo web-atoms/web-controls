@@ -4,6 +4,7 @@ import styled from "@web-atoms/core/dist/style/styled";
     styled.css `
         position: relative;
         overflow: hidden;
+        contain: content;
     `
     .child("[data-element=more]", styled.css `
         display: flex;
@@ -11,8 +12,8 @@ import styled from "@web-atoms/core/dist/style/styled";
         width: 100%;
         right: 0;
         left: 0;
-        bottom: 0;
         position: absolute;
+        transform: translateY(-100%)
     `.child("button", styled.css `
             padding: 1px;
             padding-left: 10px;
@@ -40,6 +41,7 @@ const toggleDetails = (e: Event) => {
         return;
     }
     start = start.parentElement;
+    const container = start;
     start = start?.parentElement;
     if (start.getAttribute("data-limited-text") !== "limited-text") {
         return;
@@ -50,8 +52,11 @@ const toggleDetails = (e: Event) => {
     if(start.getAttribute("data-mode") === "collapsed") {
         start.setAttribute("data-mode", "open");
         start.style.maxHeight = "";
+        container.style.top = "";
     } else {
-        start.style.maxHeight = start.getAttribute("data-max-height");
+        const h = start.getAttribute("data-max-height");
+        start.style.maxHeight = h;
+        container.style.top = h;
         start.setAttribute("data-mode", "collapsed");
     }
 };
@@ -78,6 +83,7 @@ export default function LimitedText({
         {... a}>
         <p text={text}/>
         <div
+            style-top={h}
             data-element="more">
             <button
                 class="fa-solid fa-angles-up"/>
