@@ -20,6 +20,8 @@ import styled from "@web-atoms/core/dist/style/styled";
             border-radius: 9999px;
             border: none;
             outline: none;
+            box-shadow: 0 0 6px 6px white;
+            transition: transform 0.5s ease-out;
         `)
     )
     .and("[data-mode=collapsed]",
@@ -47,9 +49,9 @@ const toggleDetails = (e: Event) => {
     e.stopPropagation();
     if(start.getAttribute("data-mode") === "collapsed") {
         start.setAttribute("data-mode", "open");
-        start.style.maxHeight = "";
+        start.style.height = "";
     } else {
-        start.style.maxHeight = start.getAttribute("data-max-height");
+        start.style.height = start.getAttribute("data-max-height");
         start.setAttribute("data-mode", "collapsed");
     }
 };
@@ -71,7 +73,7 @@ export default function LimitedText({
     return <div
         data-mode="collapsed"
         data-max-height={h}
-        style-max-height={h}
+        style-height={h}
         data-limited-text="limited-text"
         {... a}>
         <p text={text}/>
