@@ -12,7 +12,7 @@ import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomWindowViewModel } from "@web-atoms/core/dist/view-model/AtomWindowViewModel";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { AtomUI, ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
-import PopupService, { IPopup, PopupControl } from "@web-atoms/core/dist/web/services/PopupService";
+import PopupService, { IPopup, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import PageNavigator from "../PageNavigator";
 import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
@@ -811,6 +811,33 @@ export default class MobileApp extends AtomControl {
     }
 }
 
+export const isMobileView = /Android|iPhone/i.test(navigator.userAgent) && (Math.min(window.visualViewport.width, window.visualViewport.height) < 500);
+
+class PopupWindowEx extends PopupWindow {
+    protected preCreate(): void {
+        super.preCreate();
+        this.runAfterInit(() => this.init());
+    }
+}
+
+const root = (isMobileView ? ContentPage : PopupWindowEx) as typeof AtomControl;
+
+export class PopupWindowPage<TIn = any, TOut = any> extends (root) {
+
+
+    public parameters: TIn;
+
+    public close: (r: TOut) => void;
+
+    public title: string;
+
+}
+
 PageNavigator.pushPageForResult =
-    (page, parameters, clearHistory) =>
-        MobileApp.pushPage(page, parameters, clearHistory);
+    (page, parameters, clearHistory) => {
+        if (!isMobileView) {
+            return (page as any as typeof PopupWindow).showModal({ parameters: { parameters }});
+        }
+        return MobileApp.pushPage(page, parameters, clearHistory)
+    };
+
