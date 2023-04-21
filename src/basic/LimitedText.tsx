@@ -5,35 +5,38 @@ import styled from "@web-atoms/core/dist/style/styled";
         position: relative;
         overflow: hidden;
         contain: content;
-    `
-    .child("[data-element=more]", styled.css `
-        display: flex;
-        justify-content: flex-end;
-        width: 100%;
-        right: 0;
-        left: 0;
-        position: absolute;
-        transform: translateY(-100%);
-    `.child("button", styled.css `
-            padding: 1px;
-            padding-left: 10px;
-            padding-right: 10px;
-            border-radius: 9999px;
-            border: none;
-            outline: none;
-            box-shadow: 0 0 6px 6px white;
-            transition: transform 0.5s ease-out;
-        `)
-    )
-    .and("[data-mode=collapsed]",
-        styled.css ``.child("[data-element=more]", styled.css `
-            cursor: pointer;
-            background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 19%, rgba(255,255,255,1) 65%, rgba(255,255,255,1) 100%);
-        `.child("button", styled.css `
-            transform: rotate(180deg);
-        `)
-        )
-    ).installGlobal("[data-limited-text]")
+
+        &[data-mode=collapsed] {
+            & > [data-element=more] {
+                cursor: pointer;
+                background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 19%, rgba(255,255,255,1) 65%, rgba(255,255,255,1) 100%);
+                & > button {
+                    transform: rotate(180deg);
+                }
+            }
+        }
+
+        & > [data-element=more] {
+            display: flex;
+            justify-content: flex-end;
+            width: 100%;
+            right: 0;
+            left: 0;
+            position: absolute;
+            transform: translateY(-100%);
+            & > button {
+                padding: 1px;
+                padding-left: 10px;
+                padding-right: 10px;
+                border-radius: 9999px;
+                border: none;
+                outline: none;
+                box-shadow: 0 0 6px 6px white;
+                transition: transform 0.5s ease-out;
+            }
+        }
+
+    `.installGlobal("[data-limited-text]")
 
 const toggleDetails = (e: Event) => {
     let start = e.target as HTMLElement;

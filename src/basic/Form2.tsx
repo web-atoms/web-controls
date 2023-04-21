@@ -6,21 +6,25 @@ import styled from "@web-atoms/core/dist/style/styled";
     display: flex;
     flex-direction: column;
     gap: var(--spacing, 5px);
-`
-.child(".error-message", styled.css `
-    padding: var(--spacing-small, 2px);
-    padding-left: var(--spacing-large, 10px);
-    padding-right: var(--spacing-large, 10px);
-    background-color: red;
-    border-radius: 9999px;
-    color: white;
-`)
-.and("[data-valid=true] .field-error:not(:empty)", styled.css `
-    display: none;
-`)
-.and("[data-valid=true] > .error-message", styled.css `
-    display: none;
-`).installGlobal("[data-form=form]");
+
+    &[data-valid=true] {
+        & .field-error:not(:empty) {
+            display: none;
+        }
+        & > .error-message {
+            display: none;
+        }
+    }
+
+    & > .error-message {
+        padding: var(--spacing-small, 2px);
+        padding-left: var(--spacing-large, 10px);
+        padding-right: var(--spacing-large, 10px);
+        background-color: red;
+        border-radius: 9999px;
+        color: white;
+    }
+`.installGlobal("[data-form=form]");
 
 const checkClick = (e: MouseEvent) => {
     const form = e.currentTarget as HTMLDivElement;
