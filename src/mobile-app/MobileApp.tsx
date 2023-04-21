@@ -813,7 +813,12 @@ export default class MobileApp extends AtomControl {
 
 export const isMobileView = /Android|iPhone/i.test(navigator.userAgent) && (Math.min(window.visualViewport.width, window.visualViewport.height) < 500);
 
+const isPopupPage = Symbol("isPopupPage");
+
 class PopupWindowEx extends PopupWindow {
+
+    static [isPopupPage] = true;
+
     protected preCreate(): void {
         super.preCreate();
         this.runAfterInit(() => this.init());
@@ -835,7 +840,7 @@ export class PopupWindowPage<TIn = any, TOut = any> extends (root as any as type
 
 PageNavigator.pushPageForResult =
     (page, parameters, clearHistory) => {
-        if (!isMobileView) {
+        if (!isMobileView && page[isPopupPage]) {
             return (page as any as typeof PopupWindow).showModal({ parameters: { parameters }});
         }
         return MobileApp.pushPage(page, parameters, clearHistory)
