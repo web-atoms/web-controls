@@ -23,6 +23,7 @@ import styled from "@web-atoms/core/dist/style/styled";
         background-color: red;
         border-radius: 9999px;
         color: white;
+        position: sticky;
     }
 `.installGlobal("[data-form=form]");
 
