@@ -834,7 +834,16 @@ export class PopupWindowPage<TIn = any, TOut = any> extends (root as any as type
 
     public close: (r: TOut) => void;
 
+    public cancel: (error?: any) => void;
+
     public title: string;
+
+    public headerRenderer: () => XNode;
+
+    public footerRenderer: () => XNode;
+
+    public titleRenderer: () => XNode;
+
 
 }
 
