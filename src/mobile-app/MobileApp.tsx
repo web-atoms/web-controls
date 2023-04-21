@@ -822,7 +822,7 @@ class PopupWindowEx extends PopupWindow {
 
 const root = (isMobileView ? ContentPage : PopupWindowEx) as typeof AtomControl;
 
-export class PopupWindowPage<TIn = any, TOut = any> extends (root) {
+export class PopupWindowPage<TIn = any, TOut = any> extends (root as any as typeof ContentPage) {
 
 
     public parameters: TIn;
