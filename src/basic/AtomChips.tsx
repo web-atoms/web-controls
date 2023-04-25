@@ -236,6 +236,8 @@ export default class AtomChips<T = any> extends AtomRepeater<T> {
 
     private suggestionsWatcher: IDisposable;
 
+    private focusTimeout;
+
     public onPropertyChanged(name: string): void {
         super.onPropertyChanged(name);
         switch (name) {
@@ -294,10 +296,15 @@ export default class AtomChips<T = any> extends AtomRepeater<T> {
 
     protected setFocus(hasFocus) {
         if (hasFocus) {
+            if(this.focusTimeout) {
+                clearTimeout(this.focusTimeout);
+                this.focusTimeout = void 0;
+            }
             this.focused = true;
             return;
         }
-        setTimeout(() => {
+        this.focusTimeout = setTimeout(() => {
+            this.focusTimeout = void 0;
             this.focused = false;
         }, 1500);
     }
