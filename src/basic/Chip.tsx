@@ -86,9 +86,11 @@ export default function Chip(
         draggable,
         recreate = true,
         deleted,
+        ... a
     }: IChip,
     ... nodes: XNode[]) {
     return <div
+        { ... a}
         data-recreate={recreate}
         data-deleted={!!deleted}
         data-item-chip="chip"
