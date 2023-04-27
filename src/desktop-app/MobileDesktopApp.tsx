@@ -6,7 +6,7 @@ import XNode from "@web-atoms/core/dist/core/XNode";
 
 const T = isMobileView ? MobileApp : DesktopApp;
 
-export default class MobileDesktopApp extends (T as any as typeof AtomControl) {
+export default abstract class MobileDesktopApp extends (T as any as typeof AtomControl) {
 
     public mobileApp: MobileApp;
 
@@ -23,6 +23,8 @@ export default class MobileDesktopApp extends (T as any as typeof AtomControl) {
             this.desktopApp.menuRenderer = () => XNode.create(v, {});
         }
     }
+
+    public abstract init(): Promise<any>;
 
     private menu: typeof Drawer;
 
