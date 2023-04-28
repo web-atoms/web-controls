@@ -361,14 +361,14 @@ export function SelectorCheckBox(
     }: ISelectorCheckBox,
     ... nodes: XNode[]) {
     if (text) {
-        return <label>
+        return <label { ... a}>
         <i class={icon} data-click-event="item-select"/>
         <i class={iconSelected}  data-click-event="item-deselect"/>
             <span data-no-wrap="true" text={text}/>
             { ... nodes }
         </label>;
     }
-    return <label>
+    return <label { ... a}>
         <i class={icon} data-click-event="item-select"/>
         <i class={iconSelected}  data-click-event="item-deselect"/>
         { ... nodes }
