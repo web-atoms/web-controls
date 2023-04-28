@@ -820,8 +820,6 @@ export const isMobileView = /Android|iPhone/i.test(navigator.userAgent) && (Math
 
 const isPopupPage = Symbol("isPopupPage");
 
-const isPopupModalPage = Symbol("isPopupModalPage");
-
 class PopupWindowEx extends PopupWindow {
 
     static [isPopupPage] = true;
@@ -830,29 +828,6 @@ class PopupWindowEx extends PopupWindow {
 }
 
 const root = (isMobileView ? ContentPage : PopupWindowEx) as typeof AtomControl;
-
-export class PopupWindowModalPage<TIn = any, TOut = any> extends (root as any as typeof ContentPage) {
-
-    public static dialogOptions: IDialogOptions;
-
-    static [isPopupModalPage] = true;
-
-    public parameters: TIn;
-
-    public close: (r: TOut) => void;
-
-    public cancel: (error?: any) => void;
-
-    public title: string;
-
-    public headerRenderer: () => XNode;
-
-    public footerRenderer: () => XNode;
-
-    public titleRenderer: () => XNode;
-
-
-}
 
 export class PopupWindowPage<TIn = any, TOut = any> extends (root as any as typeof ContentPage) {
 
@@ -886,7 +861,9 @@ PageNavigator.pushPageForResult =
                     parameters
                 }
             };
-            if (page[isPopupModalPage] || options.modal) {
+            // we make window modal if not set...
+            options.modal ??= true;
+            if (options.modal) {
                 return (page as any as typeof PopupWindow).showModal(options);
             }
             return (page as any as typeof PopupWindow).showWindow(options);
