@@ -891,7 +891,7 @@ PageNavigator.pushPageForResult =
                     parameters
                 }
             };
-            if (page[isPopupModalPage]) {
+            if (page[isPopupModalPage] || options.modal) {
                 return (page as any as typeof PopupWindow).showModal(options);
             }
             return (page as any as typeof PopupWindow).showWindow(options);
