@@ -3,6 +3,7 @@ import MobileApp, { Drawer } from "../mobile-app/MobileApp";
 import { isMobileView } from "../mobile-app/MobileApp";
 import DesktopApp from "./DesktopApp";
 import XNode from "@web-atoms/core/dist/core/XNode";
+import PopupService from "@web-atoms/core/dist/web/services/PopupService";
 
 const T = isMobileView ? MobileApp : DesktopApp;
 
@@ -35,6 +36,8 @@ export default abstract class MobileDesktopApp extends (T as any as typeof AtomC
         } else {
             this.desktopApp = this as any as DesktopApp;
         }
+
+        PopupService.lastTarget = this.element;
     }
 
 }
