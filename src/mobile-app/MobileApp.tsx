@@ -316,6 +316,11 @@ export class BasePage extends AtomControl {
 
     }
 
+    /**
+     * This is because if someone changes renderer, entire content will
+     * vanish, so we need to update allow update of only content element
+     * @returns 
+     */
     protected rendererChanged() {
         for (const content of ChildEnumerator.where(this.element,
             ({ dataset: { pageElement }}) => !pageElement || pageElement === "content")) {
