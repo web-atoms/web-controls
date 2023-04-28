@@ -37,7 +37,8 @@ export default abstract class MobileDesktopApp extends (T as any as typeof AtomC
             this.desktopApp = this as any as DesktopApp;
         }
 
-        PopupService.lastTarget = this.element;
+        this.runAfterInit(() =>
+            PopupService.lastTarget = this.element);
     }
 
 }
