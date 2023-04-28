@@ -827,11 +827,6 @@ class PopupWindowEx extends PopupWindow {
     static [isPopupPage] = true;
 
     public static dialogOptions: IDialogOptions;
-
-    protected preCreate(): void {
-        super.preCreate();
-        this.runAfterInit(() => this.init());
-    }
 }
 
 const root = (isMobileView ? ContentPage : PopupWindowEx) as typeof AtomControl;
