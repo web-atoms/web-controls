@@ -12,7 +12,7 @@ import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomWindowViewModel } from "@web-atoms/core/dist/view-model/AtomWindowViewModel";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { AtomUI, ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
-import PopupService, { IPopup, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
+import PopupService, { IDialogOptions, IPopup, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import PageNavigator from "../PageNavigator";
 import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
@@ -820,9 +820,13 @@ export const isMobileView = /Android|iPhone/i.test(navigator.userAgent) && (Math
 
 const isPopupPage = Symbol("isPopupPage");
 
+const isPopupModalPage = Symbol("isPopupModalPage");
+
 class PopupWindowEx extends PopupWindow {
 
     static [isPopupPage] = true;
+
+    public static dialogOptions: IDialogOptions;
 
     protected preCreate(): void {
         super.preCreate();
@@ -832,10 +836,35 @@ class PopupWindowEx extends PopupWindow {
 
 const root = (isMobileView ? ContentPage : PopupWindowEx) as typeof AtomControl;
 
+export class PopupWindowModalPage<TIn = any, TOut = any> extends (root as any as typeof ContentPage) {
+
+    public static dialogOptions: IDialogOptions;
+
+    static [isPopupModalPage] = true;
+
+    public parameters: TIn;
+
+    public close: (r: TOut) => void;
+
+    public cancel: (error?: any) => void;
+
+    public title: string;
+
+    public headerRenderer: () => XNode;
+
+    public footerRenderer: () => XNode;
+
+    public titleRenderer: () => XNode;
+
+
+}
+
 export class PopupWindowPage<TIn = any, TOut = any> extends (root as any as typeof ContentPage) {
 
 
     public parameters: TIn;
+
+    public static dialogOptions: IDialogOptions;
 
     public close: (r: TOut) => void;
 
@@ -855,7 +884,17 @@ export class PopupWindowPage<TIn = any, TOut = any> extends (root as any as type
 PageNavigator.pushPageForResult =
     (page, parameters, clearHistory) => {
         if (!isMobileView && page[isPopupPage]) {
-            return (page as any as typeof PopupWindow).showModal({ parameters: { parameters }});
+            const popupPage = page as any as typeof PopupWindowEx;
+            const options: IDialogOptions = {
+                ... popupPage.dialogOptions ?? {},
+                parameters: {
+                    parameters
+                }
+            };
+            if (page[isPopupModalPage]) {
+                return (page as any as typeof PopupWindow).showModal(options);
+            }
+            return (page as any as typeof PopupWindow).showWindow(options);
         }
         return MobileApp.pushPage(page, parameters, clearHistory)
     };
