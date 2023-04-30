@@ -3,6 +3,7 @@ const get = (start, path: string) => {
     for (const iterator of path.split(".")) {
         if (iterator === "$") {
             item = start;
+            continue;
         }
         item = item[iterator];
     }
