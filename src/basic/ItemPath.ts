@@ -43,7 +43,8 @@ export default class ItemPath {
             return json;
         }
         const target = {};
-        return this.build(item, path, target);
+        this.build(item, path, target);
+        return target;
     }
 
     public static build(item, path: string, target: any) {
