@@ -16,6 +16,7 @@ import ArrayLike from "../ArrayLike";
 import InlinePopup from "./InlinePopup";
 import InlinePopupControl from "./InlinePopupControl";
 import MergeNode from "./MergeNode";
+import ItemPath from "./ItemPath";
 
 CSS(StyleRule()
     .display("none")
@@ -1238,38 +1239,9 @@ export default class AtomRepeater<T = any> extends AtomControl {
         let index = ~~itemIndex;
         const item = this.items[index];
         if (item) {
-            if (itemPath) {
+            if (itemPath ?? false) {
                 // check path...
-
-                if (/^[\{\"}]/.test(itemPath)) {
-                    this.dispatchItemEvent(clickEvent, item, recreate, e.target, JSON.parse(itemPath));
-                    return;
-                }
-
-                let nestedItem = {};
-                const all: string[] = itemPath.split(",");
-                for (const iterator of all) {
-                    let [name, paths] = iterator.split(/\=|\:/);
-                    if (paths === void 0) {
-                        if (all.length > 1) {
-                            throw new Error("Invalid path, please use name=path format");
-                        }
-                        paths = name;
-                    }
-                    let start = item;
-                    for (const path of paths.split(".")) {
-                        if (path === "$") {
-                            start = item;
-                            continue;
-                        }
-                        start = start[path];
-                    }
-                    if (all.length === 1) {
-                        nestedItem = start;
-                        break;
-                    }
-                    nestedItem[name] = start;
-                }
+                const nestedItem = ItemPath.get(item, itemPath.trim());
                 this.dispatchItemEvent(clickEvent, item, recreate, e.target, nestedItem);
                 return;
             }
