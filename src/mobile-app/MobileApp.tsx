@@ -816,7 +816,9 @@ export default class MobileApp extends AtomControl {
     }
 }
 
-export const isMobileView = /Android|iPhone/i.test(navigator.userAgent) && (Math.min(window.visualViewport.width, window.visualViewport.height) < 500);
+export const isMobileView = /Android|iPhone/i.test(navigator.userAgent)
+    || (window.visualViewport.width < 500)
+    || (window as any).forceMobileLayout;
 
 const isPopupPage = Symbol("isPopupPage");
 
