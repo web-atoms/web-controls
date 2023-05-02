@@ -1224,30 +1224,29 @@ export default class AtomRepeater<T = any> extends AtomControl {
             itemPath
         } = data;
         clickEvent = clickEvent.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+
+        if (itemIndex !== void 0) {
+            // tslint:disable-next-line: no-bitwise
+            let index = ~~itemIndex;
+            const item = this.items[index];
+            if (item) {
+                if (itemPath ?? false) {
+                    // check path...
+                    const nestedItem = ItemPath.get(item, itemPath.trim());
+                    this.dispatchItemEvent(clickEvent, item, recreate, e.target, nestedItem);
+                    return;
+                }
+                this.dispatchItemEvent(clickEvent, item, recreate, e.target);
+            }
+            return;
+        }
+
         if (header) {
             this.dispatchHeaderFooterEvent(clickEvent, header, e.target);
-            return;
         }
         if (footer) {
             this.dispatchHeaderFooterEvent(clickEvent, header, e.target);
-            return;
         }
-        if (itemIndex === void 0 || itemIndex === null) {
-            return;
-        }
-        // tslint:disable-next-line: no-bitwise
-        let index = ~~itemIndex;
-        const item = this.items[index];
-        if (item) {
-            if (itemPath ?? false) {
-                // check path...
-                const nestedItem = ItemPath.get(item, itemPath.trim());
-                this.dispatchItemEvent(clickEvent, item, recreate, e.target, nestedItem);
-                return;
-            }
-            this.dispatchItemEvent(clickEvent, item, recreate, e.target);
-        }
-
     }
 }
 
