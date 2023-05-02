@@ -28,6 +28,8 @@ import StrikeThrough from "./commands/StrikeThrough";
 import Underline from "./commands/Underline";
 import Unlink from "./commands/Unlink";
 import UnorderedList from "./commands/UnorderedList";
+import Toolbar from "./commands/Toolbar";
+export { default as Toolbar} from "./commands/Toolbar";
 
 const link = document.createElement("link");
 link.href = "https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css";
@@ -85,12 +87,6 @@ const css = CSS(StyleRule()
         )
     )
 );
-
-export function Toolbar(a: any, ... nodes: XNode[]) {
-    return <div class="toolbar">
-        { ... nodes}
-    </div>;
-}
 
 function preventLinkClick(e: Event, editor: HTMLElement, doc: Document) {
     let target = e.target as HTMLElement;
