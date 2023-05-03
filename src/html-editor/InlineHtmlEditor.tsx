@@ -39,8 +39,26 @@ export default class InlineHtmlEditor extends AtomControl {
 
     public editableSelector: string = ".editable";
 
+    public sanitizeHtml: (node: HTMLElement) => void;
+
+    /**
+     * This will return the html content
+     * after sanitizing everything, removing editable
+     * attributes etc.
+     */
     public get htmlContent() {
-        return this.content;
+        // we will sanitize...
+        // remove editable
+        const copy = document.createElement("div");
+        copy.innerHTML = this.editor.innerHTML;
+
+        for(const node of descendentElementIterator(copy)) {
+            (node as HTMLElement).contentEditable = "false";
+        }
+
+        this.sanitizeHtml?.(copy);
+
+        return copy.innerHTML;
     }
 
     public set htmlContent(v: string) {
