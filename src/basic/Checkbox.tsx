@@ -3,31 +3,7 @@ import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
-const css = CSS(
-    StyleRule("check-box")
-    .display("inline-block")
-    .child(
-        StyleRule("label")
-        .display("flex")
-        .paddingLeft(5)
-        .paddingRight(5)
-        .child(
-
-            StyleRule("input[type=checkbox]")
-            .borderRadius(3)
-            .margin(0)
-            .padding(0)
-            .alignSelf("center")
-        )
-        .child(
-            StyleRule("span")
-            .alignSelf("center")
-            .whiteSpace("nowrap")
-            .marginLeft(5)
-            .flexStretch()
-
-        ))
-);
+import "./styles/checkbox-style";
 
 export default function Checkbox({
     checked,
@@ -36,7 +12,7 @@ export default function Checkbox({
     checked: any,
     text: string
 }) {
-    return <div class={css}>
+    return <div data-check-box="check-box">
         <label>
             <input
                 type="checkbox"

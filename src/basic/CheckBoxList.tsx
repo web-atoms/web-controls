@@ -5,27 +5,29 @@ import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import AtomRepeater, { SameObjectValue } from "./AtomRepeater";
 
-CSS(StyleRule()
-    .flexLayout({ inline: true, justifyContent: "flex-start"})
-    .flexFlow("wrap"),
-"div[data-checkbox-list=checkbox-list]");
+import "./styles/check-box-list-style";
 
-CSS(StyleRule()
-    .flexLayout({ justifyContent: "flex-start" })
-    .marginRight(5)
-    .child(StyleRule("span")
-        .cursor("pointer")
-    )
-    .and(StyleRule("[data-selected-item=true]")
-        .color(Colors.blue)
-    )
-    .displayNone("[data-selected-item=true][data-deleted=none] > i.far")
-    .displayNone("[data-selected-item=false][data-deleted=none] > i.fas")
-    .displayNone("[data-selected-item=false][data-deleted=false] > i.fas")
-    .displayNone("[data-selected-item=true][data-deleted=true] > i.fas")
-    .displayNone("[data-selected-item=true][data-deleted=false] > i.far")
-    .displayNone("[data-selected-item=false][data-deleted=true] > i.fas")
-, "div[data-item-type=checkbox]");
+// CSS(StyleRule()
+//     .flexLayout({ inline: true, justifyContent: "flex-start"})
+//     .flexFlow("wrap"),
+// "div[data-checkbox-list=checkbox-list]");
+
+// CSS(StyleRule()
+//     .flexLayout({ justifyContent: "flex-start" })
+//     .marginRight(5)
+//     .child(StyleRule("span")
+//         .cursor("pointer")
+//     )
+//     .and(StyleRule("[data-selected-item=true]")
+//         .color(Colors.blue)
+//     )
+//     .displayNone("[data-selected-item=true][data-deleted=none] > i.far")
+//     .displayNone("[data-selected-item=true][data-deleted=true] > i.fas")
+//     .displayNone("[data-selected-item=true][data-deleted=false] > i.far")
+//     .displayNone("[data-selected-item=false][data-deleted=none] > i.fas")
+//     .displayNone("[data-selected-item=false][data-deleted=false] > i.fas")
+//     .displayNone("[data-selected-item=false][data-deleted=true] > i.fas")
+// , "div[data-item-type=checkbox]");
 
 export default class CheckBoxList extends AtomRepeater {
 
