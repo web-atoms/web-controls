@@ -9,12 +9,7 @@ import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import AtomRepeater, { askSuggestion, askSuggestionPopup,
     disposeChildren, Match, MatchAnyCaseInsensitive } from "./AtomRepeater";
 
-CSS(StyleRule()
-    .flexLayout({ inline: true, justifyContent: "stretch" as any})
-    .nested(StyleRule("[data-white-space=nowrap]")
-        .whiteSpace("nowrap")
-    )
-, "div[data-drop-down=drop-down]");
+import "./styles/drop-down-style";
 
 export default class DropDown<T = any> extends AtomRepeater<T> {
 
