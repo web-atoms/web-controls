@@ -18,32 +18,17 @@ import InlinePopupControl from "./InlinePopupControl";
 import MergeNode from "./MergeNode";
 import ItemPath from "./ItemPath";
 
-CSS(StyleRule()
-    .display("none")
-, "[data-ui-display=none]");
+import "./styles/ui-display-none-style";
+import { repeaterPopupCss } from "./styles/popup-style";
+import "./styles/suggestion-popup";
+import "./styles/repeater-style";
 
 export interface IItemPair<ParentItem = any, ChildItem = any> {
     parent: ParentItem;
     child: ChildItem;
 }
 
-const popupCSS = CSS(StyleRule()
-    // .minHeight(300)
-    .minWidth(200)
-    .verticalFlexLayout({ alignItems: "stretch" })
-    .child(StyleRule(".items")
-        .flexStretch()
-        .overflow("auto")
-        .child(StyleRule(".presenter")
-            .child(StyleRule("*")
-                .padding(5)
-            )
-            .child(StyleRule("[data-selected-item=true]")
-                .backgroundColor(Colors.lightGreen)
-            )
-        )
-    )
-);
+const popupCSS = repeaterPopupCss;
 
 export type IRepeaterItemInfo = [string, AtomRepeater, any, number, HTMLElement] | undefined;
 
@@ -165,28 +150,6 @@ export function askSuggestion<T>(
     }
     return Suggestions.showModal(options);
 }
-
-const maxHeight = (window.screen.availHeight / 2) > 250
-    ? StyleRule().height("250px")
-    : StyleRule().maxHeight(80);
-
-CSS(StyleRule()
-    .merge(maxHeight)
-    .minWidth(80)
-    .verticalFlexLayout({ alignItems: "stretch" })
-    .child(StyleRule(".items")
-        .flexStretch()
-        .overflow("auto")
-        .child(StyleRule(".presenter")
-            .child(StyleRule("*")
-                .padding(5)
-            )
-            .child(StyleRule("[data-selected-item=true]")
-                .backgroundColor(Colors.lightGreen)
-            )
-        )
-    )
-, "*[data-suggestion-popup=suggestion-popup]");
 
 /**
  * Asks user for selecting item from given suggestions
@@ -333,26 +296,6 @@ export interface ISelectorCheckBox {
     [key: string]: any;
 }
 
-CSS(StyleRule()
-    .nested(StyleRule("i[data-click-event]")
-        .padding(5)
-    )
-    .nested(StyleRule("[data-no-wrap=true]")
-        .whiteSpace("nowrap")
-    )
-, "*[data-selected-item]");
-
-CSS(StyleRule()
-    .nested(StyleRule("i[data-click-event=item-select]")
-        .padding(5)
-    )
-    .displayNone(" i[data-click-event=item-select]")
-, "*[data-selected-item=true]");
-
-CSS(StyleRule()
-    .displayNone(" i[data-click-event=item-deselect]")
-, "*[data-selected-item=false]");
-
 export function SelectorCheckBox(
     {
         text,
@@ -375,19 +318,6 @@ export function SelectorCheckBox(
         { ... nodes }
     </label>;
 }
-
-CSS(StyleRule()
-    .flexLayout({ alignItems: "center", justifyContent: "flex-start"})
-    .margin(0)
-    .nested(StyleRule("i[data-ui-type]")
-        .padding(5)
-    )
-    .nested(StyleRule("[data-no-wrap=true]")
-        .whiteSpace("nowrap")
-    )
-    .displayNone("[data-is-selected=true] i[data-ui-type=item-select]")
-    .displayNone("[data-is-selected=false] i[data-ui-type=item-deselect]")
-, "*[data-select-all=select-all]");
 
 class SelectAllControl extends AtomControl {
 

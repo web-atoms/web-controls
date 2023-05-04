@@ -65,6 +65,8 @@ export default function Button({
     subClass
 }: IButton) {
 
+    console.warn("Deprecated, use data-layout=icon-button")
+
     const cn = className ?? ( subClass
         ? subClass + " " + css
         : css

@@ -7,36 +7,7 @@ import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import AtomRepeater, { askSuggestion, askSuggestionPopup } from "./AtomRepeater";
 
-CSS(StyleRule()
-.margin(5)
-.flexLayout({})
-.overflow("hidden")
-.child(StyleRule(".header")
-    .color(Colors.darkOrange)
-    .whiteSpace("nowrap")
-)
-.child(StyleRule(".items")
-    .flexStretch()
-    .flexLayout({ justifyContent: "flex-start", gap: 0 })
-    .overflow("hidden")
-    .child(StyleRule("*")
-        .whiteSpace("nowrap")
-        .padding(3)
-        .cursor("pointer")
-        .hover(StyleRule()
-            .color(Colors.blue)
-            .textDecoration("underline")
-        )
-    )
-)
-.child(StyleRule(".more")
-    .fontSize("smaller")
-    .color(Colors.blue)
-    .textTransform("lowercase")
-    .textDecoration("underline")
-    .cursor("pointer")
-)
-, "*[data-suggestions=suggestions]");
+import "./styles/suggestion-style";
 
 export default class AtomSuggestions extends AtomRepeater {
 

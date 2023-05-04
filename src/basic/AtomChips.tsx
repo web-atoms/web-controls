@@ -15,32 +15,8 @@ import IElement from "./IElement";
 import InlinePopup from "./InlinePopup";
 import InlinePopupControl from "./InlinePopupControl";
 
-CSS(StyleRule()
-    .flexLayout({ justifyContent: "stretch" as any})
-    .flexFlow("wrap")
-    .child(StyleRule(".search")
-        .border("none")
-        .outline("none")
-        .flex("1 1")
-    )
-    .child(StyleRule(".footer")
-        .marginLeft("auto")
-    )
-    .child(StyleRule(".presenter")
-        .flexLayout({ inline: true, justifyContent: "flex-start" })
-        .flexFlow("wrap")
-        .child(StyleRule("*")
-            .backgroundColor(Colors.lightGray.withAlphaPercent(0.3))
-        )
-    )
-    .and(StyleRule("[data-mode=search]")
-        .child(StyleRule(".search")
-            .paddingLeft(20)
-            // tslint:disable-next-line: max-line-length
-            .background(`transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' class='bi bi-search' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'%3E%3C/path%3E%3C/svg%3E") no-repeat 1px center` as any)
-        )
-    )
-, "div[data-atom-chips]");
+import "./styles/chips-style";
+import "./styles/item-suggestion-style";
 
 function getChips(target: HTMLElement): AtomChips {
     let start = target;
@@ -110,44 +86,6 @@ function askSuggestionPopup<T>(
 
     return Suggestions.showControl(host, { cancelToken, alignment: "auto" });
 }
-
-CSS(StyleRule()
-    .padding(1)
-    .paddingLeft(5)
-    .paddingRight(5)
-    .borderRadius(10)
-    .display("grid")
-    .alignItems("center")
-    .gridTemplateRows("auto 1fr")
-    .gridTemplateColumns("auto 1fr auto")
-    .child(StyleRule("[data-content]")
-        .gridRowStart("2")
-        .gridColumnStart("2")
-    )
-    .child(StyleRule(".icon")
-        .gridColumnStart("1")
-        .gridRowStart("1")
-        .gridRowEnd("span 2")
-        .alignSelf("center")
-        .marginRight(5)
-    )
-    .child(StyleRule(".delete")
-        .gridColumnStart("3")
-        .gridRowStart("1")
-        .gridRowEnd("span 2")
-        .alignSelf("center")
-        .color(Colors.red)
-    )
-    .child(StyleRule(".header")
-        .fontSize("x-small")
-        .gridRowStart("1")
-        .gridColumnStart("2")
-    )
-    .child(StyleRule(".label")
-        .gridRowStart("2")
-        .gridColumnStart("2")
-    )
-, "*[data-item-suggestion]");
 
 export function Suggestion(
     {

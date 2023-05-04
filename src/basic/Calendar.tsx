@@ -10,6 +10,8 @@ import AtomRepeater from "./AtomRepeater";
 import ComboBox from "./ComboBox";
 import Select from "./Select";
 
+import "./styles/calendar-style";
+
 const start = DateTime.now;
 
 const getWeekDays = (locale, type: "short" | "long") => {
@@ -59,70 +61,6 @@ export const months = {
         return setValue(this, "items", this.long.map((x, i) => ({label: x, value: i})));
     }
 };
-
-CSS(StyleRule()
-    .display("inline-grid")
-    .gridTemplateRows("auto auto auto")
-    .gridTemplateColumns("auto auto auto auto")
-    .child(StyleRule(".fa-solid")
-        .padding(5)
-        .paddingLeft(10)
-        .paddingRight(10)
-        .cursor("pointer")
-        .hoverColor(Colors.blueViolet)
-    )
-    .child(StyleRule("select")
-        .border("none")
-    )
-    .child(StyleRule(".week")
-        .gridColumnStart("1")
-        .gridColumnEnd("span 4")
-        .gridRowStart("2")
-        .display("inline-grid")
-        .gridTemplateColumns("1fr 1fr 1fr 1fr 1fr 1fr 1fr")
-        .gap(0)
-        .child(StyleRule("*")
-            .fontSize("smaller")
-            .padding("5")
-            .paddingLeft("10")
-            .paddingRight("10")
-            .cursor("default")
-            .alignSelf("center")
-            .justifySelf("center")
-        )
-    )
-    .child(StyleRule(".dates")
-        .gridColumnStart("1")
-        .gridColumnEnd("span 4")
-        .gridRowStart("3")
-        .display("inline-grid")
-        .gap(0)
-        .child(StyleRule("[data-item-index]")
-            .alignSelf("stretch")
-            .justifySelf("stretch")
-            .padding(7)
-            .cursor("pointer")
-            .textAlign("center")
-            .hoverBackgroundColor(Colors.lightGray.withAlphaPercent(0.5))
-            .and(StyleRule("[data-is-today=true]")
-                .backgroundColor(Colors.lightGreen)
-            )
-            .and(StyleRule("[data-is-weekend=true]")
-                .backgroundColor(Colors.lightGray.withAlphaPercent(0.3))
-            )
-            .and(StyleRule("[data-is-other-month=true]")
-                .opacity("0.5")
-            )
-            .and(StyleRule("[data-disabled=true]")
-                .textDecoration("line-through")
-            )
-            .and(StyleRule("[data-selected-item=true]")
-                .backgroundColor(Colors.blueViolet)
-                .color(Colors.white)
-            )
-        )
-    )
-, "*[data-calendar=calendar]");
 
 export interface ICalendarDate {
     label: string;
