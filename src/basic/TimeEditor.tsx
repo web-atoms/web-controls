@@ -1,12 +1,11 @@
 import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { descendentElementIterator } from "@web-atoms/core/dist/web/core/AtomUI";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import TimeSpan from "@web-atoms/date-time/dist/TimeSpan";
 import Select from "./Select";
 import Bind from "@web-atoms/core/dist/core/Bind";
+
+import "./styles/time-editor-style";
 
 function hours() {
     return [
@@ -35,43 +34,6 @@ function minutes() {
     }
     return items;
 }
-
-CSS(StyleRule()
-    .paddingLeft(5)
-    .gridRow("2")
-    .flexLayout({ direction: "row", alignItems: "center", justifyContent: "start" as any, gap: 0})
-    .child(StyleRule("[data-element=hour]")
-        .marginLeft(5)
-        .marginRight(5)
-    )
-    .child(StyleRule("[data-element=minute]")
-        .marginRight(5)
-    )
-    .child(StyleRule("[data-element=pm]")
-        .marginRight(5)
-    )
-    .child(StyleRule("button")
-        .borderRadius(9999)
-        .outline("none")
-        .border("none")
-        .backgroundColor("transparent")
-        .and(StyleRule("[data-selected=true]")
-            .backgroundColor("var(--accent-color, blue)")
-            .color("var(--accent-text-color, white)")
-        )
-    )
-    .child(StyleRule("button[data-element=am]")
-        .borderTopRightRadius(0)
-        .borderBottomRightRadius(0)
-    )
-    .child(StyleRule("button[data-element=pm]")
-        .borderTopLeftRadius(0)
-        .borderBottomLeftRadius(0)
-    )
-    .child(StyleRule("select")
-        .border("none")
-        .outline("none")
-    ),"[data-time-editor]");
 
 export default class TimeEditor extends AtomControl {
 

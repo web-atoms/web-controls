@@ -4,34 +4,7 @@ import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import IElement from "./IElement";
 import { InlinePopupButton } from "./InlinePopup";
 
-CSS(StyleRule()
-    .display("inline-grid")
-    .gridTemplateRows("1fr auto")
-    .gridTemplateColumns("1fr 40px")
-    .columnGap("5px")
-    .child(StyleRule("input")
-        .gridRow("1 / span 2")
-        .gridColumn("1")
-    )
-    .child(StyleRule("i")
-        .gridRow("1")
-        .gridColumn("2")
-        .fontSize("smaller")
-        .paddingLeft(5)
-        .paddingRight(5)
-        .alignSelf("stretch")
-        .justifySelf("stretch")
-        .textAlign("center")
-    )
-    .child(StyleRule("span")
-        .gridRow("2")
-        .gridColumn("2")
-        .fontSize("xx-small")
-        .alignSelf("stretch")
-        .justifySelf("stretch")
-        .textAlign("center")
-    )
-, "[data-title-editor=title-editor]");
+import "./styles/title-editor-style";
 
 export type Capitalize = "none" | "off" | "on" | "sentences" | "words" | "characters";
 

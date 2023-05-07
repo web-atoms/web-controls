@@ -8,6 +8,8 @@ import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import AtomRepeater, { getParentRepeaterItem } from "./AtomRepeater";
 import InlinePopup from "./InlinePopup";
 
+import "./styles/tooltip-style";
+
 const tooltips = new Map<HTMLElement, [{control: any, tooltip: CancelToken}, typeof InlinePopup]>();
 
 ElementValueSetters.tooltip = (control: AtomControl, e: HTMLElement, value: any) => {
@@ -35,11 +37,6 @@ document.body.addEventListener("pointerleave", (ev) => {
         }
     }, 250);
 }, true);
-
-CSS(StyleRule()
-    .verticalFlexLayout({})
-    .padding(10),
-"div[data-tooltip=tooltip]");
 
 export default class Tooltip extends InlinePopup {
 
