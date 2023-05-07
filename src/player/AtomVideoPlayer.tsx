@@ -59,9 +59,9 @@ const isTouchEnabled = /android|iPhone|iPad/i.test(navigator.userAgent);
             & > i {
                 margin-left: 4px; 
             }
-        }       
+        }
     }
-    
+
     & > [data-element=progress] {
         z-index: 11;
         grid-row-start: 2;
@@ -89,38 +89,39 @@ const isTouchEnabled = /android|iPhone|iPad/i.test(navigator.userAgent);
         justify-content: flex-start;
         gap: 4px;
         display: flex; 
-    }
-    
-    & > [data-element=toolbar] > * {
-        min-width: 20px;
-        margin-left: 5px;
-        padding: 5px; 
-    }
-    
-    & > [data-element=toolbar] > [data-style=button] {
-        width: 30px;
-        height: 30px;
-        padding: 5px; 
-    }
-    
-    & > [data-element=toolbar] > [data-font-size=small] {
-        font-size: x-small; 
-    }
-    
-    & > [data-element=toolbar] > [data-element=volume-range] {
-        height: 2px;
-        color: #008000;
-        box-shadow: none;
-        border: none; 
-    }
-    
-    & > [data-element=toolbar] > [data-element=volume-range]:focus {
-        box-shadow: none;
-        border: none; 
-    }
-    
-    & > [data-element=toolbar] > [data-element=full-screen] {
-        margin-left: auto; 
+
+        & > * {
+            min-width: 20px;
+            margin-left: 5px;
+            padding: 5px; 
+        }
+        
+        & > [data-style=button] {
+            width: 30px;
+            height: 30px;
+            padding: 5px; 
+        }
+        
+        & > [data-font-size=small] {
+            font-size: x-small; 
+        }
+        
+        & > [data-element=volume-range] {
+            height: 2px;
+            color: #008000;
+            box-shadow: none;
+            border: none; 
+        }
+        
+        & > [data-element=volume-range]:focus {
+            box-shadow: none;
+            border: none; 
+        }
+        
+        & > [data-element=full-screen] {
+            margin-left: auto; 
+        }
+                
     }
     
     &[data-controls=true] > [data-element=toolbar] {
