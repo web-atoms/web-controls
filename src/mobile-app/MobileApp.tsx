@@ -16,32 +16,47 @@ import PopupService, { IDialogOptions, IPopup, PopupControl, PopupWindow } from 
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import PageNavigator from "../PageNavigator";
 import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
+import styled from "@web-atoms/core/dist/style/styled";
 
-CSS(StyleRule()
-    .absolutePosition({ left: 0, top: 0, right: 0, bottom: 0})
-    .padding(5)
-    .overflow("hidden")
-    .child(StyleRule("[data-container]")
-        .absolutePosition({ left: 0, top: 0, bottom: 0, width: "100%"})
-        .overflow("hidden")
-        .transition("left 0.3s ease-out")
-    )
-    .and(StyleRule("[data-drawer=visible]")
-        .child(StyleRule("[data-container]")
-            .left("80%")
-        )
-        .child(StyleRule("[data-drawer-page]")
-            .left(0)
-        )
-    )
-    .nested(StyleRule("div[data-drawer-page=drawer-page]")
-        .absolutePosition({ left: "-80%", top: 0 })
-        .width("80%")
-        .height("100%")
-        .overflow("hidden")
-        .transition("left 0.3s ease-out")
-    )
-, "div[data-page-app=page-app]");
+    styled.css `
+
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    padding: 5px;
+    overflow: hidden;
+
+    & > [data-container] {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        bottom: 0px;
+        overflow: hidden;
+        transition: left 0.3s ease-out;
+    }
+    
+    &[data-drawer=visible] {
+        & > [data-container] {
+            left: 80%;
+        }
+        & > [data-drawer-page] {
+            left: 0px;
+        } 
+    }
+    
+    & div[data-drawer-page=drawer-page] {
+        position: absolute;
+        top: 0px;
+        left: -80%;
+        width: 80%;
+        height: 100%;
+        overflow: hidden;
+        transition: left 0.3s ease-out;
+    }
+`.installGlobal("[data-page-app=page-app]");
 
 // CSS(StyleRule()
 //     .absolutePosition({ left: "-80%", top: 0 })
@@ -51,162 +66,200 @@ CSS(StyleRule()
 //     .transition("left 0.3s ease-out")
 // , "div[data-drawer-page=drawer-page]");
 
-CSS(StyleRule()
-    .absolutePosition({ left: 0, top: 0})
-    .width("100%")
-    .height("100%")
-    .overflow("hidden")
-    .custom("contain", "content")
-    .transition("transform 0.3s ease-out")
-    .display("grid")
-    .gridTemplateRows("auto auto 1fr auto")
-    .gridTemplateColumns("auto 1fr auto")
-    .child(StyleRule("[data-icon-button=icon-button]")
-        .padding(5)
-    )
-    .child(StyleRule("[data-page-element=action-bar]")
-        .zIndex(11)
-        .gridRowStart("1")
-        .gridColumnStart("1")
-        .gridColumnEnd("span 3")
-        .backgroundColor("var(--accent-color, lightgray)")
-    )
-    .child(StyleRule("[data-page-element=icon]")
-        .fontSize(20)
-        .zIndex(14)
-        .padding(10)
-        // .width(40)
-        // .height(40)
-        .textAlign("center")
-        .alignSelf("center")
-        .justifySelf("center")
-        .gridRowStart("1")
-        .gridColumnStart("1")
-        .color("var(--accent-text-color, black)")
-    )
-    .child(StyleRule("[data-page-element=title]")
-        .fontSize(20)
-        .zIndex(14)
-        .padding(5)
-        .alignSelf("center")
-        .justifySelf("stretch")
-        .gridRowStart("1")
-        .gridColumnStart("2")
-        .textEllipsis()
-        .color("var(--accent-text-color, black)")
-    )
-    .child(StyleRule("[data-page-element=action]")
-        .fontSize(20)
-        .zIndex(14)
-        .padding(10)
-        .gridRowStart("1")
-        .gridColumnStart("3")
-        .color("var(--accent-text-color, black)")
-        .nested(StyleRule("button")
-            .width(30)
-            .border("none")
-            .outline("none")
-            .background("transparent" as any)
-            .fontSize("inherit")
-        )
-    )
-    .child(StyleRule("button[data-page-element=action]")
-        .width(30)
-        .border("none")
-        .outline("none")
-        .background("transparent" as any)
-    )
-    .child(StyleRule("[data-page-element=header]")
-        .zIndex(12)
-        .padding(5)
-        .gridRowStart("2")
-        .gridColumnStart("1")
-        .gridColumnEnd("span 3")
-        .backgroundColor(Colors.silver)
-    )
-    .child(StyleRule("[data-page-element=pull-to-refresh]")
-        .gridRowStart("3")
-        .gridColumnStart("1")
-        .gridColumnEnd("span 3")
-        .padding(5)
-        .margin(10)
-        .zIndex(9)
-        .alignSelf("start" as any)
-        .justifySelf("center")
-        .nested(StyleRule(".pull-icon")
-            .transition("all 0.3s ease-out")
-        )
-        .and(StyleRule("[data-mode=up] .pull-icon")
-            .transform("rotate(180deg)" as any)
-        )
-        .and(StyleRule("[data-mode=loading] .pull-icon")
-            .display("none")
-        )
-        .and(StyleRule(":not([data-mode=down]) .down")
-            .display("none")
-        )
-        .and(StyleRule(":not([data-mode=up]) .up")
-            .display("none")
-        )
-        .and(StyleRule(":not([data-mode=loading]) .loading")
-            .display("none")
-        )
-    )
-    .child(StyleRule("[data-page-element=content]")
-        .gridRowStart("3")
-        .gridColumnStart("1")
-        .gridColumnEnd("span 3")
-        .padding(5)
-        .position("relative")
-        .overflowX("hidden")
-        .overflowY("auto")
-        .zIndex(10)
-        .scrollBarWidth("5px")
-        .scrollBarColor(Colors.orange, "white")
-        // trick to disable shrinking for flexbox
-        .child(StyleRule("*")
-            .flexShrink("0")
-        )
-    )
-    .child(StyleRule("[data-page-element=footer]")
-        .gridRowStart("4")
-        .gridColumnStart("1")
-        .gridColumnEnd("span 3")
-        .zIndex(11)
-        .padding(5)
-    )
-    .transform("translate(100%,0)" as any)
-    .and(StyleRule("[data-page-state=ready]")
-        .transform("translate(0,0)" as any)
-    )
-    .and(StyleRule("[data-page-state=hidden]")
-        .transform("translate(-100%,0)" as any)
-    )
-    .and(StyleRule("[data-hide-toolbar=true]")
-        .child(StyleRule("[data-page-element=icon]")
-            .display("none")
-        )
-        .child(StyleRule("[data-page-element=title]")
-            .display("none")
-        )
-        .child(StyleRule("[data-page-element=action-bar]")
-            .display("none")
-        )
-        .child(StyleRule("[data-page-element=action]")
-            .display("none")
-        )
-    )
-, "div[data-base-page=base-page]");
 
 // CSS(StyleRule()
 //     .paddingBottom(500)
-// , "body[data-keyboard=shown] div[data-base-page=base-page] > [data-page-element=content]");
+// , "body[data-keyboard=shown] & > [data-page-element=content]");
 
 // if (/iphone|ios/i.test(window.navigator.userAgent)) {
 //     CSS(StyleRule()
 //         .marginBottom(500)
-//     , "body[data-keyboard=shown] div[data-page-app=page-app]");
+//     , "body[data-keyboard=shown] &");
 // }
+
+    styled.css `
+
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    contain: content;
+    transition: transform 0.3s ease-out;
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-columns: auto 1fr auto;
+    transform: translate(100%,0);
+
+    & > [data-icon-button=icon-button] {
+        padding: 5px;
+    }
+    
+    & > [data-page-element=action-bar] {
+        z-index: 11;
+        grid-row-start: 1;
+        grid-column-start: 1;
+        grid-column-end: span 3;
+        background-color: var(--accent-color, lightgray); 
+    }
+    
+    & > [data-page-element=icon] {
+        font-size: 20px;
+        z-index: 14;
+        padding: 10px;
+        text-align: center;
+        align-self: center;
+        justify-self: center;
+        grid-row-start: 1;
+        grid-column-start: 1;
+        color: var(--accent-text-color, black); 
+    }
+    
+    & > [data-page-element=title] {
+        font-size: 20px;
+        z-index: 14;
+        padding: 5px;
+        align-self: center;
+        justify-self: stretch;
+        grid-row-start: 1;
+        grid-column-start: 2;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        color: var(--accent-text-color, black); 
+    }
+    
+    & > [data-page-element=action] {
+        font-size: 20px;
+        z-index: 14;
+        padding: 10px;
+        grid-row-start: 1;
+        grid-column-start: 3;
+        color: var(--accent-text-color, black); 
+
+        & button {
+            width: 30px;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: inherit; 
+        }
+    }
+    
+    & > button[data-page-element=action] {
+        width: 30px;
+        border: none;
+        outline: none;
+        background: transparent; 
+    }
+    
+    & > [data-page-element=header] {
+        z-index: 12;
+        padding: 5px;
+        grid-row-start: 2;
+        grid-column-start: 1;
+        grid-column-end: span 3;
+        background-color: #c0c0c0; 
+    }
+    
+    & > [data-page-element=pull-to-refresh] {
+        grid-row-start: 3;
+        grid-column-start: 1;
+        grid-column-end: span 3;
+        padding: 5px;
+        margin: 10px;
+        z-index: 9;
+        align-self: start;
+        justify-self: center; 
+
+        & .pull-icon {
+            transition: all 0.3s ease-out; 
+        }
+        
+        &[data-mode=up] .pull-icon {
+            transform: rotate(180deg); 
+        }
+        
+        &[data-mode=loading] .pull-icon {
+            display: none; 
+        }
+        
+        &:not([data-mode=down]) .down {
+            display: none; 
+        }
+        
+        &:not([data-mode=up]) .up {
+            display: none; 
+        }
+        
+        &:not([data-mode=loading]) .loading {
+            display: none; 
+        }
+    }
+        
+    & > [data-page-element=content] {
+        grid-row-start: 3;
+        grid-column-start: 1;
+        grid-column-end: span 3;
+        padding: 5px;
+        position: relative;
+        overflow-x: hidden;
+        overflow-y: auto;
+        z-index: 10;
+        scrollbar-width: 5px;
+        scrollbar-color: #ffa500 white; 
+
+        &::-webkit-scrollbar {
+            width: 5px; 
+        }
+        
+        &::-webkit-scrollbar-thumb {
+            background-color: white;
+            border-radius: 20px;
+            border: 3px solid #ffa500; 
+        }
+        
+        & > * {
+            flex-shrink: 0; 
+        }
+    }
+        
+    & > [data-page-element=footer] {
+        grid-row-start: 4;
+        grid-column-start: 1;
+        grid-column-end: span 3;
+        z-index: 11;
+        padding: 5px; 
+    }
+    
+    &[data-page-state=ready] {
+        transform: translate(0,0); 
+    }
+    
+    &[data-page-state=hidden] {
+        transform: translate(-100%,0); 
+    }
+
+    &[data-hide-toolbar=true] {
+        & > [data-page-element=icon] {
+            display: none; 
+        }
+        
+        & > [data-page-element=title] {
+            display: none; 
+        }
+        
+        & > [data-page-element=action-bar] {
+            display: none; 
+        }
+        
+        & > [data-page-element=action] {
+            display: none;    
+        }
+    }
+    
+`.installGlobal("[data-base-page=base-page]");
 
 export function PullToRefresh() {
     return <div>
