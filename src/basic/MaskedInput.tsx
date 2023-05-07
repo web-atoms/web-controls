@@ -3,26 +3,11 @@ import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import IElement from "./IElement";
 
+import "./styles/masked-input-style";
+
 export interface IMaskedInput extends IElement {
     mask?: string;
 }
-
-CSS(StyleRule()
-    .position("relative")
-    .paddingLeft(2)
-    .paddingTop(1)
-    .fontFamily("monospace")
-    // .and(StyleRule("::after")
-    //     .absolutePosition({
-    //         left: 2,
-    //         top: 1
-    //     })
-    //     .content("attr(data-mask)" as any)
-    //     .fontFamily("inherit")
-    //     .fontWeight("inherit")
-    //     .fontSize("inherit")
-    // )
-, "input[data-mask]");
 
 const updateMask = (e: Event) => {
     const target = e.target as HTMLInputElement;
