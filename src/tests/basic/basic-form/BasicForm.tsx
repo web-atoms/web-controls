@@ -2,7 +2,7 @@ import Bind from "@web-atoms/core/dist/core/Bind";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import Pack from "@web-atoms/core/dist/Pack";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import Form, { SubmitButton } from "../../../basic/Form";
+import Form from "../../../basic/Form";
 import FormField, { HorizontalFormField } from "../../../basic/FormField";
 
 @Pack
@@ -16,7 +16,7 @@ export default class BasicForm extends AtomControl {
         };
         this.render(<div>
             <Form
-                eventSubmit={() => alert("Submit Success")}
+                event-submit-event={() => alert("Submit Success")}
                 style-margin="50px">
                 <FormField
                     label="First name:"

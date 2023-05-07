@@ -4,7 +4,7 @@ import Pack from "@web-atoms/core/dist/Pack";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
-import Form, { FormGroup } from "../../../basic/Form";
+import Form from "../../../basic/Form";
 import FormField from "../../../basic/FormField";
 import ToggleButtonBar from "../../../basic/ToggleButtonBar";
 
@@ -27,22 +27,22 @@ export default class GroupForm extends AtomControl {
                         items={groups}
                         selectedItem={Bind.twoWays(() => this.group)}/>
                 </div>
-                <FormGroup group="name">
+                <div style-display={Bind.oneWay(() => /name|all/i.test(this.group))}>
                     <FormField label="First">
                         <input/>
                     </FormField>
                     <FormField label="Last">
                         <input/>
                     </FormField>
-                </FormGroup>
-                <FormGroup group="address">
+                </div>
+                <div style-display={Bind.oneWay(() => /address|all/i.test(this.group))}>
                     <FormField label="Line 1">
                         <input/>
                     </FormField>
                     <FormField label="Line 2">
                         <input/>
                     </FormField>
-                </FormGroup>
+                </div>
                 <div>
                     <button text="Save"/>
                 </div>

@@ -1,7 +1,7 @@
 import Pack from "@web-atoms/core/dist/Pack";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import Form2, { BindError } from "../../../basic/Form2";
+import Form, { BindError } from "../../../basic/Form";
 import FormField from "../../../basic/FormField";
 import Bind from "@web-atoms/core/dist/core/Bind";
 import Action from "@web-atoms/core/dist/view-model/Action";
@@ -19,7 +19,7 @@ export default class Form2Test extends AtomControl {
 
         this.render(<div>
 
-            <Form2>
+            <Form>
                 <FormField
                     label="Username"
                     required={true}
@@ -29,7 +29,7 @@ export default class Form2Test extends AtomControl {
                 <div data-layout="command-row">
                     <button type="submit" text="Send"/>
                 </div>
-            </Form2>
+            </Form>
 
         </div>);
     }
