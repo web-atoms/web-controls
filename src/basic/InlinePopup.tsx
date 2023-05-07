@@ -10,22 +10,7 @@ import { IPopupOptions } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import IElement from "./IElement";
 
-CSS(StyleRule()
-    .position("absolute")
-    .borderRadius(5)
-    .padding(5)
-    .border("solid 1px lightgray")
-    .defaultBoxShadow()
-    .zIndex(5000)
-    .backgroundColor("var(--primary-bg, white)")
-    .color("var(--primary-color, darkgray)")
-    .left(0)
-, "*[data-inline-popup=inline-popup]");
-
-CSS(StyleRule()
-    .right(0)
-    .left("unset")
-, "*[data-alignment=bottom-right] > [data-inline-popup=inline-popup]");
+import "./styles/inline-popup-style";
 
 function closeHandler(
     opener: HTMLElement,
