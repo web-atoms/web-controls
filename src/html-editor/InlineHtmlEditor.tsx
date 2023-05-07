@@ -1,29 +1,39 @@
 import XNode from "@web-atoms/core/dist/core/XNode";
 import sleep from "@web-atoms/core/dist/core/sleep";
 import { CancelToken } from "@web-atoms/core/dist/core/types";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { ChildEnumerator, descendentElementIterator } from "@web-atoms/core/dist/web/core/AtomUI";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
-import RangeEditor, { RangeEditorCommands } from "./RangeEditor";
 
 import "@web-atoms/data-styles/data-styles";
 import { showImageDialog } from "./commands/AddImage";
 import { FilesAvailableEventArgs } from "../basic/UploadEvent";
+import styled from "@web-atoms/core/dist/style/styled";
 
-CSS(StyleRule()
-    .child(StyleRule("[data-element=toolbar]")
-        .verticalFlexLayout({})
-        .child(StyleRule(".toolbar")
-            .flexLayout({})
-            .nested(StyleRule(".command")
-                .and(StyleRule(".pressed")
-                    .fontWeight("bold")
-                )
-            )
-        )
-    )
-, "[data-inline-editor=inline-editor]");
+    styled.css `
+
+    & > [data-element=toolbar] {
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        gap: 4px;
+        display: flex;
+
+        & > .toolbar {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-around;
+            gap: 4px;
+            display: flex;
+
+            & .command {
+
+                &.pressed {
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+    `.installGlobal("[data-inline-editor=inline-editor]")
 
 export default class InlineHtmlEditor extends AtomControl {
 

@@ -2,81 +2,90 @@ import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import Colors from "@web-atoms/core/dist/core/Colors";
 import { CancelToken } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import PopupService, { IPopupOptions, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
 export * as zDoNotUse from "../animations/Animations";
 import MobileApp from "./MobileApp";
+import styled from "@web-atoms/core/dist/style/styled";
 
-CSS(StyleRule()
-    .maximizeAbsolute()
-    .backgroundColor(Colors.black.withAlphaPercent(0.3))
-    .zIndex("500")
-    .and(StyleRule("[data-background=transparent]")
-        .backgroundColor(Colors.transparent)
-    )
-, "div[data-bottom-popup-container]");
+    styled.css `
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0,0,0,0.3);
+    z-index: 500;
 
-CSS(StyleRule()
-    .absolutePosition({
-        left: 0,
-        right: 0,
-        bottom: 0
-    })
-    .marginLeft(2)
-    .marginRight(2)
-    .borderTopLeftRadius(5)
-    .borderTopRightRadius(5)
-    .display("grid")
-    .gridTemplateColumns("auto 1fr auto")
-    .gridTemplateRows("auto auto auto")
-    .backgroundColor(Colors.white)
-    .child(StyleRule("[data-element=bar]")
-        .borderTopLeftRadius(5)
-        .borderTopRightRadius(5)
-        .gridRow("1")
-        .gridColumn("1 / span 3")
-        .backgroundColor(Colors.lightGray)
-        .zIndex(10)
-    )
-    .child(StyleRule("[data-element=icon]")
-        .gridRow("1")
-        .gridColumn("1")
-        .padding(5)
-        .alignSelf("center")
-        .marginRight(5)
-        .zIndex(11)
-    )
-    .child(StyleRule("[data-element=close]")
-        .gridRow("1")
-        .gridColumn("3")
-        .padding(5)
-        .marginLeft(5)
-        .alignSelf("center")
-        .zIndex(11)
-    )
-    .child(StyleRule("[data-element=title]")
-        .gridRow("1")
-        .gridColumn("2")
-        .padding(5)
-        .zIndex(11)
-    )
-    .child(StyleRule("[data-element=content]")
-        .padding(5)
-        .gridRow("2")
-        .gridColumn("1 / span 3")
-        .zIndex(11)
-    )
-    .child(StyleRule("[data-element=footer]")
-        .gridRow("3")
-        .gridColumn("1 / span 3")
-        .marginTop(5)
-        .padding(5)
-        .zIndex(11)
-    )
-, "div[data-bottom-popup]");
+    &[data-background=transparent] {
+        background-color: #00000000;
+    }
+    `.installGlobal("*[data-bottom-popup-container]");
+
+    styled.css `
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    margin-left: 2px;
+    margin-right: 2px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-rows: auto auto auto;
+    background-color: #ffffff;
+        
+    & > [data-element=bar] {
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        grid-row: 1;
+        grid-column: 1 / span 3;
+        background-color: #d3d3d3;
+        z-index: 10;
+    }
+    
+    & > [data-element=icon] {
+        grid-row: 1;
+        grid-column: 1;
+        padding: 5px;
+        align-self: center;
+        margin-right: 5px;
+        z-index: 11;
+    }
+    
+    & > [data-element=close] {
+        grid-row: 1;
+        grid-column: 3;
+        padding: 5px;
+        margin-left: 5px;
+        align-self: center;
+        z-index: 11;
+    }
+    
+    & > [data-element=title] {
+        grid-row: 1;
+        grid-column: 2;
+        padding: 5px;
+        z-index: 11;
+    }
+    
+    & > [data-element=content] {
+        padding: 5px;
+        grid-row: 2;
+        grid-column: 1 / span 3;
+        z-index: 11;
+    }
+    
+    & > [data-element=footer] {
+        grid-row: 3;
+        grid-column: 1 / span 3;
+        margin-top: 5px;
+        padding: 5px;
+        z-index: 11;
+    }
+    `.installGlobal("*[data-bottom-popup]");
 
 export interface IBottomPopupOptions extends IPopupOptions {
     parameters?: {[key: string]: any};
