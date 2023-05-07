@@ -4,9 +4,6 @@ import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import AtomRepeater, { disposeChildren } from "./AtomRepeater";
 
-CSS(StyleRule()
-, "table[data-table-repeater=table-repeater]");
-
 export default class TableRepeater extends AtomRepeater {
 
     constructor(app, e = document.createElement("table")) {
