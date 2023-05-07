@@ -7,23 +7,7 @@ import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import AtomRepeater from "./AtomRepeater";
 
-CSS(StyleRule()
-    .flexLayout({ inline: true, justifyContent: "flex-start"})
-    .flexFlow("wrap"),
-"*[data-radio-button-list=radio-button-list]");
-
-CSS(StyleRule()
-    .flexLayout({ justifyContent: "flex-start" })
-    .marginRight(5)
-    .child(StyleRule("span")
-        .cursor("pointer")
-    )
-    .and(StyleRule("[data-selected-item=true]")
-        .color(Colors.blue)
-    )
-    .displayNone("[data-selected-item=true] > i.fa-circle")
-    .displayNone("[data-selected-item=false] > i.fa-dot-circle")
-, "div[data-item-type=radio]");
+import "./styles/radio-button-list-style";
 
 export default class RadioButtonList extends AtomRepeater {
 

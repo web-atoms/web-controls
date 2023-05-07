@@ -1,28 +1,7 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import IElement from "./IElement";
 
-CSS(StyleRule()
-    .display("inline-grid")
-    .gridTemplateColumns("1fr 20px")
-    .child(StyleRule("input")
-        .gridRowStart("1")
-        .gridColumnStart("1")
-        .gridColumnEnd("span 2")
-        .and(StyleRule("::-ms-reveal")
-            .display("none")
-        )
-    )
-    .child(StyleRule("i")
-        .gridRowStart("1")
-        .gridColumnStart("2")
-        .alignSelf("center")
-        .justifySelf("center")
-        .zIndex("2")
-    )
-, "div[data-password-box=password-box]");
+import "./styles/password-box-style";
 
 document.body.addEventListener("togglePassword", (e) => {
     const current = e.target as HTMLElement;

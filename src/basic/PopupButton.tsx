@@ -1,27 +1,9 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import Colors from "@web-atoms/core/dist/core/Colors";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import PopupService, { IPopup, IPopupOptions } from "@web-atoms/core/dist/web/services/PopupService";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import InlinePopup, { IInlinePopupButtonOptions, InlinePopupButton } from "./InlinePopup";
 
-CSS(StyleRule()
-    .padding(5)
-    .borderRadius(5)
-    .cursor("pointer")
-    .hoverBackgroundColor(Colors.lightGreen)
-    .flexLayout({ alignItems: "center", justifyContent: "flex-start"})
-    .flexWrap("wrap")
-    .child(StyleRule("*")
-        .flexShrink("0")
-    )
-, "*[data-menu-item=menu-item]");
-
-CSS(StyleRule()
-    .verticalFlexLayout({ justifyContent: "stretch" as any, alignItems: "stretch"})
-, "*[data-menu-items=menu-items]");
+import "./styles/popup-button-style";
 
 export interface IMenuItem {
     label?: string;

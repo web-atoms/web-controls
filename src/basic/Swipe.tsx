@@ -1,6 +1,7 @@
 import XNode from "@web-atoms/core/dist/core/XNode";
 import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
+import "./styles/swipe-style";
 
 interface ISwipeStart {
     element: HTMLElement;
@@ -8,27 +9,6 @@ interface ISwipeStart {
 }
 
 let swipeStart: ISwipeStart = null;
-
-CSS(StyleRule()
-    .display("grid")
-    .child(StyleRule("*")
-        .gridRow("1")
-        .gridColumn("1")
-    )
-, "[data-swipe]");
-
-CSS(StyleRule()
-    .child(StyleRule("*")
-        .alignSelf("center")
-        .justifySelf("end" as any)
-        .zIndex(2)
-        .and(StyleRule(":first-child")
-            .alignSelf("stretch")
-            .justifySelf("stretch" as any)
-            .zIndex(10)
-        )
-    )
-, "[data-swipe=left]");
 
 
 document.body.addEventListener("touchstart", (e: TouchEvent) => {
