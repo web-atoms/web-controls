@@ -8,151 +8,155 @@ import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import { installInputRangeStyle } from "./input-range-style";
+import styled from "@web-atoms/core/dist/style/styled";
 
 // check if it is a mobile..
 const isTouchEnabled = /android|iPhone|iPad/i.test(navigator.userAgent);
 
-CSS(StyleRule()
-    .display("grid")
-    .gridTemplateRows("auto 1fr auto")
-    .gridTemplateColumns("auto 1fr auto")
-    .backgroundColor(Colors.black)
-    .child(StyleRule("[data-element=video]")
-        .gridRowStart("1")
-        .gridRowEnd("span 3")
-        .gridColumnStart("1")
-        .gridColumnEnd("span 3")
-        .alignSelf("stretch")
-        .justifySelf("stretch")
-    )
-    .child(StyleRule("[data-element=play-element]")
-        .zIndex("10")
-        .gridRowStart("1")
-        .gridRowEnd("span 3")
-        .gridColumnStart("1")
-        .gridColumnEnd("span 3")
-        .alignSelf("center")
-        .justifySelf("center")
-        .flexLayout({ justifyContent: "center"})
-        .child(StyleRule("button.play")
-            .display("inline-flex")
-            .alignItems("center")
-            .justifyContent("center")
-            .color(Colors.white)
-            .backgroundColor(Colors.blue)
-            .borderRadius(9999)
-            .fontSize(25)
-            .padding(10)
-            .width(50)
-            .height(50)
-            .textAlign("center")
-            .verticalAlign("middle")
-            .child(StyleRule("i")
-                .marginLeft(4)
-            )
-        )
-    )
-    .child(StyleRule("[data-element=progress]")
-        .zIndex("11")
-        .gridRowStart("2")
-        .gridColumnStart("1")
-        .gridColumnEnd("span 3")
-        .alignSelf("flex-end")
-        .height( isTouchEnabled ? 50 : 15)
-        .paddingTop(isTouchEnabled ? 20 : 5)
-        .paddingBottom(isTouchEnabled ? 20 : 5)
-        .justifySelf("stretch" as any)
-        .backgroundColor(Colors.black.withAlphaPercent(0.3))
-        .width("100%")
-        .cursor("pointer")
-    )
-    .child(StyleRule("[data-element=toolbar]")
-        .zIndex("10")
-        .gridRowStart("3")
-        .gridColumnStart("1")
-        .gridColumnEnd("span 3")
-        .backgroundColor(Colors.black.withAlphaPercent(0.3))
-        .color(Colors.white)
-        .flexLayout({
-            justifyContent: "flex-start"
-        })
-        .child(StyleRule("*")
-            .minWidth(20)
-            .marginLeft(5)
-            .padding(5)
-        )
-        .child(StyleRule("[data-style=button]")
-            .width(30)
-            .height(30)
-            .padding(5)
-        )
-        .child(StyleRule("[data-font-size=small]")
-            .fontSize("x-small")
-        )
-        .child(StyleRule("[data-element=volume-range]")
-            .height(2)
-            .color(Colors.green)
-            .boxShadow("none")
-            .border("none")
-            .focus(StyleRule()
-                .boxShadow("none")
-                .border("none")
-            )
-        )
-        .child(StyleRule("[data-element=full-screen]")
-            .marginLeft("auto")
-        )
-    )
-    .and(StyleRule("[data-controls=true]")
-        .child(StyleRule("[data-element=toolbar]")
-            .display("flex")
-        )
-        .child(StyleRule("[data-element=progress]")
-            .display("flex")
-        )
-    )
-    .and(StyleRule("[data-state=paused]")
-        .child(StyleRule("[data-element=toolbar]")
-            .display("flex")
-        )
-        .child(StyleRule("[data-element=toolbar]")
-            .child(StyleRule("[data-element=pause]")
-                .display("none")
-            )
-        )
-    )
-    .and(StyleRule("[data-state=playing]")
-        .and(StyleRule("[data-controls=false]")
-            .child(StyleRule("[data-element=play-element]")
-                .display("none")
-            )
-            .child(StyleRule("[data-element=toolbar]")
-                .display("none")
-            )
-            .child(StyleRule("[data-element=progress]")
-                .display("none")
-            )
-        )
-    )
-    .and(StyleRule("[data-state=waiting]")
-        .child(StyleRule("[data-element=play-element]")
-            .display("none")
-        )
-        .child(StyleRule("[data-element=toolbar]")
-            .child(StyleRule("[data-element=play]")
-                .display("none")
-            )
-        )
-        .and(StyleRule("[data-controls=false]")
-            .child(StyleRule("[data-element=toolbar]")
-                .display("none")
-            )
-            .child(StyleRule("[data-element=progress]")
-                .display("none")
-            )
-        )
-    )
-, "*[data-video-player=video-player]");
+    styled.css `
+
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    grid-template-columns: auto 1fr auto;
+    background-color: #000000;
+
+    & > [data-element=video] {
+        grid-row-start: 1;
+        grid-row-end: span 3;
+        grid-column-start: 1;
+        grid-column-end: span 3;
+        align-self: stretch;
+        justify-self: stretch; 
+    }
+    
+    & > [data-element=play-element] {
+        z-index: 10;
+        grid-row-start: 1;
+        grid-row-end: span 3;
+        grid-column-start: 1;
+        grid-column-end: span 3;
+        align-self: center;
+        justify-self: center;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        display: flex; 
+
+        & > button.play {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            background-color: #0000ff;
+            border-radius: 9999px;
+            font-size: 25px;
+            padding: 10px;
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            vertical-align: middle; 
+            & > i {
+                margin-left: 4px; 
+            }
+        }       
+    }
+    
+    & > [data-element=progress] {
+        z-index: 11;
+        grid-row-start: 2;
+        grid-column-start: 1;
+        grid-column-end: span 3;
+        align-self: flex-end;
+        height: 15px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        justify-self: stretch;
+        background-color: rgba(0,0,0,0.3);
+        width: 100%;
+        cursor: pointer; 
+    }
+    
+    & > [data-element=toolbar] {
+        z-index: 10;
+        grid-row-start: 3;
+        grid-column-start: 1;
+        grid-column-end: span 3;
+        background-color: rgba(0,0,0,0.3);
+        color: #ffffff;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 4px;
+        display: flex; 
+    }
+    
+    & > [data-element=toolbar] > * {
+        min-width: 20px;
+        margin-left: 5px;
+        padding: 5px; 
+    }
+    
+    & > [data-element=toolbar] > [data-style=button] {
+        width: 30px;
+        height: 30px;
+        padding: 5px; 
+    }
+    
+    & > [data-element=toolbar] > [data-font-size=small] {
+        font-size: x-small; 
+    }
+    
+    & > [data-element=toolbar] > [data-element=volume-range] {
+        height: 2px;
+        color: #008000;
+        box-shadow: none;
+        border: none; 
+    }
+    
+    & > [data-element=toolbar] > [data-element=volume-range]:focus {
+        box-shadow: none;
+        border: none; 
+    }
+    
+    & > [data-element=toolbar] > [data-element=full-screen] {
+        margin-left: auto; 
+    }
+    
+    &[data-controls=true] > [data-element=toolbar] {
+        display: flex; 
+    }
+    
+    &[data-controls=true] > [data-element=progress] {
+        display: flex; 
+    }
+    
+    &[data-state=paused] > [data-element=toolbar] > [data-element=pause] {
+        display: none; 
+    }
+    
+    &[data-state=playing][data-controls=false] > [data-element=play-element] {
+        display: none; 
+    }
+    
+    &[data-state=playing][data-controls=false] > [data-element=toolbar] {
+        display: none; 
+    }
+    
+    &[data-state=playing][data-controls=false] > [data-element=progress] {
+        display: none; 
+    }
+    
+    &[data-state=waiting] > [data-element=play-element] {
+        display: none; 
+    }
+        &[data-state=waiting] > [data-element=toolbar] > [data-element=play] {
+        display: none; }
+        &[data-state=waiting][data-controls=false] > [data-element=toolbar] {
+        display: none; }
+        &[data-state=waiting][data-controls=false] > [data-element=progress] {
+        display: none; 
+    }    `.installGlobal("[data-video-player=video-player]");
 
 const gatherElements = (e: HTMLElement, data = {}) => {
     const ce = ChildEnumerator.enumerate(e);
