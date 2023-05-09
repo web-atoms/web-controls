@@ -1,4 +1,5 @@
 import Bind from "@web-atoms/core/dist/core/Bind";
+import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
 import XNode, { elementFactorySymbol } from "@web-atoms/core/dist/core/XNode";
 import styled from "@web-atoms/core/dist/style/styled";
 
@@ -43,7 +44,8 @@ const checkClick = (e: MouseEvent) => {
             }
         }
         form.setAttribute("data-valid", "true");
-        target.dispatchEvent(new CustomEvent(form.getAttribute("data-submit-event"), { bubbles: true, cancelable: true }));
+        const eventName = StringHelper.fromHyphenToCamel(form.getAttribute("data-submit-event"));
+        target.dispatchEvent(new CustomEvent(eventName, { bubbles: true, cancelable: true }));
     }, 100);
 };
 
