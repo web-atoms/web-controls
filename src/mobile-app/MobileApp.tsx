@@ -46,7 +46,7 @@ import styled from "@web-atoms/core/dist/style/styled";
 
         & > [data-drawer-page] {
             left: 0px;
-        } 
+        }
     }
     
     & div[data-drawer-page=drawer-page] {
@@ -58,7 +58,8 @@ import styled from "@web-atoms/core/dist/style/styled";
         overflow: hidden;
         transition: left 0.3s ease-out;
     }
-`.installGlobal("[data-page-app=page-app]");
+
+    `.installGlobal("[data-page-app=page-app]");
 
 // CSS(StyleRule()
 //     .absolutePosition({ left: "-80%", top: 0 })
