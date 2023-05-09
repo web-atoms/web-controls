@@ -27,12 +27,14 @@ import styled from "@web-atoms/core/dist/style/styled";
 
             &:first-child {
                 border-top-left-radius: 10px;
-                border-bottom-left-radius: 10px; 
+                border-bottom-left-radius: 10px;
+                border-right: none;
             }
             
             &:last-child {
                 border-top-right-radius: 10px;
                 border-bottom-right-radius: 10px; 
+                border-left: none;
             }
             
             &.selected {
