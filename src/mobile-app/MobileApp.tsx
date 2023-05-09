@@ -39,9 +39,11 @@ import styled from "@web-atoms/core/dist/style/styled";
     }
     
     &[data-drawer=visible] {
+
         & > [data-container] {
             left: 80%;
         }
+
         & > [data-drawer-page] {
             left: 0px;
         } 
