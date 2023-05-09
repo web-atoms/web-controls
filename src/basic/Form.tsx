@@ -47,7 +47,7 @@ const checkClick = (e: MouseEvent) => {
     }, 100);
 };
 
-export interface IForm2 {
+export interface IForm {
     /**
      * The event that will be dispatched, default is `submitForm`
      */
@@ -70,6 +70,8 @@ export interface IForm2 {
      * Please change your form style to catch event-submit-form
      */
     submitCommand?: never;
+
+    [key: string]: any;
 }
 
 export default function Form({
@@ -77,7 +79,7 @@ export default function Form({
     "data-show-validation": showValidation = "false",
     "data-error-message": errorMessage = "Please fix all validations",
     ... a
-}: IForm2, ... nodes: XNode[]) {
+}: IForm, ... nodes: XNode[]) {
     return <div
         { ... a}
         data-submit-event={submitEvent}
