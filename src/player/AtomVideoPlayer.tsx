@@ -123,41 +123,52 @@ const isTouchEnabled = /android|iPhone|iPad/i.test(navigator.userAgent);
         }
                 
     }
-    
-    &[data-controls=true] > [data-element=toolbar] {
-        display: flex; 
+
+    &[data-controls=true] {
+        & > [data-element=toolbar] {
+            display: flex; 
+        }
+        
+        & > [data-element=progress] {
+            display: flex; 
+        }
+    }
+
+    &[data-state=playing] {
+        &[data-controls=false] {
+            & > [data-element=play-element], & > [data-element=progress], & > [data-element=toolbar] {
+                display: none;
+            }
+        }
+    }
+
+    &[data-state=waiting] {
+        &[data-controls=false] {
+            & > [data-element=toolbar], & > [data-element=progress] {
+                display: none;
+            }
+        }
+
+        & > [data-element=toolbar] {
+            & > [data-element=play] {
+                display: none;
+            }
+        }
+
+        & > [data-element=play-element] {
+            display: none;
+        }
     }
     
-    &[data-controls=true] > [data-element=progress] {
-        display: flex; 
+    &[data-state=paused] {
+        & > [data-element=toolbar] {
+            & > [data-element-pause] {
+                display: none; 
+            }
+        }
     }
     
-    &[data-state=paused] > [data-element=toolbar] > [data-element=pause] {
-        display: none; 
-    }
-    
-    &[data-state=playing][data-controls=false] > [data-element=play-element] {
-        display: none; 
-    }
-    
-    &[data-state=playing][data-controls=false] > [data-element=toolbar] {
-        display: none; 
-    }
-    
-    &[data-state=playing][data-controls=false] > [data-element=progress] {
-        display: none; 
-    }
-    
-    &[data-state=waiting] > [data-element=play-element] {
-        display: none; 
-    }
-        &[data-state=waiting] > [data-element=toolbar] > [data-element=play] {
-        display: none; }
-        &[data-state=waiting][data-controls=false] > [data-element=toolbar] {
-        display: none; }
-        &[data-state=waiting][data-controls=false] > [data-element=progress] {
-        display: none; 
-    }    `.installGlobal("[data-video-player=video-player]");
+    `.installGlobal("[data-video-player=video-player]");
 
 const gatherElements = (e: HTMLElement, data = {}) => {
     const ce = ChildEnumerator.enumerate(e);

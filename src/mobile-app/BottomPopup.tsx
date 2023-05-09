@@ -17,10 +17,6 @@ import styled from "@web-atoms/core/dist/style/styled";
     right: 0;
     background-color: rgba(0,0,0,0.3);
     z-index: 500;
-
-    &[data-background=transparent] {
-        background-color: #00000000;
-    }
     `.installGlobal("*[data-bottom-popup-container]");
 
     styled.css `

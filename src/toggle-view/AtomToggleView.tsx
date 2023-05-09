@@ -6,6 +6,9 @@ import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
+import "../basic/styles/toggle-view-style";
+
+
 export interface IToggleView {
     label?: string;
     icon?: string;
@@ -27,59 +30,6 @@ export function ToggleView(
         </div>
     </div>;
 }
-
-const css = CSS(StyleRule()
-    .flexStretch()
-    .verticalFlexLayout({ alignItems: "stretch"})
-    .overflow("hidden")
-    .child(StyleRule(".toolbar")
-        .flexLayout({ gap: 0})
-        .alignSelf("center")
-        .child(StyleRule(".item")
-            .flexLayout({ inline: true })
-            .border("solid 1px lightgray")
-            .padding(5)
-            .child(StyleRule("label")
-                .whiteSpace("nowrap")
-                .marginBottom(0)
-            )
-            .and(StyleRule(".selected")
-                .backgroundColor(Colors.darkBlue)
-                .color(Colors.white)
-            )
-            .and(StyleRule(":first-child")
-                .borderTopLeftRadius(10)
-                .borderBottomLeftRadius(10)
-            ).and(StyleRule(":last-child")
-                .borderTopRightRadius(10)
-                .borderBottomRightRadius(10)
-            )
-        )
-    )
-    .child(StyleRule(".presenter")
-        .flexStretch()
-        .display("grid")
-        .gridTemplateColumns("1fr")
-        .gridTemplateRows("1fr")
-        .overflow("hidden")
-        .child(StyleRule("*")
-            .gridRowStart("1")
-            .gridColumnStart("1")
-            .transition("transform 0.3s")
-            .overflow("auto")
-            .padding(5)
-        )
-        .child(StyleRule(".left")
-            .transform("translate(-100%, 0)" as any)
-        )
-        .child(StyleRule(".right")
-            .transform("translate(100%, 0)" as any)
-        )
-        .child(StyleRule(".selected")
-            .transform("translate(0, 0)" as any)
-        )
-    )
-, "div[data-wa-toggle-view=wa-toggle-view]");
 
 export default class AtomToggleView extends AtomControl {
 
