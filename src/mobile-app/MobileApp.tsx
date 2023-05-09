@@ -244,6 +244,7 @@ import styled from "@web-atoms/core/dist/style/styled";
     }
 
     &[data-hide-toolbar=true] {
+
         & > [data-page-element=icon] {
             display: none; 
         }
