@@ -31,10 +31,10 @@ export function MenuItem({
 }: IMenuItem) {
 
     if (href) {
-        <a data-menu-item="menu-item" href={href} target={target} { ... others }>
-        { icon && <i class={icon}/>}
-        { label && <span text={label}/>}
-    </a>
+        return <a data-menu-item="menu-item" href={href} target={target} { ... others }>
+            { icon && <i class={icon}/>}
+            { label && <span text={label}/>}
+        </a>;
     }
 
     return <div data-menu-item="menu-item" eventClick={eventClick} { ... others }>
@@ -42,14 +42,6 @@ export function MenuItem({
         { label && <span text={label}/>}
     </div>;
 }
-
-const iconLabelCss = CSS(
-    StyleRule(".label")
-        .display("inline-flex")
-        .child(StyleRule("span")
-            .flexStretch()
-        )
-);
 
 export default InlinePopupButton;
 
