@@ -16,7 +16,7 @@ import styled from "@web-atoms/core/dist/style/styled";
 
     & > i {
         grid-row: 1;
-        grid-column: 1;
+        grid-column: 2;
         align-self: center;
         justify-self: center;
         z-index: 2;
