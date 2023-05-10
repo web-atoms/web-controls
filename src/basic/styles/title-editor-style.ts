@@ -13,7 +13,7 @@ import styled from "@web-atoms/core/dist/style/styled";
 
     & > i {
         grid-row: 1;
-        grid-column: 1;
+        grid-column: 2;
         font-size: smaller;
         padding-left: 5px;
         padding-right: 5px;
