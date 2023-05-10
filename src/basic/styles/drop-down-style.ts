@@ -10,4 +10,4 @@ import styled from "@web-atoms/core/dist/style/styled";
         & [data-white-space=nowrap] {
             white-space: nowrap;
         }
-    `.installLocal("div[data-drop-down=drop-down]");
+    `.installGlobal("div[data-drop-down=drop-down]");
