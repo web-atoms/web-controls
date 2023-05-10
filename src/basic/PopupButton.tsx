@@ -30,14 +30,16 @@ export function MenuItem({
     ... others
 }: IMenuItem) {
 
-    if (label) {
-        return <div data-menu-item="menu-item" eventClick={eventClick} { ... others }>
-            <i class={icon}/>
-            <span text={label}/>
-        </div>;
+    if (href) {
+        <a data-menu-item="menu-item" href={href} target={target} { ... others }>
+        { icon && <i class={icon}/>}
+        { label && <span text={label}/>}
+    </a>
     }
+
     return <div data-menu-item="menu-item" eventClick={eventClick} { ... others }>
-        <i class={icon}/>
+        { icon && <i class={icon}/>}
+        { label && <span text={label}/>}
     </div>;
 }
 
