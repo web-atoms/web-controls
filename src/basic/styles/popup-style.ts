@@ -4,8 +4,7 @@ export const repeaterPopupCss = styled.css `
     min-width: 200px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
+    align-items: stretch;
     gap: 4px;
 
     & > .items {
@@ -14,6 +13,13 @@ export const repeaterPopupCss = styled.css `
         & > .presenter {
             & > * {
                 padding: 5px;
+            }
+            & > [data-item-index] {
+                cursor: pointer;
+                &:hover {
+                    color: blue;
+                    text-decoration: underline;
+                }
             }
             & > [data-selected-item=true] {
                 background-color: lightgreen;
