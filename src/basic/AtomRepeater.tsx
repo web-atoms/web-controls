@@ -796,6 +796,12 @@ export default class AtomRepeater<T = any> extends AtomControl {
             return;
         }
 
+        // @ts-expect-error
+        if (m.classes?.[0]?.remove) {
+            this.items.removeAt(index);
+            return;
+        }
+
         const container = this.itemsPresenter ?? this.element;
 
         const node = this.itemRenderer(item, index, this);

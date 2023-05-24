@@ -3,13 +3,18 @@ const empty = [];
 export type IReplaceClass = string | {
     replace?: string,
     parent?: string,
-    after?: string
+    after?: string,
+    remove?: boolean
 };
 
 export default class MergeNode {
 
     public static none() {
         return new MergeNode(empty);
+    }
+
+    public static remove() {
+        return new MergeNode([{ remove: true}]);
     }
 
     public static childSelector(name: string, p?: { after?: string, parent?: string }) {
