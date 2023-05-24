@@ -205,17 +205,17 @@ export interface IInlinePopupButtonOptions extends IElement {
     popup?: PopupFactory;
 }
 
-CSS(StyleRule()
-    .flexLayout({ alignItems: "center", inline: true, justifyContent: "center"})
-    .flexWrap("wrap")
-    .padding(3)
-    .paddingLeft(5)
-    .paddingRight(5)
-    .and(StyleRule("[data-has-border=false]")
-        .border("none")
-        .backgroundColor(Colors.transparent)
-    )
-, "*[data-inline-popup-button=inline-popup-button]");
+// CSS(StyleRule()
+//     .flexLayout({ alignItems: "center", inline: true, justifyContent: "center"})
+//     .flexWrap("wrap")
+//     .padding(3)
+//     .paddingLeft(5)
+//     .paddingRight(5)
+//     .and(StyleRule("[data-has-border=false]")
+//         .border("none")
+//         .backgroundColor(Colors.transparent)
+//     )
+// , "*[data-inline-popup-button=inline-popup-button]");
 
 export type PopupFactory = (data) => XNode;
 

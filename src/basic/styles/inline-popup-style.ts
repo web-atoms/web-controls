@@ -17,3 +17,15 @@ import styled from "@web-atoms/core/dist/style/styled";
     left: unset;
     `.installGlobal("*[data-alignment=bottom-right] > [data-inline-popup=inline-popup]");
 
+
+    styled.css `
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        display: inline-flex;
+        flex-wrap: wrap;
+        padding: 3px;
+        padding-left: 5px;
+        padding-right: 5px;
+    `.installGlobal("*[data-inline-popup-button=inline-popup-button]");
