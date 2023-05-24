@@ -30,7 +30,7 @@ import styled from "@web-atoms/core/dist/style/styled";
         padding-right: 5px;
 
         &[data-has-border=false] {
-            border: "none";
+            border: none;
             background-color: transparent;
         }
     `.installGlobal("*[data-inline-popup-button=inline-popup-button]");
