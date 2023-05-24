@@ -66,4 +66,4 @@ import styled from "@web-atoms/core/dist/style/styled";
         padding-left: 5px;
         margin-left: 0px;
     }
-    `.installGlobal("*[data-date-field=date-field]");
+    `.withOrder("medium").installGlobal("*[data-date-field=date-field]");
