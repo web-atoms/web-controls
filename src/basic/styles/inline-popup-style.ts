@@ -28,4 +28,9 @@ import styled from "@web-atoms/core/dist/style/styled";
         padding: 3px;
         padding-left: 5px;
         padding-right: 5px;
+
+        &[data-has-border=false] {
+            border: "none";
+            background-color: transparent;
+        }
     `.installGlobal("*[data-inline-popup-button=inline-popup-button]");
