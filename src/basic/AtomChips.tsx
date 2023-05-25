@@ -166,6 +166,23 @@ export default class AtomChips<T = any> extends AtomRepeater<T> {
 
     public anchorItem: any;
 
+    public get searchType() {
+        return this.searchInput.type;
+    }
+
+    public set searchType(v: string) {
+        this.searchInput.type = v;
+    }
+
+    
+    public get enterKeyHint() {
+        return this.searchInput.enterKeyHint;
+    }
+
+    public set enterKeyHint(v: string) {
+        this.searchInput.enterKeyHint = v;
+    }
+
     private searchInput: HTMLInputElement;
 
     private anchorIndex: number;
