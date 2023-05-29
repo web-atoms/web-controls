@@ -2,14 +2,15 @@ import styled from "@web-atoms/core/dist/style/styled";
 
     styled.css `
     flex: 1 1 100%;
-    flex-direction: column;
     align-items: stretch;
     justify-content: space-around;
     gap: 4px;
-    display: flex;
+    display: grid;
+    grid-template-rows: auto 1fr;
     overflow: hidden;
         
     & > .toolbar {
+        grid-row: 1;
         flex-direction: row;
         align-items: center;
         justify-content: space-around;
@@ -52,7 +53,7 @@ import styled from "@web-atoms/core/dist/style/styled";
     
     
     & > .presenter {
-        flex: 1 1 100%;
+        grid-row: 2;
         display: grid;
         grid-template-columns: 1fr;
         grid-template-rows: 1fr;
