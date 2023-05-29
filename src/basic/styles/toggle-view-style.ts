@@ -2,22 +2,21 @@ import styled from "@web-atoms/core/dist/style/styled";
 
     styled.css `
     flex: 1 1 100%;
-    align-items: stretch;
-    justify-content: space-around;
     gap: 4px;
     display: grid;
     grid-template-rows: auto 1fr;
     overflow: hidden;
+    align-items: stretch;
+    justify-items: stretch;
+    justify-content: stretch;
         
     & > .toolbar {
         grid-row: 1;
         flex-direction: row;
-        align-items: center;
-        justify-content: space-around;
         display: flex;
-        align-self: center; 
+        place-self: center;
 
-        & > .item {
+        & > [data-element=header] {
             flex-direction: row;
             align-items: center;
             justify-content: space-around;
@@ -52,28 +51,23 @@ import styled from "@web-atoms/core/dist/style/styled";
     }
     
     
-    & > .presenter {
-        grid-row: 2;
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr;
-        overflow: hidden; 
-        & > * {
-            grid-row-start: 1;
-            grid-column-start: 1;
-            transition: transform 0.3s;
-            overflow: auto;
-            padding: 5px; 
-        }
-        & > .left {
+    & > [data-element=view] {
+        grid-row-start: 2;
+        grid-column-start: 1;
+        transition: transform 0.3s;
+        align-self: stretch;
+        justify-self: stretch;
+        overflow: auto;
+        padding: 5px;
+        &[data-left=true] {
             transform: translate(-100%, 0); 
         }
         
-        & > .right {
+        &[data-right=true] {
             transform: translate(100%, 0); 
         }
         
-        & > .selected {
+        &[data-selected=true] {
             transform: translate(0, 0);
         }
     }
