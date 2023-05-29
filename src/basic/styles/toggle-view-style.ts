@@ -37,7 +37,7 @@ import styled from "@web-atoms/core/dist/style/styled";
                 border-left: none;
             }
             
-            &.selected {
+            &[data-selected=true] {
                 background-color: var(--accent-color, #00008b);
                 color: var(--accent-text-color,#ffffff); 
             }

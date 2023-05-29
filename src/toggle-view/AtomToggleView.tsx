@@ -99,6 +99,10 @@ export default function AtomToggleView( { selectedIndex, ... a }: IAtomToggleVie
                 child.setAttribute("data-right", (i > this.selectedIndex).toString());
                 child.setAttribute("data-selected", (i === this.selectedIndex).toString());
             }
+            for(const child of Array.from(pe.querySelectorAll(`[data-element="header"]`))) {
+                const i = ai++;
+                child.setAttribute("data-selected", (i === this.selectedIndex).toString());
+            }
         }
    
     }
