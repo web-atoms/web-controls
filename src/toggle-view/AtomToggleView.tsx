@@ -71,10 +71,10 @@ export default class AtomToggleView extends AtomControl {
             }));
             const l = document.createElement("div");
             toolbar.appendChild(l);
-            this.render(label, l, this);
+            this.render(label, l, creator);
             const p = document.createElement("div");
             presenter.appendChild(p);
-            this.render(view, p, this);
+            this.render(view, p, creator);
             index++;
         }
     }
