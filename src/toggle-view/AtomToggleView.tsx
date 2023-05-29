@@ -39,6 +39,33 @@ export interface IAtomToggleView extends IElement {
 
 export default function AtomToggleView(a: IAtomToggleView, ... nodes: XNode[]) {
 
+    const headers = [];
+    const views = [];
+
+    const source = {};
+
+    let n = 0;
+    for (const iterator of nodes) {
+
+        const i = n++;
+
+        const header = iterator.children[0];
+        const ha = (header.attributes??={});
+        ha["data-element"] = "header";
+        ha["data-click-event"] = "header-click";
+        ha["data-header-index"] = i.toString();
+
+        const view = iterator.children[1];
+        const a = (view.attributes ??= {});
+        a["data-element"] = "view";
+        a["data-left"] = Bind.oneWay(() => i < this.selectedIndex);
+        a["data-right"] = Bind.oneWay(() => i > this.selectedIndex);
+        a["data-selected"] = Bind.oneWay(() => i === this.selectedIndex);
+        
+        headers.push(header);
+        views.push(view);
+    }
+
     class AtomToggleViewControl extends AtomControl {
 
         public selectedIndex: number;
@@ -46,35 +73,10 @@ export default function AtomToggleView(a: IAtomToggleView, ... nodes: XNode[]) {
         protected preCreate(): void {
             this.selectedIndex = 0;
 
-            const headers = [];
-            const views = [];
-
-            let n = 0;
-            for (const iterator of nodes) {
-
-                const i = n++;
-
-                const header = iterator.children[0];
-                const ha = (header.attributes??={});
-                ha["data-element"] = "header";
-                ha["data-click-event"] = "header-click";
-                ha["data-header-index"] = i.toString();
-
-                const view = iterator.children[1];
-                const a = (view.attributes ??= {});
-                a["data-element"] = "view";
-                a["data-left"] = Bind.oneWay(() => i < this.selectedIndex);
-                a["data-right"] = Bind.oneWay(() => i > this.selectedIndex);
-                a["data-selected"] = Bind.oneWay(() => i === this.selectedIndex);
-                
-                headers.push(header);
-                views.push(view);
-            }
 
             this.render(<div
                 data-wa-toggle-view="wa-toggle-view">
                 <div class="toolbar">{ ... headers}</div>
-                { ... views}
             </div>);
         }
 
@@ -85,7 +87,9 @@ export default function AtomToggleView(a: IAtomToggleView, ... nodes: XNode[]) {
    
     }
 
-    return <AtomToggleViewControl { ... a}></AtomToggleViewControl>;
+    return <AtomToggleViewControl { ... a}>
+        { ... views}
+    </AtomToggleViewControl>;
 }
 
 class AtomToggleViewControl extends AtomControl {
