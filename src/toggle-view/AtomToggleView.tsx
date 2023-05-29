@@ -37,13 +37,11 @@ export interface IAtomToggleView extends IElement {
     selectedIndex?: number;
 }
 
-export default function AtomToggleView(a: IAtomToggleView, ... nodes: XNode[]) {
+export default function AtomToggleView( { selectedIndex, ... a }: IAtomToggleView, ... nodes: XNode[]) {
 
     const headers = [];
     const views = [];
-
-    const source = {};
-
+    
     let n = 0;
     for (const iterator of nodes) {
 
@@ -58,9 +56,9 @@ export default function AtomToggleView(a: IAtomToggleView, ... nodes: XNode[]) {
         const view = iterator.children[1];
         const a = (view.attributes ??= {});
         a["data-element"] = "view";
-        a["data-left"] = Bind.oneWay(() => i < this.selectedIndex);
-        a["data-right"] = Bind.oneWay(() => i > this.selectedIndex);
-        a["data-selected"] = Bind.oneWay(() => i === this.selectedIndex);
+        a["data-left"] = i < selectedIndex;
+        a["data-right"] = i > selectedIndex;
+        a["data-selected"] = i === selectedIndex;
         
         headers.push(header);
         views.push(view);
@@ -68,28 +66,48 @@ export default function AtomToggleView(a: IAtomToggleView, ... nodes: XNode[]) {
 
     class AtomToggleViewControl extends AtomControl {
 
+        @BindableProperty
         public selectedIndex: number;
+
+        onPropertyChanged(name: string): void {
+            super.onPropertyChanged(name);
+            if (name === "selectedIndex") {
+                // update children...
+                this.updateViews();
+            }
+        }
     
         protected preCreate(): void {
             this.selectedIndex = 0;
-
-
-            this.render(<div
-                data-wa-toggle-view="wa-toggle-view">
-                <div class="toolbar">{ ... headers}</div>
-            </div>);
+            this.runAfterInit(() => this.updateViews());
         }
 
         @Action({ onEvent: "header-click"})
         onHeaderClick({ headerIndex }) {
             this.selectedIndex = parseInt(headerIndex, 0);
         }
+
+        updateViews() {
+            const pe = this.element.parentElement;
+            if (!pe) {
+                return;            
+            }
+            let ai = 0;
+            for(const child of Array.from(pe.querySelectorAll(`[data-element="view"]`))) {
+                const i = ai++;
+                child.setAttribute("data-left", (i < this.selectedIndex).toString());
+                child.setAttribute("data-right", (i > this.selectedIndex).toString());
+                child.setAttribute("data-selected", (i === this.selectedIndex).toString());
+            }
+        }
    
     }
 
-    return <AtomToggleViewControl { ... a}>
+    return <div { ... a} data-wa-toggle-view="wa-toggle-view">
+        <AtomToggleViewControl
+            class="toolbar">{... headers }</AtomToggleViewControl>
         { ... views}
-    </AtomToggleViewControl>;
+    </div>;
 }
 
 class AtomToggleViewControl extends AtomControl {
