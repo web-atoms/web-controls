@@ -129,7 +129,18 @@ export default class AtomSuggestions extends AtomRepeater {
         );
         this.element.dispatchEvent(ce);
         if (!ce.defaultPrevented) {
-            this.selectedItems?.add(ce.detail);
+            const selectedItem = ce.detail;
+            const vp = this.valuePath ?? ((i) => i);
+            const value = vp(selectedItem);
+            if(this.selectedItems) {
+                for (const iterator of this.selectedItems) {
+                    // eslint-disable-next-line eqeqeq
+                    if(vp(iterator) == value) {
+                        return;
+                    }
+                }
+            }
+            this.selectedItems?.add(selectedItem);
         }
     }
 }
