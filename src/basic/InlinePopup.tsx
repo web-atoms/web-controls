@@ -1,13 +1,9 @@
 import { App } from "@web-atoms/core/dist/App";
 import { AtomDisposableList } from "@web-atoms/core/dist/core/AtomDisposableList";
-import Colors from "@web-atoms/core/dist/core/Colors";
 import sleep from "@web-atoms/core/dist/core/sleep";
-import { CancelToken } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule, { ContentAlignType } from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl, ElementValueSetters } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { IPopupOptions } from "@web-atoms/core/dist/web/services/PopupService";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import IElement from "./IElement";
 
 import "./styles/inline-popup-style";
@@ -204,18 +200,6 @@ export interface IInlinePopupButtonOptions extends IElement {
     anchorRight?: boolean;
     popup?: PopupFactory;
 }
-
-// CSS(StyleRule()
-//     .flexLayout({ alignItems: "center", inline: true, justifyContent: "center"})
-//     .flexWrap("wrap")
-//     .padding(3)
-//     .paddingLeft(5)
-//     .paddingRight(5)
-//     .and(StyleRule("[data-has-border=false]")
-//         .border("none")
-//         .backgroundColor(Colors.transparent)
-//     )
-// , "*[data-inline-popup-button=inline-popup-button]");
 
 export type PopupFactory = (data) => XNode;
 

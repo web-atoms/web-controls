@@ -1,11 +1,8 @@
 import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder";
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import Colors from "@web-atoms/core/dist/core/Colors";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule, { AtomStyleRules } from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import AtomRepeater from "../basic/AtomRepeater";
 import AddImage, { showImageDialog } from "./commands/AddImage";
 import AddLink from "./commands/AddLink";
@@ -29,6 +26,7 @@ import Underline from "./commands/Underline";
 import Unlink from "./commands/Unlink";
 import UnorderedList from "./commands/UnorderedList";
 import Toolbar from "./commands/Toolbar";
+import styled from "@web-atoms/core/dist/style/styled";
 export { default as Toolbar} from "./commands/Toolbar";
 
 const link = document.createElement("link");
@@ -41,52 +39,71 @@ link.onload = () => {
 };
 document.head.appendChild(link);
 
-const css = CSS(StyleRule()
-    .display("flex")
-    .flexDirection("column")
-    .minHeight(500)
-    .child(StyleRule("iframe")
-        .flexStretch()
-    )
-    .child(StyleRule(".files")
-        .child(StyleRule(".file")
-            .flexLayout({ inline: true })
-            .borderColor(Colors.lightGray.withAlphaPercent(0.5))
-            .borderWidth(1)
-            .borderStyle("solid")
-            .borderRadius(15)
-            .paddingLeft(10)
-            .paddingRight(10)
-            .child(StyleRule("label")
-                .maxWidth(100)
-                .textEllipsis()
-            )
-        )
-    )
-    .nested(StyleRule(".toolbar")
-        .display("flex")
-        .flexWrap("wrap")
-        .alignItems("center")
-        .child(StyleRule(".command")
-            .display("inline-flex")
-            .alignItems("center")
-            .justifyContent("space-evenly" as any)
-            .border("none")
-            .cursor("pointer")
-            .backgroundColor(Colors.transparent)
-            .hoverBackgroundColor(Colors.lightGreen)
-            .minWidth(28)
-            .height(28)
-            .and(StyleRule(".pressed")
-                .backgroundColor(Colors.lightGray)
-                .hoverBackgroundColor(Colors.lightGreen)
-            )
-            .nested(StyleRule(".ri-bold")
-                .fontWeight("bold")
-            )
-        )
-    )
-);
+const css = styled.css `
+
+    display: flex;
+    flex-direction: column;
+    min-height: 500px;
+    
+    & > iframe {
+        flex: 1 1 100%; 
+    }
+    
+    & > .files > .file {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+        gap: 4px;
+        display: inline-flex;
+        border-color: rgba(211,211,211,0.5);
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 15px;
+        padding-left: 10px;
+        padding-right: 10px; 
+
+        & > label {
+            max-width: 100px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis; 
+        }
+    }
+    
+    
+    & .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+
+        & > .command {
+            display: inline-flex;
+            align-items: center;
+            justify-content: space-evenly;
+            border: none;
+            cursor: pointer;
+            background-color: #00000000;
+            min-width: 28px;
+            height: 28px; 
+        
+            &:hover {
+                background-color: #90ee90; 
+            }
+            
+            &.pressed {
+                background-color: #d3d3d3; 
+
+                &:hover {
+                    background-color: #90ee90; 
+                }
+            }            
+            
+            & .ri-bold {
+                font-weight: bold; 
+            }
+        }
+    }
+    `.installLocal();
 
 function preventLinkClick(e: Event, editor: HTMLElement, doc: Document) {
     let target = e.target as HTMLElement;
@@ -212,7 +229,7 @@ export interface IEditorCommand {
 
 export interface ITagCommand<T = any> {
     name: string;
-    style: AtomStyleRules;
+    style: any;
     handler: (ce: CustomEvent<{ target: HTMLElement, data: T}>) => any
 }
 

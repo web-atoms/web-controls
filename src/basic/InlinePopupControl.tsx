@@ -1,8 +1,5 @@
-import { App } from "@web-atoms/core/dist/App";
-import Colors from "@web-atoms/core/dist/core/Colors";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
-import { AtomControl, ElementValueSetters } from "@web-atoms/core/dist/web/controls/AtomControl";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { IPopupOptions, PopupControl } from "@web-atoms/core/dist/web/services/PopupService";
 
 export default class InlinePopupControl extends PopupControl {

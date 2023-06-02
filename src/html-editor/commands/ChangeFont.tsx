@@ -1,25 +1,13 @@
 import Bind from "@web-atoms/core/dist/core/Bind";
-import Colors from "@web-atoms/core/dist/core/Colors";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import PopupButton, { MenuItem } from "../../basic/PopupButton";
 import type AtomHtmlEditor from "../AtomHtmlEditor";
+import styled from "@web-atoms/core/dist/style/styled";
 
-const fontMenuCSS = CSS(StyleRule()
-    .padding(5)
-    .width(170)
-    // .child(StyleRule(".menu")
-    //     .padding(5)
-    //     .hoverBackgroundColor(Colors.lightGreen)
-    //     .child(StyleRule("i")
-    //         .opacity("0")
-    //         .and(StyleRule(".selected")
-    //             .opacity("1")
-    //         )
-    //     )
-    // )
-);
+const fontMenuCSS = styled.css `
+    padding: 5px;
+    width: 170px;
+`.installLocal();
 
 const fonts: Array<[string, string[]]> = [
     ["Sans Serif", ["arial", "sans-serif"]],

@@ -1,58 +1,64 @@
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import MobileApp, { Drawer } from "../mobile-app/MobileApp";
+import styled from "@web-atoms/core/dist/style/styled";
 
-CSS(StyleRule()
-    .position("relative")
-    .overflow("hidden")
-    .display("grid")
-    .minWidth(900)
-    .gridTemplateRows("1fr auto")
-    .gridTemplateColumns("auto 1fr auto")
-    .child(StyleRule("[data-page-element=app]")
-        .gridRow("1")
-        .gridColumn("2")
-        .position("inherit")
-    )
-    .child(StyleRule("[data-page-element=menu-renderer]")
-        .gridRow("1")
-        .gridColumn("1")
-        .overflowX("hidden")
-        .overflowY("auto")
-    )
-    .child(StyleRule("[data-page-element=side-bar]")
-        .gridRow("1")
-        .gridColumn("3")
-        .overflowX("hidden")
-        .overflowY("auto")
-    )
-    .child(StyleRule("[data-page-element=status-bar]")
-        .gridRow("2")
-        .gridColumn("1 / span 3")
-        .padding(5)
-        .marginTop(2)
-        .borderTop("solid 1px lightgray")
-        .overflow("hidden")
-    )
-, "*[data-desktop-app=desktop-app]");
+    styled.css `
 
-CSS(StyleRule()
-    .width("100%")
-    .height("100%")
-, "html,body");
+    html, body {
+        width: 100%;
+        height: 100%;
+    }
 
-CSS(StyleRule()
-    .overflow("hidden")
-    .display("flex")
-    .justifyContent("space-around")
-    .alignItems("stretch")
-    .alignContent("stretch")
-    .flexDirection("row")
-, "body");
+    body {
+        overflow: hidden;
+        display: flex;
+        justify-content: space-around;
+        align-items: stretch;
+        align-content: stretch;
+        flex-direction: row;
+    }
+
+    *[data-desktop-app=desktop-app] {
+        position: relative;
+        overflow: hidden;
+        display: grid;
+        min-width: 900px;
+        grid-template-rows: 1fr auto;
+        grid-template-columns: auto 1fr auto;
+        
+        & > [data-page-element=app] {
+            grid-row: 1;
+            grid-column: 2;
+            position: inherit; 
+        }
+
+        & > [data-page-element=menu-renderer] {
+            grid-row: 1;
+            grid-column: 1;
+            overflow-x: hidden;
+            overflow-y: auto; 
+        }
+        
+        & > [data-page-element=side-bar] {
+            grid-row: 1;
+            grid-column: 3;
+            overflow-x: hidden;
+            overflow-y: auto; 
+        }
+        
+        & > [data-page-element=status-bar] {
+            grid-row: 2;
+            grid-column: 1 / span 3;
+            padding: 5px;
+            margin-top: 2px;
+            border-top: solid 1px lightgray;
+            overflow: hidden; 
+        }
+    }
+    `.withId("*[data-desktop-app=desktop-app]").installGlobal();
 
 export default class DesktopApp extends AtomControl {
 

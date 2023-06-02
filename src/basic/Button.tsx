@@ -1,7 +1,5 @@
-import Colors from "@web-atoms/core/dist/core/Colors";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
+import styled from "@web-atoms/core/dist/style/styled";
 
 export interface IButton {
     id?: string;
@@ -17,41 +15,42 @@ export interface IButton {
     subClass?: string;
 }
 
-const css = CSS(
-    StyleRule()
-    .padding(8)
-    .marginLeft(3)
-    .marginRight(3)
-    .roundBorderFull()
-    .display("inline-block")
-    .height(40)
-    .minWidth(40)
-    .defaultBoxShadow()
-    .cursor("pointer")
-    .backgroundColor(Colors.transparent)
-    .hoverBackgroundColor(Colors.lightGreen)
-    .and(StyleRule(".pressed")
-        .backgroundColor(Colors.lightSteelBlue)
-    )
-    .child(StyleRule("label.label")
-        .display("flex")
-        .alignItems("center")
-        .gap("5px")
-        .child(StyleRule(".fad")
-            .fontSize(18)
-            .width("100%")
-            .color(Colors.purple.withAlphaPercent(0.5))
-            .cursor("pointer")
-            .and(StyleRule(".red")
-                .color(Colors.red)
-            )
-        )
-        .child(StyleRule("span")
-            .whiteSpace("nowrap")
-        )
-    )
-);
-
+const css = styled.css `
+    padding: 8px;
+    margin-left: 3px;
+    margin-right: 3px;
+    border-radius: 9999px;
+    display: inline-block;
+    height: 40px;
+    min-width: 40px;
+    box-shadow: rgba(50, 50, 105, 0.07) 0px 2px 5px 0px, rgba(0, 0, 0, 0.03) 0px 1px 1px 0px;
+    border: solid 1px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    background-color: transparent;
+    &.pressed {
+        background-color: lightsteelblue;
+    }
+    &:hover {
+        background-color: lightgreen;
+    }
+    & > label.label {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        & > .fad {
+            font-size: larger;
+            width: 100%;
+            color: purple;
+            cursor: pointer;
+            &.red {
+                color: red;
+            }
+        }
+        & > span {
+            white-space: nowrap;
+        }
+    }
+`.installLocal();
 export default function Button({
     id,
     icon,

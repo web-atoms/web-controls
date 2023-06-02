@@ -1,7 +1,5 @@
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
-import InlinePopup, { IInlinePopupButtonOptions, InlinePopupButton } from "./InlinePopup";
+import { IInlinePopupButtonOptions, InlinePopupButton } from "./InlinePopup";
 
 import "./styles/popup-button-style";
 

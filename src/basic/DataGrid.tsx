@@ -1,12 +1,7 @@
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import Colors from "@web-atoms/core/dist/core/Colors";
-import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
 import { CancelToken } from "@web-atoms/core/dist/core/types";
-import WatchProperty from "@web-atoms/core/dist/core/WatchProperty";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import AtomRepeater, { getParentRepeaterItem, SelectorCheckBox } from "./AtomRepeater";
 import { EditableInput, getPropertyInfo, IPropertyInfo } from "./Editable";
 import TableRepeater from "./TableRepeater";
@@ -125,36 +120,6 @@ export type IDataGridColumn = IDataGridColumnWithLabel | IDataGridColumnWithLabe
 
 // }
 
-// CSS(StyleRule()
-//     .child(StyleRule("thead")
-//         .child(StyleRule("tr[data-header=header]")
-//             .child(StyleRule("th")
-//                 .child(StyleRule("i[data-sort]")
-//                     .marginRight(5)
-//                     .marginLeft(3)
-//                     .opacity("0.5")
-//                 )
-//                 .child(StyleRule("input[type=checkbox]")
-//                     .margin(5)
-//                 )
-//             )
-//         )
-//     )
-//     .child(StyleRule("tbody")
-//         .child(StyleRule("tr[data-item-index]")
-//             .hoverBackgroundColor(Colors.lightSkyBlue.withAlphaPercent(0.3))
-//             .and(StyleRule("[data-selected-item=true]")
-//                 .backgroundColor(Colors.lightGray.withAlphaPercent(0.4))
-//             )
-//             .child(StyleRule("td[data-ellipsis]")
-//                 .maxWidth("200px")
-//                 .overflow("hidden")
-//                 .textOverflow("ellipsis")
-//                 .whiteSpace("nowrap")
-//             )
-//         )
-//     )
-// , "table[data-data-grid=data-grid]");
 
 export const SelectAllColumn: IDataGridColumn = {
     header: "Select All",

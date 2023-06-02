@@ -3,8 +3,6 @@ import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import Colors from "@web-atoms/core/dist/core/Colors";
 import { IDisposable } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import AtomRepeater, { askSuggestion, askSuggestionPopup } from "./AtomRepeater";
 
 import "./styles/suggestion-style";

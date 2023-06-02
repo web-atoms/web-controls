@@ -1,6 +1,4 @@
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import IElement from "./IElement";
 
 import "./styles/switch-style";

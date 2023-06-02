@@ -1,14 +1,18 @@
 import XNode from "@web-atoms/core/dist/core/XNode";
 import Pack from "@web-atoms/core/dist/Pack";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import AtomToggleView, { ToggleView } from "../../toggle-view/AtomToggleView";
+import styled from "@web-atoms/core/dist/style/styled";
 
-const css = CSS(StyleRule("test")
-    .display("flex")
-    .absolutePosition({ top: 0, bottom: 0, right: 0, left: 0})
-);
+const css = styled.css `
+    display: flex;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px; 
+
+    `.installLocal();
 
 @Pack
 export default class ToggleViewTest extends AtomControl {

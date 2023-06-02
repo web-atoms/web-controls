@@ -8,13 +8,9 @@ import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
 import { CancelToken, IDisposable } from "@web-atoms/core/dist/core/types";
 import WatchProperty from "@web-atoms/core/dist/core/WatchProperty";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { IDialogOptions, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
-import ArrayLike from "../ArrayLike";
 import InlinePopup from "./InlinePopup";
-import InlinePopupControl from "./InlinePopupControl";
 import MergeNode from "./MergeNode";
 import ItemPath from "./ItemPath";
 

@@ -1,19 +1,12 @@
 import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder";
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import Colors from "@web-atoms/core/dist/core/Colors";
 import { CancelToken, IDisposable } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import AtomRepeater, { Match, MatchTrue } from "./AtomRepeater";
 import type { IChip } from "./Chip";
 export { default as Chip } from "./Chip";
-import IElement from "./IElement";
 import InlinePopup from "./InlinePopup";
-import InlinePopupControl from "./InlinePopupControl";
 
 import "./styles/chips-style";
 import "./styles/item-suggestion-style";

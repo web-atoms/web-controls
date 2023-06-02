@@ -3,17 +3,14 @@ import { AtomLoader } from "@web-atoms/core/dist/core/AtomLoader";
 import { AtomUri } from "@web-atoms/core/dist/core/AtomUri";
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import Colors from "@web-atoms/core/dist/core/Colors";
 import sleep from "@web-atoms/core/dist/core/sleep";
-import { CancelToken, IClassOf, IDisposable } from "@web-atoms/core/dist/core/types";
+import { IDisposable } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import { IPageOptions, NavigationService } from "@web-atoms/core/dist/services/NavigationService";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
+import { NavigationService } from "@web-atoms/core/dist/services/NavigationService";
 import { AtomWindowViewModel } from "@web-atoms/core/dist/view-model/AtomWindowViewModel";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { AtomUI, ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
-import PopupService, { IDialogOptions, IPopup, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
+import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
+import PopupService, { IDialogOptions, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import PageNavigator from "../PageNavigator";
 import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
 import styled from "@web-atoms/core/dist/style/styled";
@@ -60,26 +57,6 @@ import styled from "@web-atoms/core/dist/style/styled";
     }
 
     `.installGlobal("[data-page-app=page-app]");
-
-// CSS(StyleRule()
-//     .absolutePosition({ left: "-80%", top: 0 })
-//     .width("80%")
-//     .height("100%")
-//     .overflow("hidden")
-//     .transition("left 0.3s ease-out")
-// , "div[data-drawer-page=drawer-page]");
-
-
-// CSS(StyleRule()
-//     .paddingBottom(500)
-// , "body[data-keyboard=shown] & > [data-page-element=content]");
-
-// if (/iphone|ios/i.test(window.navigator.userAgent)) {
-//     CSS(StyleRule()
-//         .marginBottom(500)
-//     , "body[data-keyboard=shown] &");
-// }
-
     styled.css `
 
     position: absolute;

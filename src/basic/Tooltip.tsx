@@ -1,11 +1,7 @@
-import Colors from "@web-atoms/core/dist/core/Colors";
 import { CancelToken } from "@web-atoms/core/dist/core/types";
-import XNode, { xnodeSymbol } from "@web-atoms/core/dist/core/XNode";
-import StyleRule, { AnimationType } from "@web-atoms/core/dist/style/StyleRule";
+import XNode from "@web-atoms/core/dist/core/XNode";
 import { AtomControl, ElementValueSetters } from "@web-atoms/core/dist/web/controls/AtomControl";
-import PopupService, { IPopup, PopupControl } from "@web-atoms/core/dist/web/services/PopupService";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
-import AtomRepeater, { getParentRepeaterItem } from "./AtomRepeater";
+import { getParentRepeaterItem } from "./AtomRepeater";
 import InlinePopup from "./InlinePopup";
 
 import "./styles/tooltip-style";

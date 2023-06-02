@@ -1,17 +1,18 @@
 import Bind from "@web-atoms/core/dist/core/Bind";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import Pack from "@web-atoms/core/dist/Pack";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import AtomChips, { Chip } from "../../../basic/AtomChips";
 import GridTestViewModel, { ICurrencyInfo } from "../../data-grid/GridTestViewModel";
+import styled from "@web-atoms/core/dist/style/styled";
 
-const css = CSS(StyleRule()
-    .child(StyleRule("*")
-        .flexLayout()
-    )
-);
+const css = styled.css `
+    & > * {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+`.installLocal();
 
 @Pack
 export default class ChipsTest extends AtomControl {
