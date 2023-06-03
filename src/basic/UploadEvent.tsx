@@ -141,6 +141,15 @@ requestUpload.eventScope.listen((ce: CustomEvent) => {
                         return;
                     }
                 }
+
+                if (upload) {
+                    const doUploadEvent = new CustomEvent("uploadRequested", { detail: { files, extra, uploadEvent }, bubbles: true });
+                    root.dispatchEvent(doUploadEvent);
+                    if (doUploadEvent.defaultPrevented) {
+                        return;
+                    }
+                }
+
                 // if (upload) {
                 //     (window as any).uploading = true;
                 //     control.app.runAsync(async () => {
