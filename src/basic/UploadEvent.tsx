@@ -1,6 +1,7 @@
 import { App } from "@web-atoms/core/dist/App";
 import Command from "@web-atoms/core/dist/core/Command";
 import EventScope from "@web-atoms/core/dist/core/EventScope";
+import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import PopupService from "@web-atoms/core/dist/web/services/PopupService";
 
@@ -71,7 +72,7 @@ requestUpload.eventScope.listen((ce: CustomEvent) => {
     const multiple = element.dataset.multiple === "true";
     const extra = (element as any).extra;
     const upload = element.dataset.upload === "true";
-    const uploadEvent = element.getAttribute("data-upload-event");
+    const uploadEvent = StringHelper.fromHyphenToCamel(element.getAttribute("data-upload-event"));
 
     const chain: HTMLElement[] = [];
     let start = element;
