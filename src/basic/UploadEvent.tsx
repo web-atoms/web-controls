@@ -144,7 +144,15 @@ requestUpload.eventScope.listen((ce: CustomEvent) => {
                 }
 
                 if (upload) {
-                    const doUploadEvent = new CustomEvent("uploadRequested", { detail: { files, extra, uploadEvent }, bubbles: true });
+                    const doUploadEvent = new CustomEvent("uploadRequested", {
+                        detail: {
+                            files,
+                            extra,
+                            uploadEvent
+                        },
+                        bubbles: true,
+                        cancelable: true
+                    });
                     root.dispatchEvent(doUploadEvent);
                     if (doUploadEvent.defaultPrevented) {
                         return;
