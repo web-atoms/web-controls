@@ -18,15 +18,21 @@ import { ContentPage, isMobileView } from "./MobileApp";
             }
             &[data-mode=desktop] {
                 display: grid;
-                grid-template-columns: 5fr minmax(400px, 3fr);
-                grid-template-rows: 1fr;
+                grid-template-columns: 5fr minmax(400px, 3fr) auto;
+                grid-template-rows: auto 1fr;
                 & > *{
-                    grid-row: 1;
+                    grid-row: 1 / span 2;
                     grid-column: 1;
                 }
-                & > *[data-element=detail] {
+                & > *[data-element=close] {
                     grid-row: 1;
-                    grid-column: 2;
+                    grid-column: 3;
+                    align-self: center;
+                    justify-self: center;
+                }
+                & > *[data-element=detail] {
+                    grid-row: 1 / span 2;
+                    grid-column: 2 / span 2;
                     align-self: stretch;
                     justify-self: stretch;
                     transform: none;
@@ -46,7 +52,11 @@ import { ContentPage, isMobileView } from "./MobileApp";
 
 export default class MasterDetailPage extends ContentPage {
 
+    public showClose = true;
+
     private lastDetail: ContentPage;
+
+    private closeButton: HTMLElement;
 
     public openDetail<T>(page: Page<T>, parameters: T) {
         if (isMobileView) {
@@ -56,6 +66,15 @@ export default class MasterDetailPage extends ContentPage {
 
         const content = this.element.querySelector(`[data-page-element="content"]`);
         content.setAttribute("data-mode", "desktop");
+
+        if (!this.closeButton && this.showClose) {
+            const closeButton = document.createElement("i");
+            closeButton.setAttribute("data-element", "close");
+            closeButton.className = "fas fa-times-circle";
+            closeButton.addEventListener("click", () => this.closeDetail());
+            this.closeButton = closeButton;
+            content.appendChild(closeButton);            
+        }
 
         let lastDetail = this.lastDetail;
         if (lastDetail) {
@@ -79,4 +98,17 @@ export default class MasterDetailPage extends ContentPage {
         this.element.setAttribute("data-page-type", "master-detail");
     }
 
+    protected closeDetail() {
+        const lastDetail = this.lastDetail;
+        if (lastDetail) {
+            const { element } = lastDetail;
+            lastDetail.dispose();
+            element.remove();
+            this.lastDetail = null;
+        }
+        const closeButton = this.closeButton;
+        if (closeButton) {
+            closeButton.remove();
+        }
+    }
 }
