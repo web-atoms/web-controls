@@ -28,7 +28,7 @@ import { ContentPage, isMobileView } from "./MobileApp";
                     grid-row: 1;
                     grid-column: 3;
                     color: red;
-                    margin-top: 10px;
+                    margin-top: 5px;
                     margin-right: 5px;
                     padding: 5px;
                     align-self: center;
@@ -48,7 +48,7 @@ import { ContentPage, isMobileView } from "./MobileApp";
                     border-radius: 9px;
                     box-shadow: rgb(50 50 105 / 7%) 0px 2px 5px 0px, rgb(0 0 0 / 3%) 0px 1px 1px 0px;
                     border: solid 1px rgb(217 217 217);
-                    padding: 5px;
+                    padding: 0;
                     & > [data-page-element=action-bar] {
                         border-radius: 5px;
                     }
