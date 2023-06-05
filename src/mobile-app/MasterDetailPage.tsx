@@ -40,6 +40,11 @@ import { ContentPage, isMobileView } from "./MobileApp";
                     transition: none;
                     display: grid;
                     position: relative;
+                    margin: 5px;
+                    border-radius: 9px;
+                    box-shadow: rgb(50 50 105 / 7%) 0px 2px 5px 0px, rgb(0 0 0 / 3%) 0px 1px 1px 0px;
+                    border: solid 1px rgb(217 217 217);
+                    padding: 5px;
                     & > [data-page-element-title-text], & > [data-page-element=icon-button], & > [data-page-element=action-bar] {
                         display: none;
                     }
