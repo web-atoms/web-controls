@@ -65,7 +65,7 @@ import { ContentPage, isMobileView } from "./MobileApp";
         }
     `.installGlobal("[data-page-type=master-detail]");
 
-export default class MasterDetailPage extends ContentPage {
+export default class MasterDetailPage<T = any, TResult = any> extends ContentPage<T, TResult> {
 
     public showClose = true;
 
