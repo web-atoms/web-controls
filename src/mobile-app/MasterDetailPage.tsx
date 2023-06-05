@@ -49,9 +49,6 @@ import { ContentPage, isMobileView } from "./MobileApp";
                     box-shadow: rgb(50 50 105 / 7%) 0px 2px 5px 0px, rgb(0 0 0 / 3%) 0px 1px 1px 0px;
                     border: solid 1px rgb(217 217 217);
                     padding: 0;
-                    & > [data-page-element=action-bar] {
-                        border-radius: 5px;
-                    }
                     & > [data-page-element=header] {
                         grid-column: 1 / span 3;
                     }
