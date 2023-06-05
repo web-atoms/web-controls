@@ -31,6 +31,7 @@ import { ContentPage, isMobileView } from "./MobileApp";
                     padding: 5px;
                     align-self: center;
                     justify-self: center;
+                    z-index: 2;
                 }
                 & > *[data-element=detail] {
                     grid-row: 1 / span 2;
@@ -40,6 +41,7 @@ import { ContentPage, isMobileView } from "./MobileApp";
                     transform: none;
                     transition: none;
                     display: grid;
+                    grid-template-rows: auto 1fr auto;
                     position: relative;
                     margin: 5px;
                     border-radius: 9px;
@@ -49,8 +51,17 @@ import { ContentPage, isMobileView } from "./MobileApp";
                     & > [data-page-element-title-text], & > [data-page-element=icon-button], & > [data-page-element=action-bar] {
                         display: none;
                     }
-                    & > [data-page-element=header], & > [data-page-element=footer], & > [data-page-element=content] {
-                        grid-column: 1 / span 2;
+                    & > [data-page-element=header] {
+                        grid-column: 1 / span 3;
+                        grid-row: 1;
+                    }
+                    & > [data-page-element=footer] {
+                        grid-column: 1 / span 3;
+                        grid-row: 3;
+                    }
+                    & > [data-page-element=content] {
+                        grid-column: 1 / span 3;
+                        grid-row: 2;
                     }
                 }
             }
@@ -111,11 +122,12 @@ export default class MasterDetailPage extends ContentPage {
             const { element } = lastDetail;
             lastDetail.dispose();
             element.remove();
-            this.lastDetail = null;
+            this.lastDetail = void 0;
         }
         const closeButton = this.closeButton;
         if (closeButton) {
             closeButton.remove();
+            this.closeButton = void 0;
         }
     }
 }
