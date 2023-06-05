@@ -28,6 +28,7 @@ import { ContentPage, isMobileView } from "./MobileApp";
                     grid-row: 1;
                     grid-column: 3;
                     color: red;
+                    padding: 5px;
                     align-self: center;
                     justify-self: center;
                 }
@@ -77,9 +78,9 @@ export default class MasterDetailPage extends ContentPage {
             const closeButton = document.createElement("i");
             closeButton.setAttribute("data-element", "close");
             closeButton.className = "fas fa-times-circle";
-            closeButton.addEventListener("click", () => this.closeDetail());
             this.closeButton = closeButton;
             content.appendChild(closeButton);            
+            closeButton.addEventListener("click", () => this.closeDetail());
         }
 
         let lastDetail = this.lastDetail;
