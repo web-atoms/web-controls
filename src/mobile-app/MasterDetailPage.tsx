@@ -28,11 +28,11 @@ import { ContentPage, isMobileView } from "./MobileApp";
                     grid-row: 1;
                     grid-column: 3;
                     color: red;
-                    margin-top: 5px;
-                    margin-right: 5px;
+                    margin-top: 0.35em;
                     padding: 5px;
                     align-self: center;
                     justify-self: center;
+                    font-size: 1.5em;
                     z-index: 2;
                 }
                 & > *[data-element=detail] {
