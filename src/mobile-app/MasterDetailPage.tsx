@@ -27,6 +27,7 @@ import { ContentPage, isMobileView } from "./MobileApp";
                 & > *[data-element=close] {
                     grid-row: 1;
                     grid-column: 3;
+                    color: red;
                     align-self: center;
                     justify-self: center;
                 }
