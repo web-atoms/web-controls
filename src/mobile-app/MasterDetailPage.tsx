@@ -28,6 +28,8 @@ import { ContentPage, isMobileView } from "./MobileApp";
                     grid-row: 1;
                     grid-column: 3;
                     color: red;
+                    margin-top: 10px;
+                    margin-right: 5px;
                     padding: 5px;
                     align-self: center;
                     justify-self: center;
@@ -41,27 +43,20 @@ import { ContentPage, isMobileView } from "./MobileApp";
                     transform: none;
                     transition: none;
                     display: grid;
-                    grid-template-rows: auto 1fr auto;
                     position: relative;
                     margin: 5px;
                     border-radius: 9px;
                     box-shadow: rgb(50 50 105 / 7%) 0px 2px 5px 0px, rgb(0 0 0 / 3%) 0px 1px 1px 0px;
                     border: solid 1px rgb(217 217 217);
                     padding: 5px;
-                    & > [data-page-element-title-text], & > [data-page-element=icon-button], & > [data-page-element=action-bar] {
-                        display: none;
-                    }
                     & > [data-page-element=header] {
                         grid-column: 1 / span 3;
-                        grid-row: 1;
                     }
                     & > [data-page-element=footer] {
                         grid-column: 1 / span 3;
-                        grid-row: 3;
                     }
                     & > [data-page-element=content] {
                         grid-column: 1 / span 3;
-                        grid-row: 2;
                     }
                 }
             }
