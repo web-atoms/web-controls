@@ -20,9 +20,11 @@ import { ContentPage, isMobileView } from "./MobileApp";
                 display: grid;
                 grid-template-columns: 5fr minmax(400px, 3fr) auto;
                 grid-template-rows: auto 1fr;
+                overflow: hidden;
                 & > *{
                     grid-row: 1 / span 2;
                     grid-column: 1;
+                    overflow: auto;
                 }
                 & > *[data-element=close] {
                     grid-row: 1;
