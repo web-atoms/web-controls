@@ -124,5 +124,7 @@ export default class MasterDetailPage extends ContentPage {
             closeButton.remove();
             this.closeButton = void 0;
         }
+        const content = this.element.querySelector(`[data-page-element="content"]`);
+        content.removeAttribute("data-mode");
     }
 }
