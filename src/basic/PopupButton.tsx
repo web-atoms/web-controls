@@ -30,14 +30,14 @@ export function MenuItem({
 
     if (href) {
         return <a data-menu-item="menu-item" href={href} target={target} { ... others }>
-            { icon && <i class={icon}/>}
-            { label && <span text={label}/>}
+            { icon && <i data-element="icon" class={icon}/>}
+            { label && <span data-element="label" text={label}/>}
         </a>;
     }
 
     return <div data-menu-item="menu-item" eventClick={eventClick} { ... others }>
-        { icon && <i class={icon}/>}
-        { label && <span text={label}/>}
+        { icon && <i data-element="icon" class={icon}/>}
+        { label && <span data-element="label" text={label}/>}
     </div>;
 }
 

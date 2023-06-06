@@ -19,6 +19,11 @@ import styled from "@web-atoms/core/dist/style/styled";
         flex-shrink: 0;
     }
 
+    & > [data-element=icon] {
+        width: 1.3em;
+        text-align: center;
+    }
+
     `.installGlobal("*[data-menu-item=menu-item]");
 
     styled.css `
