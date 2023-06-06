@@ -41,4 +41,17 @@ export default class PageNavigator {
         return null;
     }
 
+    public static pushPageForResultOrCancel<T, TResult>(
+        page: PageWith<T, TResult>, parameters?: T, clearHistory?: boolean): Promise<TResult | undefined> {
+        try {
+            return this.pushPageForResult(page, parameters);
+        } catch (e) {
+            if (CancelToken.isCancelled(e)) {
+                return;
+            }
+            console.error(e);
+            return;
+        }
+    }
+
 }
