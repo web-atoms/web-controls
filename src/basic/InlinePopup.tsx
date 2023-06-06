@@ -288,6 +288,14 @@ export function InlinePopupButton(
 
     alignment ||= anchorRight ? "bottomRight" : "bottomLeft";
 
+    if(!a["data-layout"]) {
+        if (icon && text) {
+            a["data-layout"] = "icon-button";
+        } else {
+            a["data-layout"] = "button";
+        }
+    }
+
     if (popup) {
         return <button
             data-popup-class={popup}
