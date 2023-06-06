@@ -10,7 +10,7 @@ import styled from "@web-atoms/core/dist/style/styled";
     justify-content: flex-start;
     gap: 4px;
     flex-wrap: wrap;
-
+    min-width: 20ch;
     &:hover {
         background-color: lightgreen;
     }
