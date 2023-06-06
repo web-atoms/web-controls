@@ -600,6 +600,10 @@ export class ContentPage<T = any, TResult = any> extends BasePage {
     public close: (result: TResult) => any;
 }
 
+export type InputOf<T extends ContentPage> = T extends ContentPage<infer T> ? T : any;
+
+export type OutputOf<T extends ContentPage> = T extends ContentPage<any, infer T> ? T : any;
+
 export class TabbedPage extends BasePage {
 
 }
