@@ -46,7 +46,7 @@ const toggleDetails = (e: Event) => {
     start = start.parentElement;
     const container = start;
     start = start?.parentElement;
-    if (start.getAttribute("data-limited-text") !== "limited-text") {
+    if (!start || start.getAttribute("data-limited-text") !== "limited-text") {
         return;
     }
     e.preventDefault();
