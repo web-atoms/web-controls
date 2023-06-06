@@ -3,7 +3,7 @@ import { AtomDisposableList } from "@web-atoms/core/dist/core/AtomDisposableList
 import sleep from "@web-atoms/core/dist/core/sleep";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import { AtomControl, ElementValueSetters } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { IPopupOptions } from "@web-atoms/core/dist/web/services/PopupService";
+import { IPopup, IPopupOptions } from "@web-atoms/core/dist/web/services/PopupService";
 import IElement from "./IElement";
 
 import "./styles/inline-popup-style";
@@ -93,7 +93,7 @@ export default class InlinePopup extends AtomControl {
                 container.style.left = `${targetElement.offsetWidth}px`;
                 break;
             case "above":
-                container.style.bottom = "0px";
+                container.style.bottom = `${targetElement.offsetHeight}px`;
                 container.style.left = "0px";
             default:
                 container.style.top = `${targetElement.offsetHeight}px`;
@@ -201,6 +201,7 @@ export interface IInlinePopupButtonOptions extends IElement {
     nodes?: XNode[];
     defaultOnClick?: "close" | "cancel";
     anchorRight?: boolean;
+    alignment: IPopupOptions["alignment"];
     popup?: PopupFactory;
 }
 
@@ -278,17 +279,20 @@ export function InlinePopupButton(
         nodes = [],
         defaultOnClick = "close",
         anchorRight = false,
+        alignment,
         popup,
         ... a
     }: IInlinePopupButtonOptions,
     ... popupNodes: XNode[]) {
+
+    alignment ||= anchorRight ? "bottomRight" : "bottomLeft";
 
     if (popup) {
         return <button
             data-popup-class={popup}
             data-has-border={!!hasBorder}
             data-inline-popup-button="inline-popup-button"
-            data-alignment={anchorRight ? "bottomRight" : "bottomLeft"}
+            data-alignment={alignment}
             { ... a}>
             {icon && <i class={icon}/>}
             {text && <span text={text}/>}
@@ -308,7 +312,7 @@ export function InlinePopupButton(
             isOpen = true;
 
             await InlinePopup.show(
-                e.currentTarget as any, popupNode, { defaultOnClick });
+                e.currentTarget as any, popupNode, { defaultOnClick, alignment });
         } finally {
             done();
         }
@@ -316,7 +320,7 @@ export function InlinePopupButton(
     return <button
         event-click={click}
         data-has-border={!!hasBorder}
-        data-alignment={anchorRight ? "bottomRight" : "bottomLeft"}
+        data-alignment={alignment}
         data-inline-popup-button="inline-popup-button"
         { ... a}>
         {icon && <i class={icon}/>}
