@@ -31,7 +31,7 @@ import styled from "@web-atoms/core/dist/style/styled";
 const checkClick = (e: MouseEvent) => {
     const form = e.currentTarget as HTMLDivElement;
     const target = e.target as HTMLButtonElement;
-    if (!/submit/i.test(target.type ?? target.getAttribute("data-type") )) {
+    if (!/submit/i.test(target.getAttribute("type") ?? target.getAttribute("data-type") )) {
         return;
     }
     form.setAttribute("data-show-validation", "true");
