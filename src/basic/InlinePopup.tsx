@@ -201,7 +201,7 @@ export interface IInlinePopupButtonOptions extends IElement {
     nodes?: XNode[];
     defaultOnClick?: "close" | "cancel";
     anchorRight?: boolean;
-    alignment: IPopupOptions["alignment"];
+    alignment?: IPopupOptions["alignment"];
     popup?: PopupFactory;
 }
 
