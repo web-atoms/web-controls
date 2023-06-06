@@ -45,7 +45,7 @@ export default InlinePopupButton;
 
 export function PopupActionButton(a: IInlinePopupButtonOptions, ... nodes: XNode[]) {
     a.anchorRight = true;
-    a["data-alignment"] = "bottom-right";
+    a["data-alignment"] ??= "bottom-right";
     return InlinePopupButton(a, ... nodes);
 }
 

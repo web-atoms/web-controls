@@ -92,6 +92,9 @@ export default class InlinePopup extends AtomControl {
                 container.style.top = "0px";
                 container.style.left = `${targetElement.offsetWidth}px`;
                 break;
+            case "above":
+                container.style.bottom = "0px";
+                container.style.left = "0px";
             default:
                 container.style.top = `${targetElement.offsetHeight}px`;
                 break;
