@@ -584,6 +584,10 @@ export default class AtomRepeater<T = any> extends AtomControl {
 
     protected headerPresenter: HTMLElement;
 
+    private footerElement: HTMLElement;
+
+    private headerElement: HTMLElement;
+
     private initialValue: any;
 
     private itemsDisposable: IDisposable;
@@ -853,7 +857,7 @@ export default class AtomRepeater<T = any> extends AtomControl {
                 targetPrevious.insertAdjacentElement("afterend", i);
                 targetPrevious = i;
             }
-    }
+        }
 
         // we need to remove when done...
         // to unbind events... if any...
@@ -908,6 +912,8 @@ export default class AtomRepeater<T = any> extends AtomControl {
             current.remove();
         }
 
+        const end = this.footerElement;
+
         if (!isRemove) {
             const en = ir(item, index, this);
             const ea = en.attributes ??= {};
@@ -920,6 +926,8 @@ export default class AtomRepeater<T = any> extends AtomControl {
             }
             if (start) {
                 container.insertBefore(e, start);
+            } if(end) {
+                container.insertBefore(e, end);
             } else {
                 container.appendChild(e);
             }
@@ -937,7 +945,7 @@ export default class AtomRepeater<T = any> extends AtomControl {
             start = start.nextElementSibling as HTMLElement;
         }
 
-        this.onPropertyChanged("footer");
+        // this.onPropertyChanged("footer");
     }
 
     public updateItems(container?: HTMLElement, force?: boolean) {
@@ -977,6 +985,7 @@ export default class AtomRepeater<T = any> extends AtomControl {
         const vp = this.valuePath ?? ((it) => it);
         const si = (this.selectedItems ?? []).map(vp);
         let i = 0;
+
         for (const iterator of items) {
             const index = i++;
             const e = ir(iterator, index, this);
@@ -1089,9 +1098,10 @@ export default class AtomRepeater<T = any> extends AtomControl {
         } else {
             presenter.appendChild(element);
         }
+        this[name + "Element"] = element;
     }
 
-    protected dispatchHeaderFooterEvent(eventName, type, originalTarget) {
+    protected dispatchHeaderFooterEvent(eventName, type, recreate, originalTarget) {
         const detail = this[type];
         const ce = new CustomEvent(eventName ?? `${type}Click`, {
             detail,
@@ -1099,9 +1109,16 @@ export default class AtomRepeater<T = any> extends AtomControl {
             cancelable: true
         });
         originalTarget.dispatchEvent(ce);
-        if (!ce.defaultPrevented) {
+        if (ce.defaultPrevented || !(ce as any).executed) {
+            return;
+        }
+        if (recreate) {
             this.onPropertyChanged(type);
         }
+        // const promise = (ce as any).promise;        
+        // if (promise) {
+        //     promise.then((r) => r instanceof MergeNode && this.refreshItem(item, r));
+        // }
     }
 
     protected dispatchItemEvent(eventName, item, recreate, originalTarget, nestedItem?) {
@@ -1143,7 +1160,6 @@ export default class AtomRepeater<T = any> extends AtomControl {
 
     protected dispatchClickEvent(e: MouseEvent, data: any): void {
         let {
-            clickEvent = "itemClick",
             // tslint:disable-next-line: prefer-const
             recreate,
             // tslint:disable-next-line: prefer-const
@@ -1153,7 +1169,8 @@ export default class AtomRepeater<T = any> extends AtomControl {
             // tslint:disable-next-line: prefer-const
             itemIndex,
             // tslint:disable-next-line: prefer-const
-            itemPath
+            itemPath,
+            clickEvent = header ? "headerClick" : (footer ? "footerClick" : "itemClick"),
         } = data;
         clickEvent = clickEvent.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
 
@@ -1174,10 +1191,10 @@ export default class AtomRepeater<T = any> extends AtomControl {
         }
 
         if (header) {
-            this.dispatchHeaderFooterEvent(clickEvent, header, e.target);
+            this.dispatchHeaderFooterEvent(clickEvent, header, recreate, e.target);
         }
         if (footer) {
-            this.dispatchHeaderFooterEvent(clickEvent, header, e.target);
+            this.dispatchHeaderFooterEvent(clickEvent, footer, recreate, e.target);
         }
     }
 }

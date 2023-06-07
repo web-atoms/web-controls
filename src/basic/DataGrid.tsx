@@ -215,7 +215,7 @@ export default class DataGrid extends TableRepeater {
                             }
                         }
                         return <th>
-                        <span text={x.header} title={x.header}/>
+                        <span data-recreate="true" text={x.header} title={x.header}/>
                             { typeof order === "boolean" &&
                                 (order
                                     ? <i data-sort="up" class="fa-solid fa-arrow-up-short-wide"/>
