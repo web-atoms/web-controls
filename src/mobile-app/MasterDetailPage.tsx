@@ -3,6 +3,7 @@ import styled from "@web-atoms/core/dist/style/styled";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import PageNavigator, { Page } from "../PageNavigator";
 import { ContentPage, isMobileView } from "./MobileApp";
+import { IDisposable } from "@web-atoms/core/dist/core/types";
 
     styled.css `
         & > [data-page-element=content] {
@@ -69,11 +70,44 @@ export default class MasterDetailPage<T = any, TResult = any> extends ContentPag
 
     public showClose = true;
 
+    private highlightAttributeValue: [string, string] = ["data-filter", "drop-shadow-accent"];
+    public get highlightAttribute() {
+        return this.highlightAttributeValue;
+    }
+    public set highlightAttribute(value: string | [string, string]) {
+        if(!value) {
+            this.highlightAttributeValue = ["data-filter", "drop-shadow-accent"];
+            return;
+        }
+        if (typeof value === "string") {
+            const tokens = value.split("=");
+            let key = tokens[0];
+            let v = tokens[1] ?? "true";
+            if(v.endsWith("]")) {
+                v = v.substring(0, v.length - 1);
+            }
+            if (key.startsWith("[")) {
+                key = key.substring(1);
+            }
+            value = [key, v];
+        }
+        this.highlightAttributeValue = value;
+    }
+
+    private lastTargetElement: HTMLElement;
+
     private lastDetail: ContentPage;
 
     private closeButton: HTMLElement;
 
-    public openDetail<T>(page: Page<T>, parameters: T) {
+    /**
+     * 
+     * @param page Page to open in detail view
+     * @param parameters Parameters required to create the page
+     * @param highlightElement element to highlight and will be brought into view after details is created
+     * @returns 
+     */
+    public openDetail<T>(page: Page<T>, parameters: T, highlightElement?: HTMLElement) {
         if (isMobileView) {
             PageNavigator.pushPage(page, parameters);
             return;
@@ -81,6 +115,13 @@ export default class MasterDetailPage<T = any, TResult = any> extends ContentPag
 
         const content = this.element.querySelector(`[data-page-element="content"]`);
         content.setAttribute("data-mode", "desktop");
+
+        const lastTargetElement = this.lastTargetElement;
+        if (lastTargetElement) {
+            const [key] = this.highlightAttributeValue;
+            lastTargetElement.removeAttribute(key);
+        }
+        this.lastTargetElement = highlightElement;
 
         if (!this.closeButton && this.showClose) {
             const closeButton = document.createElement("i");
@@ -96,6 +137,8 @@ export default class MasterDetailPage<T = any, TResult = any> extends ContentPag
             const { element } = lastDetail;
             lastDetail.dispose();
             element.remove();
+
+            this.scrollTargetIntoView();
         }
         const P = page;
         lastDetail = new P(this.app);
@@ -106,6 +149,23 @@ export default class MasterDetailPage<T = any, TResult = any> extends ContentPag
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         this.app.runAsync(() => this.lastDetail?.init?.());
+    }
+
+    protected scrollTargetIntoView(dispose = false) {
+        const lastTargetElement = this.lastTargetElement;
+        if (lastTargetElement) {
+            setTimeout(() => {
+                const [key, value] = this.highlightAttributeValue;
+                if (lastTargetElement.isConnected) {
+                    lastTargetElement.setAttribute(key, value);
+                    lastTargetElement.scrollIntoView();
+                }
+                if (dispose) {
+                    this.lastTargetElement = void 0;
+                    lastTargetElement.removeAttribute(key);
+                }
+            }, 100);
+        }
     }
 
     protected preCreate(): void {
@@ -128,5 +188,6 @@ export default class MasterDetailPage<T = any, TResult = any> extends ContentPag
         }
         const content = this.element.querySelector(`[data-page-element="content"]`);
         content.removeAttribute("data-mode");
+        this.scrollTargetIntoView(true);
     }
 }
