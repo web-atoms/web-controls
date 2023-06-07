@@ -129,7 +129,8 @@ function BackgroundColor(color: string) {
 }
 
 export default function ChangeColor() {
-    return <PopupButton title="Change Color" class="command" icon="ri-font-color">
+    return <PopupButton title="Change Color" class="command" icon="ri-font-color"
+        data-layout="toolbar-button">
         <div class={colorSelectorCss}>
             <table>
                 <thead>

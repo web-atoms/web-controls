@@ -55,6 +55,7 @@ function selectFont(name: string) {
 export default function ChangeFont() {
     return <PopupButton
         class="command"
+        data-layout="toolbar-button"
         text={Bind.oneWay((e: AtomHtmlEditor) => selectFont(e.getStyle("fontFamily", e.version)))}
         title="Change Font">
         <div class={fontMenuCSS}>

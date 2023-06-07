@@ -6,6 +6,7 @@ import type AtomHtmlEditor from "../AtomHtmlEditor";
 export default function Align() {
     return <PopupButton
         class="command"
+        data-layout="toolbar-button"
         icon="ri-align-left"
         title="Change Alignment">
         <MenuItem
