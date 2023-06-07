@@ -62,7 +62,7 @@ export default function ChangeFont() {
             { ... fonts.map(([name, value]) =>
                 <MenuItem
                     style-font-family={name}
-                    icon={Bind.oneWay((e: AtomHtmlEditor) => e.getStyle("fontFamily", e.version)
+                    icon={Bind.oneWay((e: AtomHtmlEditor) => selectFont(e.getStyle("fontFamily", e.version))
                     .toLowerCase()
                     .indexOf(value[0].toLowerCase()) !== -1
                     ? "ri-check-line selected"
