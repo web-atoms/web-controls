@@ -7,8 +7,8 @@ import styled from "@web-atoms/core/dist/style/styled";
     box-shadow: rgba(50, 50, 105, 0.07) 0px 2px 5px 0px, rgba(0, 0, 0, 0.03) 0px 1px 1px 0px;
     border: solid 1px rgba(0, 0, 0, 0.05);
     z-index: 5000;
-    background-color: var(--primary-bg, white);
-    color: var(--primary-color, darkgray);
+    background-color: var(--popup-background-color, white);
+    color: var(--popup-text-color, rbga(0,0,0,0.8));
     left: 0;
     `.installGlobal("*[data-inline-popup=inline-popup]");
 
