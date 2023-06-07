@@ -8,7 +8,7 @@ import styled from "@web-atoms/core/dist/style/styled";
     border: solid 1px rgba(0, 0, 0, 0.05);
     z-index: 5000;
     background-color: var(--popup-background-color, white);
-    color: var(--popup-text-color, rbga(0,0,0,0.8));
+    color: var(--popup-text-color, rgba(0,0,0,0.8));
     left: 0;
     `.installGlobal("*[data-inline-popup=inline-popup]");
 
