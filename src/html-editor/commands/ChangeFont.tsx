@@ -39,7 +39,7 @@ export function FontMenu({ name, value }) {
 }
 
 function selectFont(name: string) {
-    if (name === null) {
+    if (name === null || name === void 0) {
         return "Font";
     }
     for (const [display, value] of fonts) {
