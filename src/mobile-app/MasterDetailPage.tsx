@@ -139,16 +139,13 @@ export default class MasterDetailPage<T = any, TResult = any> extends ContentPag
             const { element } = lastDetail;
             lastDetail.dispose();
             element.remove();
-
-            if (this.scrollEveryNewTarget) {
-                this.scrollTargetIntoView();
-            } else {
-                this.updateTargetSelector(highlightElement);   
-            }
-        } else {
+            this.scrollTargetIntoView();
+        } else if (this.scrollEveryNewTarget) {
             this.scrollTargetIntoView();
         }
-       
+        
+        this.updateTargetSelector(highlightElement);   
+
         const P = page;
         lastDetail = new P(this.app);
         content.appendChild(lastDetail.element);
@@ -164,20 +161,23 @@ export default class MasterDetailPage<T = any, TResult = any> extends ContentPag
         const lastTargetElement = this.lastTargetElement;
         if (lastTargetElement) {
             setTimeout(() => {
-                this.updateTargetSelector(lastTargetElement);
                 if (lastTargetElement.isConnected) {
                     lastTargetElement.scrollIntoView();
                 }
                 if (dispose) {
                     this.lastTargetElement = void 0;
-                    lastTargetElement.removeAttribute(key);
+                    this.updateTargetSelector(lastTargetElement, true);
                 }
             }, 100);
         }
     }
 
-    protected updateTargetSelector(lastTargetElement: HTMLElement) {
+    protected updateTargetSelector(lastTargetElement: HTMLElement, remove = false) {
         const [key, value] = this.highlightAttributeValue;
+        if (remove) {
+            lastTargetElement.removeAttribute(key);
+            return;
+        }        
         lastTargetElement.setAttribute(key, value);
     }
 
