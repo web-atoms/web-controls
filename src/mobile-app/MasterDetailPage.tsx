@@ -138,9 +138,9 @@ export default class MasterDetailPage<T = any, TResult = any> extends ContentPag
             lastDetail.dispose();
             element.remove();
 
-        } else {
-            this.scrollTargetIntoView();
-        }
+        } 
+        this.scrollTargetIntoView();
+       
         const P = page;
         lastDetail = new P(this.app);
         content.appendChild(lastDetail.element);
