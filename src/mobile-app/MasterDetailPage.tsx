@@ -70,6 +70,8 @@ export default class MasterDetailPage<T = any, TResult = any> extends ContentPag
 
     public showClose = true;
 
+    public scrollEveryNewTarget = false;
+
     private highlightAttributeValue: [string, string] = ["data-filter", "drop-shadow-accent"];
     public get highlightAttribute() {
         return this.highlightAttributeValue;
@@ -138,8 +140,14 @@ export default class MasterDetailPage<T = any, TResult = any> extends ContentPag
             lastDetail.dispose();
             element.remove();
 
-        } 
-        this.scrollTargetIntoView();
+            if (this.scrollEveryNewTarget) {
+                this.scrollTargetIntoView();
+            } else {
+                this.updateTargetSelector(highlightElement);   
+            }
+        } else {
+            this.scrollTargetIntoView();
+        }
        
         const P = page;
         lastDetail = new P(this.app);
@@ -156,9 +164,8 @@ export default class MasterDetailPage<T = any, TResult = any> extends ContentPag
         const lastTargetElement = this.lastTargetElement;
         if (lastTargetElement) {
             setTimeout(() => {
-                const [key, value] = this.highlightAttributeValue;
+                this.updateTargetSelector(lastTargetElement);
                 if (lastTargetElement.isConnected) {
-                    lastTargetElement.setAttribute(key, value);
                     lastTargetElement.scrollIntoView();
                 }
                 if (dispose) {
@@ -167,6 +174,11 @@ export default class MasterDetailPage<T = any, TResult = any> extends ContentPag
                 }
             }, 100);
         }
+    }
+
+    protected updateTargetSelector(lastTargetElement: HTMLElement) {
+        const [key, value] = this.highlightAttributeValue;
+        lastTargetElement.setAttribute(key, value);
     }
 
     protected preCreate(): void {
