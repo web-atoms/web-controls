@@ -926,7 +926,7 @@ export default class AtomRepeater<T = any> extends AtomControl {
             }
             if (start) {
                 container.insertBefore(e, start);
-            } if(end) {
+            } else if(end) {
                 container.insertBefore(e, end);
             } else {
                 container.appendChild(e);
