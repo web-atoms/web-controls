@@ -637,7 +637,7 @@ export default class MobileApp extends AtomControl {
         parameters: {[key: string]: any} = {},
         clearHistory: boolean = false) {
         const mobileApp = this.current;
-        const page = await AtomLoader.loadClass<BasePage>(pageUri, parameters, mobileApp.app);
+        const page = await AtomLoader.loadClass<BasePage>(pageUri, parameters ?? {}, mobileApp.app);
         const result = await mobileApp.loadPage(page, clearHistory);
         return result as T;
     }
