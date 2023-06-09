@@ -2,9 +2,8 @@ import XNode from "@web-atoms/core/dist/core/XNode";
 import styled from "@web-atoms/core/dist/style/styled";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import PageNavigator, { Page } from "../PageNavigator";
-import { isMobileView } from "./MobileApp";
+import { ContentPage, isMobileView } from "./MobileApp";
 import { IDisposable } from "@web-atoms/core/dist/core/types";
-import { ContentPage } from "./ContentPage";
 
     styled.css `
         & > [data-page-element=content] {

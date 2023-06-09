@@ -6,10 +6,9 @@ import { NavigationService } from "@web-atoms/core/dist/services/NavigationServi
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { MenuItem } from "../../basic/PopupButton";
 import BottomPopup from "../../mobile-app/BottomPopup";
-import MobileApp, { PullToRefresh } from "../../mobile-app/MobileApp";
+import MobileApp, { ContentPage, PullToRefresh } from "../../mobile-app/MobileApp";
 import { Drawer } from "../../mobile-app/Drawer";
 import PageNavigator from "../../PageNavigator";
-import { ContentPage } from "../../mobile-app/ContentPage";
 
 class Detail extends ContentPage {
     protected create(): void {

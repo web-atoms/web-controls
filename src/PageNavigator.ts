@@ -1,5 +1,5 @@
 import { CancelToken } from "@web-atoms/core/dist/core/types";
-import { ContentPage } from "./mobile-app/ContentPage";
+import type { ContentPage } from "./mobile-app/MobileApp";
 
 export type Page<T> = typeof ContentPage<T, any>;
 export type PageWith<T, T2> = typeof ContentPage<T, T2>;
