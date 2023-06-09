@@ -1012,7 +1012,7 @@ export default class AtomRepeater<T = any> extends AtomControl {
         type = StringHelper.fromHyphenToCamel(type);
         this.element?.dispatchEvent(new CustomEvent(type, {
             detail,
-            bubbles: false,
+            bubbles:true,
             cancelable: true
         }));
     }
