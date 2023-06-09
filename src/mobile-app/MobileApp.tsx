@@ -691,6 +691,12 @@ export default class MobileApp extends AtomControl {
 
     public selectedPage: BasePage;
 
+    /**
+     * Set this to class or url to load the page when user
+     * hits back button when there is nothing in history stack
+     */
+    public defaultPage: any;
+
     private container: HTMLDivElement;
 
     public popTo(w: any) {
@@ -806,6 +812,7 @@ export default class MobileApp extends AtomControl {
     }
 
     protected async loadPageForReturn(url: AtomUri, clearHistory: boolean): Promise<any> {
+        this.defaultPage ??= url;
         const page = await AtomLoader.loadControl<BasePage>(url, this.app);
         if (url.query && url.query.title) {
             page.title ||= url.query.title.toString();
@@ -825,6 +832,7 @@ export default class MobileApp extends AtomControl {
     }
 
     protected async loadPage(page: BasePage, clearHistory: boolean) {
+
         page.title ||= StringHelper.fromPascalToTitleCase(Object.getPrototypeOf(page).constructor.name);
         const selectedPage = this.selectedPage;
         if (selectedPage) {
@@ -857,33 +865,27 @@ export default class MobileApp extends AtomControl {
         const vm = page.viewModel as AtomWindowViewModel;
         const element = page.element;
         return new Promise((resolve, reject) => {
-            const cancel: any = (error?) => {
-                // page.dispose();
-                // element.remove();
-                element.dataset.pageState = "";
-                const last = this.pages.pop();
-                (last as any).show();
-                // last.element.dataset.pageState = "ready";
-                setTimeout(() => {
-                    page.dispose();
-                    element.remove();
-                    reject(error ?? "cancelled");
-                    this.selectedPage = last;
-                }, 300);
-            };
-            const close: any = (r) => {
-                // page.dispose();
-                // element.remove();
-                delete element.dataset.pageState;
-                const last = this.pages.pop();
-                (last as any).show();
-                setTimeout(() => {
-                    page.dispose();
-                    element.remove();
-                    resolve(r);
-                    this.selectedPage = last;
-                }, 300);
-            };
+
+            const closeFactory = (callback, result?) =>
+                (r) => {
+                    if (clearHistory) {
+                        this.app.runAsync(() => this.loadPageForReturn(this.defaultPage, true));
+                        return;
+                    }
+                    // element.dataset.pageState = "";
+                    element.removeAttribute("data-page-state");
+                    const last = this.pages.pop();
+                    (last as any).show();
+                    setTimeout(() => {
+                        page.dispose();
+                        element.remove();
+                        callback(r ?? result);
+                        this.selectedPage = last;
+                    }, 300);    
+                };
+
+            const cancel = closeFactory(reject, "cancelled") as any;
+            const close = closeFactory(resolve);
             if (vm) {
                 vm.cancel = cancel;
                 vm.close = close;
