@@ -916,7 +916,7 @@ export default class AtomRepeater<T = any> extends AtomControl {
             current.remove();
         }
 
-        const end = this.footerElement.parentElement === container ? this.footerElement : null;
+        const end = this.footerElement?.parentElement === container ? this.footerElement : null;
 
         if (!isRemove) {
             const en = ir(item, index, this);
