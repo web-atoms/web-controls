@@ -1013,7 +1013,7 @@ export default class AtomRepeater<T = any> extends AtomControl {
     }
 
     protected dispatchCustomEvent(type: string, detail: any) {
-        const eventName = this.element.getAttribute("data-" + type);
+        const eventName = this.element.getAttribute("data-" + type + "-event");
         type = StringHelper.fromHyphenToCamel(eventName ?? type);
         this.element?.dispatchEvent(new CustomEvent(type, {
             detail,
