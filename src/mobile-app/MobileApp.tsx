@@ -324,10 +324,12 @@ export class BasePage extends AtomControl {
             return;
         }
 
+        const last = history.state?.url;
+
         const state = { url };
         history.pushState(state, "", url);
         const eventRegistration = (e: PopStateEvent) => {
-            if (e.state?.url === state.url) {
+            if (e.state?.url === last) {
                 this.cancel();
             }
         };
