@@ -3,7 +3,6 @@ import XNode from "@web-atoms/core/dist/core/XNode";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import MobileApp from "../mobile-app/MobileApp";
-import { Drawer } from "../mobile-app/Drawer";
 import styled from "@web-atoms/core/dist/style/styled";
 
     styled.css `

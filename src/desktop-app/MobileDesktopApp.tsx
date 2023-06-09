@@ -1,6 +1,5 @@
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import MobileApp from "../mobile-app/MobileApp";
-import { Drawer } from "../mobile-app/Drawer";
+import MobileApp, { Drawer } from "../mobile-app/MobileApp";
 import { isMobileView } from "../mobile-app/MobileApp";
 import DesktopApp from "./DesktopApp";
 import XNode from "@web-atoms/core/dist/core/XNode";
