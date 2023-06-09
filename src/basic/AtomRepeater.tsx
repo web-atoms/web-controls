@@ -1088,6 +1088,7 @@ export default class AtomRepeater<T = any> extends AtomControl {
 
         if (current) {
             disposeChild(this, current);
+            this[name + "Element"] = null;
         }
 
         if (!(item && itemRenderer)) {
