@@ -466,6 +466,10 @@ export default class AtomRepeater<T = any> extends AtomControl {
     public "event-item-click"?: (e: CustomEvent) => void;
     public "event-item-select"?: (e: CustomEvent) => void;
     public "event-item-deselect"?: (e: CustomEvent) => void;
+
+    public "data-items-updated-event"?: string;
+    public "data-selection-updated-event"?: string;
+
     public "event-items-updated"?: (e: CustomEvent<{ type: string, items: any[] }>) => void;
     public "event-selection-updated"?: (e: CustomEvent<any[]>) => void;
 
@@ -1009,10 +1013,11 @@ export default class AtomRepeater<T = any> extends AtomControl {
     }
 
     protected dispatchCustomEvent(type: string, detail: any) {
-        type = StringHelper.fromHyphenToCamel(type);
+        const eventName = this.element.getAttribute("data-" + type);
+        type = StringHelper.fromHyphenToCamel(eventName ?? type);
         this.element?.dispatchEvent(new CustomEvent(type, {
             detail,
-            bubbles:true,
+            bubbles: eventName !== null,
             cancelable: true
         }));
     }
