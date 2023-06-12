@@ -14,6 +14,7 @@ import { AtomDisposableList } from "@web-atoms/core/dist/core/AtomDisposableList
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { IDisposable } from "@web-atoms/core/dist/core/types";
 import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
+import { displayRouteSymbol, routeSymbol } from "@web-atoms/core/dist/core/Command";
 
     styled.css `
 
@@ -834,6 +835,13 @@ export default class MobileApp extends AtomControl {
     protected async loadPage(page: BasePage, clearHistory: boolean) {
 
         page.title ||= StringHelper.fromPascalToTitleCase(Object.getPrototypeOf(page).constructor.name);
+
+        const { parameters } = page as any;
+        const route = parameters[displayRouteSymbol];
+        if (route) {
+            page.route = route;
+        }
+
         const selectedPage = this.selectedPage;
         if (selectedPage) {
             (selectedPage as any).hide();
