@@ -15,6 +15,7 @@ import Bind from "@web-atoms/core/dist/core/Bind";
 import { IDisposable } from "@web-atoms/core/dist/core/types";
 import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import { displayRouteSymbol, routeSymbol } from "@web-atoms/core/dist/core/Command";
+import Route from "@web-atoms/core/dist/core/Route";
 
     styled.css `
 
@@ -274,10 +275,6 @@ delete (Drawer.prototype as any).init;
 
 export class BasePage extends AtomControl {
 
-    public static encodeRoute(url: string) {
-        return url;
-    }
-
     public close: (result) => void;
 
     public cancel: (error?) => void;
@@ -319,7 +316,7 @@ export class BasePage extends AtomControl {
         if(!url) {
             return;
         }
-        url = BasePage.encodeRoute(url);
+        url = Route.encodeUrl(url);
 
         if (history.state?.url === url) {
             return;
