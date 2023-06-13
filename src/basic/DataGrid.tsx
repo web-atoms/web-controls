@@ -284,7 +284,7 @@ export default class DataGrid extends TableRepeater {
         </tr>;
     }
 
-    protected dispatchHeaderFooterEvent(eventName: any, type: any, originalTarget: any): void {
+    protected dispatchHeaderFooterEvent(eventName: any, type: any, recreate: boolean, originalTarget: any): void {
         let detail = this[type];
 
         const column = this.columns.find((x) => getHeaderEventName(x) === eventName
