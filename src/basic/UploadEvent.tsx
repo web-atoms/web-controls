@@ -200,6 +200,7 @@ export default class UploadEvent {
     }: IUploadParams) {
         return {
             ... others,
+            "data-click-command": uploadCommand.name,
             "data-upload-event": uploadEvent,
             "data-accept": accept,
             "data-multiple": multiple ? "true" : "false",
