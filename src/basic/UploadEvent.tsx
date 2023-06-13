@@ -3,6 +3,7 @@ import Command from "@web-atoms/core/dist/core/Command";
 import EventScope from "@web-atoms/core/dist/core/EventScope";
 import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
+import { AncestorEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import PopupService from "@web-atoms/core/dist/web/services/PopupService";
 
 const acceptCache = {};
@@ -56,23 +57,38 @@ export interface IUploadParams<T = any> {
     ariaLabel?: string;
 } 
 
-const requestUpload = new Command();
-
 let previousFile: HTMLInputElement;
 
-requestUpload.eventScope.listen((ce: CustomEvent) => {
-    const element = ce.target as HTMLElement;
-    const authorize = element.dataset.authorize;
+window.addEventListener("click", (ce: MouseEvent) => {
+    if (ce.defaultPrevented) {
+        return;
+    }
+
+    let element = ce.target as HTMLElement;
+    let uploadEvent: string;
+    while (element) {
+        uploadEvent = element.getAttribute("data-upload-event");
+        if (uploadEvent) {
+            break;
+        }
+        element = element.parentElement;
+    }
+
+    if (!element) {
+        return;
+    }
+
+    const authorize = element.getAttribute("data-authorize");
     if (authorize === "true") {
         if(!App.authorize()) {
             return;
         }
     }
 
-    const multiple = element.dataset.multiple === "true";
+    const multiple = element.getAttribute("data-multiple") === "true";
     const extra = (element as any).extra;
-    const upload = element.dataset.upload === "true";
-    const uploadEvent = StringHelper.fromHyphenToCamel(element.getAttribute("data-upload-event"));
+    const upload = element.getAttribute("data-upload") === "true";
+    uploadEvent = StringHelper.fromHyphenToCamel(uploadEvent);
 
     const chain: HTMLElement[] = [];
     let start = element;
@@ -85,9 +101,9 @@ requestUpload.eventScope.listen((ce: CustomEvent) => {
     const file = document.createElement("input");
     file.type = "file";
     file.multiple = multiple;
-    const accept = element.dataset.accept || "*/*";
+    const accept = element.getAttribute("data-accept") || "*/*";
     file.accept = accept;
-    const capture = element.dataset.capture;
+    const capture = element.getAttribute("data-capture");
     if (capture) {
         file.capture = capture;
     }
@@ -96,8 +112,8 @@ requestUpload.eventScope.listen((ce: CustomEvent) => {
     file.style.top = "-1000px";
     document.body.append(file);
     previousFile = file;
-    const maxSize = parseInt(element.dataset.maxSize || "0", 10);
-    const forceType = element.dataset.forceType === "true";
+    const maxSize = parseInt(element.getAttribute("data-max-size") || "0", 10);
+    const forceType = element.getAttribute("data-force-type") === "true";
 
     file.addEventListener("change", () => {
         let files = Array.from(file.files);
@@ -158,19 +174,6 @@ requestUpload.eventScope.listen((ce: CustomEvent) => {
                         return;
                     }
                 }
-
-                // if (upload) {
-                //     (window as any).uploading = true;
-                //     control.app.runAsync(async () => {
-                //         try {
-                //             const afs = await UploadFilesWindow.showModal({ parameters: { files, uploadEvent}});
-                //             root.dispatchEvent(new CustomEvent(uploadEvent, { detail: { files: afs, extra }, bubbles: true}));
-                //         } finally {
-                //             (window as any).uploading = false;
-                //         }
-                //     });
-                //     break;
-                // }
                 root.dispatchEvent(new CustomEvent(uploadEvent, { detail: {
                     files,
                     extra
@@ -205,7 +208,6 @@ export default class UploadEvent {
     }: IUploadParams) {
         return {
             ... others,
-            ... requestUpload.registerOnClick(""),
             "data-upload-event": uploadEvent,
             "data-accept": accept,
             "data-multiple": multiple ? "true" : "false",
