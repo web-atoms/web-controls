@@ -308,6 +308,12 @@ export class BasePage extends AtomControl {
 
     public iconClass: any;
 
+    /**
+     * If set to true, you must set `autofocus` attribute
+     * to enable focus when page is visible.
+     */
+    public disableAutoFocus = false;
+
     public get route() {
         return this.routeUrl;
     }
@@ -454,9 +460,21 @@ export class BasePage extends AtomControl {
                 return;
             }
             const anyAutofocus = this.element.querySelector(`*[autofocus]`) as HTMLElement;
-            if (anyAutofocus) {
-                anyAutofocus.focus();
+            if (!anyAutofocus) {
+                if (this.disableAutoFocus) {
+                    return;
+                }
+                const windowContent = this.element.querySelector(`[data-page-element="content"]`);
+                if (windowContent) {
+                    const firstInput = windowContent.querySelector("input,textarea") as HTMLInputElement;
+                    if (firstInput) {
+                        firstInput.focus();
+                        return;
+                    }
+                }
+                return;
             }
+            anyAutofocus.focus();
         });
 
         setTimeout((p) => {
