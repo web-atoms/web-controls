@@ -16,7 +16,7 @@ document.body.addEventListener("click", (e: MouseEvent) => {
     }
     let start = e.target as HTMLElement;
     while (start) {
-        if (/icon|caret|header/.test(start.dataset.element)) {
+        if (/icon|caret|header/.test(start.getAttribute("data-element"))) {
             break;
         }
         start = start.parentElement;
@@ -25,7 +25,7 @@ document.body.addEventListener("click", (e: MouseEvent) => {
     if (!start) {
         return;
     }
-    const isExpander = start.dataset?.isExpander;
+    const isExpander = start?.getAttribute("data-is-expander");
     if (!/^(menu|expander)$/i.test(isExpander)) {
         return;
     }

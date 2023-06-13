@@ -40,7 +40,7 @@ export const getParentRepeaterItem = (target: HTMLElement): IRepeaterItemInfo =>
             break;
         }
         if (index === undefined) {
-            const itemIndex = target.dataset.itemIndex;
+            const itemIndex = target.getAttribute("data-item-index");
             if (typeof itemIndex !== "undefined") {
                 root = target;
                 // tslint:disable-next-line: no-bitwise
@@ -48,7 +48,7 @@ export const getParentRepeaterItem = (target: HTMLElement): IRepeaterItemInfo =>
             }
         }
         if (eventName === undefined) {
-            const itemClickEvent = target.dataset.clickEvent;
+            const itemClickEvent = target.getAttribute("data-click-event");
             if (itemClickEvent) {
                 eventName = itemClickEvent.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
             }
@@ -429,7 +429,7 @@ export function defaultComparer<T>(left: T , right: T) {
 
 const getFirstChild = (container: HTMLElement) => {
     let child = container.firstElementChild as HTMLElement;
-    while (child && child.dataset.itemIndex === void 0) {
+    while (child && !child.hasAttribute("data-item-index")) {
         child = child.nextElementSibling as HTMLElement;
     }
     return child;
@@ -887,7 +887,7 @@ export default class AtomRepeater<T = any> extends AtomControl {
 
         while (start) {
             // tslint:disable-next-line: no-bitwise
-            ei = ~~start.dataset.itemIndex;
+            ei = ~~start.getAttribute("data-item-index");
             if (ei === index) {
                 break;
             }

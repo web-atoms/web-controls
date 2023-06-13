@@ -237,9 +237,9 @@ document.body.addEventListener("click", (e) => {
     if (control.items && control.itemRenderer) {
         // this is atom repeater
         while (start && start !== element) {
-            itemIndex ??= start.dataset.itemIndex;
+            itemIndex ??= start.getAttribute("data-item-index");
             if (itemIndex) {
-                data = control.items[itemIndex];
+                data = control.items[~~itemIndex];
                 break;
             }
             start = start.parentElement;

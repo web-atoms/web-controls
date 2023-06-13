@@ -66,10 +66,10 @@ export interface IFormField {
 // });
 
 document.addEventListener("focusin", (e) => {
-    let { target } = e as any;
+    let target = e.target as HTMLElement;
     while (target) {
-        if (target.dataset.waFormField === "wa-form-field") {
-            target.dataset.focused = "true";
+        if (target.getAttribute("data-wa-form-field") === "wa-form-field") {
+            target.setAttribute("data-focused", "true");
             break;
         }
         target = target.parentElement;
@@ -77,10 +77,10 @@ document.addEventListener("focusin", (e) => {
 });
 
 document.addEventListener("focusout", (e) => {
-    let { target } = e as any;
+    let target = e.target as HTMLElement;
     while (target) {
-        if (target.dataset.waFormField === "wa-form-field") {
-            delete target.dataset.focused;
+        if (target.getAttribute("data-wa-form-field") === "wa-form-field") {
+            target.removeAttribute("data-focused");
             break;
         }
         target = target.parentElement;

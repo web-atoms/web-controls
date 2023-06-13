@@ -78,6 +78,10 @@ window.addEventListener("click", (ce: MouseEvent) => {
         return;
     }
 
+    if (AncestorEnumerator.findSelector(element, "a")) {
+        ce.preventDefault();
+    }
+
     const authorize = element.getAttribute("data-authorize");
     if (authorize === "true") {
         if(!App.authorize()) {
