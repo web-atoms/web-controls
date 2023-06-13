@@ -59,28 +59,16 @@ export interface IUploadParams<T = any> {
 
 let previousFile: HTMLInputElement;
 
-window.addEventListener("click", (ce: MouseEvent) => {
+const uploadCommand = Command.create({
+    name: "upload-command"
+});
+
+window.addEventListener(uploadCommand.eventName, (ce: MouseEvent) => {
     if (ce.defaultPrevented) {
         return;
     }
 
-    let element = ce.target as HTMLElement;
-    let uploadEvent: string;
-    while (element) {
-        uploadEvent = element.getAttribute("data-upload-event");
-        if (uploadEvent) {
-            break;
-        }
-        element = element.parentElement;
-    }
-
-    if (!element) {
-        return;
-    }
-
-    if (AncestorEnumerator.findSelector(element, "a")) {
-        ce.preventDefault();
-    }
+    const element = ce.target as HTMLElement;
 
     const authorize = element.getAttribute("data-authorize");
     if (authorize === "true") {
@@ -92,7 +80,7 @@ window.addEventListener("click", (ce: MouseEvent) => {
     const multiple = element.getAttribute("data-multiple") === "true";
     const extra = (element as any).extra;
     const upload = element.getAttribute("data-upload") === "true";
-    uploadEvent = StringHelper.fromHyphenToCamel(uploadEvent);
+    const uploadEvent = StringHelper.fromHyphenToCamel(element.getAttribute("data-upload-event"));
 
     const chain: HTMLElement[] = [];
     let start = element;
