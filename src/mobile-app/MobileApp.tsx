@@ -453,17 +453,9 @@ export class BasePage extends AtomControl {
             if (!this.element) {
                 return;
             }
-            const anyAutofocus = this.element.querySelector(`*[autofocus]`);
-            if (!anyAutofocus) {
-                const windowContent = this.element.querySelector(`[data-page-element="content"]`);
-                if (windowContent) {
-                    const firstInput = windowContent.querySelector("input,button,a,textarea") as HTMLInputElement;
-                    if (firstInput) {
-                        firstInput.focus();
-                        return;
-                    }
-                }
-                return;
+            const anyAutofocus = this.element.querySelector(`*[autofocus]`) as HTMLElement;
+            if (anyAutofocus) {
+                anyAutofocus.focus();
             }
         });
 
