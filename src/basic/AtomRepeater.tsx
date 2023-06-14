@@ -18,6 +18,7 @@ import "./styles/ui-display-none-style";
 import { repeaterPopupCss } from "./styles/popup-style";
 import "./styles/suggestion-popup";
 import "./styles/repeater-style";
+import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 
 export interface IItemPair<ParentItem = any, ChildItem = any> {
     parent: ParentItem;
@@ -747,30 +748,14 @@ export default class AtomRepeater<T = any> extends AtomControl {
 
     public elementAt(index: number) {
         const container = this.itemsPresenter ?? this.element;
-        let element = getFirstChild(container);
-        let ci = 0;
-        do {
-            if (index === ci++) {
-                break;
-            }
-            element = element.nextElementSibling as HTMLElement;
-        } while (true);
+        const indexText = index.toString();
+        const element = ChildEnumerator.find(container, (e) => e.getAttribute("data-item-index") === indexText);
         return element;
     }
 
     public elementForItem(itemToFind: any, container?: HTMLElement) {
-        container ??= this.itemsPresenter ?? this.element;
-        const items = this.items;
-        let element = getFirstChild(container);
-        while (element) {
-            const index = element.dataset.itemIndex;
-            // tslint:disable-next-line: no-bitwise
-            const item = items[~~index];
-            if (item === itemToFind) {
-                return element;
-            }
-            element = element.nextElementSibling as HTMLElement;
-        }
+        const index = this.items.indexOf(itemToFind);
+        return this.elementAt(index);
     }
 
     public refreshItem(item, fx?: Promise<void> | any, index: number = -1) {
