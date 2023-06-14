@@ -74,11 +74,11 @@ const findItem = (content: Element, item) => {
         if (!(repeater instanceof AtomRepeater)) {
             continue;
         }
-        const index = repeater.items.indexOf(item);
+        const index = repeater.items?.indexOf(item) ?? -1;
         if (index === -1) {
             continue;
         }
-        const element = repeater.element.querySelector(`[data-item-index="${index}"]`);
+        const element = repeater.element?.querySelector(`[data-item-index="${index}"]`);
         if (element) {
             return element;
         }
