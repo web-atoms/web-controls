@@ -178,6 +178,9 @@ export default class MasterDetailPage<T = any, TResult = any> extends ContentPag
     }
 
     protected updateTargetSelector(lastTargetElement: HTMLElement, remove = false, delay = false) {
+        if (!lastTargetElement) {
+            return;
+        }
         const [key, value] = this.highlightAttributeValue;
         if (remove) {
             if (delay) {
