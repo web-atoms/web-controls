@@ -154,6 +154,9 @@ export default class MasterDetailPage<T = any, TResult = any> extends ContentPag
         lastDetail.element.setAttribute("data-element", "detail");
         this.lastDetail = lastDetail;
         lastDetail.parameters = parameters;
+        const close = () => this.closeDetail();
+        lastDetail.cancel = close;
+        lastDetail.close = close;
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         this.app.runAsync(() => this.lastDetail?.init?.());
@@ -168,16 +171,22 @@ export default class MasterDetailPage<T = any, TResult = any> extends ContentPag
                 }
                 if (dispose) {
                     this.lastTargetElement = void 0;
-                    this.updateTargetSelector(lastTargetElement, true);
+                    this.updateTargetSelector(lastTargetElement, true, dispose);
                 }
             }, 100);
         }
     }
 
-    protected updateTargetSelector(lastTargetElement: HTMLElement, remove = false) {
+    protected updateTargetSelector(lastTargetElement: HTMLElement, remove = false, delay = false) {
         const [key, value] = this.highlightAttributeValue;
         if (remove) {
-            lastTargetElement.removeAttribute(key);
+            if (delay) {
+                setTimeout(() => {
+                    lastTargetElement.removeAttribute(key);
+                }, 1000);
+            } else {
+                lastTargetElement.removeAttribute(key);
+            }
             return;
         }        
         lastTargetElement.setAttribute(key, value);
