@@ -746,8 +746,8 @@ export default class AtomRepeater<T = any> extends AtomControl {
         }
     }
 
-    public elementAt(index: number) {
-        const container = this.itemsPresenter ?? this.element;
+    public elementAt(index: number, container?: HTMLElement) {
+        container ??= this.itemsPresenter ?? this.element;
         const indexText = index.toString();
         const element = ChildEnumerator.find(container, (e) => e.getAttribute("data-item-index") === indexText);
         return element;
@@ -755,7 +755,7 @@ export default class AtomRepeater<T = any> extends AtomControl {
 
     public elementForItem(itemToFind: any, container?: HTMLElement) {
         const index = this.items.indexOf(itemToFind);
-        return this.elementAt(index);
+        return this.elementAt(index, container);
     }
 
     public refreshItem(item, fx?: Promise<void> | any, index: number = -1) {
