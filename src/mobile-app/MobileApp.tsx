@@ -844,7 +844,7 @@ export default class MobileApp extends AtomControl {
         page.title ||= StringHelper.fromPascalToTitleCase(Object.getPrototypeOf(page).constructor.name);
 
         const { parameters } = page as any;
-        const route = parameters[displayRouteSymbol];
+        const route = parameters?.[displayRouteSymbol];
         if (route) {
             page.route = route;
         }
