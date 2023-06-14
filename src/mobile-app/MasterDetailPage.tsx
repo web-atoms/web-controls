@@ -4,6 +4,8 @@ import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import PageNavigator, { Page } from "../PageNavigator";
 import { ContentPage, isMobileView } from "./MobileApp";
 import { IDisposable } from "@web-atoms/core/dist/core/types";
+import { ChildEnumerator, descendentElementIterator } from "@web-atoms/core/dist/web/core/AtomUI";
+import AtomRepeater from "../basic/AtomRepeater";
 
     styled.css `
         & > [data-page-element=content] {
@@ -66,11 +68,30 @@ import { IDisposable } from "@web-atoms/core/dist/core/types";
         }
     `.installGlobal("[data-page-type=master-detail]");
 
+const findItem = (content: Element, item) => {
+    for (const iterator of descendentElementIterator(content)) {
+        const repeater = (iterator as HTMLElement)?.atomControl;
+        if (!(repeater instanceof AtomRepeater)) {
+            continue;
+        }
+        const index = repeater.items.indexOf(item);
+        if (index === -1) {
+            continue;
+        }
+        const element = repeater.element.querySelector(`[data-item-index="${index}"]`);
+        if (element) {
+            return element;
+        }
+    }
+};
+
 export default class MasterDetailPage<T = any, TResult = any> extends ContentPage<T, TResult> {
 
     public showClose = true;
 
     public scrollEveryNewTarget = false;
+
+    public lookupItemForHighlight = true;
 
     private highlightAttributeValue: [string, string] = ["data-filter", "drop-shadow-accent"];
     public get highlightAttribute() {
@@ -109,7 +130,10 @@ export default class MasterDetailPage<T = any, TResult = any> extends ContentPag
      * @param highlightElement element to highlight and will be brought into view after details is created
      * @returns 
      */
-    public openDetail<T>(page: Page<T>, parameters: T, highlightElement?: HTMLElement) {
+    public openDetail<T>(
+        page: Page<T>,
+        parameters: T,
+        highlightElementOrItem?: HTMLElement | any) {
         if (isMobileView) {
             PageNavigator.pushPage(page, parameters);
             return;
@@ -117,6 +141,15 @@ export default class MasterDetailPage<T = any, TResult = any> extends ContentPag
 
         const content = this.element.querySelector(`[data-page-element="content"]`);
         content.setAttribute("data-mode", "desktop");
+
+        let highlightElement;
+        if (highlightElementOrItem instanceof HTMLElement) {
+            highlightElement = highlightElementOrItem;
+        }
+
+        if(!highlightElement && this.lookupItemForHighlight) {
+            highlightElement = findItem(content, highlightElementOrItem);
+        }
 
         const lastTargetElement = this.lastTargetElement;
         if (lastTargetElement) {
