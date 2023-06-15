@@ -1053,7 +1053,7 @@ export default class AtomRepeater<T = any> extends AtomControl {
             if (vf(item)) {
                 element.removeAttribute("data-ui-display");
             } else {
-                element.dataset.uiDisplay = "none";
+                element.setAttribute("data-ui-display", "none");
             }
             element = element.nextElementSibling as HTMLElement;
         }
