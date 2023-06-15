@@ -1121,20 +1121,16 @@ export default class AtomRepeater<T = any> extends AtomControl {
         });
         originalTarget.dispatchEvent(ce);
         if (!ce.defaultPrevented) {
-            if (eventName === "itemSelect" || eventName === "itemDeselect") {
-                const si = this.selectedItems ??= [];
-                if (si) {
-                    const index = si.indexOf(item);
-                    if (index === -1) {
-                        if (this.allowMultipleSelection) {
-                            si.add(item);
-                        } else {
-                            si.set(0, item);
-                        }
-                    } else {
-                        si.removeAt(index);
-                    }
+            const si = this.selectedItems ??= [];
+            if (eventName === "itemSelect") {
+                if (this.allowMultipleSelection) {
+                    si.add(item);
+                } else {
+                    si.set(0, item);
                 }
+            }
+            if (eventName === "itemDeselect") {
+                si.remove(item);
             }
         }
         if (ce.defaultPrevented || !(ce as any).executed) {
