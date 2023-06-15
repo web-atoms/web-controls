@@ -302,14 +302,14 @@ export function SelectorCheckBox(
     }: ISelectorCheckBox,
     ... nodes: XNode[]) {
     if (text) {
-        return <label { ... a}>
+        return <label data-selector="check-box" { ... a}>
         <i class={icon} data-click-event="item-select"/>
         <i class={iconSelected}  data-click-event="item-deselect"/>
             <span data-no-wrap="true" text={text}/>
             { ... nodes }
         </label>;
     }
-    return <label { ... a}>
+    return <label data-selector="check-box" { ... a}>
         <i class={icon} data-click-event="item-select"/>
         <i class={iconSelected}  data-click-event="item-deselect"/>
         { ... nodes }
@@ -907,9 +907,13 @@ export default class AtomRepeater<T = any> extends AtomControl {
             const en = ir(item, index, this);
             const ea = en.attributes ??= {};
             const v = vp(item);
-            const e = document.createElement(ea.for ?? en.name ?? "div");
-            e.dataset.itemIndex = (index++).toString();
-            e.dataset.selectedItem = si.indexOf(v) !== -1 ? "true" : "false";
+            const e = document.createElement(ea.for ?? en.name ?? "div") as HTMLElement;
+            e.setAttribute("data-item-index",`${index++}`);
+            if (si.indexOf(v) !== -1) {
+                e.setAttribute("data-selected-item", "true");
+            } else {
+                e.removeAttribute("data-selected-item");
+            }
             if (this.enableDragDrop) {
                 updateDragDrop(e);
             }
@@ -927,10 +931,13 @@ export default class AtomRepeater<T = any> extends AtomControl {
         while (start) {
             const ci = items[index];
             const cv = vp(ci);
-            start.dataset.itemIndex = (index++).toString();
-            start.dataset.selectedItem = si.indexOf(cv) !== -1
-                ? "true"
-                : "false";
+            start.setAttribute("data-item-index",`${index++}`);
+            
+            if (si.indexOf(cv) !== -1) {
+                start.setAttribute("data-selected-item", "true");
+            } else {
+                start.removeAttribute("data-selected-item");
+            }
             start = start.nextElementSibling as HTMLElement;
         }
 
@@ -981,8 +988,14 @@ export default class AtomRepeater<T = any> extends AtomControl {
             const ea = e.attributes ??= {};
             const v = vp(iterator);
             const element = document.createElement(ea.for ?? e.name ?? "div");
-            element.dataset.itemIndex = index.toString();
-            element.dataset.selectedItem = si.indexOf(v) !== -1 ? "true" : "false";
+            // element.dataset.itemIndex = index.toString();
+            // element.dataset.selectedItem = si.indexOf(v) !== -1 ? "true" : "false";
+            element.setAttribute("data-item-index",`${index}`);
+            if (si.indexOf(v) !== -1) {
+                element.setAttribute("data-selected-item", "true");
+            } else {
+                element.removeAttribute("data-selected-item");
+            }
             this.render(e, element, this);
             if (this.enableDragDrop) {
                 updateDragDrop(element);
@@ -1018,9 +1031,11 @@ export default class AtomRepeater<T = any> extends AtomControl {
             const index = ~~element.dataset.itemIndex;
             const item = items[index];
             const v = vp(item);
-            element.dataset.selectedItem = si.indexOf(v) !== -1
-                ? "true"
-                : "false";
+            if (si.indexOf(v) !== -1) {
+                element.setAttribute("data-selected-item", "true");
+            } else {
+                element.removeAttribute("data-selected-item");
+            }
             element = element.nextElementSibling as HTMLElement;
         }
 
@@ -1121,17 +1136,31 @@ export default class AtomRepeater<T = any> extends AtomControl {
         });
         originalTarget.dispatchEvent(ce);
         if (!ce.defaultPrevented) {
-            const si = this.selectedItems ??= [];
-            if (eventName === "itemSelect") {
-                if (this.allowMultipleSelection) {
-                    si.add(item);
-                } else {
-                    si.set(0, item);
+            if (eventName === "itemSelect" || eventName === "itemDeselect") {
+                const si = this.selectedItems ??= [];
+                if (si) {
+                    const index = si.indexOf(item);
+                    if (index === -1) {
+                        if (this.allowMultipleSelection) {
+                            si.add(item);
+                        } else {
+                            si.set(0, item);
+                        }
+                    } else {
+                        si.removeAt(index);
+                    }
                 }
             }
-            if (eventName === "itemDeselect") {
-                si.remove(item);
-            }
+            // if (eventName === "itemSelect") {
+            //     if (this.allowMultipleSelection) {
+            //         si.add(item);
+            //     } else {
+            //         si.set(0, item);
+            //     }
+            // }
+            // if (eventName === "itemDeselect") {
+            //     si.remove(item);
+            // }
         }
         if (ce.defaultPrevented || !(ce as any).executed) {
             return;

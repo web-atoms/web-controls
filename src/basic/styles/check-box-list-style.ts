@@ -26,6 +26,18 @@ import styled from "@web-atoms/core/dist/style/styled";
             cursor: pointer;
         }
 
+        &:not([data-selected-item]) {
+            &[data-deleted=none] > i.fas {
+                display: none;
+            }
+            &[data-deleted=false] > i.fas {
+                display: none;
+            }
+            &[data-deleted=true] > i.fas {
+                display: none;
+            }
+        }
+
         &[data-selected-item=true] {
             color: blue;
 
@@ -39,20 +51,6 @@ import styled from "@web-atoms/core/dist/style/styled";
                 display: none;
             }
         }
-
-        &[data-selected-item=false] {
-            &[data-deleted=none] > i.fas {
-                display: none;
-            }
-            &[data-deleted=false] > i.fas {
-                display: none;
-            }
-            &[data-deleted=true] > i.fas {
-                display: none;
-            }
-        }
-
-
 
     `.installGlobal("div[data-item-type=checkbox]");
 

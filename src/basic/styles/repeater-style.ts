@@ -11,18 +11,26 @@ import styled from "@web-atoms/core/dist/style/styled";
     }
 }
 
-*[data-selected-item=true] {
-    & i[data-click-event=item-select] {
+*[data-item-index] {
+    & label[data-selector=check-box] {
         padding: 5px;
+        & > i {
+            padding: 0;
+        }
     }
-    & i[data-click-event=item-select] {
-        display: none;
+    &:not([data-selected-item]) {
+        & [data-selector=check-box] {
+            & i[data-click-event=item-deselect] {
+                display: none;
+            }
+        }
     }
-}
-
-*[data-selected-item=false] {
-    & i[data-click-event=item-deselect] {
-        display: none;
+    &[data-selected-item=true] {
+        & [data-selector=check-box] {
+            & i[data-click-event=item-select] {
+                display: none;
+            }
+        }
     }
 }
 
