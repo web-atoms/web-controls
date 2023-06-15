@@ -47,6 +47,7 @@ import styled from "@web-atoms/core/dist/style/styled";
         grid-row-start: 3;
         display: inline-grid;
         gap: 0px;
+        grid-template-columns: repeat(7, 1fr);
 
         & > [data-item-index] {
             align-self: stretch;

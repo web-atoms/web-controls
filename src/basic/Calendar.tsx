@@ -229,7 +229,7 @@ export default class Calendar extends AtomRepeater {
                     class="fa-solid fa-angle-right"
                     title="Next Month"/>
                 <div class="week"/>
-                <div class="dates"/>
+                <div data-click-event="item-select" class="dates"/>
             </div>);
         this.itemsPresenter = this.element.lastElementChild;
         const week = this.element.lastElementChild.previousElementSibling;
@@ -244,15 +244,18 @@ export default class Calendar extends AtomRepeater {
         this.itemRenderer = (item: ICalendarDate) => {
             const d = this.dateRenderer(item);
             const a = d.attributes ??= {};
-            if (!a["data-click-event"]) {
-                a["data-click-event"] = "itemSelect";
+            if (item.isToday) {
+                a["data-is-today"] = item.isToday;
             }
-            a["data-is-today"] = item.isToday;
-            a["data-is-other-month"] = item.isOtherMonth;
-            a["data-is-weekend"] = item.isWeekend;
-            a["data-disabled"] = item.disabled;
-            a.styleGridColumnStart = (item.column + 1);
-            a.styleGridRowStart = (item.row + 1);
+            if (item.isOtherMonth) {
+                a["data-is-other-month"] = item.isOtherMonth;
+            }
+            if (item.isWeekend) {
+                a["data-is-weekend"] = item.isWeekend;
+            }
+            if (item.disabled) {
+                a["data-disabled"] = item.disabled;
+            }
             return d;
         };
     }
