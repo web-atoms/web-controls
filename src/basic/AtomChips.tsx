@@ -217,8 +217,8 @@ export default class AtomChips<T = any> extends AtomRepeater<T> {
         this.preventDuplicates = true;
         this.softDeleteProperty = null;
         this.prompt = "Search";
-        this.element.dataset.atomChips = "atom-chips";
-        this.element.dataset.mode = "search";
+        this.element.setAttribute("data-atom-chips", "atom-chips");
+        this.element.setAttribute("data-mode", "search");
         this.suggestionFilter = MatchTrue;
         // this.bindEvent(this.element, "click", () => this.searchInput.focus());
         this.valuePath = (item: any) => item?.value ?? item;

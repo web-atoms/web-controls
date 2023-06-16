@@ -7,6 +7,7 @@ import styled from "@web-atoms/core/dist/style/styled";
     gap: 4px;
     display: flex;
     flex-flow: wrap;
+    padding: 5px;
 
     & > .search {
         border: none;
