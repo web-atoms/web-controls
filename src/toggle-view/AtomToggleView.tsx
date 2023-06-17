@@ -17,14 +17,14 @@ export function ToggleView(
         icon,
         label
     }: IToggleView,
-    node: XNode) {
+    ... nodes: XNode[]) {
     return <div>
         <div>
             <i class={icon}/>
             <label text={label}/>
         </div>
         <div>
-            {node}
+            {...nodes}
         </div>
     </div>;
 }
