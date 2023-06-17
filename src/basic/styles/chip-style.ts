@@ -1,10 +1,10 @@
 import styled from "@web-atoms/core/dist/style/styled";
 
     styled.css `
-        padding: 1px;
-        padding-left: 5px;
-        padding-right: 5px;
-        border-radius: 10px;
+        padding: 2px;
+        padding-left: 10px;
+        padding-right: 10px;
+        border-radius: 9999px;
         display: grid;
         align-items: center;
         grid-template-rows: auto 1fr;
@@ -45,6 +45,7 @@ import styled from "@web-atoms/core/dist/style/styled";
             font-size: x-small;
             grid-row-start: 1;
             grid-column-start: 2;
+            text-align: center;
         }
 
         & > .label {
