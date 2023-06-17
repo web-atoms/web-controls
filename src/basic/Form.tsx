@@ -44,7 +44,7 @@ const checkClick = (e: MouseEvent) => {
             }
         }
         form.setAttribute("data-valid", "true");
-        const eventName = StringHelper.fromHyphenToCamel(form.getAttribute("data-submit-event"));
+        const eventName = StringHelper.fromHyphenToCamel( target.getAttribute("data-submit-event") ?? form.getAttribute("data-submit-event"));
         target.dispatchEvent(new CustomEvent(eventName, { bubbles: true, cancelable: true }));
     }, 100);
 };
