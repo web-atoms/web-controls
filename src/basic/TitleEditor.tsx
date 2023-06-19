@@ -16,6 +16,11 @@ export interface ITitleEditor extends IElement {
      * Characters - Capitalize everything
      */
     capitalize?: Capitalize;
+
+    /**
+     * Hint displayed on icon
+     */
+    capitalizationTitle?: string;
 }
 
 const paste = (e: ClipboardEvent) => {
@@ -120,6 +125,7 @@ export default function TitleEditor({
     type,
     placeholder,
     capitalize = "on",
+    capitalizationTitle = "Capitalization",
     ... a
 }: ITitleEditor) {
     return <div
@@ -133,10 +139,14 @@ export default function TitleEditor({
             event-paste={paste}
             />
         <i
+            data-element="icon"
             class="fas fa-font-case"
-            event-click={changeCase}/>
+            event-click={changeCase}
+            title={capitalizationTitle}/>
         <span
+            data-element="text"
             text={toText(capitalize)}
-            event-click={changeCase}/>
+            event-click={changeCase}
+            title={capitalizationTitle}/>
     </div>;
 }
