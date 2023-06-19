@@ -59,6 +59,9 @@ import styled from "@web-atoms/core/dist/style/styled";
         justify-self: stretch;
         overflow: auto;
         padding: 5px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
         &[data-left=true] {
             transform: translate(-100%, 0); 
         }
