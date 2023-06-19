@@ -26,6 +26,7 @@ import { AncestorEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
         border-radius: 9999px;
         color: white;
         position: sticky;
+        top: 0;
     }
 `.installGlobal("[data-form=form]");
 
