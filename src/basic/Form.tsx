@@ -2,6 +2,7 @@ import Bind from "@web-atoms/core/dist/core/Bind";
 import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
 import XNode, { elementFactorySymbol } from "@web-atoms/core/dist/core/XNode";
 import styled from "@web-atoms/core/dist/style/styled";
+import { AncestorEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 
     styled.css `
     display: flex;
@@ -30,9 +31,22 @@ import styled from "@web-atoms/core/dist/style/styled";
 
 const checkClick = (e: MouseEvent) => {
     const form = e.currentTarget as HTMLDivElement;
-    const target = e.target as HTMLButtonElement;
-    if (!/submit/i.test(target.getAttribute("type") ?? target.getAttribute("data-type") )) {
-        return;
+    const element = e.target as HTMLElement;
+
+    // find button...
+    let target = element;
+    while (target.tagName !== "BUTTON") {
+        target = target.parentElement;
+        if (!target || target === form) {
+            return;
+        }
+    }
+
+    const submitEvent = target.getAttribute("data-submit-event");
+    if (!submitEvent) {
+        if (!/submit/i.test(target.getAttribute("type") ?? target.getAttribute("data-type") )) {
+            return;
+        }
     }
     form.setAttribute("data-show-validation", "true");
     setTimeout(() => {
@@ -44,7 +58,7 @@ const checkClick = (e: MouseEvent) => {
             }
         }
         form.setAttribute("data-valid", "true");
-        const eventName = StringHelper.fromHyphenToCamel( target.getAttribute("data-submit-event") ?? form.getAttribute("data-submit-event"));
+        const eventName = StringHelper.fromHyphenToCamel( submitEvent ?? form.getAttribute("data-submit-event"));
         target.dispatchEvent(new CustomEvent(eventName, { bubbles: true, cancelable: true }));
     }, 100);
 };
