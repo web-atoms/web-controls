@@ -67,7 +67,9 @@ import styled from "@web-atoms/core/dist/style/styled";
             justify-self: stretch;
             padding: 7px;
             cursor: pointer;
-            text-align: center; 
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
 
             &:hover {
                 background-color: rgba(211,211,211,0.5);             
