@@ -106,6 +106,7 @@ export default class Calendar extends AtomRepeater {
     public get dates() {
         const year = this.year;
         const tm = this.month;
+
         if (tm === undefined || year === undefined) {
             return [];
         }
@@ -214,19 +215,23 @@ export default class Calendar extends AtomRepeater {
             data-calendar="calendar"
             items={Bind.oneWay(() => this.dates)}>
                 <i
+                    data-element="previous"
                     event-click={() => this.prev()}
-                    class="fa-solid fa-angle-left"
+                    class="fa-solid fa-circle-chevron-left"
                     title="Previous Month"/>
                 <Select
+                    data-element="month"
                     items={months.items}
                     value={Bind.twoWays(() => this.month)}
                     />
                 <Select
+                    data-element="year"
                     items={Bind.oneWay(() => this.years)}
                     value={Bind.twoWays(() => this.year)}/>
                 <i
+                    data-element="next"
                     event-click={() => this.next()}
-                    class="fa-solid fa-angle-right"
+                    class="fa-solid fa-circle-chevron-right"
                     title="Next Month"/>
                 <div class="week"/>
                 <div data-click-event="item-select" class="dates"/>

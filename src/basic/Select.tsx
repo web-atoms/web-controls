@@ -61,14 +61,14 @@ export default function Select({
         items,
         labelPath,
         valuePath,
-        value
+        value,
+        ... a
     }: ISelect) {
-    const p = {};
-    p[labelPathSetter.property] = labelPath;
-    p[valuePathSetter.property] = valuePath;
-    p[valueSetter.property] = value;
-    p[itemsSetter.property] = items;
+    a[labelPathSetter.property] = labelPath;
+    a[valuePathSetter.property] = valuePath;
+    a[valueSetter.property] = value;
+    a[itemsSetter.property] = items;
     return <select
-        { ... p}
+        { ... a}
         ></select>;
 }

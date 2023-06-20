@@ -2,17 +2,28 @@ import styled from "@web-atoms/core/dist/style/styled";
 
     styled.css `
 
-    & {
-        display: inline-grid;
-        grid-template-rows: auto auto auto;
-        grid-template-columns: auto auto auto auto;
-    }
+    display: inline-grid;
+    grid-template-rows: auto auto 1fr;
+    grid-template-columns: auto auto auto auto;
+    justify-items: stretch;
 
     & > .fa-solid {
         padding: 5px;
         padding-left: 10px;
         padding-right: 10px;
         cursor: pointer;
+    }
+
+    & > [data-element=year], & > [data-element=month] {
+        justify-self: center;
+    }
+
+    & > [data-element=previous] {
+        justify-self: start;
+    }
+
+    & > [data-element=next] {
+        justify-self: end;
     }
 
     & > .fa-solid:hover {
@@ -28,16 +39,18 @@ import styled from "@web-atoms/core/dist/style/styled";
         grid-row-start: 2;
         display: inline-grid;
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-        gap: 0px;
+        gap: 2px;
 
         & > * {
             font-size: smaller;
-            padding: 5;
-            padding-left: 10;
-            padding-right: 10;
+            padding: 5px;
+            padding-left: 10px;
+            padding-right: 10px;
+            background-color: rgba(211,211,211,0.5);
             cursor: default;
+            text-align: center;
             align-self: center;
-            justify-self: center;
+            justify-self: stretch;
         }
     }
 
