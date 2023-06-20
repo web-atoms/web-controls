@@ -202,9 +202,6 @@ import Route from "@web-atoms/core/dist/core/Route";
             border: 3px solid #ffa500; 
         }
         
-        & > * {
-            flex-shrink: 0; 
-        }
     }
         
     & > [data-page-element=footer] {
