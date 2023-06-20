@@ -352,12 +352,17 @@ export default class AtomHtmlEditor extends AtomControl {
             // we need to sanitize this one...
             const s = window.getSelection();
             const r = s.getRangeAt(0);
-            const p = document.createElement("p");
-            const span = document.createElement("span");
-            span.textContent = d;
-            p.appendChild(span);
-            r.insertNode(p);
-            r.setStartAfter(p);
+            let last: HTMLElement;
+            for (const iterator of d.split("\n")) {
+                const text = iterator.trim();
+                if (!text) {
+                    continue;
+                }
+                last = document.createElement("p");
+                last.innerText = iterator;
+                r.insertNode(last);
+            }
+            r.setStartAfter(last);
         }
         e.preventDefault();
     }
