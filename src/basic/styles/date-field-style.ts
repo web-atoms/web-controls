@@ -16,6 +16,7 @@ import styled from "@web-atoms/core/dist/style/styled";
         grid-template-columns: 1fr auto;
         grid-template-rows: 1fr auto auto;
         gap: 7px;
+        min-width: max-content;
     }
 
     & .calendar-popup > [data-calendar] {
