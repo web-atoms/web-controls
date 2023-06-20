@@ -155,6 +155,10 @@ export default class Calendar extends AtomRepeater {
         return years;
     }
 
+    public get value() {
+        return super.value;
+    }
+
     public set value(v) {
         // change the date....
         if (v instanceof Date) {
