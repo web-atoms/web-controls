@@ -480,6 +480,9 @@ export default class AtomRepeater<T = any> extends AtomControl {
     public allowMultipleSelection: boolean;
 
     @BindableProperty
+    public selectOnClick;
+
+    @BindableProperty
     public selectedItems: T[];
 
     @BindableProperty
@@ -1007,6 +1010,7 @@ export default class AtomRepeater<T = any> extends AtomControl {
 
     protected preCreate() {
         this.mergeOnRefresh = false;
+        this.selectOnClick = false;
         this.element.setAttribute("data-click-event", "item-click");
     }
 
@@ -1136,7 +1140,7 @@ export default class AtomRepeater<T = any> extends AtomControl {
         });
         originalTarget.dispatchEvent(ce);
         if (!ce.defaultPrevented) {
-            if (eventName === "itemSelect" || eventName === "itemDeselect") {
+            if (this.selectOnClick || eventName === "itemSelect" || eventName === "itemDeselect") {
                 const si = this.selectedItems ??= [];
                 if (si) {
                     const index = si.indexOf(item);
