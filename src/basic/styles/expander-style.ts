@@ -96,6 +96,7 @@ import styled from "@web-atoms/core/dist/style/styled";
         border-top-width: 0px;
         margin-top: 0px;
         margin-bottom: 0px;
+        margin-left: 25px;
 
         &[data-selected=true] {
             font-weight: bold;
