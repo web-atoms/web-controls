@@ -9,6 +9,8 @@ const T = isMobileView ? MobileApp : DesktopApp;
 
 export default abstract class MobileDesktopApp extends (T as any as typeof AtomControl) {
 
+    public static current: MobileDesktopApp;
+
     public mobileApp: MobileApp;
 
     public desktopApp: DesktopApp;
@@ -30,6 +32,9 @@ export default abstract class MobileDesktopApp extends (T as any as typeof AtomC
     private menu: typeof Drawer;
 
     protected preCreate(): void {
+
+        MobileDesktopApp.current = this;
+
         super.preCreate();
         if (isMobileView) {
             this.mobileApp = this as any as MobileApp;
