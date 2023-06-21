@@ -1,5 +1,6 @@
 import { CancelToken } from "@web-atoms/core/dist/core/types";
 import type { ContentPage } from "./mobile-app/MobileApp";
+import { PageCommands } from "@web-atoms/core/dist/core/Command";
 
 export type Page<T> = typeof ContentPage<T, any>;
 export type PageWith<T, T2> = typeof ContentPage<T, T2>;
@@ -55,3 +56,7 @@ export default class PageNavigator {
     }
 
 }
+
+PageCommands.openPage = (c, p) => PageNavigator.openPage(c, p);
+PageCommands.pushPage = (c, p) => PageNavigator.pushPage(c, p);
+PageCommands.pushPageForResult = (c, p) => PageNavigator.pushPageForResult(c, p);
