@@ -130,7 +130,7 @@ import Route from "@web-atoms/core/dist/core/Route";
     }
     
     & > button[data-page-element=action] {
-        width: 30px;
+        min-width: 40px;
         border: none;
         outline: none;
         background: transparent; 
