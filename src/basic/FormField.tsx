@@ -65,6 +65,34 @@ export interface IFormField {
 //     }
 // });
 
+document.body.addEventListener("click", (e) => {
+    // check if it is a label...
+    let label = e.target as HTMLElement;
+    while (label.tagName !== "LABEL") {
+        if (label.getAttribute("data-element") === "label") {
+            break;
+        }
+        label = label.parentElement;
+        if (label === document.body) {
+            return;
+        }
+    }
+
+    if(!label) {
+        return;
+    }
+
+    const formField = label.parentElement;
+    if (!formField.hasAttribute("data-wa-form-field")) {
+        return;
+    }
+
+    // look for associated control...
+    const selectable = formField.querySelector("select,input,textarea") as any;
+    selectable?.focus?.();
+
+});
+
 document.addEventListener("focusin", (e) => {
     let target = e.target as HTMLElement;
     while (target) {
