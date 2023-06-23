@@ -21,13 +21,14 @@ import styled from "@web-atoms/core/dist/style/styled";
         cursor: pointer;
     }
 
-    &[data-selected-item=true] {
-        & > i.fa-circle {
+    &:not([data-selected-item]) {
+        & > i.fa-dot-circle {
             display: none;
         }
     }
-    &[data-selected-item=false] {
-        & > i.fa-dot-circle {
+
+    &[data-selected-item=true] {
+        & > i.fa-circle {
             display: none;
         }
     }
