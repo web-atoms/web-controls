@@ -68,7 +68,7 @@ export interface IFormField {
 document.body.addEventListener("click", (e) => {
     // check if it is a label...
     let label = e.target as HTMLElement;
-    while (label.tagName !== "LABEL") {
+    while (label && label.tagName !== "LABEL") {
         if (label.getAttribute("data-element") === "label") {
             break;
         }
