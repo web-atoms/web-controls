@@ -353,6 +353,7 @@ export default class AtomHtmlEditor extends AtomControl {
             const s = window.getSelection();
             const r = s.getRangeAt(0);
             let last: HTMLElement;
+            const tags = [];
             for (const iterator of d.split("\n")) {
                 const text = iterator.trim();
                 if (!text) {
@@ -360,7 +361,10 @@ export default class AtomHtmlEditor extends AtomControl {
                 }
                 last = document.createElement("p");
                 last.innerText = iterator;
-                r.insertNode(last);
+                tags.push(last);
+            }
+            while(tags.length) {
+                r.insertNode(tags.pop());
             }
             r.setStartAfter(last);
         }
