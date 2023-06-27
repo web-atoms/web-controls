@@ -346,6 +346,8 @@ export class BasePage extends AtomControl {
         this.registerDisposable(d)
     }
 
+    protected disposed: boolean;
+
     private routeUrl: string;
 
     private viewModelTitle: string;
@@ -880,6 +882,8 @@ export default class MobileApp extends AtomControl {
 
             const closeFactory = (callback, result?) =>
                 (r) => {
+                    // @ts-expect-error To be accessed privately
+                    page.disposed = true;
                     if (clearHistory) {
                         this.app.runAsync(() => this.loadPageForReturn(this.defaultPage, true));
                         return;
