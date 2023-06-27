@@ -12,7 +12,7 @@ import styled from "@web-atoms/core/dist/style/styled";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import { AtomDisposableList } from "@web-atoms/core/dist/core/AtomDisposableList";
 import Bind from "@web-atoms/core/dist/core/Bind";
-import { IDisposable } from "@web-atoms/core/dist/core/types";
+import { CancelToken, IDisposable } from "@web-atoms/core/dist/core/types";
 import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import { displayRouteSymbol, routeSymbol } from "@web-atoms/core/dist/core/Command";
 import Route from "@web-atoms/core/dist/core/Route";
@@ -346,8 +346,6 @@ export class BasePage extends AtomControl {
         this.registerDisposable(d)
     }
 
-    protected disposed: boolean;
-
     private routeUrl: string;
 
     private viewModelTitle: string;
@@ -368,6 +366,8 @@ export class BasePage extends AtomControl {
     public set hideToolbar(v: boolean) {
         this.element.dataset.hideToolbar = v ? "true" : "false";
     }
+
+    protected readonly cancelToken: CancelToken;
 
     public async requestCancel() {
         if (this.closeWarning) {
@@ -454,6 +454,14 @@ export class BasePage extends AtomControl {
         this.element.dataset.basePage = "base-page";
         this.iconClass = "";
         this.viewModelTitle = null;
+        const c = new CancelToken();
+        // @ts-expect-error
+        this.cancelToken = c;
+        this.registerDisposable({
+            dispose() {
+                c.cancel();
+            }
+        });
         this.runAfterInit(() => {
             if (!this.element) {
                 return;
@@ -882,8 +890,6 @@ export default class MobileApp extends AtomControl {
 
             const closeFactory = (callback, result?) =>
                 (r) => {
-                    // @ts-expect-error To be accessed privately
-                    page.disposed = true;
                     if (clearHistory) {
                         this.app.runAsync(() => this.loadPageForReturn(this.defaultPage, true));
                         return;
