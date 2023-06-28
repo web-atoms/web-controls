@@ -5,6 +5,7 @@ import styled from "@web-atoms/core/dist/style/styled";
     display: inline-block;
     cursor: pointer;
     text-align: left;
+    border: none;
     background-color: transparent;
 
     &::after {
