@@ -180,6 +180,7 @@ export default class DateField extends AtomControl {
         }
 
         this.render(<InlinePopupButton
+            data-layout="flex"
             data-date-field="date-field"
             text={Bind.oneWay(() => this.format?.(this.value, this.enableTime) || this.prompt)}>
             <CalendarPopup/>
