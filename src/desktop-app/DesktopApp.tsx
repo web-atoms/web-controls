@@ -14,7 +14,7 @@ import styled from "@web-atoms/core/dist/style/styled";
 
     body {
         overflow: hidden;
-        display: flex;
+        display: grid;
         justify-content: space-around;
         align-items: stretch;
         align-content: stretch;
