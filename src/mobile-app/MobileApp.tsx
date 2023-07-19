@@ -35,11 +35,14 @@ import Route from "@web-atoms/core/dist/core/Route";
     }
 
     @media screen {
-        position: absolute;
-        overflow: hidden;        
-        & > [data-container] {
+        & {
             position: absolute;
-            overflow: hidden;
+            overflow: hidden;        
+        
+            & > [data-container] {
+                position: absolute;
+                overflow: hidden;
+            }
         }
     }
     
