@@ -13,18 +13,27 @@ import styled from "@web-atoms/core/dist/style/styled";
     }
 
     body {
-        overflow: hidden;
-        display: grid;
         justify-content: space-around;
         align-items: stretch;
         align-content: stretch;
         flex-direction: row;
     }
 
+    @media screen {
+        body {
+            overflow: hidden;
+            display: grid;
+        }
+
+        *[data-desktop-app=desktop-app] {
+            position: relative;
+            overflow: hidden;
+            display: grid;
+        }
+        
+    }
+
     *[data-desktop-app=desktop-app] {
-        position: relative;
-        overflow: hidden;
-        display: grid;
         min-width: 900px;
         grid-template-rows: 1fr auto;
         grid-template-columns: auto 1fr auto;

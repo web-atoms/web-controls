@@ -19,13 +19,11 @@ import Route from "@web-atoms/core/dist/core/Route";
 
     styled.css `
 
-    position: absolute;
     top: 0px;
     left: 0px;
     right: 0px;
     bottom: 0px;
     padding: 5px;
-    overflow: hidden;
 
     & > [data-container] {
         position: absolute;
@@ -33,8 +31,16 @@ import Route from "@web-atoms/core/dist/core/Route";
         left: 0px;
         width: 100%;
         bottom: 0px;
-        overflow: hidden;
         transition: left 0.3s ease-out;
+    }
+
+    @media screen {
+        position: absolute;
+        overflow: hidden;        
+        & > [data-container] {
+            position: absolute;
+            overflow: hidden;
+        }
     }
     
     &[data-drawer=visible] {
