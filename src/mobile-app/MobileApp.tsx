@@ -250,6 +250,14 @@ import Route from "@web-atoms/core/dist/core/Route";
     
 `.installGlobal("[data-base-page=base-page]");
 
+    styled.css `
+        @media screen {
+            body {
+            overflow: hidden;
+        }        
+    }
+`.installGlobal();
+
 export function PullToRefresh() {
     return <div>
         <i class="pull-icon fa-solid fa-down"/>
@@ -812,7 +820,7 @@ export default class MobileApp extends AtomControl {
         });
 
         // disable top level scroll
-        document.body.style.overflow = "hidden";
+        // document.body.style.overflow = "hidden";
         this.drawer = null;
         this.element.dataset.pageApp = "page-app";
         const container = this.container = document.createElement("div");
