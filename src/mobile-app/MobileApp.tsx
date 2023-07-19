@@ -26,7 +26,6 @@ import Route from "@web-atoms/core/dist/core/Route";
     padding: 5px;
 
     & > [data-container] {
-        position: absolute;
         top: 0px;
         left: 0px;
         width: 100%;
@@ -68,20 +67,26 @@ import Route from "@web-atoms/core/dist/core/Route";
     }
 
     `.installGlobal("[data-page-app=page-app]");
+
     styled.css `
 
-    position: absolute;
     top: 0px;
     left: 0px;
     width: 100%;
     height: 100%;
-    overflow: hidden;
     contain: content;
     transition: transform 0.3s ease-out;
     display: grid;
     grid-template-rows: auto auto 1fr auto;
     grid-template-columns: auto 1fr auto;
     transform: translate(100%,0);
+
+    @media screen {
+        & {
+            position: absolute;
+            overflow: hidden;
+        }   
+    }
 
     & > [data-icon-button=icon-button] {
         padding: 5px;
