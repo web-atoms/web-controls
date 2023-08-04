@@ -159,6 +159,8 @@ export default class AtomChips<T = any> extends AtomRepeater<T> {
 
     public anchorItem: any;
 
+    public onKeyPressedItemToChip: (key: string, search: string) => any;
+
     public get searchType() {
         return this.searchInput.type;
     }
@@ -357,6 +359,15 @@ export default class AtomChips<T = any> extends AtomRepeater<T> {
 
     protected onKey(e: KeyboardEvent) {
         const suggested = this.suggestions;
+        const onKeyPressedItemToChip = this.onKeyPressedItemToChip;
+        if (onKeyPressedItemToChip) {
+            const item = onKeyPressedItemToChip(e.key, this.search);
+            if (item) {
+                this.addItem(item);
+                this.searchInput.value = "";
+                return;
+            }
+        }
         switch (e.key) {
             case "Enter":
                 // selection mode...
