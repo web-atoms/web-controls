@@ -57,6 +57,15 @@ export default class InlineHtmlEditor extends AtomControl {
      * attributes etc.
      */
     public get htmlContent() {
+        return this.htmlTextContent.html;
+    }
+
+    public set htmlContent(v: string) {
+        this.content = v;
+    }
+
+    public get htmlTextContent() {
+
         // we will sanitize...
         // remove editable
         const copy = document.createElement("div");
@@ -68,11 +77,7 @@ export default class InlineHtmlEditor extends AtomControl {
 
         this.sanitizeHtml?.(copy);
 
-        return copy.innerHTML;
-    }
-
-    public set htmlContent(v: string) {
-        this.content = v;
+        return { html: copy.innerHTML , text: copy.innerText };
     }
 
     public get content() {
