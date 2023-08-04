@@ -159,6 +159,7 @@ export default class AtomChips<T = any> extends AtomRepeater<T> {
 
     public anchorItem: any;
 
+    @BindableProperty
     public onKeyPressedItemToChip: (key: string, search: string) => any;
 
     public get searchType() {
