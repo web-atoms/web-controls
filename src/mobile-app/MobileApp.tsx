@@ -121,6 +121,7 @@ import Route from "@web-atoms/core/dist/core/Route";
         grid-row-start: 1;
         grid-column-start: 2;
         overflow: hidden;
+        overflow-y: visible;
         white-space: nowrap;
         text-overflow: ellipsis;
         color: var(--accent-text-color, black); 
