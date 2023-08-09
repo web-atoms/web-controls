@@ -11,6 +11,18 @@ import styled from "@web-atoms/core/dist/style/styled";
 
     styled.css `
 
+    & > [data-element=editor] {
+
+        padding: var(--spacing, 5px);
+        border: solid 1px lightgray;
+        border-radius: var(--spacing, 5px);
+        margin: var(--spacing, 5px);
+
+        & > * {
+            outline: none;
+        }
+    }
+
     & > [data-element=toolbar] {
         flex-direction: column;
         align-items: center;
@@ -238,6 +250,7 @@ export default class InlineHtmlEditor extends AtomControl {
     protected onPasteEvent(e: ClipboardEvent) {
         // tslint:disable-next-line: no-console
         if (!e.clipboardData.types.find((x) => x === "text/html")) {
+            this.onContentInput();
             return;
         }
 
