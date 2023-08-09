@@ -234,6 +234,11 @@ export default class InlineHtmlEditor extends AtomControl {
                     first.innerHTML = "<p><br/></p>";
                     this.editor.appendChild(first);
                 }
+                else {
+                    if (!first.lastChild) {
+                        first.innerHTML = "<p></br></b>";
+                    }
+                }
                 const selection = window.getSelection();
                 selection.removeAllRanges();
                 const range = document.createRange();
