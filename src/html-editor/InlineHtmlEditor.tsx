@@ -219,13 +219,30 @@ export default class InlineHtmlEditor extends AtomControl {
         this.bindEvent(this.editor, "blur", () => this.saveSelection(), void 0, true);
         this.bindEvent(this.editor, "input", (e: InputEvent) => this.onContentInput(e));
         this.bindEvent(this.editor, "keydown", (e: KeyboardEvent) => this.updateQueryCommand());
-        this.bindEvent(this.editor, "click", (e: KeyboardEvent) => this.updateQueryCommand());
+        this.bindEvent(this.editor, "click", (e: MouseEvent) => this.updateQueryCommand(e));
         this.bindEvent(this.editor, "paste", (e: ClipboardEvent) => this.onPasteEvent(e));
         this.bindEvent(this.editor, "cut", () => this.onContentInput());
         this.bindEvent(this.editor, "drop", (e: DragEvent) => this.onDrop(e));
     }
 
-    protected updateQueryCommand() {
+    protected updateQueryCommand(e?: Event) {
+        if (e?.type === "click") {
+            if (!this.editor.textContent) {
+                let first = this.editor.firstElementChild;
+                if(!first) {
+                    first = document.createElement("div");
+                    first.innerHTML = "<p><br/></p>";
+                    this.editor.appendChild(first);
+                }
+                const selection = window.getSelection();
+                selection.removeAllRanges();
+                const range = document.createRange();
+                // find editable...
+                range.setEndAfter(first.lastChild);
+                range.setStartAfter(first.lastChild);
+                selection.addRange(range);
+            }
+        }
         this.version++;
     }
 
