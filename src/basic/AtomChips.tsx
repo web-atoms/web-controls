@@ -162,6 +162,9 @@ export default class AtomChips<T = any> extends AtomRepeater<T> {
     @BindableProperty
     public onKeyPressedItemToChip: (key: string, search: string) => any;
 
+    @BindableProperty
+    public onBlurItemToChip: (search: string) => any;
+
     public get searchType() {
         return this.searchInput.type;
     }
@@ -243,6 +246,15 @@ export default class AtomChips<T = any> extends AtomRepeater<T> {
         this.bindEvent(this.element, "removeChip", (e: CustomEvent) => e.defaultPrevented || this.removeItem(e.detail));
         this.bindEvent(this.element, "undoRemoveChip", (e: CustomEvent) =>
             e.defaultPrevented || this.undoRemoveItem(e.detail));
+        this.bindEvent(this.searchInput, "blur", () => {
+            if (this.onBlurItemToChip && this.search) {
+                const item = this.onBlurItemToChip(this.search);
+                if (item) {
+                    this.items.add(item);
+                    this.searchInput.value = "";
+                }
+            }
+        });
     }
 
     protected setFocus(hasFocus) {
@@ -361,7 +373,7 @@ export default class AtomChips<T = any> extends AtomRepeater<T> {
     protected onKey(e: KeyboardEvent) {
         const suggested = this.suggestions;
         const onKeyPressedItemToChip = this.onKeyPressedItemToChip;
-        if (onKeyPressedItemToChip) {
+        if (onKeyPressedItemToChip && this.search) {
             const item = onKeyPressedItemToChip(e.key, this.search);
             if (item) {
                 this.addItem(item);
