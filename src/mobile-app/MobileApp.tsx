@@ -342,12 +342,17 @@ export class BasePage extends AtomControl {
         if(!url) {
             return;
         }
-        url = Route.encodeUrl(url);
-
         if (history.state?.url === url) {
             return;
         }
+        url = Route.encodeUrl(url);
+        if (this.routeUrl === url) {
+            return;
+        }
+        this.routeUrl = url;
+        // we will unregister previous disposable...
 
+        this.reouteDisposable?.dispose();
         const last = history.state?.url;
 
         const state = { url };
@@ -366,10 +371,12 @@ export class BasePage extends AtomControl {
                 }
             }
         };
-        this.registerDisposable(d)
+        this.reouteDisposable = this.registerDisposable(d);
     }
 
     private routeUrl: string;
+
+    private reouteDisposable: IDisposable;
 
     private viewModelTitle: string;
 
