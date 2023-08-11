@@ -353,7 +353,13 @@ export class BasePage extends AtomControl {
         // we will unregister previous disposable...
 
         this.reouteDisposable?.dispose();
-        const last = history.state?.url;
+        let last = void 0;
+
+        // this is to prevent unloading of the page
+        // previous page exists without the route and
+        // new page has set the current route and its
+        // still loading
+        setTimeout(() => last = url, 100);
 
         const state = { url };
         history.pushState(state, "", url);
