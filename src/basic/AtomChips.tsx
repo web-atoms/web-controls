@@ -182,7 +182,7 @@ export default class AtomChips<T = any> extends AtomRepeater<T> {
         this.searchInput.enterKeyHint = v;
     }
 
-    private searchInput: HTMLInputElement;
+    protected searchInput: HTMLInputElement;
 
     private anchorIndex: number;
 
