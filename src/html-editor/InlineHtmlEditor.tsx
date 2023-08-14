@@ -107,11 +107,12 @@ export default class InlineHtmlEditor extends AtomControl {
         this.render(v(), this.toolbarElement, this);
     }
 
+    public editor: HTMLElement;
+
     private version: number;
 
     private selection: Range;
 
-    private editor: HTMLElement;
 
     private toolbarElement: HTMLElement;
 
