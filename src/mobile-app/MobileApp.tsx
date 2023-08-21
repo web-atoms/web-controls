@@ -685,11 +685,15 @@ export class BasePage extends AtomControl {
     }
 
     protected hide() {
-        this.element.dataset.pageState = "hidden";
-        this.element._logicalParent = this.element.parentElement;
+        const { element } = this;
+        if (!element) {
+            return;
+        }
+        element.dataset.pageState = "hidden";
+        element._logicalParent = element.parentElement;
         this.scrollTop = this.contentElement?.scrollTop;
         setTimeout(() => {
-            this.element?.remove();
+            element?.remove();
         }, 400);
     }
 
