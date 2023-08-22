@@ -71,13 +71,13 @@ let setEventHandler = () => {
 
 export default function LimitedText({
     text = "",
-    height = 100,
+    height = 100 as (number | string),
     ... a
 }, ... nodes: XNode[]) {
 
     setEventHandler?.();
 
-    const h = `${height}px`;
+    const h = typeof height === "number" ? `${height}px` : height;
     return <div
         data-mode="collapsed"
         data-max-height={h}
