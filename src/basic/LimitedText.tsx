@@ -70,10 +70,10 @@ let setEventHandler = () => {
 };
 
 export default function LimitedText({
-    text,
+    text = "",
     height = 100,
     ... a
-}) {
+}, ... nodes: XNode[]) {
 
     setEventHandler?.();
 
@@ -84,7 +84,8 @@ export default function LimitedText({
         style-max-height={h}
         data-limited-text="limited-text"
         {... a}>
-        <p text={text}/>
+        { text && <p text={text}/> }
+        { ... nodes}
         <div
             style-top={h}
             data-element="more">
