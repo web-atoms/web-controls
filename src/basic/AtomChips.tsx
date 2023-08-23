@@ -247,12 +247,14 @@ export default class AtomChips<T = any> extends AtomRepeater<T> {
         this.bindEvent(this.element, "undoRemoveChip", (e: CustomEvent) =>
             e.defaultPrevented || this.undoRemoveItem(e.detail));
         this.bindEvent(this.searchInput, "blur", () => {
+            const search = this.search;
             setTimeout(() => {
-                if (this.onBlurItemToChip && this.search) {
-                    const item = this.onBlurItemToChip(this.search);
+                if (this.onBlurItemToChip && search) {
+                    const item = this.onBlurItemToChip(search);
                     if (item) {
                         this.items.add(item);
                         this.searchInput.value = "";
+                        this.search = "";
                     }
                 }
             }, 50);
