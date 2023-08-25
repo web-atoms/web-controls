@@ -78,7 +78,7 @@ window.addEventListener(uploadCommand.eventName, (ce: MouseEvent) => {
     }
 
     const multiple = element.getAttribute("data-multiple") === "true";
-    const extra = (element as any).extra;
+    const extra = (element as any).extra ?? element.getAttribute("data-extra");
     const upload = element.getAttribute("data-upload") === "true";
     const uploadEvent = StringHelper.fromHyphenToCamel(element.getAttribute("data-upload-event"));
 
