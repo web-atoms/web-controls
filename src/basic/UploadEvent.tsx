@@ -55,6 +55,7 @@ export interface IUploadParams<T = any> {
     extra?: T;
     authorize?: boolean;
     ariaLabel?: string;
+    folder?: boolean;
 } 
 
 let previousFile: HTMLInputElement;
@@ -80,6 +81,7 @@ window.addEventListener(uploadCommand.eventName, (ce: MouseEvent) => {
     const multiple = element.getAttribute("data-multiple") === "true";
     const extra = (element as any).extra;
     const upload = element.getAttribute("data-upload") === "true";
+    const folder = element.hasAttribute("data-folder");
     const uploadEvent = StringHelper.fromHyphenToCamel(element.getAttribute("data-upload-event"));
 
     const chain: HTMLElement[] = [];
@@ -93,6 +95,9 @@ window.addEventListener(uploadCommand.eventName, (ce: MouseEvent) => {
     const file = document.createElement("input");
     file.type = "file";
     file.multiple = multiple;
+    if (folder) {
+        file.webkitdirectory = folder;
+    }
     const accept = element.getAttribute("data-accept") || "*/*";
     file.accept = accept;
     const capture = element.getAttribute("data-capture");
@@ -196,10 +201,12 @@ export default class UploadEvent {
         upload = true,
         authorize = true,
         ariaLabel = "Upload",
+        folder = false,
         ... others
     }: IUploadParams) {
         return {
             ... others,
+            "data-folder": folder ? "true" : void 0,
             "data-click-command": uploadCommand.name,
             "data-upload-event": uploadEvent,
             "data-accept": accept,
