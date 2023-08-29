@@ -292,6 +292,7 @@ export class Drawer extends AtomControl {
 
 delete (Drawer.prototype as any).init;
 
+let historyBackCalled = false;
 
 export class BasePage extends AtomControl {
 
@@ -364,6 +365,9 @@ export class BasePage extends AtomControl {
         const state = { url };
         history.pushState(state, "", url);
         const eventRegistration = (e: PopStateEvent) => {
+            if (historyBackCalled) {
+                return;
+            }
             if (e.state?.url === last) {
                 this.cancel();
             }
@@ -373,7 +377,9 @@ export class BasePage extends AtomControl {
             dispose() {
                 window.removeEventListener("popstate", eventRegistration);
                 if (history.state?.url === state.url) {
+                    historyBackCalled = true;
                     history.back();
+                    setTimeout(() => historyBackCalled = false, 500);
                 }
             }
         };
