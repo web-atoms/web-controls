@@ -1302,6 +1302,9 @@ interface IPoint {
 }
 
 const dragOver = (e: DragEvent) => {
+    if (!e.dataTransfer) {
+        return;
+    }
     if (hoverItem) {
         const { placeholder } = hoverItem;
         if (e.target === placeholder) {
