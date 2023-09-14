@@ -1004,9 +1004,7 @@ export class PopupWindowPage<TIn = any, TOut = any> extends (root as any as type
 
 PageNavigator.pushPageForResult =
     (page, parameters, clearHistory) => {
-        if (
-            !clearHistory
-            && !isMobileView
+        if (!isMobileView
             && page[isPopupPage]
         ) {
             const popupPage = page as any as typeof PopupWindowEx;
