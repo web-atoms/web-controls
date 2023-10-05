@@ -3,6 +3,7 @@ const supportsFileSystemAccessAPI =
 const supportsWebkitGetAsEntry =
   "webkitGetAsEntry" in DataTransferItem.prototype;
 
+import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
 import styled from "@web-atoms/core/dist/style/styled";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 
@@ -43,7 +44,8 @@ const eventDrop = (e: DragEvent) => {
     const currentTarget = e.currentTarget as HTMLElement;
     currentTarget.removeAttribute("data-drop-enabled");
 
-    const uploadEvent = currentTarget.getAttribute("data-upload-event");
+    const uploadEvent = StringHelper.fromHyphenToCamel(currentTarget.getAttribute("data-upload-event"));
+    const uploadRequested = StringHelper.fromHyphenToCamel(currentTarget.getAttribute("data-upload-requested"));
     const extra = currentTarget.getAttribute("data-extra");
 
     const fileHandlesPromises = [...e.dataTransfer.items as any]
@@ -88,7 +90,7 @@ const eventDrop = (e: DragEvent) => {
             uploadEvent
         };
         // console.log(detail);
-        currentTarget.dispatchEvent(new CustomEvent("uploadRequested", { detail, bubbles: true, cancelable: true}));
+        currentTarget.dispatchEvent(new CustomEvent(uploadRequested, { detail, bubbles: true, cancelable: true}));
         // console.log(files);
     });
 
