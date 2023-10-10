@@ -112,6 +112,8 @@ export default class InlinePopup extends AtomControl {
 
             const disposables = new AtomDisposableList();
 
+            disposables.add(() => targetElement.removeAttribute("data-popup-open"))
+
             let resolved = false;
 
             const close = (r?) => {
@@ -227,6 +229,11 @@ document.body.addEventListener("click", (e) => {
     if (!start) {
         return;
     }
+
+    if (start.getAttribute("data-popup-open")) {
+        return;
+    }
+    start.setAttribute("data-popup-open", "true");
 
     const control = AtomControl.from(start) as any;
     const app = control.app as App;
