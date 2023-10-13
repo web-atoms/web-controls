@@ -25,6 +25,9 @@ const isTouchEnabled = /android|iPhone|iPad/i.test(navigator.userAgent);
         grid-column-end: span 3;
         align-self: start;
         justify-self: end; 
+        max-height: 20%;
+        max-width: 20%;
+        z-index: 2;
     }
 
     & > [data-element=video] {

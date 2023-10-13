@@ -27,6 +27,7 @@ export default class AtomVideoTest extends AtomControl {
     protected create(): void {
         this.render(<div class={css}>
             <AtomVideoPlayer
+                logo="https://test.castyy.com/files/was/15242/25964cbc418f4692b9d58f95624a21ad/playstore.png"
                 source="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
                 />        
         </div>)
