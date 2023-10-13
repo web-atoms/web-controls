@@ -18,6 +18,15 @@ const isTouchEnabled = /android|iPhone|iPad/i.test(navigator.userAgent);
     background-color: #000000;
     overflow: hidden;
 
+    & > [data-element=logo] {
+        grid-row-start: 1;
+        grid-row-end: 3;
+        grid-column-start: 1;
+        grid-column-end: span 3;
+        align-self: start;
+        justify-self: end; 
+    }
+
     & > [data-element=video] {
         grid-row-start: 1;
         grid-row-end: span 3;
@@ -223,6 +232,9 @@ export default class AtomVideoPlayer extends AtomControl {
     @BindableProperty
     public source: any;
 
+    @BindableProperty
+    public logo: any;
+
     public get poster() {
         return this.video.poster;
     }
@@ -368,6 +380,7 @@ export default class AtomVideoPlayer extends AtomControl {
         this.render(<div
             data-click-event="toggle-play"
             data-state="pause">
+            <img data-element="logo" data-has-logo={Bind.oneWay(() => this.logo ? "true" : "false", "false")} src={Bind.oneWay(() => this.logo)}/>
             <video
                 event-abort={() => this.state = "aborted"}
                 event-durationchange={(e: Event) => AtomBinder.refreshValue(this, "duration")}
