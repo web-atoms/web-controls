@@ -546,6 +546,17 @@ export class BasePage extends AtomControl {
             this.pullToRefreshElement?.remove?.();
             this.initialized = true;
             this.enablePullToRefreshEvents();
+
+            try {
+                document.body.dispatchEvent(new CustomEvent("pageNavigated", {
+                    detail:  {
+                        title: this.title,
+                        route: this.route || Object.getPrototypeOf(this)?.constructor?.name
+                    },
+                    bubbles: true,
+                    cancelable: true
+                } ));
+            } catch {}
         });
 
     }
