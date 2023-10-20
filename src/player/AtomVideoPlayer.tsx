@@ -15,7 +15,6 @@ const isTouchEnabled = /android|iPhone|iPad/i.test(navigator.userAgent);
     display: grid;
     grid-template-rows: auto 1fr auto;
     grid-template-columns: auto 1fr auto;
-    background-color: #000000;
     overflow: hidden;
 
     & > [data-element=logo] {
