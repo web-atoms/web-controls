@@ -9,7 +9,6 @@ import styled from "@web-atoms/core/dist/style/styled";
     z-index: 5000;
     background-color: var(--popup-background-color, white);
     color: var(--popup-text-color, rgba(0,0,0,0.8));
-    left: 0;
     `.installGlobal("*[data-inline-popup=inline-popup]");
 
     // styled.css `

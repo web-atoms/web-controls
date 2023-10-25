@@ -97,7 +97,7 @@ export default class InlinePopup extends AtomControl {
                         break;
                     case "bottomRight":
                         container.style.top = `${rect.top + targetElement.offsetHeight}px`;
-                        container.style.right = `${ visualViewport.width - rect.right}px`;
+                        container.style.right = `${ visualViewport.width - (rect.left + rect.width)}px`;
                         break;
                     case "topRight":
                         container.style.top = `${rect.top}px`;
