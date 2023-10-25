@@ -81,11 +81,11 @@ export default class InlinePopup extends AtomControl {
         const alignment = StringHelper.fromHyphenToCamel(options.alignment || "none") as IPopupOptions["alignment"];
         switch (alignment) {
             case "bottomLeft":
-                container.style.top = `${targetElement.offsetHeight}px`;
+                container.style.top = `${targetElement.offsetTop + targetElement.offsetHeight}px`;
                 container.style.left = "0px";
                 break;
             case "bottomRight":
-                container.style.top = `${targetElement.offsetHeight}px`;
+                container.style.top = `${targetElement.offsetTop + targetElement.offsetHeight}px`;
                 container.style.right = "0px";
                 break;
             case "topRight":
