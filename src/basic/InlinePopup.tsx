@@ -7,6 +7,7 @@ import { IPopup, IPopupOptions } from "@web-atoms/core/dist/web/services/PopupSe
 import IElement from "./IElement";
 
 import "./styles/inline-popup-style";
+import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
 
 function closeHandler(
     opener: HTMLElement,
@@ -68,10 +69,10 @@ export default class InlinePopup extends AtomControl {
 
         const control = (target as any).element ? target as AtomControl : AtomControl.from(target as any);
 
-        const targetStyle = window.getComputedStyle(targetElement);
-        if (!/fixed|absolute|relative/i.test(targetStyle.position)) {
-            targetElement.style.position = "relative";
-        }
+        // const targetStyle = window.getComputedStyle(targetElement);
+        // if (!/fixed|absolute|relative/i.test(targetStyle.position)) {
+        //     targetElement.style.position = "relative";
+        // }
 
         await sleep(10);
 
@@ -302,6 +303,7 @@ export function InlinePopupButton(
     ... popupNodes: XNode[]) {
 
     alignment ||= anchorRight ? "bottomRight" : "bottomLeft";
+    alignment = StringHelper.fromHyphenToCamel(alignment) as any;
 
     if(!a["data-layout"]) {
         if (icon && text) {
