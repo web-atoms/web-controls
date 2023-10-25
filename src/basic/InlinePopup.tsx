@@ -279,6 +279,10 @@ document.body.addEventListener("click", (e) => {
 
     const node = popupFactory(data);
 
+    if (alignment) {
+        alignment = StringHelper.fromHyphenToCamel(alignment);
+    }
+
     app.runAsync(() => InlinePopup.show(target, node, { alignment }));
 
 });
