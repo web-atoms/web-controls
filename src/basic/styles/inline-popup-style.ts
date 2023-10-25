@@ -1,7 +1,7 @@
 import styled from "@web-atoms/core/dist/style/styled";
 
     styled.css `
-    position: absolute;
+    position: fixed;
     border-radius: 5px;
     padding: 5px;
     box-shadow: rgba(50, 50, 105, 0.5) 0px 4px 6px 4px, rgba(0, 0, 0, 0.5) 0px 1px 1px 0px;
@@ -12,10 +12,10 @@ import styled from "@web-atoms/core/dist/style/styled";
     left: 0;
     `.installGlobal("*[data-inline-popup=inline-popup]");
 
-    styled.css `
-    right: 0;
-    left: unset;
-    `.installGlobal("*[data-alignment=bottom-right] > [data-inline-popup=inline-popup]");
+    // styled.css `
+    // right: 0;
+    // left: unset;
+    // `.installGlobal("*[data-alignment=bottom-right] > [data-inline-popup=inline-popup]");
 
 
     // styled.css `

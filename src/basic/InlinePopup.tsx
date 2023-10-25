@@ -78,27 +78,31 @@ export default class InlinePopup extends AtomControl {
         const container = document.createElement("div");
         container.setAttribute("data-inline-popup", "inline-popup");
 
-        const alignment = options.alignment ?? "none";
-        switch (alignment) {
-            case "bottomLeft":
-                container.style.top = `${targetElement.offsetHeight}px`;
-                container.style.left = "0px";
-                break;
-            case "bottomRight":
-                container.style.top = `${targetElement.offsetHeight}px`;
-                container.style.right = "0px";
-                break;
-            case "topRight":
-                container.style.top = "0px";
-                container.style.left = `${targetElement.offsetWidth}px`;
-                break;
-            case "above":
-                container.style.bottom = `${targetElement.offsetHeight}px`;
-                container.style.left = "0px";
-                break;
-            default:
-                container.style.top = `${targetElement.offsetHeight}px`;
-                break;
+        const updatePosition = () => {
+            const rect = targetElement.getBoundingClientRect();
+            const alignment = options.alignment ?? "none";
+            switch (alignment) {
+                case "bottomLeft":
+                    container.style.top = `${rect.top + targetElement.offsetHeight}px`;
+                    container.style.left = `${rect.left}px`;
+                    break;
+                case "bottomRight":
+                    container.style.top = `${rect.top + targetElement.offsetHeight}px`;
+                    container.style.right = `${rect.left}px`;
+                    break;
+                case "topRight":
+                    container.style.top = `${rect.top}px`;
+                    container.style.left = `${rect.left + targetElement.offsetWidth}px`;
+                    break;
+                case "above":
+                    container.style.bottom = `${rect.top + targetElement.offsetHeight}px`;
+                    container.style.left = `${rect.left}px`;
+                    break;
+                default:
+                    container.style.top = `${rect.top + targetElement.offsetHeight}px`;
+                    container.style.left = `${rect.left}px`;
+                    break;
+            }
         }
 
         container._logicalParent = targetElement;
@@ -115,6 +119,10 @@ export default class InlinePopup extends AtomControl {
             disposables.add(() => targetElement.removeAttribute("data-popup-open"))
 
             let resolved = false;
+
+            const updatePositionInterval = setInterval(updatePosition, 1000);
+
+            disposables.add(() => clearInterval(updatePositionInterval));
 
             const close = (r?) => {
                 if (resolved) {
