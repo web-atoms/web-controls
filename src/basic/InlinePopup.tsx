@@ -69,50 +69,36 @@ export default class InlinePopup extends AtomControl {
 
         const control = (target as any).element ? target as AtomControl : AtomControl.from(target as any);
 
-        // const targetStyle = window.getComputedStyle(targetElement);
-        // if (!/fixed|absolute|relative/i.test(targetStyle.position)) {
-        //     targetElement.style.position = "relative";
-        // }
+        const targetStyle = window.getComputedStyle(targetElement);
+        if (!/fixed|absolute|relative/i.test(targetStyle.position)) {
+            targetElement.style.position = "relative";
+        }
 
         await sleep(10);
 
         const container = document.createElement("div");
         container.setAttribute("data-inline-popup", "inline-popup");
-
-        let scrolling = false;
-
-        const updatePosition = () => {
-            if(scrolling) {
-                return;
-            }
-            scrolling = true;
-            window.requestAnimationFrame(() => {
-                scrolling = false;
-                const rect = targetElement.getBoundingClientRect();
-                const alignment = options.alignment ?? "none";
-                switch (alignment) {
-                    case "bottomLeft":
-                        container.style.top = `${rect.top + targetElement.offsetHeight}px`;
-                        container.style.left = `${rect.left}px`;
-                        break;
-                    case "bottomRight":
-                        container.style.top = `${rect.top + targetElement.offsetHeight}px`;
-                        container.style.right = `${ visualViewport.width - (rect.left + rect.width)}px`;
-                        break;
-                    case "topRight":
-                        container.style.top = `${rect.top}px`;
-                        container.style.left = `${rect.left + targetElement.offsetWidth}px`;
-                        break;
-                    case "above":
-                        container.style.bottom = `${rect.top + targetElement.offsetHeight}px`;
-                        container.style.left = `${rect.left}px`;
-                        break;
-                    default:
-                        container.style.top = `${rect.top + targetElement.offsetHeight}px`;
-                        container.style.left = `${rect.left}px`;
-                        break;
-                }
-            });
+        const alignment = StringHelper.fromHyphenToCamel(options.alignment || "none") as IPopupOptions["alignment"];
+        switch (alignment) {
+            case "bottomLeft":
+                container.style.top = `${targetElement.offsetHeight}px`;
+                container.style.left = "0px";
+                break;
+            case "bottomRight":
+                container.style.top = `${targetElement.offsetHeight}px`;
+                container.style.right = "0px";
+                break;
+            case "topRight":
+                container.style.top = "0px";
+                container.style.left = `${targetElement.offsetWidth}px`;
+                break;
+            case "above":
+                container.style.bottom = `${targetElement.offsetHeight}px`;
+                container.style.left = "0px";
+                break;
+            default:
+                container.style.top = `${targetElement.offsetHeight}px`;
+                break;
         }
 
         container._logicalParent = targetElement;
@@ -129,10 +115,6 @@ export default class InlinePopup extends AtomControl {
             disposables.add(() => targetElement.removeAttribute("data-popup-open"))
 
             let resolved = false;
-
-            control.bindEvent(window as any, "scroll", updatePosition, null, {passive: true });
-
-            updatePosition();
 
             const close = (r?) => {
                 if (resolved) {
@@ -288,10 +270,6 @@ document.body.addEventListener("click", (e) => {
 
     const node = popupFactory(data);
 
-    if (alignment) {
-        alignment = StringHelper.fromHyphenToCamel(alignment);
-    }
-
     app.runAsync(() => InlinePopup.show(target, node, { alignment }));
 
 });
@@ -316,7 +294,6 @@ export function InlinePopupButton(
     ... popupNodes: XNode[]) {
 
     alignment ||= anchorRight ? "bottomRight" : "bottomLeft";
-    alignment = StringHelper.fromHyphenToCamel(alignment) as any;
 
     if(!a["data-layout"]) {
         if (icon && text) {

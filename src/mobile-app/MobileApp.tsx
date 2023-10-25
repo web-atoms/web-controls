@@ -120,10 +120,6 @@ import Route from "@web-atoms/core/dist/core/Route";
         justify-self: stretch;
         grid-row-start: 1;
         grid-column-start: 2;
-        overflow: hidden;
-        overflow-y: visible;
-        white-space: nowrap;
-        text-overflow: ellipsis;
         color: var(--accent-text-color, black); 
     }
     
@@ -531,6 +527,7 @@ export class BasePage extends AtomControl {
         }, 1, this.element);
 
         this.titleRenderer = () => <span
+            data-text-overflow="ellipsis"
             class="title-text" text={Bind.oneWay(() => this.viewModelTitle || this.title)} />;
 
         this.iconRenderer = () => <i
