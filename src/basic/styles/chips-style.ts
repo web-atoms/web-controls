@@ -28,6 +28,7 @@ import styled from "@web-atoms/core/dist/style/styled";
         flex-flow: wrap;
         & > * {
             background-color: rgba(211,211,211,0.3);
+            color: var(--text-color, CanvasText)
         }
     }
 
