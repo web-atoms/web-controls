@@ -2,7 +2,7 @@ import styled from "@web-atoms/core/dist/style/styled";
 
     styled.css `
 
-    display: inline-block;
+    display: inline-flex;
     cursor: pointer;
     text-align: left;
     border: none;
