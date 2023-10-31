@@ -69,13 +69,13 @@ const isTouchEnabled = /android|iPhone|iPad/i.test(navigator.userAgent);
             grid-column-start: 2;
             z-index: 2;
             font-weight: bold;
-            font-size: large;
         }
 
         & > [data-element=logo-description] {
             grid-row-start: 2;
             grid-column-start: 2;
             z-index: 2;
+            font-size: smaller;
         }
     }
 
