@@ -69,6 +69,9 @@ const isTouchEnabled = /android|iPhone|iPad/i.test(navigator.userAgent);
             grid-column-start: 2;
             z-index: 2;
             font-weight: bold;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
 
         & > [data-element=logo-description] {
@@ -76,6 +79,8 @@ const isTouchEnabled = /android|iPhone|iPad/i.test(navigator.userAgent);
             grid-column-start: 2;
             z-index: 2;
             font-size: smaller;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
 
