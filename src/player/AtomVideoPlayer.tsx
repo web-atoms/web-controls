@@ -477,7 +477,7 @@ export default class AtomVideoPlayer extends AtomControl {
                     const { videoWidth, videoHeight } = video;
                     const eW = video.offsetWidth * videoHeight / videoWidth;
                     const maxWidth = (100*(this.element.offsetWidth - eW) / this.element.offsetWidth); 
-                    if (maxWidth < 100) {
+                    if (maxWidth > 50 && maxWidth < 100) {
                         this.maxWidth = `${maxWidth}%`;
                     }
 
