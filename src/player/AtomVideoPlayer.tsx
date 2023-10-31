@@ -465,12 +465,10 @@ export default class AtomVideoPlayer extends AtomControl {
                     this.updateVolume();
                     this.currentTimeSpan.textContent = durationText(0, this.duration);
                     this.updateProgress();
-                    const { videoWidth, videoHeight } = this.video;
-                    if (videoHeight > videoWidth || this.element.offsetHeight > this.element.offsetWidth) {
-                        this.maxWidth = "100%";
-                    } else {
-                        this.maxWidth = (1 - (this.video.offsetWidth - this.video.videoWidth) / this.video.offsetWidth)*100 + "%";
-                    }
+                    // const { video } = this;
+                    // const { videoWidth, videoHeight } = video;
+                    // const eW = video.offsetWidth * videoHeight / videoWidth;
+
                     AtomBinder.refreshValue(this, "duration");
                 }}
                 event-pause={() => this.state = "paused"}
