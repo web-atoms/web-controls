@@ -26,7 +26,7 @@ const isTouchEnabled = /android|iPhone|iPad/i.test(navigator.userAgent);
 
         align-self: end;
         justify-self: center;
-        height: 10vh;
+        height: 15%;
 
         gap: 5px;
 
