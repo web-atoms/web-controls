@@ -468,6 +468,7 @@ export default class AtomVideoPlayer extends AtomControl {
                     // const { video } = this;
                     // const { videoWidth, videoHeight } = video;
                     // const eW = video.offsetWidth * videoHeight / videoWidth;
+                    // this.maxWidth = (100*(this.element.offsetWidth - eW) / this.element.offsetWidth) + "%";
 
                     AtomBinder.refreshValue(this, "duration");
                 }}
