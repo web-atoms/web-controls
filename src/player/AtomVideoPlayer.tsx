@@ -80,6 +80,7 @@ const isTouchEnabled = /android|iPhone|iPad/i.test(navigator.userAgent);
             z-index: 2;
             font-size: smaller;
             overflow: hidden;
+            white-space: nowrap;
             text-overflow: ellipsis;
         }
     }
@@ -472,10 +473,13 @@ export default class AtomVideoPlayer extends AtomControl {
                     this.updateVolume();
                     this.currentTimeSpan.textContent = durationText(0, this.duration);
                     this.updateProgress();
-                    // const { video } = this;
-                    // const { videoWidth, videoHeight } = video;
-                    // const eW = video.offsetWidth * videoHeight / videoWidth;
-                    // this.maxWidth = (100*(this.element.offsetWidth - eW) / this.element.offsetWidth) + "%";
+                    const { video } = this;
+                    const { videoWidth, videoHeight } = video;
+                    const eW = video.offsetWidth * videoHeight / videoWidth;
+                    const maxWidth = (100*(this.element.offsetWidth - eW) / this.element.offsetWidth); 
+                    if (maxWidth < 100) {
+                        this.maxWidth = `${maxWidth}%`;
+                    }
 
                     AtomBinder.refreshValue(this, "duration");
                 }}
