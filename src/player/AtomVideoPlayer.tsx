@@ -28,6 +28,8 @@ const isTouchEnabled = /android|iPhone|iPad/i.test(navigator.userAgent);
         justify-self: center;
         height: 10vh;
 
+        gap: 5px;
+
         overflow: hidden;
 
         grid-template-columns: auto 1fr;
@@ -36,9 +38,9 @@ const isTouchEnabled = /android|iPhone|iPad/i.test(navigator.userAgent);
         background-color: black;
         color: white;
 
-        border-radius: 5px;
+        border-radius: 10px;
 
-        padding: 5px;
+        padding: 10px;
 
         align-items: center;
         justify-items: stretch;
