@@ -13,25 +13,73 @@ const isTouchEnabled = /android|iPhone|iPad/i.test(navigator.userAgent);
     styled.css `
 
     display: grid;
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: auto 1fr auto auto auto;
     grid-template-columns: auto 1fr auto;
     overflow: hidden;
 
-    & > [data-element=logo] {
-        grid-row-start: 1;
-        grid-row-end: 3;
+    & > [data-element=banner] {
+
+        grid-row-start: 3;
+        grid-row-end: span 3;
         grid-column-start: 1;
         grid-column-end: span 3;
-        align-self: start;
-        justify-self: end; 
-        max-height: 20%;
-        max-width: 20%;
+
+        align-self: end;
+        justify-self: center;
+        height: 10vh;
+
+        overflow: hidden;
+
+        grid-template-columns: auto 1fr;
+        grid-template-rows: auto auto;
+
+        background-color: black;
+        color: white;
+
+        border-radius: 5px;
+
+        padding: 5px;
+
+        align-items: center;
+        justify-items: stretch;
         z-index: 2;
+
+        display: none;
+
+        &[data-has-logo=true] {
+            display: grid;
+        }
+
+        & > * {
+            min-height: 0;
+            min-width: 0;
+        }
+
+        & > [data-element=logo] {
+            grid-row: 1 / span 2;
+            grid-column: 1;
+            z-index: 2;
+            height: 100%;
+        }
+
+        & > [data-element=logo-title] {
+            grid-row-start: 1;
+            grid-column-start: 2;
+            z-index: 2;
+            font-weight: bold;
+            font-size: large;
+        }
+
+        & > [data-element=logo-description] {
+            grid-row-start: 2;
+            grid-column-start: 2;
+            z-index: 2;
+        }
     }
 
-    & > [data-element=video] {
+    & > [data-element=video], & > [data-element=poster] {
         grid-row-start: 1;
-        grid-row-end: span 3;
+        grid-row-end: span 5;
         grid-column-start: 1;
         grid-column-end: span 3;
         align-self: stretch;
@@ -41,7 +89,7 @@ const isTouchEnabled = /android|iPhone|iPad/i.test(navigator.userAgent);
     & > [data-element=play-element] {
         z-index: 10;
         grid-row-start: 1;
-        grid-row-end: span 3;
+        grid-row-end: span 5;
         grid-column-start: 1;
         grid-column-end: span 3;
         align-self: center;
@@ -73,7 +121,7 @@ const isTouchEnabled = /android|iPhone|iPad/i.test(navigator.userAgent);
 
     & > [data-element=progress] {
         z-index: 11;
-        grid-row-start: 2;
+        grid-row-start: 4;
         grid-column-start: 1;
         grid-column-end: span 3;
         align-self: flex-end;
@@ -88,7 +136,7 @@ const isTouchEnabled = /android|iPhone|iPad/i.test(navigator.userAgent);
     
     & > [data-element=toolbar] {
         z-index: 10;
-        grid-row-start: 3;
+        grid-row-start: 5;
         grid-column-start: 1;
         grid-column-end: span 3;
         background-color: rgba(0,0,0,0.3);
@@ -237,6 +285,12 @@ export default class AtomVideoPlayer extends AtomControl {
     @BindableProperty
     public logo: any;
 
+    @BindableProperty
+    public logoTitle: string;
+
+    @BindableProperty
+    public logoDescription: string;
+
     public get poster() {
         return this.video.poster;
     }
@@ -285,6 +339,8 @@ export default class AtomVideoPlayer extends AtomControl {
     private currentTimeSpan: HTMLSpanElement;
     private soundIcon: HTMLElement;
     private volumeRange: HTMLInputElement;
+
+    private maxWidth: string = "";
 
     public stopFullscreen() {
         if(this.isFullScreen) {
@@ -382,7 +438,18 @@ export default class AtomVideoPlayer extends AtomControl {
         this.render(<div
             data-click-event="toggle-play"
             data-state="pause">
-            <img data-element="logo" data-has-logo={Bind.oneWay(() => this.logo ? "true" : "false", "false")} src={Bind.oneWay(() => this.logo)}/>
+            <div
+                data-has-logo={Bind.oneWay(() => this.logo ? "true" : "false", "false")}
+                data-element="banner"
+                style-width={Bind.oneWay(() => this.maxWidth)}>
+                <img
+                    data-element="logo"
+                    src={Bind.oneWay(() => this.logo)}/>
+                <div
+                    data-element="logo-title" text={Bind.oneWay(() => this.logo && this.logoTitle)}/>
+                <div
+                    data-element="logo-description" text={Bind.oneWay(() => this.logo && this.logoDescription)}/>
+            </div>
             <video
                 event-abort={() => this.state = "aborted"}
                 event-durationchange={(e: Event) => AtomBinder.refreshValue(this, "duration")}
@@ -398,6 +465,12 @@ export default class AtomVideoPlayer extends AtomControl {
                     this.updateVolume();
                     this.currentTimeSpan.textContent = durationText(0, this.duration);
                     this.updateProgress();
+                    const { videoWidth, videoHeight } = this.video;
+                    if (videoHeight > videoWidth || this.element.offsetHeight > this.element.offsetWidth) {
+                        this.maxWidth = "100%";
+                    } else {
+                        this.maxWidth = (1 - (this.video.offsetWidth - this.video.videoWidth) / this.video.offsetWidth)*100 + "%";
+                    }
                     AtomBinder.refreshValue(this, "duration");
                 }}
                 event-pause={() => this.state = "paused"}

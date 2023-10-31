@@ -28,6 +28,8 @@ export default class AtomVideoTest extends AtomControl {
         this.render(<div class={css}>
             <AtomVideoPlayer
                 logo="https://test.castyy.com/files/was/15242/25964cbc418f4692b9d58f95624a21ad/playstore.png"
+                logoTitle="Castyy Demo Video"
+                logoDescription="Big bunny high definition vide"
                 source="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
                 />        
         </div>)
