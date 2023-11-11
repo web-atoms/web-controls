@@ -72,18 +72,18 @@ window.addEventListener(uploadCommand.eventName, (ce: MouseEvent) => {
     const element = ce.target as HTMLElement;
 
     const authorize = element.getAttribute("data-authorize");
-    if (authorize === "true") {
-        if(!App.authorize()) {
-            return;
-        }
-    }
+
 
     const multiple = element.getAttribute("data-multiple") === "true";
     const extra = (element as any).extra ?? element.getAttribute("data-extra");
     const upload = element.getAttribute("data-upload") === "true";
     const folder = element.hasAttribute("data-folder");
     const uploadEvent = StringHelper.fromHyphenToCamel(element.getAttribute("data-upload-event"));
-
+    if (authorize === "true") {
+        if(!App.authorize()) {
+            return;
+        }
+    }
     const chain: HTMLElement[] = [];
     let start = element;
     while(start) {
