@@ -64,22 +64,24 @@ const uploadCommand = Command.create({
     name: "upload-command"
 });
 
-window.addEventListener(uploadCommand.eventName, (ce: MouseEvent) => {
-    if (ce.defaultPrevented) {
-        return;
-    }
-
-    const element = ce.target as HTMLElement;
-
-    const authorize = element.getAttribute("data-authorize");
-
-
-    const multiple = element.getAttribute("data-multiple") === "true";
-    const extra = (element as any).extra ?? element.getAttribute("data-extra");
-    const upload = element.getAttribute("data-upload") === "true";
-    const folder = element.hasAttribute("data-folder");
-    const uploadEvent = StringHelper.fromHyphenToCamel(element.getAttribute("data-upload-event"));
-    if (authorize === "true") {
+const requestUpload = ({
+    element,
+    multiple,
+    authorize,
+    extra,
+    upload,
+    folder,
+    uploadEvent
+}: {
+    element: HTMLElement,
+    multiple?: boolean,
+    authorize?: boolean,
+    extra?: any,
+    upload?: boolean,
+    folder?: boolean,
+    uploadEvent?: string
+}) => {
+    if (authorize) {
         if(!App.authorize()) {
             return;
         }
@@ -183,12 +185,38 @@ window.addEventListener(uploadCommand.eventName, (ce: MouseEvent) => {
     setTimeout(() => {
         file.dispatchEvent(new MouseEvent("click"));
     });
+};
+
+window.addEventListener(uploadCommand.eventName, (ce: MouseEvent) => {
+    if (ce.defaultPrevented) {
+        return;
+    }
+
+    const element = ce.target as HTMLElement;
+
+    const authorize = element.getAttribute("data-authorize") === "true";
+    const multiple = element.getAttribute("data-multiple") === "true";
+    const extra = (element as any).extra ?? element.getAttribute("data-extra");
+    const upload = element.getAttribute("data-upload") === "true";
+    const folder = element.hasAttribute("data-folder");
+    const uploadEvent = StringHelper.fromHyphenToCamel(element.getAttribute("data-upload-event"));
+    requestUpload({
+        element,
+        authorize,
+        multiple,
+        extra,
+        upload,
+        folder,
+        uploadEvent
+    })
 });
 
 
 let id = 1;
 
 export default class UploadEvent {
+
+    public static requestUpload = requestUpload;
 
     public static AttachUploadAction({
         uploadEvent = "filesAvailable",
