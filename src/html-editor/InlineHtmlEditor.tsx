@@ -84,7 +84,7 @@ export default class InlineHtmlEditor extends AtomControl {
         copy.innerHTML = this.editor.innerHTML;
 
         for(const node of descendentElementIterator(copy)) {
-            (node as HTMLElement).contentEditable = "false";
+            node.removeAttribute("contenteditable");
         }
 
         this.sanitizeHtml?.(copy);
