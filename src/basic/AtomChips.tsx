@@ -132,6 +132,9 @@ export default class AtomChips<T = any> extends AtomRepeater<T> {
     @BindableProperty
     public suggestionPrompt: string;
 
+    @BindableProperty
+    public autofocus: any;
+
     /**
      * boolean or string, if it is a string it should be the name of property. default is `$deleted` if set to true
      */
@@ -237,6 +240,7 @@ export default class AtomChips<T = any> extends AtomRepeater<T> {
                 class="search"
                 placeholder={Bind.oneWay(() => this.prompt)}
                 value={Bind.twoWaysImmediate(() => this.search)}
+                autofocus={Bind.oneWay(() => this.autofocus)}
                 type="search"/>
             <div class="footer"/>
         </div>);
