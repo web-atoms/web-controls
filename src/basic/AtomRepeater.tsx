@@ -1307,6 +1307,9 @@ const dragOver = (e: DragEvent) => {
     }
     if (hoverItem) {
         const { placeholder } = hoverItem;
+        if (!placeholder) {
+            return;
+        }
         if (e.target === placeholder) {
             return;
         }
