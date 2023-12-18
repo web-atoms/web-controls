@@ -309,6 +309,7 @@ export function InlinePopupButton(
             data-popup-class={popup}
             data-has-border={!!hasBorder}
             data-inline-popup-button="inline-popup-button"
+            data-default-on-click={defaultOnClick}
             data-alignment={alignment}
             { ... a}>
             {icon && <i class={icon}/>}
@@ -324,6 +325,8 @@ export function InlinePopupButton(
         if (isOpen || e.defaultPrevented) {
             return;
         }
+        const currentTarget = e.currentTarget as HTMLElement;
+        currentTarget.setAttribute("data-popup-open", "true");
         const popupNode = popupNodes.length > 1 ? <div>{... popupNodes }</div> : popupNodes[0];
         try {
             isOpen = true;
@@ -332,6 +335,7 @@ export function InlinePopupButton(
                 e.currentTarget as any, popupNode, { defaultOnClick, alignment });
         } finally {
             done();
+            currentTarget.removeAttribute("data-popup-open");
         }
     };
     return <button
