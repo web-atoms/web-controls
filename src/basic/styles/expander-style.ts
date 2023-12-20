@@ -13,23 +13,27 @@ import styled from "@web-atoms/core/dist/style/styled";
         padding: 5px;
         margin-right: 5px;
         align-self: center;
-        justify-self: center; }
+        justify-self: center;
+    }
 
     & > [data-element=header] {
         grid-row-start: 1;
-        grid-column-start: 2; }
+        grid-column-start: 2;
+    }
 
     & > [data-element=caret] {
         grid-row-start: 1;
         grid-column-start: 3;
         padding: 5px;
-        margin-left: 5px; }
+        margin-left: 5px;
+    }
 
     & > [data-element=detail] {
         grid-row-start: 2;
         grid-column-start: 1;
         grid-column-end: span 3;
-        margin-top: 5px; }
+        margin-top: 5px;
+    }
 
     &[data-is-expanded=true] {
         & > [data-element=caret] {
