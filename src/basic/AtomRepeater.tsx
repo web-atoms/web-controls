@@ -1008,6 +1008,14 @@ export default class AtomRepeater<T = any> extends AtomControl {
         this.onPropertyChanged("footer");
     }
 
+    protected render(node: XNode, e?: any, creator?: any): void {
+        if (!(this as any).creator && this !== creator) {
+            (this as any).creator = creator;
+        }
+        this.render = super.render;
+        return super.render(node, e, creator);
+    }
+
     protected preCreate() {
         this.mergeOnRefresh = false;
         this.selectOnClick = false;
