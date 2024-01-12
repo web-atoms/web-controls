@@ -927,7 +927,7 @@ export default class AtomRepeater<T = any> extends AtomControl {
             } else {
                 container.appendChild(e);
             }
-            this.render(en, e, (this as any).creator ?? this);
+            this.render(en, e, this.creator || this);
             // start = start.nextElementSibling as HTMLElement;
         }
 
@@ -999,7 +999,7 @@ export default class AtomRepeater<T = any> extends AtomControl {
             } else {
                 element.removeAttribute("data-selected-item");
             }
-            this.render(e, element, (this as any).creator || this);
+            this.render(e, element, this.creator || this);
             if (this.enableDragDrop) {
                 updateDragDrop(element);
             }
@@ -1009,8 +1009,8 @@ export default class AtomRepeater<T = any> extends AtomControl {
     }
 
     protected render(node: XNode, e?: any, creator?: any): void {
-        if (!(this as any).creator && this !== creator) {
-            (this as any).creator = creator;
+        if (!this.creator && this !== creator) {
+            this.creator = creator;
         }
         this.render = super.render;
         return super.render(node, e, creator);
@@ -1114,7 +1114,7 @@ export default class AtomRepeater<T = any> extends AtomControl {
         const node = itemRenderer(item);
         const element = document.createElement(node.attributes?.for ?? node.name ?? "div");
         element.dataset[name] = name;
-        this.render(node, element, (this as any).creator || this);
+        this.render(node, element, this.creator || this);
         if (insert) {
             presenter.insertBefore(element, presenter.firstElementChild);
         } else {
