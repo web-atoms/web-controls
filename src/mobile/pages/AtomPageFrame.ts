@@ -1,18 +1,12 @@
-import { Atom } from "@web-atoms/core/dist/Atom";
-import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder";
-import { AtomBridge } from "@web-atoms/core/dist/core/AtomBridge";
-import { AtomLoader } from "@web-atoms/core/dist/core/AtomLoader";
-import { AtomUri } from "@web-atoms/core/dist/core/AtomUri";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import { NavigationService } from "@web-atoms/core/dist/services/NavigationService";
-import { AtomWindowViewModel } from "@web-atoms/core/dist/view-model/AtomWindowViewModel";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { AtomFrame } from "@web-atoms/core/dist/web/controls/AtomFrame";
 import AtomPageFrameTemplate from "./AtomPageFrameTemplate";
 import Page from "./Page";
 import PageFrameViewModel from "./PageFrameViewModel";
 import TitleTemplate from "./TitleTemplate";
+import { refreshInherited } from "@web-atoms/core/dist/core/Hacks";
 
 export default class AtomPageFrame extends AtomFrame {
 
@@ -246,9 +240,9 @@ export default class AtomPageFrame extends AtomFrame {
         this.tabsPresenter.innerHTML = "";
         this.tabsPresenter.append(t.element);
         this.previousTabs = t;
-        AtomBridge.instance.refreshInherited(t, "data");
-        AtomBridge.instance.refreshInherited(t, "viewModel");
-        AtomBridge.instance.refreshInherited(t, "localViewModel");
+        refreshInherited(t, "data");
+        refreshInherited(t, "viewModel");
+        refreshInherited(t, "localViewModel");
     }
 
 }

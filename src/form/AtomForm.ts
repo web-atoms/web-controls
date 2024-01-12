@@ -1,9 +1,6 @@
-import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder";
-import { AtomBridge } from "@web-atoms/core/dist/core/AtomBridge";
-import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import { IClassOf } from "@web-atoms/core/dist/core/types";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import AtomFormStyle from "./AtomFormStyle";
+import { refreshInherited } from "@web-atoms/core/dist/core/Hacks";
 
 export default class AtomForm extends AtomControl {
 
@@ -40,9 +37,9 @@ export default class AtomForm extends AtomControl {
             this.element.classList.add(this.controlStyle.name);
 
             this.app.callLater(() => {
-                AtomBridge.instance.refreshInherited(this, "viewModel");
-                AtomBridge.instance.refreshInherited(this, "localViewModel");
-                AtomBridge.instance.refreshInherited(this, "data");
+                refreshInherited(this, "viewModel");
+                refreshInherited(this, "localViewModel");
+                refreshInherited(this, "data");
             });
 
             this.watchKeyInput();

@@ -1,4 +1,3 @@
-import { AtomBridge } from "@web-atoms/core/dist/core/AtomBridge";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import {AtomControl} from "@web-atoms/core/dist/web/controls/AtomControl";
 

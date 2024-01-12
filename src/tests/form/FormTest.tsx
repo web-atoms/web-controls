@@ -4,7 +4,6 @@ import Pack from "@web-atoms/core/dist/Pack";
 import {AtomControl} from "@web-atoms/core/dist/web/controls/AtomControl";
 import AtomField from "../../form/AtomField";
 import AtomForm from "../../form/AtomForm";
-import setupBridge from "../../setupBridge";
 import FormViewModel from "./FormViewModel";
 
 @Pack
