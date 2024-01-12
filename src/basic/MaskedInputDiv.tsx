@@ -1,51 +1,12 @@
-import Colors from "@web-atoms/core/dist/core/Colors";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import IElement from "./IElement";
+
+import "./styles/masked-input-div";
 
 export interface IMaskedInput extends IElement {
     mask?: string;
 }
-
-CSS(StyleRule()
-    .display("inline")
-    .position("relative")
-    .paddingLeft(2)
-    .paddingTop(2)
-    .fontFamily("monospace")
-    .and(StyleRule("::before")
-        .absolutePosition({
-            left: 2,
-            top: 2
-        })
-        .content("attr(data-label)" as any)
-        .fontFamily("inherit")
-        .fontWeight("inherit")
-        .fontSize("inherit")
-        .pointerEvents("none")
-    )
-    .and(StyleRule("::after")
-        .absolutePosition({
-            left: 2,
-            top: 2
-        })
-        .content("attr(data-mask)" as any)
-        .fontFamily("inherit")
-        .fontWeight("inherit")
-        .fontSize("inherit")
-        .pointerEvents("none")
-        .opacity("0.2")
-    )
-    .child(StyleRule("input")
-        .color(Colors.transparent)
-        .caretColor(Colors.gray)
-        .fontFamily("inherit")
-        .fontWeight("inherit")
-        .fontSize("inherit")
-    )
-, "div[data-mask]");
 
 const updateMask = (e: Event) => {
     const target = e.target as HTMLInputElement;

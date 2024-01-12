@@ -5,6 +5,7 @@ import type AtomHtmlEditor from "../AtomHtmlEditor";
 
 export default function Headings() {
     return <PopupButton
+        data-layout="toolbar-button"
         class="command"
         icon="ri-heading"
         title="Apply Heading">

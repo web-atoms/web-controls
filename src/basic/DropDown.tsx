@@ -1,24 +1,17 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import { CancelToken, IDisposable } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import AtomRepeater, { askSuggestion, askSuggestionPopup,
     disposeChildren, Match, MatchAnyCaseInsensitive } from "./AtomRepeater";
 
-CSS(StyleRule()
-    .flexLayout({ inline: true, justifyContent: "stretch" as any})
-    .nested(StyleRule("[data-white-space=nowrap]")
-        .whiteSpace("nowrap")
-    )
-, "div[data-drop-down=drop-down]");
+import "./styles/drop-down-style";
 
-export default class DropDown extends AtomRepeater {
+export default class DropDown<T = any> extends AtomRepeater<T> {
 
     public "event-selection-changed"?: (e: CustomEvent) => void;
+
+    public "data-alignment"?: "bottom-right" | "bottom-left";
+
+    public disableSearch: boolean;
 
     @BindableProperty
     public popupSuggestions: boolean;
@@ -33,13 +26,15 @@ export default class DropDown extends AtomRepeater {
     public suggestionPrompt: string;
 
     @BindableProperty
-    public labelPath: (item) => string;
+    public labelPath: (item: T) => string;
 
     @BindableProperty
     public match: Match<any>;
 
     @BindableProperty
-    public suggestionRenderer: (item) => XNode;
+    public suggestionRenderer: (item: T) => XNode;
+
+    private isPopupOpen = false;
 
     public updateItems(container?: HTMLElement): void {
         // don't do anything...
@@ -58,12 +53,13 @@ export default class DropDown extends AtomRepeater {
     }
 
     protected preCreate(): void {
-        // super.preCreate();
+        super.preCreate();
+        this.disableSearch = false;
         this.prompt = "Select";
         this.popupSuggestions = true;
-        this.bindEvent(this.element, "click", () => this.openPopup());
-        this.valuePath = (item) => item?.value ?? item;
-        this.labelPath = (item) => item?.label ?? item;
+        this.bindEvent(this.element, "click", (e) => this.openPopup(e));
+        this.valuePath = (item: any) => item?.value ?? item;
+        this.labelPath = (item: any) => item?.label ?? item;
         this.itemRenderer = (item) => <div text={this.labelPath(item)}/>;
         this.element.dataset.dropDown = "drop-down";
         this.render(<div>
@@ -72,33 +68,41 @@ export default class DropDown extends AtomRepeater {
         </div>);
     }
 
-    protected async openPopup() {
-        if (!this.popupSuggestions) {
-            const selected = await askSuggestion(
+    protected async openPopup(e: Event) {
+        if (this.isPopupOpen) {
+            return;
+        }
+        this.isPopupOpen = true;
+        try {
+            if (!this.popupSuggestions) {
+                const selected = await askSuggestion(
+                    this.items,
+                    this.suggestionRenderer ?? this.itemRenderer,
+                    this.match ?? MatchAnyCaseInsensitive(this.labelPath),
+                    { title: this.suggestionPrompt ?? this.prompt });
+                this.selectedItem = selected;
+                return;
+            }
+
+            const selectedItem = await askSuggestionPopup(
+                this,
                 this.items,
                 this.suggestionRenderer ?? this.itemRenderer,
                 this.match ?? MatchAnyCaseInsensitive(this.labelPath),
-                { title: this.suggestionPrompt ?? this.prompt });
-            this.selectedItem = selected;
-            return;
-        }
-
-        const selectedItem = await askSuggestionPopup(
-            this,
-            this.items,
-            this.suggestionRenderer ?? this.itemRenderer,
-            this.match ?? MatchAnyCaseInsensitive(this.labelPath),
-            this.selectedItem);
-        if (this.selectedItem !== selectedItem) {
-            this.selectedItem = selectedItem;
-            this.element.dispatchEvent(new CustomEvent(
-                "selectionChanged",
-                {
-                    bubbles: true,
-                    detail: selectedItem,
-                    cancelable: true
-                }
-            ));
+                this.selectedItem);
+            if (this.selectedItem !== selectedItem) {
+                this.selectedItem = selectedItem;
+                this.element.dispatchEvent(new CustomEvent(
+                    "selectionChanged",
+                    {
+                        bubbles: true,
+                        detail: selectedItem,
+                        cancelable: true
+                    }
+                ));
+            }
+        } finally {
+            this.isPopupOpen = false;
         }
     }
 
@@ -115,10 +119,12 @@ export default class DropDown extends AtomRepeater {
             </div>);
             return;
         }
-        const node = ir(this.selectedItem);
+        const selectedItem = this.selectedItem;
+        const index = this.items.indexOf(selectedItem);
+        const node = ir(selectedItem, index, this);
         const na = node.attributes ??= {};
         if (!na["data-white-space"]) {
-            na["data-white-space"] ="nowrap";
+            na["data-white-space"] = "nowrap";
         }
         this.render(<div>
             { node }

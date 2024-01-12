@@ -1,37 +1,15 @@
+import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder";
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import Colors from "@web-atoms/core/dist/core/Colors";
 import { CancelToken, IDisposable } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
-import AtomRepeater, { Match } from "./AtomRepeater";
-import IElement from "./IElement";
+import AtomRepeater, { Match, MatchTrue } from "./AtomRepeater";
+import type { IChip } from "./Chip";
+export { default as Chip } from "./Chip";
+import InlinePopup from "./InlinePopup";
 
-CSS(StyleRule()
-    .flexLayout({ justifyContent: "stretch" as any})
-    .flexFlow("wrap")
-    .child(StyleRule(".search")
-        .border("none")
-        .outline("none")
-    )
-    .child(StyleRule(".presenter")
-        .flexLayout({ inline: true, justifyContent: "flex-start" })
-        .flexFlow("wrap")
-        .child(StyleRule("*")
-            .backgroundColor(Colors.lightGray.withAlphaPercent(0.3))
-        )
-    )
-    .and(StyleRule("[data-mode=search]")
-        .child(StyleRule(".search")
-            .paddingLeft(20)
-            // tslint:disable-next-line: max-line-length
-            .background(`transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' class='bi bi-search' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'%3E%3C/path%3E%3C/svg%3E") no-repeat 1px center` as any)
-        )
-    )
-, "div[data-atom-chips]");
+import "./styles/chips-style";
+import "./styles/item-suggestion-style";
 
 function getChips(target: HTMLElement): AtomChips {
     let start = target;
@@ -69,10 +47,11 @@ document.body.addEventListener("keydown", (e) => {
 function askSuggestionPopup<T>(
     host: HTMLElement,
     opener: AtomChips,
-    itemRenderer: (item: T) => XNode,
+    itemRenderer: (item: T, index: number, repeater: AtomRepeater) => XNode,
+    suggestionFilter: (item) => boolean,
     cancelToken: CancelToken): Promise<T> {
 
-    class Suggestions extends PopupControl {
+    class Suggestions extends InlinePopup {
 
         private opener: AtomChips;
 
@@ -85,7 +64,11 @@ function askSuggestionPopup<T>(
                         selectedItem={Bind.oneWay(() => this.opener.anchorItem)}
                         itemRenderer={itemRenderer}
                         eventDeleteSuggestion={(e) => opener.element.dispatchEvent(e) }
-                        eventItemClick={(e) => {
+                        visibilityFilter={suggestionFilter ?? MatchTrue}
+                        event-item-click={(e: CustomEvent) => {
+                            e.preventDefault();
+                            e.stopImmediatePropagation();
+                            e.stopPropagation();
                             this.close(e.detail);
                         }}
                         items={Bind.oneWay(() => this.opener.suggestions)}/>
@@ -96,125 +79,6 @@ function askSuggestionPopup<T>(
 
     return Suggestions.showControl(host, { cancelToken, alignment: "auto" });
 }
-
-export interface IChip extends IElement {
-    icon?: string;
-    header?: string;
-    label?: string;
-    deleteIcon?: string;
-    draggable?: boolean;
-    recreate?: boolean;
-    deleted?: boolean;
-}
-
-CSS(StyleRule()
-    .padding(1)
-    .paddingLeft(5)
-    .paddingRight(5)
-    .borderRadius(10)
-    .display("grid")
-    .alignItems("center")
-    .gridTemplateRows("auto 1fr")
-    .gridTemplateColumns("auto 1fr auto")
-    .child(StyleRule("[data-content]")
-        .gridRowStart("2")
-        .gridColumnStart("2")
-    )
-    .child(StyleRule(".icon")
-        .gridColumnStart("1")
-        .gridRowStart("1")
-        .gridRowEnd("span 2")
-        .alignSelf("center")
-    )
-    .child(StyleRule(".delete")
-        .gridColumnStart("3")
-        .gridRowStart("1")
-        .gridRowEnd("span 2")
-        .alignSelf("center")
-        .fontSize("small")
-        .backgroundColor(Colors.transparent)
-        .borderRadius(4)
-        .padding(2)
-        .color(Colors.gray)
-        .hover(StyleRule()
-            .backgroundColor(Colors.lightGray)
-            .color(Colors.red)
-        )
-    )
-    .child(StyleRule(".header")
-        .fontSize("x-small")
-        .gridRowStart("1")
-        .gridColumnStart("2")
-    )
-    .child(StyleRule(".label")
-        .gridRowStart("2")
-        .gridColumnStart("2")
-    )
-    .and(StyleRule("[data-deleted=true]")
-        .display("none")
-    )
-, "*[data-item-chip]");
-
-export function Chip(
-    {
-        icon,
-        label,
-        header,
-        deleteIcon = "fa-solid fa-xmark",
-        draggable,
-        recreate = true,
-        deleted,
-    }: IChip,
-    ... nodes: XNode[]) {
-    return <div
-        data-recreate={recreate}
-        data-deleted={!!deleted}
-        data-item-chip="chip"
-        draggable={draggable}>
-        { icon && <i class={"icon " + icon}/>}
-        { header && <label class="header" text={header}/>}
-        { label && <label class="label" text={label}/>}
-        { ... nodes }
-        { deleteIcon && <i class={"delete " + deleteIcon} data-click-event="remove-chip"/> }
-    </div>;
-}
-
-CSS(StyleRule()
-    .padding(1)
-    .paddingLeft(5)
-    .paddingRight(5)
-    .borderRadius(10)
-    .display("grid")
-    .alignItems("center")
-    .gridTemplateRows("auto 1fr")
-    .gridTemplateColumns("auto 1fr auto")
-    .child(StyleRule("[data-content]")
-        .gridRowStart("2")
-        .gridColumnStart("2")
-    )
-    .child(StyleRule(".icon")
-        .gridColumnStart("1")
-        .gridRowStart("1")
-        .gridRowEnd("span 2")
-        .alignSelf("center")
-    )
-    .child(StyleRule(".delete")
-        .gridColumnStart("3")
-        .gridRowStart("1")
-        .gridRowEnd("span 2")
-        .alignSelf("center")
-        .color(Colors.red)
-    )
-    .child(StyleRule(".header")
-        .fontSize("x-small")
-        .gridRowStart("1")
-        .gridColumnStart("2")
-    )
-    .child(StyleRule(".label")
-        .gridRowStart("2")
-        .gridColumnStart("2")
-    )
-, "*[data-item-suggestion]");
 
 export function Suggestion(
     {
@@ -234,7 +98,7 @@ export function Suggestion(
     </div>;
 }
 
-export default class AtomChips extends AtomRepeater {
+export default class AtomChips<T = any> extends AtomRepeater<T> {
 
     /**
      * Fired when user chooses an item from suggestions displayed,
@@ -243,16 +107,21 @@ export default class AtomChips extends AtomRepeater {
      * change the item by changing detail or by assigning to new
      * object
      */
-    public "event-suggestion-chosen"?: (e: CustomEvent) => any;
+    public "event-suggestion-chosen"?: (e: CustomEvent<T>) => any;
+
+    /**
+     * Fired just before suggestions are about to be displayed
+     */
+    public "event-suggestions-requested"?: (ce: CustomEvent<T[]>) => any;
 
     /**
      * Fired when user tries to remove the chip, you can call
      * preventDefault() to prevent chip from being removed.
      */
-    public "event-remove-chip"?: (e: CustomEvent) => any;
+    public "event-remove-chip"?: (e: CustomEvent<T>) => any;
 
     @BindableProperty
-    public suggestions: any[];
+    public suggestions: T[];
 
     @BindableProperty
     public search: string;
@@ -264,28 +133,67 @@ export default class AtomChips extends AtomRepeater {
     public suggestionPrompt: string;
 
     @BindableProperty
-    public labelPath: (item) => string;
+    public autofocus: any;
+
+    /**
+     * boolean or string, if it is a string it should be the name of property. default is `$deleted` if set to true
+     */
+    @BindableProperty
+    public softDeleteProperty: string;
+
+    @BindableProperty
+    public labelPath: (item: T) => string;
 
     @BindableProperty
     public match: Match<any>;
 
     @BindableProperty
-    public suggestionRenderer: (item) => XNode;
+    public suggestionRenderer: (item: T, index: number, repeater: AtomRepeater) => XNode;
+
+    @BindableProperty
+    public suggestionFilter: (item) => boolean;
 
     public itemToChip: (item, search) => any;
+
+    public preventDuplicates: boolean;
 
     @BindableProperty
     public focused: boolean;
 
     public anchorItem: any;
 
-    private searchInput: HTMLInputElement;
+    @BindableProperty
+    public onKeyPressedItemToChip: (key: string, search: string) => any;
+
+    @BindableProperty
+    public onBlurItemToChip: (search: string) => any;
+
+    public get searchType() {
+        return this.searchInput.type;
+    }
+
+    public set searchType(v: string) {
+        this.searchInput.type = v;
+    }
+
+    
+    public get enterKeyHint() {
+        return this.searchInput.enterKeyHint;
+    }
+
+    public set enterKeyHint(v: string) {
+        this.searchInput.enterKeyHint = v;
+    }
+
+    protected searchInput: HTMLInputElement;
 
     private anchorIndex: number;
 
     private popupCancelToken: CancelToken;
 
     private suggestionsWatcher: IDisposable;
+
+    private focusTimeout;
 
     public onPropertyChanged(name: string): void {
         super.onPropertyChanged(name);
@@ -314,13 +222,16 @@ export default class AtomChips extends AtomRepeater {
     }
 
     protected preCreate(): void {
-        // super.preCreate();
+        super.preCreate();
+        this.preventDuplicates = true;
+        this.softDeleteProperty = null;
         this.prompt = "Search";
-        this.element.dataset.atomChips = "atom-chips";
-        this.element.dataset.mode = "search";
+        this.element.setAttribute("data-atom-chips", "atom-chips");
+        this.element.setAttribute("data-mode", "search");
+        this.suggestionFilter = MatchTrue;
         // this.bindEvent(this.element, "click", () => this.searchInput.focus());
-        this.valuePath = (item) => item?.value ?? item;
-        this.labelPath = (item) => item?.label ?? item;
+        this.valuePath = (item: any) => item?.value ?? item;
+        this.labelPath = (item: any) => item?.label ?? item;
         this.itemRenderer = (item) => <div text={this.labelPath(item)}/>;
         this.element.dataset.dropDown = "drop-down";
         this.render(<div>
@@ -329,23 +240,44 @@ export default class AtomChips extends AtomRepeater {
                 class="search"
                 placeholder={Bind.oneWay(() => this.prompt)}
                 value={Bind.twoWaysImmediate(() => this.search)}
+                autofocus={Bind.oneWay(() => this.autofocus)}
                 type="search"/>
             <div class="footer"/>
         </div>);
         this.itemsPresenter = this.element.children[0];
         this.searchInput = this.element.children[1] as HTMLInputElement;
         this.footerPresenter = this.element.children[2] as HTMLInputElement;
-        this.bindEvent(this.element, "removeChip", (e: CustomEvent) => this.removeItem(e.detail));
+        this.bindEvent(this.element, "removeChip", (e: CustomEvent) => e.defaultPrevented || this.removeItem(e.detail));
+        this.bindEvent(this.element, "undoRemoveChip", (e: CustomEvent) =>
+            e.defaultPrevented || this.undoRemoveItem(e.detail));
+        this.bindEvent(this.searchInput, "blur", () => {
+            const search = this.search;
+            setTimeout(() => {
+                if (this.onBlurItemToChip && search) {
+                    const item = this.onBlurItemToChip(search);
+                    if (item) {
+                        this.items.add(item);
+                        this.searchInput.value = "";
+                        this.search = "";
+                    }
+                }
+            }, 50);
+        });
     }
 
     protected setFocus(hasFocus) {
         if (hasFocus) {
+            if(this.focusTimeout) {
+                clearTimeout(this.focusTimeout);
+                this.focusTimeout = void 0;
+            }
             this.focused = true;
             return;
         }
-        setTimeout(() => {
+        this.focusTimeout = setTimeout(() => {
+            this.focusTimeout = void 0;
             this.focused = false;
-        }, 250);
+        }, 1500);
     }
 
     protected async updatePopup() {
@@ -355,20 +287,38 @@ export default class AtomChips extends AtomRepeater {
             this.popupCancelToken = null;
             return;
         }
-        if (!suggestions || !suggestions.length) {
+
+        const detail = this.suggestions;
+        const ce = new CustomEvent("suggestions-requested", { detail });
+        this.element.dispatchEvent(ce);
+        if (ce.defaultPrevented) {
+            return;
+        }
+        const { promise } = ce as any;
+        if (promise) {
+            await promise;
+        }
+        if (ce.detail !== this.suggestions) {
+            this.suggestions = ce.detail;
+        }
+
+        if (!(suggestions?.length)) {
             this.popupCancelToken?.cancel();
             this.popupCancelToken = null;
             return;
         }
+
         if (this.popupCancelToken) {
             return;
         }
+
         const cancelToken = this.popupCancelToken = new CancelToken();
         try {
             let selectedItem = await askSuggestionPopup(
                 this.element,
                 this,
                 this.suggestionRenderer ?? this.itemRenderer,
+                this.suggestionFilter,
                 cancelToken);
             const itemToChip = this.itemToChip;
             if (itemToChip) {
@@ -395,23 +345,50 @@ export default class AtomChips extends AtomRepeater {
         });
         this.element.dispatchEvent(ce);
         if (!ce.defaultPrevented) {
+            const item = ce.detail;
+            const vp = this.valuePath ?? ((x) => x);
+            const v = vp(item);
+            for (const iterator of this.items) {
+                if (v === vp(iterator)) {
+                    return;
+                }
+            }
             this.items.add(ce.detail);
         }
     }
 
-    protected removeItem(detail) {
-        const ce = new CustomEvent("removeChip", {
-            detail,
-            cancelable: true,
-            bubbles: true
-        });
-        if (!ce.defaultPrevented) {
-            this.items.remove(ce.detail);
+    protected undoRemoveItem(item) {
+        let { softDeleteProperty } = this;
+        softDeleteProperty = typeof softDeleteProperty !== "string" ? "$deleted" : softDeleteProperty;
+        item[softDeleteProperty] = false;
+        AtomBinder.refreshValue(this.items, "length");
+        this.refreshItem(item);
+    }
+
+    protected removeItem(item) {
+
+        let { softDeleteProperty } = this;
+        if (softDeleteProperty) {
+            softDeleteProperty = typeof softDeleteProperty !== "string" ? "$deleted" : softDeleteProperty;
+            item[softDeleteProperty] = true;
+            AtomBinder.refreshValue(this.items, "length");
+            this.refreshItem(item);
+        } else {
+            this.items.remove(item);
         }
     }
 
     protected onKey(e: KeyboardEvent) {
         const suggested = this.suggestions;
+        const onKeyPressedItemToChip = this.onKeyPressedItemToChip;
+        if (onKeyPressedItemToChip && this.search) {
+            const item = onKeyPressedItemToChip(e.key, this.search);
+            if (item) {
+                this.addItem(item);
+                this.searchInput.value = "";
+                return;
+            }
+        }
         switch (e.key) {
             case "Enter":
                 // selection mode...

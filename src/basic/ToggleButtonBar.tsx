@@ -1,36 +1,8 @@
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import Colors from "@web-atoms/core/dist/core/Colors";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import AtomRepeater from "./AtomRepeater";
 
-CSS(StyleRule()
-    .flexLayout({ inline: true, gap: 0 })
-    .borderStyle("solid")
-    .borderWidth(1)
-    .borderColor(Colors.lightGray)
-    .borderRadius(9999)
-    .child(StyleRule("[data-item-type=toggle-button]")
-        .padding(5)
-        .backgroundColor(Colors.white)
-        .cursor("pointer")
-        .and(StyleRule(":first-child")
-            .paddingLeft(10)
-            .borderTopLeftRadius(9999)
-            .borderBottomLeftRadius(9999)
-        )
-        .and(StyleRule(":last-child")
-            .borderTopRightRadius(9999)
-            .borderBottomRightRadius(9999)
-            .paddingRight(10)
-        )
-        .and(StyleRule("[data-selected-item=true]")
-            .backgroundColor(Colors.black)
-            .color(Colors.white)
-        )
-    )
-, "*[data-button-bar=button-bar]");
+import "./styles/toggle-button-bar-style";
 
 export default class ToggleButtonBar extends AtomRepeater {
 

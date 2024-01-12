@@ -1,418 +1,149 @@
 import Bind from "@web-atoms/core/dist/core/Bind";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
-import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
-import FormField from "./FormField";
-import IElement from "./IElement";
-import ToggleButtonBar from "./ToggleButtonBar";
-export const FormButtonBar = ToggleButtonBar;
+import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
+import XNode, { elementFactorySymbol } from "@web-atoms/core/dist/core/XNode";
+import styled from "@web-atoms/core/dist/style/styled";
+import { AncestorEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 
-const css = CSS(StyleRule()
-    .verticalFlexLayout({ alignItems: "stretch" })
-    .displayNone(" .field-error:empty")
-    .displayNone(":not([data-wa-show-errors=yes]) .field-error:not(:empty)")
-    .child(StyleRule("button")
-        .alignSelf("flex-start")
-    )
-    .and(StyleRule("[data-scrollable=true]")
-        .justifyContent("flex-start")
-        .overflow("auto")
-    )
-, "*[data-wa-form=wa-form]");
+    styled.css `
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing, 5px);
 
-export interface ISubmitButton {
-    eventClick: any;
-    class?: string;
-    [key: string]: any;
-}
-
-export interface ISubmitAction extends IElement {
-    action: "submit";
-    eventClick?: any;
-    "event-click"?: any;
-}
-
-export interface ICancelAction extends IElement {
-    action: "cancel";
-    eventClick?: any;
-    "event-click"?: any;
-}
-
-export type IFormAction = ISubmitAction | ICancelAction;
-
-/**
- * This is just a decorator, you must have a child button for this to work
- * @param action submit | cancel
- * @param node child node where action will be applied
- * @returns XNode
- */
-export function FormAction(
-    {
-        action = "submit",
-        eventClick,
-        "event-click": eventClick2,
-        ... a
-    }: IFormAction,
-    node: XNode) {
-    const attributes = node.attributes ??= {};
-    attributes["data-wa-form-action"] = action;
-    const e = attributes["event-click"] || attributes.eventClick;
-    if (e) {
-        attributes["event-submit"] = e;
-        delete attributes["event-click"];
-        delete attributes.eventClick;
-    }
-    eventClick ??= eventClick2;
-    if (action === "submit" && eventClick) {
-        attributes.eventSubmit = eventClick;
-    }
-    node.attributes = { ... a, ... attributes};
-    return node;
-}
-
-/**
- * @deprecated Use Form with eventSubmit and button with data-event="submit"
- */
-export function SubmitAction(a: IElement, node: XNode) {
-    (a as any).action = "submit";
-    return FormAction(a as any, node);
-}
-
-/**
- * @deprecated Use Form with eventSubmit and button with data-event="submit"
- */
-export function CancelAction(a: IElement, node: XNode) {
-    (a as any).action = "cancel";
-    return FormAction(a as any, node);
-}
-
-/**
- * @deprecated Use Form with eventSubmit and button with data-event="submit"
- */
-export function SubmitButton(
-    { eventClick,
-        ... others}: ISubmitButton,
-    ... nodes: XNode[]) {
-    return <button
-        data-wa-form-action="submit"
-        eventSubmit={eventClick} { ... others }>{ ... nodes}</button>;
-}
-
-function findSubmitAction(e: Event) {
-    let button = e.target as HTMLElement;
-    if (e.type === "submit") {
-        e.preventDefault();
-        button = (e as SubmitEvent).submitter;
-    }
-    while (button) {
-        const action = button.dataset.waFormAction ?? button.dataset.event;
-        if (/submit|cancel/i.test(action)) {
-            return { button, action };
+    &[data-valid=true] {
+        & .field-error:not(:empty) {
+            display: none;
         }
-        button = button.parentElement;
-    }
-    return { button };
-}
-
-const submitFormHandler = (form: HTMLElement) => {
-    if (!form.dataset.waShowErrors) {
-        form.dataset.waShowErrors = "yes";
-    }
-    setTimeout(() => {
-        const all = Array.from(form.getElementsByClassName("field-error"));
-        for (const iterator of all) {
-            if (iterator.textContent) {
-                alert(form.dataset?.errorMessage ?? "Please fix all validations");
-                return;
-            }
+        & > .error-message {
+            display: none;
         }
-        form.dispatchEvent(new CustomEvent("submitForm"));
-    }, 100);
-};
-
-const checkValidity = (handler) => (e: MouseEvent) => {
-
-    const form = e.currentTarget as HTMLFormElement;
-
-    const { button, action } = findSubmitAction(e);
-    if (!button) {
-        return;
     }
 
-    if (handler) {
-        submitFormHandler(form);
-        return;
+    & > .error-message {
+        padding: var(--spacing-small, 2px);
+        padding-left: var(--spacing-large, 10px);
+        padding-right: var(--spacing-large, 10px);
+        background-color: red;
+        border-radius: 9999px;
+        color: white;
+        position: sticky;
+        top: 0;
     }
+`.installGlobal("[data-form=form]");
 
-    // if (button.tagName === "BUTTON" && e.type !== "submit") {
-    //     // as submit will be followed, we would ignore this only if the tag is button
-    //     return;
-    // }
-    if (action === "cancel") {
-        form.dataset.waShowErrors = "";
-        return;
-    }
-    if (!form.dataset.waShowErrors) {
-        form.dataset.waShowErrors = "yes";
-    }
-
-    setTimeout(() => {
-        const all = Array.from(form.getElementsByClassName("field-error"));
-        for (const iterator of all) {
-            if (iterator.textContent) {
-                alert(form.dataset?.errorMessage ?? "Please fix all validations");
-                return;
-            }
-        }
-        button.dispatchEvent(new CustomEvent("submit"));
-    }, 100);
-};
-
-const moveNext = (handler) => (e: KeyboardEvent) => {
-    if (!/enter|submit|return/i.test(e.key)) {
-        return;
-    }
+const checkClick = (e: MouseEvent) => {
+    const form = e.currentTarget as HTMLDivElement;
     const element = e.target as HTMLElement;
-    if (!element.tagName) {
-        return;
-    }
-    if  (handler) {
-        if (element.tagName !== "TEXTAREA") {
-            submitFormHandler(e.currentTarget as HTMLElement);
-        }
-        return;
-    }
-    if (element.dataset.waFormAction === "submit") {
-        element.dispatchEvent(new MouseEvent("click"));
-        return;
-    }
-    if (/input/i.test(element.tagName)) {
-        e.preventDefault();
-        element.dispatchEvent(new KeyboardEvent("keypress", {
-            key: "tab"
-        }));
-    }
-};
 
-document.body.addEventListener("click", (e: MouseEvent) => {
-    let start = e.target as HTMLElement;
-    let id;
-    while (start) {
-        id = start.dataset.submitFormId;
-        if (id) {
-            break;
+    // find button...
+    let target = element;
+    while (target.tagName !== "BUTTON") {
+        target = target.parentElement;
+        if (!target || target === form) {
+            return;
         }
-        start = start.parentElement;
     }
-    if (!start) {
-        return;
+
+    const submitEvent = target.getAttribute("data-submit-event");
+    if (!submitEvent) {
+        if (!/submit/i.test(target.getAttribute("type") ?? target.getAttribute("data-type") )) {
+            return;
+        }
     }
-    const form = document.body.querySelector(`[data-form-id="${id}"]`);
-    submitFormHandler(form as HTMLElement);
-});
+    form.setAttribute("data-show-validation", "true");
+    setTimeout(() => {
+        const all = Array.from(form.getElementsByClassName("field-error"));
+        for (const iterator of all) {
+            if (iterator.textContent) {
+                form.setAttribute("data-valid", "false");
+                return;
+            }
+        }
+        form.setAttribute("data-valid", "true");
+        const eventName = StringHelper.fromHyphenToCamel( submitEvent ?? form.getAttribute("data-submit-event"));
+        target.dispatchEvent(new CustomEvent(eventName, { bubbles: true, cancelable: true }));
+    }, 100);
+};
 
 export interface IForm {
-    id?: number;
-    class?: any;
-    scrollable?: boolean ;
     /**
-     * If set, when an enter key is pressed on
-     * non textarea element, form will be submitted automatically
+     * The event that will be dispatched, default is `submitForm`
      */
-    eventSubmit?: any;
+    "data-submit-event"?: string;
     /**
-     * By default it is true, when user presses enter button on an input
-     * the focus will move on to the next input element
+     * Validation will be displayed if set to true, default is false.
+     * It will be set to true if button with type=submit or data-type=submit will be clicked.
      */
-    focusNextOnEnter?: boolean;
+    "data-show-validation"?: "true" | "false"
+    /**
+     * Default error message to be displayed if any field contains error.
+     */
+    "data-error-message"?: string;
+
+    /**
+     * Please change your form style to catch event-submit-form
+     */
+    eventSubmit?: never;
+    /**
+     * Please change your form style to catch event-submit-form
+     */
+    submitCommand?: never;
+
     [key: string]: any;
 }
 
-let formId = 0;
-
-const formGroupSymbol = Symbol("formGroup");
-
-export interface IFormGroup {
-    group: string;
-    // header?: string;
-    // icon?: string;
-}
-
-export function FormGroup(
-    fg: IFormGroup,
-    ... nodes: XNode[]
-    ) {
-    fg[formGroupSymbol] = true;
+export default function Form({
+    "data-submit-event": submitEvent = "submitForm",
+    "data-show-validation": showValidation = "false",
+    "data-error-message": errorMessage = "Please fix all validations",
+    ... a
+}: IForm, ... nodes: XNode[]) {
     return <div
-        { ... fg}>
+        { ... a}
+        data-submit-event={submitEvent}
+        data-form="form"
+        data-valid="true"
+        data-show-validation={showValidation}
+        data-error-message={errorMessage}
+        event-click={checkClick}>
+        <div class="error-message" text={errorMessage}/>
         { ... nodes}
     </div>;
 }
 
-export default function Form(
-    {
-        id = formId++,
-        focusNextOnEnter = true,
-        scrollable,
-        eventSubmit,
-        ... a
-    }: IForm,
-    ... nodes: XNode[]) {
-    if (focusNextOnEnter) {
-        a.eventKeypress = moveNext(eventSubmit);
-    }
-    a["data-form-id"] = id;
-    a["data-scrollable"] = !!scrollable;
-    if (!eventSubmit) {
-        a["data-wa-show-errors"] = "yes";
-    }
+type Func = (... p: any[]) => any;
 
-    const fields = [];
-    for (const iterator of nodes) {
-        if (!iterator) {
-            continue;
-        }
-        const ca = iterator.attributes as any;
-        if (ca?.[formGroupSymbol]) {
-            for (const child of iterator.children) {
-                const cha = child.attributes ??= {};
-                cha["data-group"] = ca.group;
-                fields.push(child);
-            }
-            continue;
-        }
-        fields.push(iterator);
-    }
-
-    return <div
-        data-wa-form="wa-form"
-        { ... a}
-        eventSubmitForm={eventSubmit}
-        eventClick={checkValidity(eventSubmit)}>
-        { ... fields}
-    </div>;
+export interface IValidator {
+    value: Func;
+    message?: (value: string, label: string) => string;
+    isValid?: (value: string, element: HTMLElement) => boolean;
 }
 
-export interface IFormLayout extends IForm {
-    header?: XNode;
-    footer?: XNode;
+export const BindError = ({
+    value,
+    message = (v, l) => `${l} is invalid`,
+    isValid = (v, e) => !!v,
+}: IValidator) => {
+    function f2 (sender, element: HTMLElement) {
+        const isRequired = element.parentElement.querySelector(`[data-required]`);
+        const msg = value.call(this, sender);
+        if (!msg) {
+            if (!isRequired) {
+                return "";
+            }
+        }
+        if (isValid(msg, element)) {
+            return "";
+        }
+        return message(msg, element.parentElement.querySelector(`[data-element=label]`)?.textContent || "This field ");
+    };
+    f2.toString = () => value.toString();
+    return Bind.oneWay(f2);
 }
 
-CSS(StyleRule()
-    .display("grid")
-    .alignSelf("stretch")
-    .justifyContent("stretch" as any)
-    .flex("1 1 100%")
-    .gridTemplateRows("auto 1fr auto")
-    .gridTemplateColumns("1fr")
-    .child(StyleRule("[data-element=header]")
-        .gridRowStart("1")
-    )
-    .child(StyleRule("[data-element=content]")
-        .gridRowStart("2")
-        .overflow("auto")
-        .child(StyleRule("div")
-            .verticalFlexLayout({ alignItems: "stretch", gap: 10 })
-        )
-    )
-    .child(StyleRule("[data-element=footer]")
-        .gridRowStart("3")
-    )
-, "*[data-form-layout=form-layout]");
-
-const elementType = Symbol.for("elementType");
-
-export function FormLayout(
-    {
-        id = formId++,
-        focusNextOnEnter = true,
-        scrollable,
-        eventSubmit,
-        header,
-        footer,
-        ... a
-    }: IFormLayout,
-    ... nodes: XNode[]) {
-    if (focusNextOnEnter) {
-        a.eventKeypress = moveNext(eventSubmit);
-    }
-    a["data-form-id"] = id;
-    a["data-scrollable"] = !!scrollable;
-    if (!eventSubmit) {
-        a["data-wa-show-errors"] = "yes";
-    }
-
-    const fields = [];
-    for (const iterator of nodes) {
-        if (!iterator) {
-            continue;
-        }
-
-        const et = iterator[elementType];
-        if (et !== void 0) {
-            if (et === "header") {
-                header = iterator;
-                delete iterator[elementType];
-                continue;
-            }
-            if (et === "footer") {
-                footer = iterator;
-                delete iterator[elementType];
-                continue;
-            }
-        }
-
-        const ca = iterator.attributes as any;
-        if (ca?.[formGroupSymbol]) {
-            for (const child of iterator.children) {
-                const cha = child.attributes ??= {};
-                cha["data-group"] = ca.group;
-                fields.push(child);
-            }
-            continue;
-        }
-        fields.push(iterator);
-    }
-
-    if (header) {
-        const ha = header.attributes ??= {};
-        ha["data-element"] = "header";
-    }
-
-    if (footer) {
-        const ha = footer.attributes ??= {};
-        ha["data-element"] = "footer";
-    }
-
-    return <div
-        data-wa-form="wa-form"
-        data-form-layout="form-layout"
-        { ... a}
-        eventSubmitForm={eventSubmit}
-        eventClick={checkValidity(eventSubmit)}>
-        { header }
-        <div data-element="content">
-            <div>
-            { ... fields}
-            </div>
-        </div>
-        { footer }
-    </div>;
+export const BindEmailError = ({
+    value,
+    message = (v, l) => `${l} is not a valid email address`,
+    isValid = (v, e) => /[^\@]+\@[^\@]+\.[^\@]+/i.test(v),
+}: IValidator) => {
+    return BindError({ value, message, isValid });
 }
-
-FormLayout.Footer = ({}, child: XNode) => {
-    child[elementType] = "footer";
-    return child;
-};
-
-FormLayout.Header = ({}, child: XNode) => {
-    child[elementType] = "header";
-    return child;
-};
-
-Form.newId = () => formId++;
-
-Form.submitId = (id: number) => ({
-    "data-submit-form-id": id.toString()
-});

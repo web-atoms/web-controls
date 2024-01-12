@@ -1,9 +1,8 @@
 import Bind from "@web-atoms/core/dist/core/Bind";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import PopupButton from "../../basic/PopupButton";
 import type AtomHtmlEditor from "../AtomHtmlEditor";
+import styled from "@web-atoms/core/dist/style/styled";
 
 const gray = [
     "rgb(0,0,0)",
@@ -90,27 +89,30 @@ const all = [
     ]
 ];
 
-const colorSelectorCss = CSS(StyleRule("color-selector")
-    .width(400)
-    .display("flex")
-    .justifyContent("space-evenly" as any)
-    .child(StyleRule("table")
-        .display("inline-table")
-    )
-    .nested(StyleRule(".color-button")
-        .display("inline-block")
-        .width(20)
-        .height(20)
-        .borderWidth(1)
-        .margin(1)
-        .cursor("pointer")
-        .borderStyle("solid")
-        .borderColor("transparent")
-        .hover(StyleRule()
-            .borderColor("black")
-        )
-    )
-);
+const colorSelectorCss = styled.css `
+
+    width: 400px;
+    display: flex;
+    justify-content: space-evenly;
+
+    & > table {
+        display: inline-table; 
+    }
+    
+    & .color-button {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border-width: 1px;
+        margin: 1px;
+        cursor: pointer;
+        border-style: solid;
+        border-color: transparent; 
+        &:hover {
+            border-color: black; 
+        }
+    }    
+    `.installLocal();
 
 function TextColor(color: string) {
     return <div
@@ -127,7 +129,8 @@ function BackgroundColor(color: string) {
 }
 
 export default function ChangeColor() {
-    return <PopupButton title="Change Color" class="command" icon="ri-font-color">
+    return <PopupButton title="Change Color" class="command" icon="ri-font-color"
+        data-layout="toolbar-button">
         <div class={colorSelectorCss}>
             <table>
                 <thead>

@@ -1,19 +1,18 @@
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import PopupService, { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import type AtomHtmlEditor from "../AtomHtmlEditor";
 import CommandButton from "./CommandButton";
 import HtmlCommands from "./HtmlCommands";
+import styled from "@web-atoms/core/dist/style/styled";
 
-const css = CSS(StyleRule()
-    .child(StyleRule("textarea")
-        .minHeight(500)
-        .minWidth(700)
-    )
-);
+const css = styled.css `
+    & > textarea {
+        min-height: 500px;
+        min-width: 700px;
+    }
+`.installLocal();
 
 async function showDialog(s: AtomHtmlEditor, e: Event): Promise<string> {
 

@@ -24,12 +24,24 @@ import UnorderedList from "../../html-editor/commands/UnorderedList";
 import AtomHtmlEditor, { Toolbar } from "../../html-editor/AtomHtmlEditor";
 import AttachFile from "../../html-editor/commands/AttachFile";
 
+const sample = `
+<div>
+    <p>Hi <span contenteditable="off" data-prompt="[Name]">[Name]</span></p>
+    <p>Link <a
+        contenteditable="off"
+        data-prompt="[Link]"
+        data-replace="textContent,href"
+        data-href-template="https://webatoms.in/[Link]">[Link]</a>
+    </a>
+</div>
+`;
+
 @Pack
 export default class HtmlEditorTest extends AtomControl {
 
     protected create(): void {
         this.render(<div>
-            <AtomHtmlEditor>
+            <AtomHtmlEditor eventDocumentCreated={(ce) => ce.detail.innerHTML = sample}>
                 <Toolbar>
                     <Bold/>
                     <Italic/>

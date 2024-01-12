@@ -1,7 +1,7 @@
 import Bind from "@web-atoms/core/dist/core/Bind";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import AtomSwitch from "../../switch/AtomSwitch";
+import Switch from "../../basic/Switch";
 
 export default class SwitchTest extends AtomControl {
 
@@ -12,8 +12,8 @@ export default class SwitchTest extends AtomControl {
         this.ready = false;
 
         this.render(<div>
-            <AtomSwitch
-                value={Bind.twoWays(() => this.ready)}
+            <Switch
+                checked={Bind.twoWays(() => this.ready)}
                 />
             <span text={Bind.oneWay(() => this.ready ? "On" : "Off")}/>
         </div>);

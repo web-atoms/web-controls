@@ -1,48 +1,9 @@
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import Colors from "@web-atoms/core/dist/core/Colors";
 import XNode, { isTemplateSymbol } from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
-CSS(StyleRule()
-    .position("relative")
-    .overflow("hidden")
-    .cursor("grab")
-    .and(StyleRule("[data-state=grabbing]")
-        .cursor("grabbing")
-    )
-    .child(StyleRule(".scale")
-        .absolutePosition({
-            right: 10,
-            top: 10
-        })
-        .border("solid 2px darkgray")
-        .borderRadius(4)
-        .backgroundColor(Colors.white)
-        .padding(4)
-        .color(Colors.black)
-    )
-    .child(StyleRule(".image-container")
-        .maximizeAbsolute()
-        .overflow("hidden")
-        .display("grid")
-        .alignItems("center")
-        .justifyItems("center")
-        .justifyContent("center" as any)
-    )
-    .child(StyleRule(".spinner")
-        .maximizeAbsolute()
-        .display("inline-grid")
-        .alignItems("center")
-        .justifyItems("center")
-    )
-    .child(StyleRule(".hide")
-        .display("none")
-    )
-    , "div[data-pinch-zoom]"
-);
+import "./styles/pinch-zoom-view-style";
 
 const center = (ev: TouchEvent) => {
     const touch = ev.touches[0];

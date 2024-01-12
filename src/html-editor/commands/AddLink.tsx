@@ -1,15 +1,13 @@
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import { CancelToken } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomToggleButtonBar } from "@web-atoms/core/dist/web/controls/AtomToggleButtonBar";
 import PopupService, { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import FormField from "../../basic/FormField";
 import type AtomHtmlEditor from "../AtomHtmlEditor";
 import CommandButton, { notSet } from "./CommandButton";
 import HtmlCommands from "./HtmlCommands";
+import styled from "@web-atoms/core/dist/style/styled";
 
 const linkTypes = [
     {
@@ -30,11 +28,11 @@ const linkTypes = [
     }
 ];
 
-const linkDialogCss = CSS(StyleRule()
-    .display("flex")
-    .flexDirection("column")
-    .gap(5)
-);
+const linkDialogCss = styled.css `
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+`.installLocal();
 
 class LinkDialog extends PopupWindow {
 

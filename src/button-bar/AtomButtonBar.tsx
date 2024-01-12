@@ -1,30 +1,32 @@
-import Colors from "@web-atoms/core/dist/core/Colors";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
+import styled from "@web-atoms/core/dist/style/styled";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { AtomItemsControl } from "@web-atoms/core/dist/web/controls/AtomItemsControl";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
 
-CSS(StyleRule()
-    .flexLayout({ inline: true, gap: 0 })
-    .border("solid 1px lightblue")
-    .borderRadius(10)
-    .child(StyleRule("*")
-        .borderRadius(10)
-        .padding(5)
-        .cursor("pointer")
-        .and(StyleRule(":first-child")
-            .borderTopRightRadius(0)
-            .borderBottomRightRadius(0)
-        )
-        .and(StyleRule(":last-child")
-            .borderTopLeftRadius(0)
-            .borderBottomLeftRadius(0)
-        )
-    )
-    .child(StyleRule("*[data-item=selected-item]")
-        .backgroundColor(Colors.lightBlue)
-    )
-, "*[data-button-bar=button-bar]");
+    styled.css `
+    display: inline-flex;
+    gap: 0;
+    align-items: center;
+    border: solid 1px lightblue;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    & > * {
+        border-radius: 10px;
+        padding: 5px;
+        cursor: pointer;
+        &:first-child {
+            border-top-right-radius: 0;
+            border-bottom-right-radius:0;
+        }
+        &:last-child {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        &[data-item=selected-item] {
+            background-color: lightblue;
+        }
+    }
+`.installGlobal("*[data-button-bar=button-bar]");
 
 export default class AtomButtonBar extends AtomItemsControl {
 

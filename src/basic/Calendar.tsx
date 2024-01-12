@@ -1,13 +1,12 @@
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import Colors from "@web-atoms/core/dist/core/Colors";
 import WatchProperty from "@web-atoms/core/dist/core/WatchProperty";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import DateTime from "@web-atoms/date-time/dist/DateTime";
 import AtomRepeater from "./AtomRepeater";
-import ComboBox from "./ComboBox";
+import Select from "./Select";
+
+import "./styles/calendar-style";
 
 const start = DateTime.now;
 
@@ -31,85 +30,33 @@ const getMonths = (locale, type: "short" | "long") => {
     return weekDays;
 };
 
+function setValue(target, name, value) {
+    Object.defineProperty(target, name, { value });
+    return value;
+}
+
 export const weekdays = {
 
-    short: getWeekDays(navigator.language, "short"),
-    long: getWeekDays(navigator.language, "long"),
+    get short() {
+        return setValue(this, "short", getWeekDays(navigator.language, "short"));
+    },
+    get long() {
+        return setValue(this, "long", getWeekDays(navigator.language, "long"));
+    }
 };
 
 export const months = {
-    short: getMonths(navigator.language, "short"),
-    long: getMonths(navigator.language, "long")
+    get short() {
+        return setValue(this, "short", getMonths(navigator.language, "short"));
+    },
+    get long() {
+        return setValue(this, "long", getMonths(navigator.language, "long"));
+    },
+
+    get items() {
+        return setValue(this, "items", this.long.map((x, i) => ({label: x, value: i})));
+    }
 };
-
-const monthItems = months.long.map((x, i) => ({
-    label: x,
-    value: i
-}));
-
-CSS(StyleRule()
-    .display("inline-grid")
-    .gridTemplateRows("auto auto auto")
-    .gridTemplateColumns("auto auto auto auto")
-    .child(StyleRule(".fa-solid")
-        .padding(5)
-        .paddingLeft(10)
-        .paddingRight(10)
-        .cursor("pointer")
-        .hoverColor(Colors.blueViolet)
-    )
-    .child(StyleRule("select")
-        .border("none")
-    )
-    .child(StyleRule(".week")
-        .gridColumnStart("1")
-        .gridColumnEnd("span 4")
-        .gridRowStart("2")
-        .display("inline-grid")
-        .gridTemplateColumns("1fr 1fr 1fr 1fr 1fr 1fr 1fr")
-        .gap(0)
-        .child(StyleRule("*")
-            .fontSize("smaller")
-            .padding("5")
-            .paddingLeft("10")
-            .paddingRight("10")
-            .cursor("default")
-            .alignSelf("center")
-            .justifySelf("center")
-        )
-    )
-    .child(StyleRule(".dates")
-        .gridColumnStart("1")
-        .gridColumnEnd("span 4")
-        .gridRowStart("3")
-        .display("inline-grid")
-        .gap(0)
-        .child(StyleRule("[data-item-index]")
-            .alignSelf("stretch")
-            .justifySelf("stretch")
-            .padding(7)
-            .cursor("pointer")
-            .textAlign("center")
-            .hoverBackgroundColor(Colors.lightGray.withAlphaPercent(0.5))
-            .and(StyleRule("[data-is-today=true]")
-                .backgroundColor(Colors.lightGreen)
-            )
-            .and(StyleRule("[data-is-weekend=true]")
-                .backgroundColor(Colors.lightGray.withAlphaPercent(0.3))
-            )
-            .and(StyleRule("[data-is-other-month=true]")
-                .opacity("0.5")
-            )
-            .and(StyleRule("[data-disabled=true]")
-                .textDecoration("line-through")
-            )
-            .and(StyleRule("[data-selected-item=true]")
-                .backgroundColor(Colors.blueViolet)
-                .color(Colors.white)
-            )
-        )
-    )
-, "*[data-calendar=calendar]");
 
 export interface ICalendarDate {
     label: string;
@@ -137,6 +84,20 @@ export default class Calendar extends AtomRepeater {
     @BindableProperty
     public yearEnd: number;
 
+    public set startDate(v) {
+        if (this.dateModified) {
+            return;
+        }
+        const year = v.getFullYear();
+        const month = v.getMonth();
+        if (this.year !== year) {
+            this.year = year;
+        }
+        if (this.month !== month) {
+            this.month = month;
+        }
+    }
+
     public enableFunc: (item: ICalendarDate) => boolean;
 
     public dateRenderer: (item: ICalendarDate) => XNode;
@@ -144,10 +105,12 @@ export default class Calendar extends AtomRepeater {
     @WatchProperty
     public get dates() {
         const year = this.year;
-        const month = this.month;
-        if (month === undefined || year === undefined) {
+        const tm = this.month;
+
+        if (tm === undefined || year === undefined) {
             return [];
         }
+        const month = Number(tm);
         const today = DateTime.today;
         let startDate = new DateTime(year, month, 1);
         while (startDate.dayOfWeek !== 1) {
@@ -192,6 +155,24 @@ export default class Calendar extends AtomRepeater {
         return years;
     }
 
+    public get value() {
+        return super.value;
+    }
+
+    public set value(v) {
+        // change the date....
+        if (v instanceof Date) {
+            this.startDate = v;
+        }
+        super.value = v;
+    }
+
+    /**
+     * Date is modified by user, so do not auto select
+     * start Date
+     */
+    private dateModified = false;
+
     public onPropertyChanged(name: keyof Calendar): void {
         super.onPropertyChanged(name);
         switch (name) {
@@ -221,32 +202,43 @@ export default class Calendar extends AtomRepeater {
     }
 
     protected preCreate(): void {
+        super.preCreate();
         const now = new Date();
         this.selectedItems = [];
-        this.valuePath = (i) => i.value;
+        this.valuePath = (i) => i?.value;
         this.yearStart = -10;
         this.yearEnd = 10;
         this.year = now.getFullYear();
         this.month = now.getMonth();
+        this.comparer = (left: Date, right: Date) => left && right &&
+            DateTime.from(left).date?.msSinceEpoch === DateTime.from(right).date?.msSinceEpoch;
+        this.bindEvent(this.element, "change", () => this.dateModified = true, null, { capture: true });
+        this.bindEvent(this.element, "itemSelect",
+            (e: CustomEvent<ICalendarDate>) => e.detail.disabled ? e.preventDefault() : null);
         this.render(<div
             data-calendar="calendar"
             items={Bind.oneWay(() => this.dates)}>
                 <i
+                    data-element="previous"
                     event-click={() => this.prev()}
-                    class="fa-solid fa-angle-left"
+                    class="fa-solid fa-circle-chevron-left"
                     title="Previous Month"/>
-                <ComboBox
-                    items={monthItems}
-                    value={Bind.twoWays(() => this.month)} />
-                <ComboBox
+                <Select
+                    data-element="month"
+                    items={months.items}
+                    value={Bind.twoWays(() => this.month)}
+                    />
+                <Select
+                    data-element="year"
                     items={Bind.oneWay(() => this.years)}
                     value={Bind.twoWays(() => this.year)}/>
                 <i
+                    data-element="next"
                     event-click={() => this.next()}
-                    class="fa-solid fa-angle-right"
+                    class="fa-solid fa-circle-chevron-right"
                     title="Next Month"/>
                 <div class="week"/>
-                <div class="dates"/>
+                <div data-click-event="item-select" class="dates"/>
             </div>);
         this.itemsPresenter = this.element.lastElementChild;
         const week = this.element.lastElementChild.previousElementSibling;
@@ -261,17 +253,25 @@ export default class Calendar extends AtomRepeater {
         this.itemRenderer = (item: ICalendarDate) => {
             const d = this.dateRenderer(item);
             const a = d.attributes ??= {};
-            if (!a["data-click-event"]) {
-                a["data-click-event"] = "itemSelect";
+            if (item.isToday) {
+                a["data-is-today"] = item.isToday;
             }
-            a["data-is-today"] = item.isToday;
-            a["data-is-other-month"] = item.isOtherMonth;
-            a["data-is-weekend"] = item.isWeekend;
-            a["data-disabled"] = item.disabled;
-            a.styleGridColumnStart = (item.column + 1);
-            a.styleGridRowStart = (item.row + 1);
+            if (item.isOtherMonth) {
+                a["data-is-other-month"] = item.isOtherMonth;
+            }
+            if (item.isWeekend) {
+                a["data-is-weekend"] = item.isWeekend;
+            }
+            if (item.disabled) {
+                a["data-disabled"] = item.disabled;
+            }
             return d;
         };
+    }
+
+    protected dispatchItemEvent(eventName: any, item: any, recreate: any, originalTarget: any, nestedItem?: any): void {
+        this.dateModified = true;
+        super.dispatchItemEvent(eventName, item, recreate, originalTarget, nestedItem);
     }
 
 }

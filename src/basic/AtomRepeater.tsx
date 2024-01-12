@@ -3,32 +3,29 @@ import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder";
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import Colors from "@web-atoms/core/dist/core/Colors";
+import EventScope from "@web-atoms/core/dist/core/EventScope";
 import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
 import { CancelToken, IDisposable } from "@web-atoms/core/dist/core/types";
 import WatchProperty from "@web-atoms/core/dist/core/WatchProperty";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { IDialogOptions, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
+import InlinePopup from "./InlinePopup";
+import MergeNode from "./MergeNode";
+import ItemPath from "./ItemPath";
 
-const popupCSS = CSS(StyleRule()
-    .height(500)
-    .width(300)
-    .verticalFlexLayout({ alignItems: "stretch" })
-    .child(StyleRule(".items")
-        .flexStretch()
-        .overflow("auto")
-        .child(StyleRule(".presenter")
-            .child(StyleRule("*")
-                .padding(5)
-            )
-            .child(StyleRule("[data-selected-item=true]")
-                .backgroundColor(Colors.lightGreen)
-            )
-        )
-    )
-);
+import "./styles/ui-display-none-style";
+import { repeaterPopupCss } from "./styles/popup-style";
+import "./styles/suggestion-popup";
+import "./styles/repeater-style";
+import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
+
+export interface IItemPair<ParentItem = any, ChildItem = any> {
+    parent: ParentItem;
+    child: ChildItem;
+}
+
+const popupCSS = repeaterPopupCss;
 
 export type IRepeaterItemInfo = [string, AtomRepeater, any, number, HTMLElement] | undefined;
 
@@ -44,7 +41,7 @@ export const getParentRepeaterItem = (target: HTMLElement): IRepeaterItemInfo =>
             break;
         }
         if (index === undefined) {
-            const itemIndex = target.dataset.itemIndex;
+            const itemIndex = target.getAttribute("data-item-index");
             if (typeof itemIndex !== "undefined") {
                 root = target;
                 // tslint:disable-next-line: no-bitwise
@@ -52,7 +49,7 @@ export const getParentRepeaterItem = (target: HTMLElement): IRepeaterItemInfo =>
             }
         }
         if (eventName === undefined) {
-            const itemClickEvent = target.dataset.clickEvent;
+            const itemClickEvent = target.getAttribute("data-click-event");
             if (itemClickEvent) {
                 eventName = itemClickEvent.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
             }
@@ -110,7 +107,7 @@ export const SameObjectValue = (item) => item;
  */
 export function askSuggestion<T>(
     items: T[],
-    itemRenderer: (item: T) => XNode,
+    itemRenderer: (item: T, index: number, repeater: AtomRepeater) => XNode,
     match: Match<T>,
     options: IDialogOptions): Promise<T> {
     class Suggestions extends PopupWindow {
@@ -151,24 +148,6 @@ export function askSuggestion<T>(
     return Suggestions.showModal(options);
 }
 
-CSS(StyleRule()
-    .height(250)
-    .width(300)
-    .verticalFlexLayout({ alignItems: "stretch" })
-    .child(StyleRule(".items")
-        .flexStretch()
-        .overflow("auto")
-        .child(StyleRule(".presenter")
-            .child(StyleRule("*")
-                .padding(5)
-            )
-            .child(StyleRule("[data-selected-item=true]")
-                .backgroundColor(Colors.lightGreen)
-            )
-        )
-    )
-, "*[data-suggestion-popup=suggestion-popup]");
-
 /**
  * Asks user for selecting item from given suggestions
  * @param items items to display
@@ -179,14 +158,14 @@ CSS(StyleRule()
 export function askSuggestionPopup<T>(
     opener: HTMLElement | AtomControl,
     items: T[],
-    itemRenderer: (item: T) => XNode,
+    itemRenderer: (item: T, index: number, repeater: AtomRepeater) => XNode,
     match: Match<T>,
     selectedItem: T): Promise<T> {
 
     const updateSearch = "search" in opener;
     const itemsInOpener = "items" in opener;
 
-    class Suggestions extends PopupControl {
+    class Suggestions extends InlinePopup {
 
         public anchorItem: T;
 
@@ -211,16 +190,20 @@ export function askSuggestionPopup<T>(
         protected create(): void {
             this.anchorItem = selectedItem;
             this.opener = opener;
+            if (this.opener.search) {
+                this.search = this.opener.search;
+            }
             if (selectedItem) {
                 this.anchorIndex = items.indexOf(selectedItem);
             }
+            const disableSearch = (opener as any).disableSearch;
             if (itemsInOpener) {
                 this.render(<div data-suggestion-popup="suggestion-popup">
-                    <input
+                    {!disableSearch && <input
                         type="search"
                         value={Bind.twoWaysImmediate(() => this.search)}
                         eventKeydown={(e) => this.onKey(e)}
-                        autofocus={true}/>
+                        autofocus={true}/>}
                     <div class="items">
                         <AtomRepeater
                             class="presenter"
@@ -228,7 +211,9 @@ export function askSuggestionPopup<T>(
                             itemRenderer={itemRenderer}
                             visibilityFilter={Bind.oneWay(() => match(this.search))}
                             eventItemClick={(e) => {
-                                this.close(e.detail);
+                                this.anchorItem = e.detail;
+                                setTimeout(() =>
+                                    this.close(e.detail), 100);
                             }}
                             items={Bind.oneWay(() => this.opener.items)}/>
                     </div>
@@ -236,11 +221,11 @@ export function askSuggestionPopup<T>(
                 return;
             }
             this.render(<div data-suggestion-popup="suggestion-popup">
-                <input
+                {!disableSearch && <input
                     type="search"
                     value={Bind.twoWaysImmediate(() => this.search)}
                     eventKeydown={(e) => this.onKey(e)}
-                    autofocus={true}/>
+                    autofocus={true}/> }
                 <div class="items">
                     <AtomRepeater
                         class="presenter"
@@ -297,7 +282,7 @@ export function askSuggestionPopup<T>(
         }
     }
 
-    return Suggestions.showControl(opener);
+    return Suggestions.showControl<T>(opener);
 
 }
 
@@ -308,26 +293,6 @@ export interface ISelectorCheckBox {
     [key: string]: any;
 }
 
-CSS(StyleRule()
-    .nested(StyleRule("i[data-click-event]")
-        .padding(5)
-    )
-    .nested(StyleRule("[data-no-wrap=true]")
-        .whiteSpace("nowrap")
-    )
-, "*[data-selected-item]");
-
-CSS(StyleRule()
-    .nested(StyleRule("i[data-click-event=item-select]")
-        .padding(5)
-    )
-    .displayNone(" i[data-click-event=item-select]")
-, "*[data-selected-item=true]");
-
-CSS(StyleRule()
-    .displayNone(" i[data-click-event=item-deselect]")
-, "*[data-selected-item=false]");
-
 export function SelectorCheckBox(
     {
         text,
@@ -337,32 +302,19 @@ export function SelectorCheckBox(
     }: ISelectorCheckBox,
     ... nodes: XNode[]) {
     if (text) {
-        return <label>
+        return <label data-selector="check-box" { ... a}>
         <i class={icon} data-click-event="item-select"/>
         <i class={iconSelected}  data-click-event="item-deselect"/>
             <span data-no-wrap="true" text={text}/>
             { ... nodes }
         </label>;
     }
-    return <label>
+    return <label data-selector="check-box" { ... a}>
         <i class={icon} data-click-event="item-select"/>
         <i class={iconSelected}  data-click-event="item-deselect"/>
         { ... nodes }
     </label>;
 }
-
-CSS(StyleRule()
-    .flexLayout({ alignItems: "center", justifyContent: "flex-start"})
-    .margin(0)
-    .nested(StyleRule("i[data-ui-type]")
-        .padding(5)
-    )
-    .nested(StyleRule("[data-no-wrap=true]")
-        .whiteSpace("nowrap")
-    )
-    .displayNone("[data-is-selected=true] i[data-ui-type=item-select]")
-    .displayNone("[data-is-selected=false] i[data-ui-type=item-deselect]")
-, "*[data-select-all=select-all]");
 
 class SelectAllControl extends AtomControl {
 
@@ -478,7 +430,7 @@ export function defaultComparer<T>(left: T , right: T) {
 
 const getFirstChild = (container: HTMLElement) => {
     let child = container.firstElementChild as HTMLElement;
-    while (child && child.dataset.itemIndex === void 0) {
+    while (child && !child.hasAttribute("data-item-index")) {
         child = child.nextElementSibling as HTMLElement;
     }
     return child;
@@ -500,11 +452,25 @@ function updateDragDrop(e: HTMLElement, force: boolean = false) {
     }
 }
 
-export default class AtomRepeater extends AtomControl {
+export default class AtomRepeater<T = any> extends AtomControl {
+
+    public static from<TR = AtomRepeater>(element: any): TR {
+        while (element) {
+            const { atomControl } = element;
+            if (atomControl instanceof AtomRepeater) {
+                return atomControl as any;
+            }
+            element = element.parentElement;
+        }
+    }
 
     public "event-item-click"?: (e: CustomEvent) => void;
     public "event-item-select"?: (e: CustomEvent) => void;
     public "event-item-deselect"?: (e: CustomEvent) => void;
+
+    public "data-items-updated-event"?: string;
+    public "data-selection-updated-event"?: string;
+
     public "event-items-updated"?: (e: CustomEvent<{ type: string, items: any[] }>) => void;
     public "event-selection-updated"?: (e: CustomEvent<any[]>) => void;
 
@@ -514,31 +480,34 @@ export default class AtomRepeater extends AtomControl {
     public allowMultipleSelection: boolean;
 
     @BindableProperty
-    public selectedItems: any[];
+    public selectOnClick;
+
+    @BindableProperty
+    public selectedItems: T[];
 
     @BindableProperty
     public itemsPresenter: any;
 
     @BindableProperty
-    public items: any[];
+    public items: T[];
 
     @BindableProperty
     public watch: any;
 
     @BindableProperty
-    public visibilityFilter: (item: any) => boolean;
+    public visibilityFilter: (item: T) => boolean;
 
     @BindableProperty
-    public enableFunc: (item: any) => boolean;
+    public enableFunc: (item: T) => boolean;
 
     @BindableProperty
-    public itemRenderer: (item) => XNode;
+    public itemRenderer: (item: T, index: number, repeater: AtomRepeater) => XNode;
 
     @BindableProperty
-    public valuePath: (a) => any;
+    public valuePath: (a: T) => any;
 
     @BindableProperty
-    public comparer: (left, right) => boolean;
+    public comparer: (left: T, right: T) => boolean;
 
     @BindableProperty
     public deferUpdates: boolean;
@@ -559,6 +528,12 @@ export default class AtomRepeater extends AtomControl {
     public enableDragDrop: any;
 
     public itemTag: string;
+
+    public set refreshEventScope(v: EventScope) {
+        this.registerDisposable(v.listen((ce: CustomEvent) => {
+            this.refreshItem(ce.detail);
+        }));
+    }
 
     @WatchProperty
     public get allSelected() {
@@ -611,9 +586,15 @@ export default class AtomRepeater extends AtomControl {
 
     public scrollToSelection: boolean;
 
+    public mergeOnRefresh: boolean;
+
     protected footerPresenter: HTMLElement;
 
     protected headerPresenter: HTMLElement;
+
+    private footerElement: HTMLElement;
+
+    private headerElement: HTMLElement;
 
     private initialValue: any;
 
@@ -637,8 +618,10 @@ export default class AtomRepeater extends AtomControl {
                         case "set":
                             this.updatePartial(type, index, item);
                             break;
+                        default:
+                            this.updateItems();
+                            break;
                     }
-                    this.updateItems();
                     this.dispatchCustomEvent("items-updated", { type, items, index });
                     AtomBinder.refreshValue(this, "selectedItem");
                     AtomBinder.refreshValue(this, "value");
@@ -716,7 +699,7 @@ export default class AtomRepeater extends AtomControl {
         }, 100);
     }
 
-    public forEach<T>(action: (item: T, element: HTMLElement) => void, container?: HTMLElement) {
+    public forEach(action: (item: T, element: HTMLElement) => void, container?: HTMLElement) {
         container ??= this.itemsPresenter ?? this.element;
         const items = this.items;
         let start = getFirstChild(container);
@@ -766,19 +749,16 @@ export default class AtomRepeater extends AtomControl {
         }
     }
 
-    public elementForItem(itemToFind: any, container?: HTMLElement) {
+    public elementAt(index: number, container?: HTMLElement) {
         container ??= this.itemsPresenter ?? this.element;
-        const items = this.items;
-        let element = getFirstChild(container);
-        while (element) {
-            const index = element.dataset.itemIndex;
-            // tslint:disable-next-line: no-bitwise
-            const item = items[~~index];
-            if (item === itemToFind) {
-                return element;
-            }
-            element = element.nextElementSibling as HTMLElement;
-        }
+        const indexText = index.toString();
+        const element = ChildEnumerator.find(container, (e) => e.getAttribute("data-item-index") === indexText);
+        return element;
+    }
+
+    public elementForItem(itemToFind: any, container?: HTMLElement) {
+        const index = this.items.indexOf(itemToFind);
+        return this.elementAt(index, container);
     }
 
     public refreshItem(item, fx?: Promise<void> | any, index: number = -1) {
@@ -786,13 +766,95 @@ export default class AtomRepeater extends AtomControl {
             index = this.items.indexOf(item);
         }
         if (fx?.then) {
-            const finalize = () => {
-                this.refreshItem(item, undefined, index);
+            const finalize = (v) => {
+                this.refreshItem(item, v, index);
             };
             fx.then(finalize, finalize);
             return;
         }
+
+        if (fx instanceof MergeNode) {
+            // merge items from newly generated node
+            this.mergeItem(index, fx);
+            return;
+        }
+
         this.updatePartial("set", index, item);
+    }
+
+    public mergeItem(index: number, m: MergeNode) {
+        const item = this.items[index];
+        if (!item) {
+            return;
+        }
+
+        // @ts-expect-error
+        if (m.classes?.[0]?.remove) {
+            this.items.removeAt(index);
+            return;
+        }
+
+        const container = this.itemsPresenter ?? this.element;
+
+        const node = this.itemRenderer(item, index, this);
+
+        const sourceElement = document.createElement("div");
+        sourceElement.style.display = "none";
+        container.appendChild(sourceElement);
+        this.render(node, sourceElement);
+
+        const targetElement = this.elementAt(index);
+
+        for (const iterator of m.classes) {
+            if (typeof iterator === "string") {
+                const source = sourceElement.querySelectorAll(iterator);
+                const target = targetElement.querySelectorAll(iterator);
+                for (let i = 0; i < source.length && i < target.length; i++) {
+                    const element = source[i];
+                    const te = target[i];
+                    for (const name of te.getAttributeNames()) {
+                        te.removeAttribute(name);
+                    }
+                    te.innerHTML = element.innerHTML;
+                    for (const name of element.getAttributeNames()) {
+                        te.setAttribute(name, element.getAttribute(name));
+                    }
+                }
+                continue;
+            }
+
+            if (iterator.parent) {
+                // parent should be single...
+                // and both parent must exist...
+                const targetParent = /self|\*/.test(iterator.parent)
+                    ? targetElement
+                    : targetElement.querySelector(iterator.parent);
+                if (!targetParent) {
+                    continue;
+                }
+                for (const i of Array.from(targetElement.querySelectorAll(iterator.replace))) {
+                    i.remove();
+                }
+                for (const i of Array.from(sourceElement.querySelectorAll(iterator.replace))) {
+                    targetParent.appendChild(i);
+                }
+                continue;
+            }
+
+            let targetPrevious = targetElement.querySelector(iterator.after);
+            for (const i of Array.from(targetElement.querySelectorAll(iterator.replace))) {
+                i.remove();
+            }
+            for (const i of Array.from(sourceElement.querySelectorAll(iterator.replace))) {
+                targetPrevious.insertAdjacentElement("afterend", i);
+                targetPrevious = i;
+            }
+        }
+
+        // we need to remove when done...
+        // to unbind events... if any...
+        this.dispose(sourceElement);
+        sourceElement.remove();
     }
 
     public updatePartial(key, index, item, container?: HTMLElement) {
@@ -813,7 +875,7 @@ export default class AtomRepeater extends AtomControl {
 
         while (start) {
             // tslint:disable-next-line: no-bitwise
-            ei = ~~start.dataset.itemIndex;
+            ei = ~~start.getAttribute("data-item-index");
             if (ei === index) {
                 break;
             }
@@ -842,18 +904,26 @@ export default class AtomRepeater extends AtomControl {
             current.remove();
         }
 
+        const end = this.footerElement?.parentElement === container ? this.footerElement : null;
+
         if (!isRemove) {
-            const en = ir(item);
+            const en = ir(item, index, this);
             const ea = en.attributes ??= {};
             const v = vp(item);
-            const e = document.createElement(ea.for ?? en.name ?? "div");
-            e.dataset.itemIndex = (index++).toString();
-            e.dataset.selectedItem = si.indexOf(v) !== -1 ? "true" : "false";
+            const e = document.createElement(ea.for ?? en.name ?? "div") as HTMLElement;
+            e.setAttribute("data-item-index",`${index++}`);
+            if (si.indexOf(v) !== -1) {
+                e.setAttribute("data-selected-item", "true");
+            } else {
+                e.removeAttribute("data-selected-item");
+            }
             if (this.enableDragDrop) {
                 updateDragDrop(e);
             }
             if (start) {
                 container.insertBefore(e, start);
+            } else if(end) {
+                container.insertBefore(e, end);
             } else {
                 container.appendChild(e);
             }
@@ -864,12 +934,17 @@ export default class AtomRepeater extends AtomControl {
         while (start) {
             const ci = items[index];
             const cv = vp(ci);
-            start.dataset.itemIndex = (index++).toString();
-            start.dataset.selectedItem = si.indexOf(cv) !== -1
-                ? "true"
-                : "false";
+            start.setAttribute("data-item-index",`${index++}`);
+            
+            if (si.indexOf(cv) !== -1) {
+                start.setAttribute("data-selected-item", "true");
+            } else {
+                start.removeAttribute("data-selected-item");
+            }
             start = start.nextElementSibling as HTMLElement;
         }
+
+        // this.onPropertyChanged("footer");
     }
 
     public updateItems(container?: HTMLElement, force?: boolean) {
@@ -909,13 +984,21 @@ export default class AtomRepeater extends AtomControl {
         const vp = this.valuePath ?? ((it) => it);
         const si = (this.selectedItems ?? []).map(vp);
         let i = 0;
+
         for (const iterator of items) {
-            const e = ir(iterator);
+            const index = i++;
+            const e = ir(iterator, index, this);
             const ea = e.attributes ??= {};
             const v = vp(iterator);
             const element = document.createElement(ea.for ?? e.name ?? "div");
-            element.dataset.itemIndex = (i++).toString();
-            element.dataset.selectedItem = si.indexOf(v) !== -1 ? "true" : "false";
+            // element.dataset.itemIndex = index.toString();
+            // element.dataset.selectedItem = si.indexOf(v) !== -1 ? "true" : "false";
+            element.setAttribute("data-item-index",`${index}`);
+            if (si.indexOf(v) !== -1) {
+                element.setAttribute("data-selected-item", "true");
+            } else {
+                element.removeAttribute("data-selected-item");
+            }
             this.render(e, element, this);
             if (this.enableDragDrop) {
                 updateDragDrop(element);
@@ -925,11 +1008,21 @@ export default class AtomRepeater extends AtomControl {
         this.onPropertyChanged("footer");
     }
 
+    protected preCreate() {
+        this.mergeOnRefresh = false;
+        this.selectOnClick = false;
+        this.element.setAttribute("data-click-event", "item-click");
+    }
+
     protected dispatchCustomEvent(type: string, detail: any) {
-        type = StringHelper.fromHyphenToCamel(type);
-        this.element?.dispatchEvent(new CustomEvent(type, {
+        if (!this.element) {
+            return;
+        }
+        const eventName = this.element.getAttribute("data-" + type + "-event");
+        type = StringHelper.fromHyphenToCamel(eventName ?? type);
+        this.element.dispatchEvent(new CustomEvent(type, {
             detail,
-            bubbles: false,
+            bubbles: eventName !== null,
             cancelable: true
         }));
     }
@@ -945,9 +1038,11 @@ export default class AtomRepeater extends AtomControl {
             const index = ~~element.dataset.itemIndex;
             const item = items[index];
             const v = vp(item);
-            element.dataset.selectedItem = si.indexOf(v) !== -1
-                ? "true"
-                : "false";
+            if (si.indexOf(v) !== -1) {
+                element.setAttribute("data-selected-item", "true");
+            } else {
+                element.removeAttribute("data-selected-item");
+            }
             element = element.nextElementSibling as HTMLElement;
         }
 
@@ -962,7 +1057,11 @@ export default class AtomRepeater extends AtomControl {
             // tslint:disable-next-line: no-bitwise
             const index = ~~element.dataset.itemIndex;
             const item = items[index];
-            element.style.display = vf(item) ? "" : "none";
+            if (vf(item)) {
+                element.removeAttribute("data-ui-display");
+            } else {
+                element.setAttribute("data-ui-display", "none");
+            }
             element = element.nextElementSibling as HTMLElement;
         }
     }
@@ -977,6 +1076,7 @@ export default class AtomRepeater extends AtomControl {
         presenter ??= this.itemsPresenter ??= this.element;
 
         if (!presenter) {
+            this[name + "Element"] = null;
             return;
         }
 
@@ -996,6 +1096,7 @@ export default class AtomRepeater extends AtomControl {
 
         if (current) {
             disposeChild(this, current);
+            this[name + "Element"] = null;
         }
 
         if (!(item && itemRenderer)) {
@@ -1011,9 +1112,10 @@ export default class AtomRepeater extends AtomControl {
         } else {
             presenter.appendChild(element);
         }
+        this[name + "Element"] = element;
     }
 
-    protected dispatchHeaderFooterEvent(eventName, type, originalTarget) {
+    protected dispatchHeaderFooterEvent(eventName, type, recreate, originalTarget) {
         const detail = this[type];
         const ce = new CustomEvent(eventName ?? `${type}Click`, {
             detail,
@@ -1021,26 +1123,67 @@ export default class AtomRepeater extends AtomControl {
             cancelable: true
         });
         originalTarget.dispatchEvent(ce);
-        if (!ce.defaultPrevented) {
+        if (ce.defaultPrevented || !(ce as any).executed) {
+            return;
+        }
+        if (recreate) {
             this.onPropertyChanged(type);
         }
+        // const promise = (ce as any).promise;        
+        // if (promise) {
+        //     promise.then((r) => r instanceof MergeNode && this.refreshItem(item, r));
+        // }
     }
 
-    protected dispatchItemEvent(eventName, item, recreate, originalTarget) {
+    protected dispatchItemEvent(eventName, item, recreate, originalTarget, nestedItem?) {
         const ce = new CustomEvent(eventName ?? "itemClick", {
-            detail: item,
+            detail: nestedItem ?? item,
             bubbles: this.bubbleEvents,
             cancelable: true
         });
         originalTarget.dispatchEvent(ce);
-        if (recreate && (ce as any).executed && !ce.defaultPrevented) {
-            this.refreshItem(item, (ce as any).promise);
+        if (!ce.defaultPrevented) {
+            if (this.selectOnClick || eventName === "itemSelect" || eventName === "itemDeselect") {
+                const si = this.selectedItems ??= [];
+                if (si) {
+                    const index = si.indexOf(item);
+                    if (index === -1) {
+                        if (this.allowMultipleSelection) {
+                            si.add(item);
+                        } else {
+                            si.set(0, item);
+                        }
+                    } else {
+                        si.removeAt(index);
+                    }
+                }
+            }
+            // if (eventName === "itemSelect") {
+            //     if (this.allowMultipleSelection) {
+            //         si.add(item);
+            //     } else {
+            //         si.set(0, item);
+            //     }
+            // }
+            // if (eventName === "itemDeselect") {
+            //     si.remove(item);
+            // }
+        }
+        if (ce.defaultPrevented || !(ce as any).executed) {
+            return;
+        }
+        const promise = (ce as any).promise;
+        if (recreate) {
+            this.refreshItem(item, promise);
+            return;
+        }
+        if (promise) {
+            promise.then((r) => r instanceof MergeNode && this.refreshItem(item, r));
         }
     }
 
     protected dispatchClickEvent(e: MouseEvent, data: any): void {
         let {
-            clickEvent = "itemClick",
             // tslint:disable-next-line: prefer-const
             recreate,
             // tslint:disable-next-line: prefer-const
@@ -1048,114 +1191,37 @@ export default class AtomRepeater extends AtomControl {
             // tslint:disable-next-line: prefer-const
             footer,
             // tslint:disable-next-line: prefer-const
-            itemIndex
+            itemIndex,
+            // tslint:disable-next-line: prefer-const
+            itemPath,
+            clickEvent = header ? "headerClick" : (footer ? "footerClick" : "itemClick"),
         } = data;
         clickEvent = clickEvent.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
-        if (header) {
-            this.dispatchHeaderFooterEvent(clickEvent, header, e.target);
+
+        if (itemIndex !== void 0) {
+            // tslint:disable-next-line: no-bitwise
+            let index = ~~itemIndex;
+            const item = this.items[index];
+            if (item) {
+                if (itemPath ?? false) {
+                    // check path...
+                    const nestedItem = ItemPath.get(item, itemPath.trim());
+                    this.dispatchItemEvent(clickEvent, item, recreate, e.target, nestedItem);
+                    return;
+                }
+                this.dispatchItemEvent(clickEvent, item, recreate, e.target);
+            }
             return;
+        }
+
+        if (header) {
+            this.dispatchHeaderFooterEvent(clickEvent, header, recreate, e.target);
         }
         if (footer) {
-            this.dispatchHeaderFooterEvent(clickEvent, header, e.target);
-            return;
+            this.dispatchHeaderFooterEvent(clickEvent, footer, recreate, e.target);
         }
-        if (itemIndex === void 0 || itemIndex === null) {
-            return;
-        }
-        // tslint:disable-next-line: no-bitwise
-        let index = ~~itemIndex;
-        const item = this.items[index];
-        if (clickEvent === "itemSelect" || clickEvent === "itemDeselect") {
-            const si = this.selectedItems ??= [];
-            if (si) {
-                index = si.indexOf(item);
-                if (index === -1) {
-                    if (this.allowMultipleSelection) {
-                        si.add(item);
-                    } else {
-                        si.set(0, item);
-                    }
-                } else {
-                    si.removeAt(index);
-                }
-            }
-        }
-        if (item) {
-            this.dispatchItemEvent(clickEvent, item, recreate, e.target);
-        }
-
     }
 }
-
-// function onElementClick(e: Event) {
-//     let target = e.target as HTMLElement;
-//     const originalTarget = target;
-//     let eventName;
-//     let repeater: AtomRepeater;
-//     let index;
-//     let type;
-//     let recreate;
-//     while (target) {
-//         const a = target.atomControl;
-//         if (a !== undefined && a instanceof AtomRepeater) {
-//             repeater = a;
-//             break;
-//         }
-//         if (index === undefined) {
-//             const itemIndex = target.dataset.itemIndex;
-//             if (itemIndex !== void 0) {
-//                 // tslint:disable-next-line: no-bitwise
-//                 index = ~~itemIndex;
-//             }
-//         }
-//         if (type === undefined) {
-//             const itemType = target.dataset.header ?? target.dataset.footer;
-//             if (itemType !== void 0) {
-//                 type = itemType;
-//             }
-//         }
-//         if (eventName === undefined) {
-//             const itemClickEvent = target.dataset.clickEvent;
-//             if (itemClickEvent) {
-//                 eventName = itemClickEvent.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
-//             }
-//         }
-//         if (recreate === undefined) {
-//             recreate = target.dataset.recreate;
-//         }
-//         target = target.parentElement as HTMLElement;
-//     }
-
-//     if (index === undefined) {
-//         if (type !== undefined) {
-//             (repeater as any).dispatchHeaderFooterEvent(eventName, type, originalTarget);
-//         }
-//         return;
-//     }
-
-//     // tslint:disable-next-line: no-bitwise
-//     const item = repeater.items[~~index];
-//     if (eventName === "itemSelect" || eventName === "itemDeselect") {
-//         const si = repeater.selectedItems ??= [];
-//         if (si) {
-//             index = si.indexOf(item);
-//             if (index === -1) {
-//                 if (repeater.allowMultipleSelection) {
-//                     si.add(item);
-//                 } else {
-//                     si.set(0, item);
-//                 }
-//             } else {
-//                 si.removeAt(index);
-//             }
-//         }
-//     }
-//     if (item) {
-//         (repeater as any).dispatchItemEvent(eventName, item, recreate, originalTarget);
-//     }
-// }
-
-// document.body.addEventListener("click", onElementClick, true);
 
 let hoverItem = {
     repeater: null,
@@ -1236,8 +1302,14 @@ interface IPoint {
 }
 
 const dragOver = (e: DragEvent) => {
+    if (!e.dataTransfer) {
+        return;
+    }
     if (hoverItem) {
         const { placeholder } = hoverItem;
+        if (!placeholder) {
+            return;
+        }
         if (e.target === placeholder) {
             return;
         }

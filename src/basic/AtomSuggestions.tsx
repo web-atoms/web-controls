@@ -3,40 +3,9 @@ import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import Colors from "@web-atoms/core/dist/core/Colors";
 import { IDisposable } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
 import AtomRepeater, { askSuggestion, askSuggestionPopup } from "./AtomRepeater";
 
-CSS(StyleRule()
-.margin(5)
-.flexLayout({})
-.overflow("hidden")
-.child(StyleRule(".header")
-    .color(Colors.darkOrange)
-    .whiteSpace("nowrap")
-)
-.child(StyleRule(".items")
-    .flexStretch()
-    .flexLayout({ justifyContent: "flex-start", gap: 0 })
-    .overflow("hidden")
-    .child(StyleRule("*")
-        .whiteSpace("nowrap")
-        .padding(3)
-        .cursor("pointer")
-        .hover(StyleRule()
-            .color(Colors.blue)
-            .textDecoration("underline")
-        )
-    )
-)
-.child(StyleRule(".more")
-    .fontSize("smaller")
-    .color(Colors.blue)
-    .textTransform("lowercase")
-    .textDecoration("underline")
-    .cursor("pointer")
-)
-, "*[data-suggestions=suggestions]");
+import "./styles/suggestion-style";
 
 export default class AtomSuggestions extends AtomRepeater {
 
@@ -55,6 +24,9 @@ export default class AtomSuggestions extends AtomRepeater {
     public match: (text) => (item) => boolean;
 
     @BindableProperty
+    public search: string;
+
+    @BindableProperty
     public version: number;
 
     @BindableProperty
@@ -64,6 +36,8 @@ export default class AtomSuggestions extends AtomRepeater {
     public popupSuggestions: boolean;
 
     private selectedItemsWatcher: IDisposable;
+
+    private isPopupOpen = false;
 
     public onPropertyChanged(name: keyof AtomSuggestions): void {
         super.onPropertyChanged(name);
@@ -80,19 +54,30 @@ export default class AtomSuggestions extends AtomRepeater {
                 this.version++;
                 break;
             case "version":
-                // this.updateVisibility(this.itemsPresenter);
-                const vp = this.valuePath ?? ((item) => item);
-                const selectedValues = (this.selectedItems ?? []).map(vp);
-                this.visibilityFilter = (item) => {
-                    const v = vp(item);
-                    return selectedValues.length === 0 || selectedValues.indexOf(v) === -1;
-                };
+            case "search":
+            case "items":
+                    this.updateVisibilityFilter();
                 break;
         }
     }
 
+    protected updateVisibilityFilter() {
+        const vp = this.valuePath ?? ((item) => item);
+        const selectedItems = this.selectedItems ?? [];
+        const selectedValues = selectedItems.map(vp);
+        const search = this.match(this.search);
+        this.visibilityFilter = (item) => {
+            const v = vp(item);
+            if (!search(item)) {
+                return false;
+            }
+            return selectedValues.length === 0 || selectedValues.indexOf(v) === -1;
+        };
+    }
+
     protected create(): void {
         this.version = 1;
+        this.search = "";
         this.render(<div data-suggestions="suggestions" eventItemClick={(e) => this.addItem(e.detail)}>
             <span class="header" text={Bind.oneWay(() => this.title)}/>
             <div class="items"></div>
@@ -103,26 +88,33 @@ export default class AtomSuggestions extends AtomRepeater {
     }
 
     protected async more() {
-        const vf = this.visibilityFilter ?? ((item) => true);
-        if (!this.popupSuggestions) {
-            const selected = await askSuggestion(
-                this.items.filter(vf),
-                this.suggestionRenderer ?? this.itemRenderer,
-                (text: string) => this.match(text),
-                { title: this.title });
-            this.addItem(selected);
+        if (this.isPopupOpen) {
             return;
         }
+        this.isPopupOpen = true;
+        try {
+            const vf = this.visibilityFilter ?? ((item) => true);
+            if (!this.popupSuggestions) {
+                const selected = await askSuggestion(
+                    this.items.filter(vf),
+                    this.suggestionRenderer ?? this.itemRenderer,
+                    (text: string) => this.match(text),
+                    { title: this.title });
+                this.addItem(selected);
+                return;
+            }
 
-        const selectedItem = await askSuggestionPopup(
-            this,
-            this.items,
-            this.suggestionRenderer ?? this.itemRenderer,
-            (text: string) => this.match(text),
-            this.selectedItem);
-        this.addItem(selectedItem);
+            const selectedItem = await askSuggestionPopup(
+                this,
+                this.items,
+                this.suggestionRenderer ?? this.itemRenderer,
+                (text: string) => this.match(text),
+                this.selectedItem);
+            this.addItem(selectedItem);
+        } finally {
+            this.isPopupOpen = false;
+        }
     }
-
 
     protected addItem(selectedItem: any) {
         const ce = new CustomEvent(
@@ -135,7 +127,18 @@ export default class AtomSuggestions extends AtomRepeater {
         );
         this.element.dispatchEvent(ce);
         if (!ce.defaultPrevented) {
-            this.selectedItems?.add(ce.detail);
+            const selectedItem = ce.detail;
+            const vp = this.valuePath ?? ((i) => i);
+            const value = vp(selectedItem);
+            if(this.selectedItems) {
+                for (const iterator of this.selectedItems) {
+                    // eslint-disable-next-line eqeqeq
+                    if(vp(iterator) == value) {
+                        return;
+                    }
+                }
+            }
+            this.selectedItems?.add(selectedItem);
         }
     }
 }

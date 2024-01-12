@@ -67,6 +67,7 @@ export default function CommandButton({
     if (label) {
         return <button
             class="command"
+            data-layout="toolbar-button"
             disabled={disabled}
             eventClick={Bind.event(insert(eventInsertHtml, insertCommand))}
             title={title}>
@@ -77,6 +78,7 @@ export default function CommandButton({
         </button>;
     }
     return <button
+        data-layout="toolbar-button"
         title={title}
         class="command"
         disabled={disabled}

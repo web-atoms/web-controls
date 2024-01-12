@@ -8,6 +8,8 @@ import { AtomViewModel, Receive, Watch } from "@web-atoms/core/dist/view-model/A
 import bindUrlParameter from "@web-atoms/core/dist/view-model/bindUrlParameter";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 
+declare var dotNet: any;
+
 export default class PageFrameViewModel extends AtomViewModel {
 
     public owner: any = null;
@@ -65,10 +67,25 @@ export default class PageFrameViewModel extends AtomViewModel {
         }
 
         // watch for window popstate...
-        (this.owner as AtomControl).bindEvent(
-            window as any,
-            "popstate",
-            () => this.onPopState());
+
+        if (typeof dotNet === "undefined") {
+            (this.owner as AtomControl).bindEvent(
+                window as any,
+                "popstate",
+                () => this.onPopState());
+        } else {
+            window.addEventListener("backButton", (ce: CustomEvent<Function>) => {
+                const { detail } = ce;
+                ce.preventDefault();
+                this.app.runAsync(async () => {
+                    if (this.owner.stack.length) {
+                        await this.iconClick();
+                    } else {
+                        detail();
+                    }
+                });
+            });
+        }
     }
 
     @Receive("root-page-go-back")

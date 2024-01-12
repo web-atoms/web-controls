@@ -25,7 +25,7 @@ export default class TooltipTest extends AtomControl {
 
     protected create(): void {
         this.data = data;
-        this.render(<div style-width="500px" style-height="500px">
+        this.render(<div style-width="100px" style-height="500px">
             <a tooltip={CustomTooltip}>Demo</a>
             <AtomRepeater
                 items={items}

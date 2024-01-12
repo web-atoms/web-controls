@@ -1,17 +1,13 @@
 import type { App } from "@web-atoms/core/dist/App";
 import Bind from "@web-atoms/core/dist/core/Bind";
-import Colors from "@web-atoms/core/dist/core/Colors";
 import FormattedString from "@web-atoms/core/dist/core/FormattedString";
-import { CancelToken } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import { NavigationService } from "@web-atoms/core/dist/services/NavigationService";
-import StyleRule from "@web-atoms/core/dist/style/StyleRule";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import PopupService, { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
-import CSS from "@web-atoms/core/dist/web/styles/CSS";
+import { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
+import "./styles/form-field-style";
 
 export interface IFormField {
-    label: string;
+    label: string | XNode;
     required?: boolean;
     error?: string;
     class?: string;
@@ -31,125 +27,77 @@ export interface IFormField {
     [key: string]: any;
 }
 
-const css = CSS(StyleRule()
-    .display("grid")
-    .alignItems("center")
-    .gridTemplateColumns("auto 1fr auto auto")
-    .gridTemplateRows("auto auto auto")
-    .child(StyleRule("[data-content=content]")
-        .gridRowStart("2")
-        .gridColumnStart("1")
-        .gridColumnEnd("span 2")
-        .marginTop(5)
-        .marginBottom(5)
-    )
-    .and(StyleRule("[data-border=true]")
-        .nested(StyleRule("input")
-            .border("none")
-            .outline("none")
-        )
-        .nested(StyleRule("textarea")
-            .border("none")
-            .outline("none")
-        )
-        .nested(StyleRule("select")
-            .border("none")
-        )
-    )
-    .child(StyleRule("i[data-border=border]")
-        .gridColumnStart("1")
-        .gridColumnEnd("span 3")
-        .gridRowStart("3")
-        .alignSelf("flex-end")
-        .borderBottomStyle("solid")
-        .borderBottomWidth("1px")
-        .borderBottomColor(Colors.lightGray)
-    )
-    .and(StyleRule("[data-focused=true]")
-            .child(StyleRule("i[data-border=border]")
-            .borderBottomColor(Colors.black)
-        )
-    )
-    .child(StyleRule("i[data-help=help]")
-        .gridRowStart("2")
-        .gridColumnStart("3")
-        .padding(5)
-        .fontSize("x-large")
-        .cursor("pointer")
-        .marginLeft("auto")
-        .color(Colors.lightGreen)
-    )
-    .child(StyleRule(".field-error")
-        .gridRowStart("4")
-        .gridColumnStart("1")
-        .gridColumnEnd("span 3")
-        .padding(5)
-        .margin(5)
-        .borderRadius(9999)
-        .backgroundColor(Colors.red)
-        .color(Colors.white)
-        .fontSize("smaller")
-        .and(StyleRule(":empty")
-            .display("none")
-        )
-    )
-    .child(StyleRule("span[data-required=required]")
-        .gridColumnStart("2")
-        .visibility("hidden")
-        .color(Colors.red)
-        .and(StyleRule(".true")
-            .visibility("visible")
-        )
-    )
-    .and(StyleRule("[data-layout=horizontal]")
-        .gridTemplateColumns("auto auto 1fr auto")
-        .gridTemplateRows("auto auto")
-        .child(StyleRule("label.label")
-            .gridRowStart("2")
-            .marginRight(5)
-            .marginBottom(5)
-        )
-        .child(StyleRule("[data-content=content]")
-            .gridRowStart("2")
-            .gridColumnStart("3")
-            .marginTop(0)
-            .marginBottom(5)
-        )
-        .child(StyleRule("i[data-help=help]")
-            .gridRowStart("2")
-            .gridColumnStart("4")
-        )
-        .child(StyleRule(".field-error")
-            .gridRowStart("4")
-            .gridColumnStart("1")
-            .gridColumnEnd("span 3")
-        )
-        .child(StyleRule("span[data-required=required]")
-            .gridRowStart("2")
-            .gridColumnStart("2")
-            .marginRight(5)
-            .display("none")
-            .color(Colors.red)
-            .and(StyleRule(".true")
-                .display("inline")
-            )
-        )
-    )
-, "div[data-wa-form-field=wa-form-field]");
+// let id = 1;
+// const generateId = (name: string) => {
+//     return `${name.replace(/[\W_]+/g, "-")}-${id++}`;
+// };
 
-CSS(StyleRule()
-    .width(300)
-    .maxHeight(500)
-    .overflow("auto")
-    .padding(10)
-    .verticalFlexLayout({ alignItems: "center", justifyContent: "flex-start"})
-, "div[data-form-field-help=help-window]");
+// const associateLabel = AtomControl.registerProperty("assign-label", "for", (ctrl, e, value) => {
+//     if (!/TEXTAREA|INPUT/.test(e.tagName)) {
+//         return;
+//     }
+
+//     if (e.ariaLabel) {
+//         return;
+//     }
+
+//     // travel up till we find waFormField...
+//     let start = e;
+//     while (start) {
+//         if (start.getAttribute("data-wa-form-field")) {
+//             break;
+//         }
+//         start = start.parentElement;
+//     }
+//     if (!start) {
+//         return;
+//     }
+//     const label = start.querySelector("label");
+//     if (!label) {
+//         return;
+//     }
+
+//     try {
+//         (label as any).control = e;
+//     } catch {
+//         const eid = e.id ||= generateId(label.textContent);
+//         label.htmlFor = eid;
+//     }
+// });
+
+document.body.addEventListener("click", (e) => {
+    // check if it is a label...
+    let label = e.target as HTMLElement;
+    while (label && label.tagName !== "LABEL") {
+        if (label.getAttribute("data-element") === "label") {
+            break;
+        }
+        label = label.parentElement;
+        if (label === document.body) {
+            return;
+        }
+    }
+
+    if(!label) {
+        return;
+    }
+
+    const formField = label.parentElement;
+    if (!formField.hasAttribute("data-wa-form-field")) {
+        return;
+    }
+
+    // look for associated control...
+    const selectable = formField.querySelector("select,input,textarea") as any;
+    selectable?.focus?.();
+
+});
 
 document.addEventListener("focusin", (e) => {
-    let { target } = e as any;
+    let target = e.target as HTMLElement;
     while (target) {
-        if (target.dataset.waFormField === "wa-form-field") {
-            target.dataset.focused = "true";
+        if (target.getAttribute("data-wa-form-field") === "wa-form-field") {
+            target.setAttribute("data-focused", "true");
             break;
         }
         target = target.parentElement;
@@ -157,10 +105,10 @@ document.addEventListener("focusin", (e) => {
 });
 
 document.addEventListener("focusout", (e) => {
-    let { target } = e as any;
+    let target = e.target as HTMLElement;
     while (target) {
-        if (target.dataset.waFormField === "wa-form-field") {
-            delete target.dataset.focused;
+        if (target.getAttribute("data-wa-form-field") === "wa-form-field") {
+            target.removeAttribute("data-focused");
             break;
         }
         target = target.parentElement;
@@ -183,7 +131,7 @@ export default function FormField(
 
     if (node) {
         const na = node.attributes ??= {};
-        na["data-content"] = "content";
+        na["data-element"] = "content";
     }
 
     if (!helpEventClick && help) {
@@ -202,15 +150,31 @@ export default function FormField(
                     </div>);
                 }
             }
-            HelpPopup.showWindow({ title : helpTitle ?? "Help" });
+            HelpPopup.showWindow({ title : helpTitle ?? "Help", modal: true });
         });
+    }
+
+    let labelIsNode = false;
+
+    if (label) {
+        if (label instanceof XNode) {
+            const la = label.attributes ??= {};
+            la["data-element"] = "label";
+            labelIsNode = true;
+        } else {
+            if (node) {
+                if (!(node.attributes?.ariaLabel || node.attributes?.["aria-label"])) {
+                    (node.attributes ??= {})["aria-label"] = label;
+                }
+            }
+        }
     }
 
     return <div
         data-wa-form-field="wa-form-field"
         data-border={border}
         { ... others }>
-        { label && <label class="label" text={label}/> }
+        { label && (labelIsNode ? label : <label data-element="label" text={label}/>) }
         { required && <span
             data-required="required"
             class={required}
@@ -265,6 +229,12 @@ export function HorizontalFormField(
             }
             HelpPopup.showWindow({ title : helpTitle ?? "Help" });
         });
+    }
+
+    if (node) {
+        if (!(node.attributes?.ariaLabel || node.attributes?.["aria-label"])) {
+            (node.attributes ??= {})["aria-label"] = label;
+        }
     }
 
     return <div
