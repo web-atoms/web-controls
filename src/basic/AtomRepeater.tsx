@@ -472,7 +472,7 @@ export default class AtomRepeater<T = any> extends AtomControl {
         const footer = da.get("data-footer");
         const itemIndex = da.get("data-item-index");
         const itemPath = da.get("data-item-path");
-        let clickEvent = da.get("data-click-event") ?? (header
+        let clickEvent = da.get("data-click-event") || (header
             ? "headerClick"
             : (footer ? "footerClick" : "itemClick"));
         clickEvent = clickEvent.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
@@ -480,7 +480,7 @@ export default class AtomRepeater<T = any> extends AtomControl {
         const item = ar.items[index];
         let nestedItem = null;
         if (item) {
-            if (itemPath ?? false) {
+            if (itemPath || false) {
                 // check path...
                 nestedItem = ItemPath.get(item, itemPath.trim());
             }
