@@ -19,6 +19,7 @@ import { repeaterPopupCss } from "./styles/popup-style";
 import "./styles/suggestion-popup";
 import "./styles/repeater-style";
 import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
+import DataAttributes from "../DataAttributes";
 
 export interface IItemPair<ParentItem = any, ChildItem = any> {
     parent: ParentItem;
@@ -462,6 +463,39 @@ export default class AtomRepeater<T = any> extends AtomControl {
             }
             element = element.parentElement;
         }
+    }
+
+    public static itemFromElement(e: HTMLElement, ar: AtomRepeater = this.from(e)) {
+        const da = new DataAttributes(e, ar);
+        const recreate = da.get("data-recreate");
+        const header = da.get("data-header");
+        const footer = da.get("data-footer");
+        const itemIndex = da.get("data-item-index");
+        const itemPath = da.get("data-item-path");
+        let clickEvent = da.get("data-click-event") ?? (header
+            ? "headerClick"
+            : (footer ? "footerClick" : "itemClick"));
+        clickEvent = clickEvent.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+        const index = ~~itemIndex;
+        const item = ar.items[index];
+        let nestedItem = null;
+        if (item) {
+            if (itemPath ?? false) {
+                // check path...
+                nestedItem = ItemPath.get(item, itemPath.trim());
+            }
+        }
+        return {
+            recreate,
+            header,
+            footer,
+            itemPath,
+            itemIndex,
+            item,
+            nestedItem,
+            clickEvent,
+            target: e
+        };
     }
 
     public "event-item-click"?: (e: CustomEvent) => void;
@@ -1191,29 +1225,20 @@ export default class AtomRepeater<T = any> extends AtomControl {
     }
 
     protected dispatchClickEvent(e: MouseEvent, data: any): void {
-        let {
-            // tslint:disable-next-line: prefer-const
+        const {
             recreate,
-            // tslint:disable-next-line: prefer-const
             header,
-            // tslint:disable-next-line: prefer-const
             footer,
-            // tslint:disable-next-line: prefer-const
             itemIndex,
-            // tslint:disable-next-line: prefer-const
             itemPath,
-            clickEvent = header ? "headerClick" : (footer ? "footerClick" : "itemClick"),
-        } = data;
-        clickEvent = clickEvent.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+            clickEvent,
+            item,
+            nestedItem
+        } = AtomRepeater.itemFromElement(e.target as HTMLElement, this);
 
         if (itemIndex !== void 0) {
-            // tslint:disable-next-line: no-bitwise
-            let index = ~~itemIndex;
-            const item = this.items[index];
             if (item) {
-                if (itemPath ?? false) {
-                    // check path...
-                    const nestedItem = ItemPath.get(item, itemPath.trim());
+                if (nestedItem) {
                     this.dispatchItemEvent(clickEvent, item, recreate, e.target, nestedItem);
                     return;
                 }
