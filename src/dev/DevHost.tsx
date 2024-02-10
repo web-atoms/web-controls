@@ -79,6 +79,24 @@ const toAbsoluteUrl = (file: IFilePath, designMode?: boolean) => {
 	return `${location.protocol}//${location.host}${url}`;
 };
 
+@DISingleton({})
+export class FileService extends BaseService {
+
+    public async getModules(search: string, packed: boolean, cancelToken: CancelToken) {
+        const result = await this.getRemoteModules(search, packed, cancelToken);
+        return result.files;
+    }
+
+    @Get("/flat-modules")
+    private getRemoteModules(
+        @Query("search") search: string,
+        @Query("packed") packed: boolean,
+        ct?: CancelToken): Promise<IFilePathResult> {
+        return null;
+    }
+
+}
+
 export default class AppHost extends AtomControl {
 
 	public search: string = "";
@@ -180,25 +198,6 @@ export default class AppHost extends AtomControl {
         await navigator.clipboard.writeText(url);
 	}
 }
-
-@DISingleton({})
-export class FileService extends BaseService {
-
-    public async getModules(search: string, packed: boolean, cancelToken: CancelToken) {
-        const result = await this.getRemoteModules(search, packed, cancelToken);
-        return result.files;
-    }
-
-    @Get("/flat-modules")
-    private getRemoteModules(
-        @Query("search") search: string,
-        @Query("packed") packed: boolean,
-        ct?: CancelToken): Promise<IFilePathResult> {
-        return null;
-    }
-
-}
-
 export interface IFilePath {
 
     name: string;
