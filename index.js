@@ -51,7 +51,7 @@
         const min = JSON.parse(script.getAttribute("data-min") ?? "true");
 
         const viewUrl = `${packageRoot}/${view}${packed ? ".pack" : ""}${min ? ".min" : ""}.js`;
-        const viewName = `${package}/${view}`;
+        const viewName = view.startsWith("@") ? view : `${package}/${view}`;
 
         loadScript(viewUrl).then(() => {
             function empty () {
