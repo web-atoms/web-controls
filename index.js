@@ -36,7 +36,6 @@
         let packageRoot = script.getAttribute("data-package-root");
         if (!packageRoot) {
             packageRoot = src;
-            script.setAttribute("data-package-root");
         }
         if (!package) {
             fetch(src + "/package.json").then((x) => x.json().then((json) => {
