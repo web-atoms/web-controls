@@ -52,14 +52,10 @@
         const viewName = view.startsWith("@") ? view : `${package}/${view}`;
 
         const init = ()  => {
-            function empty () {
-                return function () {
-                    return null
-                }
-            }
+            const empty = () => () => null;
     
             AmdLoader.moduleProgress = empty;
-            function done () {
+            const done = () => {
                 const we = document.getElementById("webAtomsLoader");
                 if (we) {
                     we.remove();
