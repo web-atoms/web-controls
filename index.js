@@ -1,11 +1,11 @@
-(function () {
+(() => {
 
     let script = document.currentScript;
     let src = script.src;
     let index = src.lastIndexOf("/");
     src = src.substring(0, index);
 
-    function loadScript(url) {
+    const loadScript = (url) => {
         return new Promise((resolve, reject) => {
             var script = document.createElement("script");
             script.type = "text/javascript";
@@ -28,9 +28,9 @@
             };
             document.body.appendChild(s);
         });
-    }
+    };
 
-    function loadPackage() {
+    const loadPackage = () => {
 
         let package = script.getAttribute("data-package");
         let packageRoot = script.getAttribute("data-package-root");
@@ -49,17 +49,15 @@
 
         const packed = JSON.parse(script.getAttribute("data-packed") ?? "true");
         const min = JSON.parse(script.getAttribute("data-min") ?? "true");
-
-        const viewUrl = `${packageRoot}/${view}${packed ? ".pack" : ""}${min ? ".min" : ""}.js`;
         const viewName = view.startsWith("@") ? view : `${package}/${view}`;
 
-        loadScript(viewUrl).then(() => {
+        const init = ()  => {
             function empty () {
                 return function () {
                     return null
                 }
             }
-
+    
             AmdLoader.moduleProgress = empty;
             function done () {
                 const we = document.getElementById("webAtomsLoader");
@@ -80,9 +78,16 @@
                 }
             }
             UMD.loadView(viewName, 0).then(done);
-        });
+        }
 
-    }
+        if (!packed) {
+            init();
+            return;
+        }
+
+        const viewUrl = `${packageRoot}/${view}${packed ? ".pack" : ""}${min ? ".min" : ""}.js`;
+        loadScript(viewUrl).then(init);
+    };
 
     loadPackage();
 })();
