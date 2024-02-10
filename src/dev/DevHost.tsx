@@ -69,7 +69,7 @@ const replaceSrc = (src: string): string => {
 }
 
 const toAbsoluteUrl = (file: IFilePath, designMode?: boolean) => {
-	let url = `/uiv/$CURRENT$/${replaceSrc(file.dir)}/${file.name}`;
+	let url = `/_view/${replaceSrc(file.dir)}/${file.name}`;
 	if (designMode) {
 		if (url.indexOf("?") === -1) {
 			url += "?";
