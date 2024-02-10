@@ -34,7 +34,7 @@
 
         let package = script.getAttribute("data-package");
         let packageRoot = script.getAttribute("data-package-root");
-        if (!packageRoot) {
+        if (packageRoot === void 0 || packageRoot === null) {
             packageRoot = src;
         }
         if (!package) {
