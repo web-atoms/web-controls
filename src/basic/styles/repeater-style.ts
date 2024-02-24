@@ -14,6 +14,7 @@ import styled from "@web-atoms/core/dist/style/styled";
 *[data-item-index] {
     & label[data-selector=check-box] {
         padding: 5px;
+        width: 30px;
         & > i {
             padding: 0;
         }
