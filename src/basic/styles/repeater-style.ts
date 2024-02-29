@@ -2,7 +2,7 @@ import styled from "@web-atoms/core/dist/style/styled";
 
     styled.css `
 
-*[data-selected-item] {
+*[data-item-index] {
     & i[data-click-event] {
         padding: 5px;
     }
