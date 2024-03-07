@@ -11,12 +11,17 @@ import styled from "@web-atoms/core/dist/style/styled";
 
     styled.css `
 
+    display: grid;
+    grid-template-rows: auto 1fr;
+
     & > [data-element=editor] {
 
         padding: var(--spacing, 5px);
         border: solid 1px lightgray;
         border-radius: var(--spacing, 5px);
         margin: var(--spacing, 5px);
+
+        overflow: auto;
 
         & > * {
             outline: none;
