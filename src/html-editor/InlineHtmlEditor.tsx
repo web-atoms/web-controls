@@ -189,15 +189,9 @@ export default class InlineHtmlEditor extends AtomControl {
 
     protected onContentSet() {
 
-        const start = (
-            Array.from(this.editor.querySelectorAll<HTMLElement>(this.editableSelector))
-            ??
-            [this.editor.firstElementChild as HTMLElement]
-        );
-        if (start.length) {
-            for (const iterator of start) {
-                iterator.contentEditable = "true";
-            }
+        const start = Array.from(this.editor.querySelectorAll<HTMLElement>(this.editableSelector))[0] ?? this.editor.firstElementChild;
+        if (start) {
+            (start as any).contentEditable = "true";
         }
         this.editor.dispatchEvent(new CustomEvent("contentReady", { detail: this.editor.innerHTML, bubbles: true }));
     }
