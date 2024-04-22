@@ -9,6 +9,7 @@ const separatorCss = styled.css `
     margin-top: 4px;
     height: 20px;
     width: 2px;
+    padding: 0;
     `.installLocal();
 
 export default function Separator() {
