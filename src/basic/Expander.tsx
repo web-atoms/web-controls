@@ -102,6 +102,7 @@ export function ExpanderMenu({
     const ha = header.attributes ??= {};
     ha["data-element"] = "header";
     let i = 2;
+    details = details.filter((x: any) => x !== false);
     for (const iterator of details) {
         const ia = (iterator.attributes ??= {});
         ia["data-element"] = "detail";
