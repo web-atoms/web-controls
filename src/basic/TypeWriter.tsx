@@ -21,10 +21,10 @@ const nbsp = "\u202f";
 
 const tp = AtomControl.registerProperty("data-type-writer","type-writer", (c, e, value) => {
 
-    c[disposableProperty]?.cancel();
+    e[disposableProperty]?.cancel();
 
     const ct = new CancelToken();
-    c[disposableProperty] = ct;
+    e[disposableProperty] = ct;
     c.app.runAsync(async () => {
 
         const separator = e.getAttribute("separator") ?? e.getAttribute("data-separator") ?? ",";
@@ -47,6 +47,9 @@ const tp = AtomControl.registerProperty("data-type-writer","type-writer", (c, e,
 
 
         while(!ct.cancelled) {
+            if (!e.isConnected) {
+                return;
+            }
             const current = textList[index];
 
             let length = 0;
