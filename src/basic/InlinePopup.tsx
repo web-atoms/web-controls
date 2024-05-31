@@ -270,8 +270,8 @@ document.body.addEventListener("click", (e) => {
     }
 
     const node = popupFactory(data);
-
-    app.runAsync(() => InlinePopup.show(target, node, { alignment }));
+    const defaultOnClick = target.getAttribute("data-default-on-click") as any;
+    app.runAsync(() => InlinePopup.show(target, node, { alignment, defaultOnClick }));
 
 });
 
