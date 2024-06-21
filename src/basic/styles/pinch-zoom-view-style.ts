@@ -42,6 +42,7 @@ import styled from "@web-atoms/core/dist/style/styled";
             display: inline-grid;
             align-items: center;
             justify-items: center;
+            z-index: 10;
         }
 
         & > .hide {
