@@ -65,6 +65,7 @@ export default class PinchZoomView extends AtomControl {
             <div class="image-container">
                 <img
                     src={Bind.oneWay(() => this.getSource(this.source))}
+                    style-opacity={Bind.oneWay(() => this.loading ? "0.3" : "1")}
                     event-load={() => {
                         this.loading = false;
                         this.updateZoom(this.zoom);
