@@ -579,7 +579,11 @@ export class BasePage extends AtomControl {
         </div>, e, creator);
         this.contentElement = this.element.querySelector("[data-page-element='content']");
 
-        setTimeout(() => this.contentElement.scrollTo(0, 0), 100);
+        setTimeout(() => {
+            // this.contentElement.scrollTo(0, 0);
+            this.contentElement.scrollTop = 0;
+            this.contentElement.scrollLeft = 0;
+        }, 100);
     }
 
     protected enablePullToRefreshEvents() {
