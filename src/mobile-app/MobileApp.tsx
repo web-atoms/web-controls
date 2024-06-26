@@ -581,8 +581,8 @@ export class BasePage extends AtomControl {
 
         setTimeout(() => {
             // this.contentElement.scrollTo(0, 0);
-            // this.contentElement.scrollTop = 0;
-            // this.contentElement.scrollLeft = 0;
+            this.contentElement.scrollTop = 0;
+            this.contentElement.scrollLeft = 0;
         }, 100);
     }
 
@@ -719,7 +719,7 @@ export class BasePage extends AtomControl {
         this.element._logicalParent.appendChild(this.element);
         setTimeout(() => {
             if (this.scrollTop) {
-                // this.contentElement.scrollTop = this.scrollTop;
+                this.contentElement.scrollTop = this.scrollTop;
             }
             this.element.dataset.pageState = "ready";
         }, 1);
