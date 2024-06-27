@@ -9,7 +9,7 @@ import { isMobileView } from "../mobile-app/MobileApp";
     display: grid;
     overflow: hidden;
     grid-template-columns: 1fr 2px;
-    gap: 5px;
+    gap: 1px;
     & > * {
         grid-row: 1;
         grid-column: 1;
