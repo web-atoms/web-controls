@@ -8,6 +8,15 @@ import styled from "@web-atoms/core/dist/style/styled";
         align-content: center;
         justify-content: center;
         gap: var(--spacing, 5px);
+
+        & .command {
+            display: flex;
+            align-content: center;
+            justify-content: center;
+            align-items: center;
+            justify-items: center;
+        }
+
     `.installGlobal("[data-html-editor-element=toolbar]")
 
 export default function Toolbar(a: any, ... nodes: XNode[]) {
