@@ -5,6 +5,8 @@ import styled from "@web-atoms/core/dist/style/styled";
         display: flex;
         flex-wrap: wrap;
         align-items: center;
+        align-content: center;
+        justify-content: center;
         gap: var(--spacing, 5px);
     `.installGlobal("[data-html-editor-element=toolbar]")
 
