@@ -23,6 +23,7 @@ export interface IPasswordBox extends IElement {
 export default function PasswordBox({
     placeholder,
     value,
+    autofocus,
     ... a
 }: IPasswordBox) {
     return <div
@@ -30,6 +31,7 @@ export default function PasswordBox({
         { ... a}>
         <input
             placeholder={placeholder}
+            autofocus={autofocus}
             type="password"
             value={value} />
         <i
