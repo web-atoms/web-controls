@@ -11,6 +11,8 @@ import styled from "@web-atoms/core/dist/style/styled";
         grid-template-columns: auto 1fr auto;
 
         max-width: 100%;
+
+        overflow-x: hidden;
         
         & > [data-content] {
             grid-row-start: 2;
