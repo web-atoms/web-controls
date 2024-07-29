@@ -85,11 +85,13 @@ export function Suggestion(
         icon,
         label,
         header,
-        deleteIcon
+        deleteIcon,
+        ... a
     }: IChip,
     ... nodes: XNode[]) {
     return <div
-        data-item-suggestion="suggestion">
+        data-item-suggestion="suggestion"
+        { ... a}>
         { icon && <i class={"icon " + icon}/>}
         { header && <label class="header" text={header}/>}
         { label && <label class="label" text={label}/>}

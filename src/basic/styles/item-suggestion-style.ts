@@ -9,6 +9,8 @@ import styled from "@web-atoms/core/dist/style/styled";
         align-items: center;
         grid-template-rows: auto 1fr;
         grid-template-columns: auto 1fr auto;
+
+        max-width: 100%;
         
         & > [data-content] {
             grid-row-start: 2;
