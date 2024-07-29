@@ -34,9 +34,13 @@ import styled from "@web-atoms/core/dist/style/styled";
             font-size: x-small;
             grid-row-start: 1;
             grid-column-start: 2;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         & > .label {
             grid-row-start: 2;
             grid-column-start: 2;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     `.installGlobal("*[data-item-suggestion]");
