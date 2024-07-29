@@ -93,8 +93,8 @@ export function Suggestion(
         data-item-suggestion="suggestion"
         { ... a}>
         { icon && <i class={"icon " + icon}/>}
-        { header && <label class="header" text={header}/>}
-        { label && <label class="label" text={label}/>}
+        { header && <label class="header" text={header} title={header}/>}
+        { label && <label class="label" text={label} title={label}/>}
         { ... nodes }
         { deleteIcon && <i class={"delete " + deleteIcon} data-click-event="remove-suggestion"/> }
     </div>;
