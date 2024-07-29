@@ -326,7 +326,7 @@ class SelectAllControl extends AtomControl {
     public selectedItems: any[];
 
     protected preCreate(): void {
-        this.element.dataset.selectAll = "select-all";
+        this.element.setAttribute("data-select-all", "select-all");
         this.items = [];
         this.selectedItems = [];
         this.render(<SelectAllControl
@@ -738,7 +738,7 @@ export default class AtomRepeater<T = any> extends AtomControl {
         const items = this.items;
         let start = getFirstChild(container);
         while (start) {
-            const index = start.dataset.itemIndex;
+            const index = start.getAttribute("data-item-index");
             // tslint:disable-next-line: no-bitwise
             const item = items[~~index];
             action(item, start);
@@ -751,7 +751,7 @@ export default class AtomRepeater<T = any> extends AtomControl {
         const items = this.items;
         let node = getFirstChild(container);
         while (node) {
-            const index = node.dataset.itemIndex;
+            const index = node.getAttribute("data-item-index");
             // tslint:disable-next-line: no-bitwise
             const item = items[~~index];
             let element = node;
@@ -775,7 +775,7 @@ export default class AtomRepeater<T = any> extends AtomControl {
         const items = this.items;
         let element = getFirstChild(container);
         while (element) {
-            const index = element.dataset.itemIndex;
+            const index = element.getAttribute("data-item-index");
             // tslint:disable-next-line: no-bitwise
             const item = items[~~index];
             yield  { item, element };
@@ -1028,8 +1028,6 @@ export default class AtomRepeater<T = any> extends AtomControl {
             const ea = e.attributes ??= {};
             const v = vp(iterator);
             const element = document.createElement(ea.for ?? e.name ?? "div");
-            // element.dataset.itemIndex = index.toString();
-            // element.dataset.selectedItem = si.indexOf(v) !== -1 ? "true" : "false";
             element.setAttribute("data-item-index",`${index}`);
             if (si.indexOf(v) !== -1) {
                 element.setAttribute("data-selected-item", "true");
@@ -1080,7 +1078,7 @@ export default class AtomRepeater<T = any> extends AtomControl {
         const si = (this.selectedItems ?? []).map(vp);
         while (element) {
             // tslint:disable-next-line: no-bitwise
-            const index = ~~element.dataset.itemIndex;
+            const index = ~~element.getAttribute("data-item-index");
             const item = items[index];
             const v = vp(item);
             if (si.indexOf(v) !== -1) {
@@ -1100,7 +1098,7 @@ export default class AtomRepeater<T = any> extends AtomControl {
         const vf = this.visibilityFilter ?? MatchTrue;
         while (element) {
             // tslint:disable-next-line: no-bitwise
-            const index = ~~element.dataset.itemIndex;
+            const index = ~~element.getAttribute("data-item-index");
             const item = items[index];
             if (vf(item)) {
                 element.removeAttribute("data-ui-display");
