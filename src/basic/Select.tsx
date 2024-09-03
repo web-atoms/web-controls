@@ -24,19 +24,21 @@ const refreshItems = (element: HTMLSelectElement, items?: any[]) => {
     const vp = element["valuePath"] ?? ((item) => item?.value ?? item);
     let i = 0;
     let si = -1;
-    for (const iterator of items) {
-        const option = document.createElement("option");
-        const label = lp(iterator);
-        const value = vp(iterator);
-        option.text = label;
-        option.value = value;
-        element.options.add(option);
-        if(cv !== void 0) {
-            if (cv == value) {
-                si = i;
+    if(items?.length) {
+        for (const iterator of items) {
+            const option = document.createElement("option");
+            const label = lp(iterator);
+            const value = vp(iterator);
+            option.text = label;
+            option.value = value;
+            element.options.add(option);
+            if(cv !== void 0) {
+                if (cv == value) {
+                    si = i;
+                }
             }
+            i++;
         }
-        i++;
     }
     if (si != -1) {
         element.selectedIndex = si;
