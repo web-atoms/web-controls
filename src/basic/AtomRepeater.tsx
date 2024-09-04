@@ -976,7 +976,7 @@ export default class AtomRepeater<T = any> extends AtomControl {
                 start.removeAttribute("data-selected-item");
             }
             start = start.nextElementSibling as HTMLElement;
-            if (start.hasAttribute("data-footer")) {
+            if (start?.hasAttribute("data-footer")) {
                 break;
             }
         }
