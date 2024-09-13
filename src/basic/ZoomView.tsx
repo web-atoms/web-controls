@@ -105,7 +105,7 @@ export default class ZoomView extends AtomControl {
 
                 let { x, y, anchorX, anchorY, scale } = this.zoom;
 
-                if (ev.touches.length === 2) {
+                if (ev.touches.length >= 2) {
 
                     ev.preventDefault();
                     ev.stopImmediatePropagation();
