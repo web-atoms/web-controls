@@ -31,8 +31,8 @@ const css = styled.css `
     position: absolute;
     left: ${isMobile ? 0 : 50};
     top: ${isMobile ? 0 : 50};
-    ${isMobile ? "right: 0" : "width: 600"};
-    ${isMobile ? "bottom: 0" : "height: 600"};
+    ${isMobile ? "right: 0" : "width: 600px"};
+    ${isMobile ? "bottom: 0" : "height: 600px"};
     display: grid;
     align-items: stretch;
     justify-items: stretch;

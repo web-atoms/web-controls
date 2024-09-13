@@ -61,6 +61,8 @@ export default class PinchZoomView extends AtomControl {
 
         this.element.dataset.pinchZoom = "true";
 
+        this.element.draggable = false;
+
         this.render(<div>
             <div class="image-container">
                 <img
@@ -75,7 +77,7 @@ export default class PinchZoomView extends AtomControl {
             <i class={Bind.oneWay(() => this.loading ? "spinner fa-duotone fa-spinner fa-spin" : "hide")}/>
             <i
                 event-click={() => this.updateZoom()}
-                class={Bind.oneWay(() => this.zoom.scale ? "scale fa-solid fa-arrows-minimize" : "hide")}
+                class={Bind.oneWay(() => this.zoom.scale ? "scale" : "hide")}
                 title="Display entire image"/>
         </div>);
         this.imageContainer = this.element.firstElementChild as HTMLDivElement;
@@ -89,9 +91,10 @@ export default class PinchZoomView extends AtomControl {
         let touchEndDisposable;
 
         this.bindEvent(scrollView, "touchstart", (evs: TouchEvent) => {
+
             previous = center(evs);
-            // evs.preventDefault();
-            // evs.stopImmediatePropagation?.();
+            evs.preventDefault();
+            evs.stopImmediatePropagation?.();
 
             // const start = this.zoom.scale;
 
@@ -99,12 +102,12 @@ export default class PinchZoomView extends AtomControl {
             
 
             touchMoveDisposable ??= this.bindEvent(scrollView, "touchmove", (ev: TouchEvent) => {
-                ev.preventDefault();
-                ev.stopImmediatePropagation?.();
+
 
                 let { x, y, anchorX, anchorY, scale } = this.zoom;
 
                 if (ev.touches.length === 2) {
+                    
                     const rect = this.element.getBoundingClientRect();
                     const first = ev.touches[0];
                     const second = ev.touches[1];
@@ -163,6 +166,11 @@ export default class PinchZoomView extends AtomControl {
 
         let mouseMoveDisposable;
         let mouseUpDisposable;
+
+        this.bindEvent(scrollView, "dragstart", (ev: DragEvent) => {
+            ev.preventDefault();
+            ev.stopImmediatePropagation();
+        });
 
         this.bindEvent(scrollView, "mousedown", (ev: MouseEvent) => {
             this.element.dataset.state = "grabbing";
