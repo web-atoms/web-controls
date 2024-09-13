@@ -93,8 +93,8 @@ export default class PinchZoomView extends AtomControl {
         this.bindEvent(scrollView, "touchstart", (evs: TouchEvent) => {
 
             previous = center(evs);
-            evs.preventDefault();
-            evs.stopImmediatePropagation?.();
+            // evs.preventDefault();
+            // evs.stopImmediatePropagation?.();
 
             // const start = this.zoom.scale;
 
@@ -121,6 +121,10 @@ export default class PinchZoomView extends AtomControl {
                     if (previousDistance === newScale) {
                         return;
                     }
+
+                    ev.preventDefault();
+                    ev.stopImmediatePropagation();
+
                     scale += newScale - previousDistance;
                     previousDistance = newScale;
                     this.updateZoom({
