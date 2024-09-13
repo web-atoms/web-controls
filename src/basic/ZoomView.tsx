@@ -3,7 +3,7 @@ import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import XNode, { isTemplateSymbol } from "@web-atoms/core/dist/core/XNode";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 
-import "./styles/pinch-zoom-view-style";
+import "./styles/zoom-view-style";
 
 const center = (ev: TouchEvent) => {
     const touch = ev.touches[0];
@@ -31,7 +31,7 @@ export interface IZoom {
     scale: number;
 }
 
-export default class PinchZoomView extends AtomControl {
+export default class ZoomView extends AtomControl {
 
     @BindableProperty
     public zoom: IZoom;
@@ -43,6 +43,8 @@ export default class PinchZoomView extends AtomControl {
     private loading: boolean;
 
     private image: HTMLImageElement;
+
+    private scrollDiv: HTMLDivElement;
 
     private imageContainer: HTMLDivElement;
 
@@ -59,13 +61,14 @@ export default class PinchZoomView extends AtomControl {
             y: 0
         };
 
-        this.element.dataset.pinchZoom = "true";
+        this.element.setAttribute("data-zoom-view", "zoom-view");
 
         this.element.draggable = false;
 
         this.render(<div>
-            <div class="image-container">
+            <div class="scroll">
                 <img
+                    class="image-container"
                     src={Bind.oneWay(() => this.getSource(this.source))}
                     style-opacity={Bind.oneWay(() => this.loading ? "0.3" : "1")}
                     event-load={() => {
@@ -80,8 +83,9 @@ export default class PinchZoomView extends AtomControl {
                 class={Bind.oneWay(() => this.zoom.scale ? "scale" : "hide")}
                 title="Display entire image"/>
         </div>);
-        this.imageContainer = this.element.firstElementChild as HTMLDivElement;
-        this.image = this.imageContainer.firstElementChild as HTMLImageElement;
+        this.scrollDiv = this.element.firstElementChild as HTMLDivElement;
+        this.imageContainer = this.scrollDiv.firstElementChild as HTMLDivElement;
+        this.image = this.imageContainer as HTMLImageElement;
 
         const scrollView = this.element;
 
@@ -93,11 +97,6 @@ export default class PinchZoomView extends AtomControl {
         this.bindEvent(scrollView, "touchstart", (evs: TouchEvent) => {
 
             previous = center(evs);
-            // evs.preventDefault();
-            // evs.stopImmediatePropagation?.();
-
-            // const start = this.zoom.scale;
-
             let previousDistance = undefined;
             
 
@@ -138,22 +137,6 @@ export default class PinchZoomView extends AtomControl {
                     return;
                 }
 
-                if (!previous) {
-                    return;
-                }
-                // enable panning...
-                const cp = center(ev);
-                x += (cp.x - previous.x);
-                y += (cp.y - previous.y);
-                previous = cp;
-                this.updateZoom({
-                    anchorX,
-                    anchorY,
-                    x,
-                    y,
-                    scale
-                });
-
             });
 
             touchEndDisposable ??= this.bindEvent(scrollView, "touchend", (ev: TouchEvent) => {
@@ -186,20 +169,11 @@ export default class PinchZoomView extends AtomControl {
             mouseMoveDisposable ??= this.bindEvent(scrollView, "mousemove", (e: MouseEvent) => {
                 e.preventDefault();
                 e.stopImmediatePropagation?.();
-                const { anchorX, anchorY, scale } = this.zoom;
-                let {x , y } = this.zoom;
                 const cp = { x: e.clientX, y: e.clientY };
-                x += (cp.x - previous.x);
-                y += (cp.y - previous.y);
+                const diffX = previous.x - cp.x;
+                const diffY = previous.y - cp.y;
                 previous = cp;
-                this.updateZoom({
-                    anchorX,
-                    anchorY,
-                    x,
-                    y,
-                    scale
-                });
-                    
+                this.scrollDiv.scrollBy(diffX, diffY);
             });
             mouseUpDisposable ??= this.bindEvent(scrollView, "mouseup", (e: MouseEvent) => {
                 e.preventDefault();
@@ -217,7 +191,6 @@ export default class PinchZoomView extends AtomControl {
 
         this.bindEvent(scrollView, "wheel", (ev: WheelEvent) => {
 
-            const target = ev.currentTarget;
             ev.preventDefault();
             ev.stopImmediatePropagation?.();
 
@@ -269,21 +242,29 @@ export default class PinchZoomView extends AtomControl {
         if (scale <= 0) {
             scale = 0;
         }
-        const newWidth = (this.element.clientWidth + scale) + "px";
-        const newHeight = (this.element.clientHeight + scale) + "px";
 
-        this.image.style.maxWidth = this.element.clientWidth + "px";
-        this.image.style.maxHeight = this.element.clientHeight + "px";
+        const { clientWidth, clientHeight } = this.element;
+
 
         if (scale <= 0) {
-            this.imageContainer.style.transform = "";
+            this.element.scrollTo(0,0);
+            this.imageContainer.style.transform = ``;
             return;
         }
 
-        const clientWidth = this.element.clientWidth;
         const scaleFactor = (clientWidth + scale) / clientWidth;
 
-        this.imageContainer.style.transformOrigin = `${anchorX}px ${anchorY}`;
-        this.imageContainer.style.transform = `translate(${x}px, ${y}px) scale(${scaleFactor})`;
+        this.imageContainer.style.transformOrigin = `${anchorX}px ${anchorY}px`;
+        this.imageContainer.style.transform = `scale(${scaleFactor})`;
+
+
+        const e = this.imageContainer.getBoundingClientRect();
+        // console.log([e.left, e.top]);
+        const left = -e.left;
+        const top = -e.top;
+        this.imageContainer.style.transformOrigin = "0 0";
+        const de = this.imageContainer.getBoundingClientRect();
+        // console.log([de.left, de.top]);
+        this.scrollDiv.scrollTo({ left: left + de.left, top: top + de.top , behavior: "instant" });
     }
 }
