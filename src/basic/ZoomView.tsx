@@ -23,6 +23,28 @@ const distance = (first: Touch, second: Touch) => {
     return Math.hypot(first.pageX - second.pageX, first.pageY - second.pageY);
 };
 
+const findLargestDistance = (touches: TouchList) => {
+
+    let pair = null as { t1: Touch, t2: Touch, distance: number};
+
+    for (let i = 0; i < touches.length; i++) {
+        const t1 = touches[i];
+        for (let j = i + 1; j < touches.length; j++) {
+            const t2 = touches[j];
+            const distance = Math.hypot(t1.pageX - t2.pageX, t1.pageY - t2.pageY);
+            if (pair === null) {
+                pair = { t1, t2, distance };
+                continue;
+            }
+            if (pair.distance < distance) {
+                pair = { t1, t2, distance };
+            }
+        }
+    }
+
+    return pair;
+};
+
 export interface IZoom {
     anchorX: number;
     anchorY: number;
@@ -105,17 +127,18 @@ export default class ZoomView extends AtomControl {
 
                 let { x, y, anchorX, anchorY, scale } = this.zoom;
 
-                if (ev.touches.length >= 2) {
+                if (ev.touches.length > 1) {
 
                     ev.preventDefault();
                     ev.stopImmediatePropagation();
                     
                     const rect = this.element.getBoundingClientRect();
-                    const first = ev.touches[0];
-                    const second = ev.touches[1];
-                    anchorX = ((first.clientX + second.clientX) / 2) - rect.left;
-                    anchorY = ((first.clientY + second.clientY) / 2) - rect.top;
-                    const newScale = distance(first, second);
+
+                    const ld = findLargestDistance(ev.touches);
+
+                    const first = ld.t1;
+                    const second = ld.t2;
+                    const newScale = ld.distance;
                     if (previousDistance === void 0) {
                         previousDistance = newScale;
                         return;
@@ -124,6 +147,8 @@ export default class ZoomView extends AtomControl {
                         return;
                     }
 
+                    anchorX = ((first.clientX + second.clientX) / 2) - rect.left;
+                    anchorY = ((first.clientY + second.clientY) / 2) - rect.top;
                     scale += newScale - previousDistance;
                     previousDistance = newScale;
                     this.updateZoom({
