@@ -18,8 +18,12 @@ const valueSetter = AtomControl.registerProperty("data-items", "value", (ctrl, e
 const refreshItems = (element: HTMLSelectElement, items?: any[]) => {
     items ??= element["items"];
     (element as any).update = true;
+    const old = element.selectedIndex;
+    let cv = element["initialValue"];
+    if (old !== -1) {
+        cv = element["value"];
+    }
     element.options.length = 0;
-    const cv = element["initialValue"] ?? element["value"];
     const lp = element["labelPath"] ?? ((item) => item?.label ?? item);
     const vp = element["valuePath"] ?? ((item) => item?.value ?? item);
     let i = 0;
