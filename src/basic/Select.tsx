@@ -19,7 +19,7 @@ const refreshItems = (element: HTMLSelectElement, items?: any[]) => {
     items ??= element["items"];
     (element as any).update = true;
     element.options.length = 0;
-    const cv = element["initialValue"];
+    const cv = element["initialValue"] ?? element["value"];
     const lp = element["labelPath"] ?? ((item) => item?.label ?? item);
     const vp = element["valuePath"] ?? ((item) => item?.value ?? item);
     let i = 0;
