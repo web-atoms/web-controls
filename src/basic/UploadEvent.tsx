@@ -130,7 +130,7 @@ const requestUpload = ({
             const checkFileType = isFileType(accept);
 
             for (const iterator of files) {
-                if (maxSize && iterator.size > maxSize) {
+                if (!convert && maxSize && iterator.size > maxSize) {
                     msg += `Size of ${iterator.name} is more than ${maxSize}`;
                     continue;
                 }
