@@ -50,6 +50,8 @@ export interface IUploadParams<T = any> {
     /** Will enforce that the selected file matches the given accept types */
     forceType?: boolean;
     maxSize?: number;
+    /** Used for inline video conversion, you must handle conversion before upload by yourself. */
+    convert?: boolean;
     upload?: boolean;
     /** Extra will hold other information that will be available in upload event */
     extra?: T;
@@ -69,6 +71,7 @@ const requestUpload = ({
     multiple,
     authorize,
     extra,
+    convert,
     upload,
     folder,
     uploadEvent
@@ -77,6 +80,7 @@ const requestUpload = ({
     multiple?: boolean,
     authorize?: boolean,
     extra?: any,
+    convert?: boolean,
     upload?: boolean,
     folder?: boolean,
     uploadEvent?: string
@@ -199,12 +203,14 @@ window.addEventListener(uploadCommand.eventName, (ce: MouseEvent) => {
     const extra = (element as any).extra ?? element.getAttribute("data-extra");
     const upload = element.getAttribute("data-upload") === "true";
     const folder = element.hasAttribute("data-folder");
+    const convert = element.getAttribute("data-convert") === "true";
     const uploadEvent = StringHelper.fromHyphenToCamel(element.getAttribute("data-upload-event"));
     requestUpload({
         element,
         authorize,
         multiple,
         extra,
+        convert,
         upload,
         folder,
         uploadEvent
@@ -226,6 +232,7 @@ export default class UploadEvent {
         forceType = true,
         maxSize = 524288000,
         extra,
+        convert = false,
         upload = true,
         authorize = true,
         ariaLabel = "Upload",
@@ -240,6 +247,7 @@ export default class UploadEvent {
             "data-accept": accept,
             "data-multiple": multiple ? "true" : "false",
             "data-capture": capture,
+            "data-convert": convert,
             "data-upload": upload ? "true" : "false",
             "data-force-type": forceType ? "true" : "false",
             "data-max-size" : maxSize ? maxSize.toString() : undefined,

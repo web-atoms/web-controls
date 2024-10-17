@@ -47,6 +47,7 @@ const eventDrop = (e: DragEvent) => {
     const uploadEvent = StringHelper.fromHyphenToCamel(currentTarget.getAttribute("data-upload-event"));
     const uploadRequested = StringHelper.fromHyphenToCamel(currentTarget.getAttribute("data-upload-requested"));
     const extra = currentTarget.getAttribute("data-extra");
+    const convert = currentTarget.getAttribute("data-convert") === "true";
 
     const fileHandlesPromises = [...e.dataTransfer.items as any]
         .filter((item) => item.kind === "file")
@@ -87,6 +88,7 @@ const eventDrop = (e: DragEvent) => {
         const detail = {
             files,
             extra,
+            convert,
             uploadEvent
         };
         // console.log(detail);
@@ -99,10 +101,12 @@ const eventDrop = (e: DragEvent) => {
 export const FilesDragDrop = ({
     uploadEvent = "files-available",
     uploadRequested = "upload-requested",
+    convert = false,
     extra = "",
 }) => ({
     "data-extra": extra,
     "data-drag-drop": "1",
+    "data-convert": convert,
     "data-upload-event": uploadEvent,
     "data-upload-requested": uploadRequested,
     "event-dragenter": dragEnter,
