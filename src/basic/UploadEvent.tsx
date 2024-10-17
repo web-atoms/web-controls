@@ -39,7 +39,7 @@ export const isFileType = (acceptType: string) => {
     return acceptCache[acceptType] ??= isFileTypeFactory(acceptType);
 };
 
-export type FilesAvailableEventArgs<T = any> = CustomEvent<{ files: File[], extra: T }>;
+export type FilesAvailableEventArgs<T = any> = CustomEvent<{ files: File[], extra: T, maxSize: number, convert: boolean, uploadEvent: string }>;
 
 export interface IUploadParams<T = any> {
     "event-files-available"?: (ce: FilesAvailableEventArgs<T>) => any,
@@ -167,6 +167,8 @@ const requestUpload = ({
                         detail: {
                             files,
                             extra,
+                            convert,
+                            maxSize,
                             uploadEvent
                         },
                         bubbles: true,

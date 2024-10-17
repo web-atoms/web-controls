@@ -48,6 +48,7 @@ const eventDrop = (e: DragEvent) => {
     const uploadRequested = StringHelper.fromHyphenToCamel(currentTarget.getAttribute("data-upload-requested"));
     const extra = currentTarget.getAttribute("data-extra");
     const convert = currentTarget.getAttribute("data-convert") === "true";
+    const maxSize = parseInt(currentTarget.getAttribute("data-max-size") || "0", 10);
 
     const fileHandlesPromises = [...e.dataTransfer.items as any]
         .filter((item) => item.kind === "file")
@@ -89,6 +90,7 @@ const eventDrop = (e: DragEvent) => {
             files,
             extra,
             convert,
+            maxSize,
             uploadEvent
         };
         // console.log(detail);
@@ -102,6 +104,7 @@ export const FilesDragDrop = ({
     uploadEvent = "files-available",
     uploadRequested = "upload-requested",
     convert = false,
+    maxSize = 50*1024*1024,
     extra = "",
 }) => ({
     "data-extra": extra,
@@ -109,6 +112,7 @@ export const FilesDragDrop = ({
     "data-convert": convert,
     "data-upload-event": uploadEvent,
     "data-upload-requested": uploadRequested,
+    "data-max-size": maxSize,
     "event-dragenter": dragEnter,
     "event-dragleave": dragLeave,
     "event-dragover": dragOver,
