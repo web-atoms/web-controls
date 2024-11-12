@@ -231,6 +231,11 @@ import Route from "@web-atoms/core/dist/core/Route";
         transform: translate(-100%,0); 
     }
 
+    &[data-page-removed] {
+        display: none;
+        z-index: -1000;
+    }
+
     &[data-hide-toolbar=true] {
 
         & > [data-page-element=icon] {
@@ -325,6 +330,8 @@ export class BasePage extends AtomControl {
 
     public iconClass: any;
 
+    public keep = false;
+
     /**
      * If set to true, you must set `autofocus` attribute
      * to enable focus when page is visible.
@@ -349,7 +356,7 @@ export class BasePage extends AtomControl {
         this.routeUrl = url;
         // we will unregister previous disposable...
 
-        this.reouteDisposable?.dispose();
+        this.routeDisposable?.dispose();
         let last = void 0;
 
         // this is to prevent unloading of the page
@@ -379,12 +386,12 @@ export class BasePage extends AtomControl {
                 }
             }
         };
-        this.reouteDisposable = this.registerDisposable(d);
+        this.routeDisposable = this.registerDisposable(d);
     }
 
     private routeUrl: string;
 
-    private reouteDisposable: IDisposable;
+    private routeDisposable: IDisposable;
 
     private viewModelTitle: string;
 
@@ -707,7 +714,12 @@ export class BasePage extends AtomControl {
         if (!element) {
             return;
         }
-        element.dataset.pageState = "hidden";
+        element.setAttribute("data-page-state", "hidden");
+        if (this.keep) {
+            setTimeout(() => 
+                element.setAttribute("data-page-removed", "true"), 400);
+            return;
+        }
         element._logicalParent = element.parentElement;
         this.scrollTop = this.contentElement?.scrollTop;
         setTimeout(() => {
@@ -716,12 +728,16 @@ export class BasePage extends AtomControl {
     }
 
     protected show() {
-        this.element._logicalParent.appendChild(this.element);
+        if (this.keep) {
+            this.element.removeAttribute("data-page-removed");
+        } else {
+            this.element._logicalParent.appendChild(this.element);
+        }
         setTimeout(() => {
             if (this.scrollTop) {
                 this.contentElement.scrollTop = this.scrollTop;
             }
-            this.element.dataset.pageState = "ready";
+            this.element.setAttribute("data-page-state", "ready");
         }, 1);
     }
 }
