@@ -12,6 +12,31 @@ const valuePathSetter = AtomControl.registerProperty("data-items", "value", (ctr
 
 const valueSetter = AtomControl.registerProperty("data-items", "value", (ctrl, element, value) => {
     element["initialValue"] = value;
+    element["value"] = value;
+    const select = element as HTMLSelectElement;
+    let length = select.options.length;
+    if (!length) {
+        setTimeout(refreshItems, 1, element);
+        return;
+    }
+
+    // go through all items...
+    const items = element["items"];
+    if (!items) {
+        setTimeout(refreshItems, 1, element);
+        return;
+    }
+
+    const vp = element["valuePath"] ?? ((item) => item?.value ?? item);
+    let index = 0;
+    for (const item of items) {
+        const v = vp(item);
+        if (v == value) {
+            select.selectedIndex = index;
+            return;
+        }
+        index++;
+    }
     setTimeout(refreshItems, 1, element);
 });
 
