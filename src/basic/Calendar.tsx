@@ -98,8 +98,10 @@ export default class Calendar extends AtomRepeater {
         }
     }
 
+    @BindableProperty
     public enableFunc: (item: ICalendarDate) => boolean;
 
+    @BindableProperty
     public dateRenderer: (item: ICalendarDate) => XNode;
 
     @WatchProperty
