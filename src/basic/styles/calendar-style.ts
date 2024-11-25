@@ -90,8 +90,8 @@ import styled from "@web-atoms/core/dist/style/styled";
                 text-decoration: line-through;            
             }
             &[data-selected-item=true] {
-                background-color: blueviolet;
-                color: white;
+                background-color: var( --selection-color, blueviolet);
+                color: var( --selection-color-text, white);
             }
         }
     }
