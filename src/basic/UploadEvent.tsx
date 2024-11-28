@@ -2,6 +2,7 @@ import { App } from "@web-atoms/core/dist/App";
 import Command from "@web-atoms/core/dist/core/Command";
 import EventScope from "@web-atoms/core/dist/core/EventScope";
 import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
+import XNode from "@web-atoms/core/dist/core/XNode";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { AncestorEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import PopupService from "@web-atoms/core/dist/web/services/PopupService";
@@ -131,7 +132,7 @@ const requestUpload = ({
     file.addEventListener("change", () => {
         let files = Array.from(file.files);
 
-        let msg = "";
+        let msgItems = [];
 
         if (forceType || maxSize) {
             
@@ -140,15 +141,23 @@ const requestUpload = ({
             const checkFileType = isFileType(accept);
 
             for (const iterator of files) {
-                if (!convert && maxSize && iterator.size > maxSize) {
-                    msg += `Size of ${iterator.name} is more than ${maxSize}`;
-                    continue;
-                }
                 if (forceType) {
                     if (!checkFileType(iterator)) {
-                        msg += `${iterator.name} is invalid file.`;
+                        msgItems.push(`${iterator.name} is invalid file.`, <br/>);
                         continue;
                     }
+                }
+                if (stream) {
+                    if (iterator.size > maxStreamSize) {
+                        msgItems.push(`Size of ${iterator.name} is more than ${maxSize}.`, <br/>);
+                        continue;
+                    }
+                    validated.push(iterator);
+                    continue;
+                }
+                if (!convert && maxSize && iterator.size > maxSize) {
+                    msgItems.push(`Size of ${iterator.name} is more than ${maxSize}.`, <br/>);
+                    continue;
                 }
                 validated.push(iterator);
             }
@@ -165,7 +174,8 @@ const requestUpload = ({
             if (root.isConnected) {
 
                 const control = AtomControl.from(root);
-                if (msg) {
+                if (msgItems.length) {
+                    const msg = <p>{ ... msgItems }</p>;
                     control.app.runAsync(() => PopupService.alert({ message: msg}));
                     if (files.length === 0) {
                         return;
