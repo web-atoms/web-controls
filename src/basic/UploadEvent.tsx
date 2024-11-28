@@ -229,7 +229,7 @@ window.addEventListener(uploadCommand.eventName, (ce: MouseEvent) => {
     const folder = element.hasAttribute("data-folder");
     const convert = element.getAttribute("data-convert") === "true";
     const stream = element.getAttribute("data-stream") === "true";
-    const maxStreamSize = parseInt(element.getAttribute("max-stream-size") ?? "0", 10);
+    const maxStreamSize = parseInt(element.getAttribute("data-max-stream-size") ?? "0", 10);
     const uploadEvent = StringHelper.fromHyphenToCamel(element.getAttribute("data-upload-event"));
     requestUpload({
         element,
