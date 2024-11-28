@@ -52,6 +52,10 @@ export interface IUploadParams<T = any> {
     maxSize?: number;
     /** Used for inline video conversion, you must handle conversion before upload by yourself. */
     convert?: boolean;
+    /** Used for inline video streaming, you must handle the streaming yourself */
+    stream?: boolean;
+    /** Max file size for streaming */
+    maxStreamSize?: number;
     upload?: boolean;
     /** Extra will hold other information that will be available in upload event */
     extra?: T;
@@ -74,6 +78,8 @@ const requestUpload = ({
     convert,
     upload,
     folder,
+    stream,
+    maxStreamSize,
     uploadEvent
 }: {
     element: HTMLElement,
@@ -81,6 +87,8 @@ const requestUpload = ({
     authorize?: boolean,
     extra?: any,
     convert?: boolean,
+    stream?: boolean,
+    maxStreamSize?: number;
     upload?: boolean,
     folder?: boolean,
     uploadEvent?: string
@@ -116,6 +124,8 @@ const requestUpload = ({
     document.body.append(file);
     previousFile = file;
     const maxSize = parseInt(element.getAttribute("data-max-size") || "0", 10);
+    stream ||= element.getAttribute("data-stream") === "true";
+    maxStreamSize ??= parseInt(element.getAttribute("data-max-stream-size") || "0", 10);
     const forceType = element.getAttribute("data-force-type") === "true";
 
     file.addEventListener("change", () => {
@@ -168,6 +178,8 @@ const requestUpload = ({
                             files,
                             extra,
                             convert,
+                            stream,
+                            maxStreamSize,
                             maxSize,
                             uploadEvent
                         },
@@ -206,6 +218,8 @@ window.addEventListener(uploadCommand.eventName, (ce: MouseEvent) => {
     const upload = element.getAttribute("data-upload") === "true";
     const folder = element.hasAttribute("data-folder");
     const convert = element.getAttribute("data-convert") === "true";
+    const stream = element.getAttribute("data-stream") === "true";
+    const maxStreamSize = parseInt(element.getAttribute("max-stream-size") ?? "0", 10);
     const uploadEvent = StringHelper.fromHyphenToCamel(element.getAttribute("data-upload-event"));
     requestUpload({
         element,
@@ -215,6 +229,8 @@ window.addEventListener(uploadCommand.eventName, (ce: MouseEvent) => {
         convert,
         upload,
         folder,
+        stream,
+        maxStreamSize,
         uploadEvent
     })
 });
@@ -233,6 +249,8 @@ export default class UploadEvent {
         multiple = false,
         forceType = true,
         maxSize = 524288000,
+        maxStreamSize = 100*1024*1024,
+        stream = false,
         extra,
         convert = false,
         upload = true,
@@ -250,6 +268,8 @@ export default class UploadEvent {
             "data-multiple": multiple ? "true" : "false",
             "data-capture": capture,
             "data-convert": convert,
+            "data-stream" : stream ? "true" : "false",
+            "data-max-stream-size" : maxStreamSize ? maxStreamSize.toString() : undefined,
             "data-upload": upload ? "true" : "false",
             "data-force-type": forceType ? "true" : "false",
             "data-max-size" : maxSize ? maxSize.toString() : undefined,
