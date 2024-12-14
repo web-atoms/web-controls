@@ -1,0 +1,20 @@
+[data-swipe] {
+    display: grid;
+    & > * {
+        grid-row: 1;
+        grid-column: 1;
+    }
+}
+
+[data-swipe=left] {
+    & > * {
+        align-self: center;
+        justify-self: end;
+        z-index: 2;
+        &:first-child {
+            align-self: stretch;
+            justify-self: stretch;
+            z-index: 10;
+        }
+    }
+}

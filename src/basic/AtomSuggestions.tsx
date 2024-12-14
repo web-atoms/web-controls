@@ -5,7 +5,7 @@ import { IDisposable } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import AtomRepeater, { askSuggestion, askSuggestionPopup } from "./AtomRepeater";
 
-import "./styles/suggestion-style";
+import "./styles/suggestion.global.less";
 
 export default class AtomSuggestions extends AtomRepeater {
 
