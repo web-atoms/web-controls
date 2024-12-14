@@ -3,71 +3,8 @@ import XNode from "@web-atoms/core/dist/core/XNode";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import MobileApp from "../mobile-app/MobileApp";
-import styled from "@web-atoms/core/dist/style/styled";
 
-    styled.css `
-
-    html, body {
-        width: 100vw;
-        height: 100vh;
-    }
-
-    body {
-        justify-content: space-around;
-        align-items: stretch;
-        align-content: stretch;
-        flex-direction: row;
-    }
-
-    @media screen {
-        body {
-            overflow: hidden;
-            display: grid;
-        }
-
-        *[data-desktop-app=desktop-app] {
-            position: relative;
-            overflow: hidden;
-            display: grid;
-        }
-        
-    }
-
-    *[data-desktop-app=desktop-app] {
-        min-width: 900px;
-        grid-template-rows: 1fr auto;
-        grid-template-columns: auto 1fr auto;
-        
-        & > [data-page-element=app] {
-            grid-row: 1;
-            grid-column: 2;
-            position: inherit; 
-        }
-
-        & > [data-page-element=menu-renderer] {
-            grid-row: 1;
-            grid-column: 1;
-            overflow-x: hidden;
-            overflow-y: auto; 
-        }
-        
-        & > [data-page-element=side-bar] {
-            grid-row: 1;
-            grid-column: 3;
-            overflow-x: hidden;
-            overflow-y: auto; 
-        }
-        
-        & > [data-page-element=status-bar] {
-            grid-row: 2;
-            grid-column: 1 / span 3;
-            padding: 5px;
-            margin-top: 2px;
-            border-top: solid 1px lightgray;
-            overflow: hidden; 
-        }
-    }
-    `.withId("*[data-desktop-app=desktop-app]").installGlobal();
+import "../styles/desktop-app.global.less";
 
 export default class DesktopApp extends AtomControl {
 
