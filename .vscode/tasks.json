@@ -7,6 +7,7 @@
             "label": "All Build",
             "dependsOn":[
                 "TypeScript Build Watch",
+                "Less Build Watch",
                 "Web Atoms Dev Server"
             ],
             "problemMatcher": [],
@@ -15,18 +16,18 @@
                 "isDefault": true
             }
         },
-        // {
-        //     "label": "TypeScript Build Watch",
-        //     "type": "typescript",
-        //     "tsconfig": "tsconfig.json",
-        //     "option": "watch",
-        // },
         {
             "label": "TypeScript Build Watch",
+            "type": "typescript",
+            "tsconfig": "tsconfig.json",
+            "option": "watch",
+        },
+        {
+            "label": "Less Build Watch",
             "type": "shell",
             "command": "gulp",
             "args": [
-                "--watch"
+                "watch"
             ]
         },
         {

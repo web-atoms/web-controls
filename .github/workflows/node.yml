@@ -16,11 +16,13 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: npm install -g typescript
       - run: npm install -D istanbul remap-istanbul @web-atoms/ts-to-systemjs
+      - run: npm install -D gulp gulp-less gulp-rename
       - run: npm install
       - run: tsc
       # - run: node ./node_modules/@web-atoms/ts-to-systemjs/index.js
       - run: npm run test
       - run: node ./node_modules/@web-atoms/ts-to-systemjs/index.js
+      - run: gulp
       - run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
