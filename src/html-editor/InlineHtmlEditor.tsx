@@ -7,50 +7,8 @@ import { ChildEnumerator, descendentElementIterator } from "@web-atoms/core/dist
 import "@web-atoms/data-styles/data-styles";
 import { showImageDialog } from "./commands/AddImage";
 import { FilesAvailableEventArgs } from "../basic/UploadEvent";
-import styled from "@web-atoms/core/dist/style/styled";
 
-    styled.css `
-
-    display: grid;
-    grid-template-rows: auto 1fr;
-
-    & > [data-element=editor] {
-
-        padding: var(--spacing, 5px);
-        border: solid 1px lightgray;
-        border-radius: var(--spacing, 5px);
-        margin: var(--spacing, 5px);
-
-        overflow: auto;
-
-        & > * {
-            outline: none;
-        }
-    }
-
-    & > [data-element=toolbar] {
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-around;
-        gap: 4px;
-        display: flex;
-
-        & > .toolbar {
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-around;
-            gap: 4px;
-            display: flex;
-
-            & .command {
-
-                &.pressed {
-                    font-weight: bold;
-                }
-            }
-        }
-    }
-    `.installGlobal("[data-inline-editor=inline-editor]")
+import "../styles/inline-html-editor.global.less";
 
 export default class InlineHtmlEditor extends AtomControl {
 
