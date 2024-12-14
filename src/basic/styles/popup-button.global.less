@@ -1,0 +1,33 @@
+*[data-menu-item=menu-item] {
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 4px;
+    flex-wrap: wrap;
+    min-width: 20ch;
+    &:hover {
+        background-color: lightgreen;
+    }
+
+    & > * {
+        flex-shrink: 0;
+    }
+
+    & > [data-element=icon] {
+        width: 1.3em;
+        text-align: center;
+    }
+
+}
+
+*[data-menu-items=menu-items] {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: stretch;
+    gap: 4px;
+}

@@ -9,13 +9,13 @@ import { CancelToken, IDisposable } from "@web-atoms/core/dist/core/types";
 import WatchProperty from "@web-atoms/core/dist/core/WatchProperty";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { IDialogOptions, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
+import { IDialogOptions, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 import InlinePopup from "./InlinePopup";
 import MergeNode from "./MergeNode";
 import ItemPath from "./ItemPath";
 
 import "./styles/ui-display-none-style";
-import { repeaterPopupCss } from "./styles/popup-style";
+import "./styles/popup.global.less";
 import "./styles/suggestion-popup";
 import "./styles/repeater-style";
 import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
@@ -25,8 +25,6 @@ export interface IItemPair<ParentItem = any, ChildItem = any> {
     parent: ParentItem;
     child: ChildItem;
 }
-
-const popupCSS = repeaterPopupCss;
 
 export type IRepeaterItemInfo = [string, AtomRepeater, any, number, HTMLElement] | undefined;
 
@@ -118,7 +116,7 @@ export function askSuggestion<T>(
 
         protected create(): void {
             this.title = options?.title ?? "Select";
-            this.render(<div class={popupCSS}>
+            this.render(<div data-repeater-popup="popup">
                 <input
                     type="search"
                     value={Bind.twoWaysImmediate(() => this.search)}
