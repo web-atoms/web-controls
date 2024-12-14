@@ -24,7 +24,8 @@ async function showDialog(s: AtomHtmlEditor, e: Event): Promise<string> {
         protected create(): void {
             this.source = s.htmlContent;
             this.render(<div class={css}>
-                <textarea value={Bind.twoWaysImmediate(() => this.source)}/>
+                <textarea
+                    value={Bind.twoWaysImmediate(() => this.source)}/>
                 <div class="command-bar">
                     <button
                         eventClick={Bind.event(() => this.close(this.source))}
