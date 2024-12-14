@@ -1,7 +1,7 @@
 import XNode from "@web-atoms/core/dist/core/XNode";
 import IElement from "./IElement";
 
-import "./styles/switch-style";
+import "./styles/switch.global.less";
 
 /**
  * Original source = https://www.htmllion.com/css3-toggle-switch-button.html
