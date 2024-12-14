@@ -1,0 +1,64 @@
+.atom-control-html-editor {
+    display: flex;
+    flex-direction: column;
+    min-height: 500px;
+    
+    & > iframe {
+        flex: 1 1 100%; 
+    }
+    
+    & > .files > .file {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+        gap: 4px;
+        display: inline-flex;
+        border-color: rgba(211,211,211,0.5);
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 15px;
+        padding-left: 10px;
+        padding-right: 10px; 
+
+        & > label {
+            max-width: 100px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis; 
+        }
+    }
+    
+    
+    & .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+
+        & > .command {
+            display: inline-flex;
+            align-items: center;
+            justify-content: space-evenly;
+            border: none;
+            cursor: pointer;
+            background-color: #00000000;
+            min-width: 28px;
+            height: 28px; 
+        
+            &:hover {
+                background-color: #90ee90; 
+            }
+            
+            &.pressed {
+                background-color: #d3d3d3; 
+
+                &:hover {
+                    background-color: #90ee90; 
+                }
+            }            
+            
+            & .ri-bold {
+                font-weight: bold; 
+            }
+        }
+    }
+}

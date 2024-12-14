@@ -26,8 +26,9 @@ import Underline from "./commands/Underline";
 import Unlink from "./commands/Unlink";
 import UnorderedList from "./commands/UnorderedList";
 import Toolbar from "./commands/Toolbar";
-import styled from "@web-atoms/core/dist/style/styled";
 export { default as Toolbar} from "./commands/Toolbar";
+
+import "../styles/atom-html-editor.global.less";
 
 const link = document.createElement("link");
 link.href = "https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css";
@@ -39,71 +40,6 @@ link.onload = () => {
 };
 document.head.appendChild(link);
 
-const css = styled.css `
-
-    display: flex;
-    flex-direction: column;
-    min-height: 500px;
-    
-    & > iframe {
-        flex: 1 1 100%; 
-    }
-    
-    & > .files > .file {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-around;
-        gap: 4px;
-        display: inline-flex;
-        border-color: rgba(211,211,211,0.5);
-        border-width: 1px;
-        border-style: solid;
-        border-radius: 15px;
-        padding-left: 10px;
-        padding-right: 10px; 
-
-        & > label {
-            max-width: 100px;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis; 
-        }
-    }
-    
-    
-    & .toolbar {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-
-        & > .command {
-            display: inline-flex;
-            align-items: center;
-            justify-content: space-evenly;
-            border: none;
-            cursor: pointer;
-            background-color: #00000000;
-            min-width: 28px;
-            height: 28px; 
-        
-            &:hover {
-                background-color: #90ee90; 
-            }
-            
-            &.pressed {
-                background-color: #d3d3d3; 
-
-                &:hover {
-                    background-color: #90ee90; 
-                }
-            }            
-            
-            & .ri-bold {
-                font-weight: bold; 
-            }
-        }
-    }
-    `.installLocal();
 
 function preventLinkClick(e: Event, editor: HTMLElement, doc: Document) {
     let target = e.target as HTMLElement;
@@ -337,7 +273,7 @@ export default class AtomHtmlEditor extends AtomControl {
         this.runAfterInit(() => {
             this.setup();
         });
-        this.element.classList.add(css);
+        this.element.classList.add("atom-control-html-editor");
         this.element.classList.add("html-editor");
     }
 
