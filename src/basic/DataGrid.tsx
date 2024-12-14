@@ -6,7 +6,7 @@ import AtomRepeater, { getParentRepeaterItem, SelectorCheckBox } from "./AtomRep
 import { EditableInput, getPropertyInfo, IPropertyInfo } from "./Editable";
 import TableRepeater from "./TableRepeater";
 
-import "./styles/data-grid-style";
+import "./styles/data-grid.global.less";
 
 const cellEventName = Symbol("cell-event-name");
 const headerEventName = Symbol("header-event-name");

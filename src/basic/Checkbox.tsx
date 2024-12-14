@@ -1,6 +1,6 @@
 import XNode from "@web-atoms/core/dist/core/XNode";
 
-import "./styles/checkbox.less";
+import "./styles/checkbox.global.less";
 
 import IElement from "./IElement";
 
