@@ -1,19 +1,9 @@
 import XNode from "@web-atoms/core/dist/core/XNode";
 import sleep from "@web-atoms/core/dist/core/sleep";
 import { CancelToken } from "@web-atoms/core/dist/core/types";
-import styled from "@web-atoms/core/dist/style/styled";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 
-    styled.css `
-    display: inline-flex;
-    align-items: center;
-    justify-content: start;
-    white-space: nowrap;
-    padding-right: 1px;
-    border-right-style: solid;
-    border-right-width: 2px;
-    border-right-color: currentColor;
-`.installGlobal("[data-component=type-writer]");
+import "../styles/type-writer.global.less";
 
 const disposableProperty = Symbol("type-writer-timer");
 
