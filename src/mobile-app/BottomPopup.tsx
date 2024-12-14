@@ -1,5 +1,4 @@
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import Colors from "@web-atoms/core/dist/core/Colors";
 import { CancelToken } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
@@ -7,81 +6,8 @@ import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import PopupService, { IPopupOptions, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
 export * as zDoNotUse from "../animations/Animations";
 import MobileApp from "./MobileApp";
-import styled from "@web-atoms/core/dist/style/styled";
 
-    styled.css `
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    background-color: rgba(0,0,0,0.3);
-    z-index: 500;
-    `.installGlobal("*[data-bottom-popup-container]");
-
-    styled.css `
-    position: absolute;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    margin-left: 2px;
-    margin-right: 2px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    grid-template-rows: auto auto auto;
-    background-color: #ffffff;
-        
-    & > [data-element=bar] {
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
-        grid-row: 1;
-        grid-column: 1 / span 3;
-        background-color: #d3d3d3;
-        z-index: 10;
-    }
-    
-    & > [data-element=icon] {
-        grid-row: 1;
-        grid-column: 1;
-        padding: 5px;
-        align-self: center;
-        margin-right: 5px;
-        z-index: 11;
-    }
-    
-    & > [data-element=close] {
-        grid-row: 1;
-        grid-column: 3;
-        padding: 5px;
-        margin-left: 5px;
-        align-self: center;
-        z-index: 11;
-    }
-    
-    & > [data-element=title] {
-        grid-row: 1;
-        grid-column: 2;
-        padding: 5px;
-        z-index: 11;
-    }
-    
-    & > [data-element=content] {
-        padding: 5px;
-        grid-row: 2;
-        grid-column: 1 / span 3;
-        z-index: 11;
-    }
-    
-    & > [data-element=footer] {
-        grid-row: 3;
-        grid-column: 1 / span 3;
-        margin-top: 5px;
-        padding: 5px;
-        z-index: 11;
-    }
-    `.installGlobal("*[data-bottom-popup]");
+import "./bottom-popup.global.less";
 
 export interface IBottomPopupOptions extends IPopupOptions {
     parameters?: {[key: string]: any};
