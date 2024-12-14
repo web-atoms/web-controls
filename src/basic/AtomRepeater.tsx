@@ -14,7 +14,6 @@ import InlinePopup from "./InlinePopup";
 import MergeNode from "./MergeNode";
 import ItemPath from "./ItemPath";
 
-import "./styles/ui-display-none-style";
 import "./styles/popup.global.less";
 import "./styles/suggestion-popup.global.less";
 import "./styles/repeater.global.less";

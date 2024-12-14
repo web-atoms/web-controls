@@ -3,7 +3,7 @@ import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import XNode, { isTemplateSymbol } from "@web-atoms/core/dist/core/XNode";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 
-import "./styles/zoom-view-style";
+import "./styles/zoom-view.global.less";
 
 const center = (ev: TouchEvent) => {
     const touch = ev.touches[0];
