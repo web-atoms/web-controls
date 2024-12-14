@@ -6,7 +6,7 @@ import { AtomControl, ElementValueSetters } from "@web-atoms/core/dist/web/contr
 import { IPopup, IPopupOptions } from "@web-atoms/core/dist/web/services/PopupService";
 import IElement from "./IElement";
 
-import "./styles/inline-popup-style";
+import "./styles/inline-popup.global.less";
 import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
 
 function closeHandler(
