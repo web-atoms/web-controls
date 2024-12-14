@@ -4,7 +4,7 @@ import { AtomControl, ElementValueSetters } from "@web-atoms/core/dist/web/contr
 import { getParentRepeaterItem } from "./AtomRepeater";
 import InlinePopup from "./InlinePopup";
 
-import "./styles/tooltip-style";
+import "./styles/tooltip.global.less";
 
 const tooltips = new Map<HTMLElement, [{control: any, tooltip: CancelToken}, typeof InlinePopup]>();
 
