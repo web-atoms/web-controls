@@ -1,6 +1,6 @@
 import XNode from "@web-atoms/core/dist/core/XNode";
 
-import "./styles/expander-style";
+import "./styles/expander.global.less";
 
 export interface IExpander {
     icon?: string | string[];
