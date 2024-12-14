@@ -2,7 +2,7 @@ import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import AtomRepeater from "./AtomRepeater";
 
-import "./styles/toggle-button-bar-style";
+import "./styles/toggle-button-bar.global.less";
 
 export default class ToggleButtonBar extends AtomRepeater {
 

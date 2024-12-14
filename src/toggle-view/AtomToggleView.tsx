@@ -2,7 +2,7 @@ import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 
-import "../basic/styles/toggle-view-style";
+import "../basic/styles/toggle-view.global.less";
 import IElement from "../basic/IElement";
 import Action from "@web-atoms/core/dist/view-model/Action";
 
