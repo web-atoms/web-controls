@@ -26,6 +26,7 @@ export function styles() {
 export function scripts() {
   return src(paths.scripts.src, { sourcemaps: true })
     .pipe(babel({
+      sourceMap: true,
       sourceType: "module",
       // sourceMaps: true,
       compact: false,
