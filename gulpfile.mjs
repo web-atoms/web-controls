@@ -1,6 +1,7 @@
 import { src, dest, watch, parallel } from 'gulp';
 import rename from "gulp-rename";
 import less from 'gulp-less';
+import sourcemaps from "gulp-sourcemaps";
 
 const paths = {
     styles: {
@@ -14,12 +15,14 @@ const paths = {
  */
 export function styles() {
   return src(paths.styles.src, { sourcemaps: true })
+    .pipe(sourcemaps.init())
     .pipe(less())
     .pipe(rename((path) => {
       path.extname = ".less.css";
       return path;
     }))
-    .pipe(dest(paths.styles.dest, {  }));
+    .pipe(sourcemaps.write("./"))
+    .pipe(dest(paths.styles.dest));
 }
 
 /*

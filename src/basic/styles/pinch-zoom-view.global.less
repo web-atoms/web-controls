@@ -1,0 +1,55 @@
+div[data-pinch-zoom] {
+    position: relative;
+    overflow: hidden;
+    cursor: grab;
+
+    &[data-state=grabbing] {
+        cursor: grabbing;
+    }
+
+    & > .scale {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        border: solid 2px darkgray;
+        border-radius: 4px;
+        background-color: white;
+        padding: 4px;
+        color: black;
+        width: 30px;
+        height: 30px;
+        background-image: data-uri("./scale.svg");
+        background-position: 2px 2px;
+        background-size: 20px 20px;
+        background-repeat: no-repeat;
+    }
+
+    & > .image-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        overflow: hidden;
+        display: grid;
+        align-items: center;
+        justify-items: center;
+        justify-content: center;
+    }
+
+    & > .spinner {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        display: inline-grid;
+        align-items: center;
+        justify-items: center;
+        z-index: 10;
+    }
+
+    & > .hide {
+        display: none;
+    }
+}
