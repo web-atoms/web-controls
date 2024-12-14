@@ -17,7 +17,7 @@ import ItemPath from "./ItemPath";
 import "./styles/ui-display-none-style";
 import "./styles/popup.global.less";
 import "./styles/suggestion-popup";
-import "./styles/repeater-style";
+import "./styles/repeater.global.less";
 import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import DataAttributes from "../DataAttributes";
 
