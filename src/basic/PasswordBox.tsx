@@ -1,7 +1,7 @@
 import XNode from "@web-atoms/core/dist/core/XNode";
 import IElement from "./IElement";
 
-import "./styles/password-box-style";
+import "./styles/password-box.global.less";
 
 document.body.addEventListener("togglePassword", (e) => {
     const current = e.target as HTMLElement;
