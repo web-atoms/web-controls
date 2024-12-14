@@ -8,7 +8,7 @@ import InlinePopup, { InlinePopupButton } from "./InlinePopup";
 import TimeEditor from "./TimeEditor";
 import TimeSpan from "@web-atoms/date-time/dist/TimeSpan";
 
-import "./styles/date-field-style";
+import "./styles/date-field.global.less";
 
 function hours() {
     return [
