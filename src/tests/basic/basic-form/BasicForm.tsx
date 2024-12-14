@@ -16,7 +16,7 @@ export default class BasicForm extends AtomControl {
         };
         this.render(<div>
             <Form
-                event-submit-event={() => alert("Submit Success")}
+                event-submit={() => alert("Submit Success")}
                 style-margin="50px">
                 <FormField
                     label="First name:"
@@ -51,7 +51,7 @@ export default class BasicForm extends AtomControl {
                 </HorizontalFormField>
                 <button
                     text="Submit"
-                    data-event="submit"/>
+                    data-submit-event="submit"/>
             </Form>
         </div>);
     }
