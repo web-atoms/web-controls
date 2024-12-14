@@ -15,11 +15,19 @@
                 "isDefault": true
             }
         },
+        // {
+        //     "label": "TypeScript Build Watch",
+        //     "type": "typescript",
+        //     "tsconfig": "tsconfig.json",
+        //     "option": "watch",
+        // },
         {
             "label": "TypeScript Build Watch",
-            "type": "typescript",
-            "tsconfig": "tsconfig.json",
-            "option": "watch",
+            "type": "shell",
+            "command": "gulp",
+            "args": [
+                "--watch"
+            ]
         },
         {
             "label": "Web Atoms Dev Server",
