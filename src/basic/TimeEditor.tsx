@@ -5,7 +5,7 @@ import TimeSpan from "@web-atoms/date-time/dist/TimeSpan";
 import Select from "./Select";
 import Bind from "@web-atoms/core/dist/core/Bind";
 
-import "./styles/time-editor-style";
+import "./styles/time-editor.global.less";
 
 function hours() {
     return [
