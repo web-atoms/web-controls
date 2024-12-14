@@ -9,7 +9,7 @@ export { default as Chip } from "./Chip";
 import InlinePopup from "./InlinePopup";
 
 import "./styles/chips.global.less";
-import "./styles/item-suggestion-style";
+import "./styles/item-suggestion.global.less";
 
 function getChips(target: HTMLElement): AtomChips {
     let start = target;

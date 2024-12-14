@@ -1,7 +1,7 @@
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import AtomRepeater from "./AtomRepeater";
 
-import "./styles/list-repeater-style";
+import "./styles/list-repeater.global.less";
 export default class ListRepeater<T = any> extends AtomRepeater<T> {
 
     public get autoSelectOnClick(): boolean {
