@@ -1,14 +1,6 @@
 import XNode from "@web-atoms/core/dist/core/XNode";
-import styled from "@web-atoms/core/dist/style/styled";
 
-    styled.css `
-        height: 5px;
-        & > * {
-            position: absolute;
-            left: 0;
-            top: 0;
-        }
-    `.installGlobal("*[data-track-progress=track-progress]");
+import "../styles/track-progress.global.less";
 
 export default function TrackProgress(a) {
     return <div
