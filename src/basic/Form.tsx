@@ -1,34 +1,8 @@
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
-import XNode, { elementFactorySymbol } from "@web-atoms/core/dist/core/XNode";
-import styled from "@web-atoms/core/dist/style/styled";
-import { AncestorEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
+import XNode from "@web-atoms/core/dist/core/XNode";
 
-    styled.css `
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing, 5px);
-
-    &[data-valid=true] {
-        & .field-error:not(:empty) {
-            display: none;
-        }
-        & > .error-message {
-            display: none;
-        }
-    }
-
-    & > .error-message {
-        padding: var(--spacing-small, 2px);
-        padding-left: var(--spacing-large, 10px);
-        padding-right: var(--spacing-large, 10px);
-        background-color: red;
-        border-radius: 9999px;
-        color: white;
-        position: sticky;
-        top: 0;
-    }
-`.installGlobal("[data-form=form]");
+import "../styles/form.global.less";
 
 const checkClick = (e: MouseEvent) => {
     const form = e.currentTarget as HTMLDivElement;

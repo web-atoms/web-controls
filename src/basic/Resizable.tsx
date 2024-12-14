@@ -1,38 +1,10 @@
 import { AtomDisposableList } from "@web-atoms/core/dist/core/AtomDisposableList";
 import XNode from "@web-atoms/core/dist/core/XNode";
-import styled from "@web-atoms/core/dist/style/styled";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { isMobileView } from "../mobile-app/MobileApp";
 
-    styled.css `
-
-    display: grid;
-    overflow: hidden;
-    grid-template-columns: 1fr 2px;
-    gap: 1px;
-    & > * {
-        grid-row: 1;
-        grid-column: 1;
-    }
-
-    & > [data-element=resizer] {
-        cursor: ew-resize;
-        grid-row: 1;
-        grid-column: 2;
-        &[data-resizing] {
-            cursor: col-resize;
-            background-color: rgba(0,0,0,0.25);
-        }
-    }
-
-    &[data-direction=vertical] {
-        & > [data-element=resizer] {
-            cursor: ns-resize;
-        }
-    }
-
-    `.installGlobal("[data-resizable=resizable]");
-
+import "../styles/resizable.global.less";
+    
 const pointerDown = (e: PointerEvent) => {
 
     const target = e.currentTarget as HTMLDivElement;
