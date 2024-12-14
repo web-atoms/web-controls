@@ -3,7 +3,7 @@ import XNode from "@web-atoms/core/dist/core/XNode";
 import AtomRepeater, { askSuggestion, askSuggestionPopup,
     disposeChildren, Match, MatchAnyCaseInsensitive } from "./AtomRepeater";
 
-import "./styles/drop-down-style";
+import "./styles/drop-down.global.less";
 
 export default class DropDown<T = any> extends AtomRepeater<T> {
 
