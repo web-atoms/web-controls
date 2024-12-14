@@ -1,6 +1,7 @@
 import XNode from "@web-atoms/core/dist/core/XNode";
 
-import "./styles/checkbox-style";
+import "./styles/checkbox.less";
+
 import IElement from "./IElement";
 
 export interface ICheckbox extends IElement {
