@@ -1,37 +1,6 @@
-import styled from "@web-atoms/core/dist/style/styled";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 
-    styled.css `
-    transition: all 0.5s ease-out;
-
-    &:not([data-animation-state]) {
-        display: none;
-    }
-    
-    &[data-animation-state=down] {
-        transform: translate(0,100%);
-    }
-    
-    &[data-animation-state=normal] {
-        transform: translate(0,0);   
-    }
-    `.installGlobal("[data-animate-slide=from-bottom]");
-
-    styled.css `
-    transition: all 0.5s ease-out;
-
-    &:not([data-animation-state]) {
-        display: none;
-    }
-    
-    &[data-animation-state=up] {
-        transform: translate(0,-100%);
-    }
-        
-    &[data-animation-state=normal] {
-        transform: translate(0,0);
-    }
-    `.installGlobal("[data-animate-slide=from-top]");
+import "./Animations.global.less";
 
 
 export default class Animations {
