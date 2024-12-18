@@ -2,8 +2,7 @@ import Bind from "@web-atoms/core/dist/core/Bind";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import PopupButton from "../../basic/PopupButton";
 import type AtomHtmlEditor from "../AtomHtmlEditor";
-import styled from "@web-atoms/core/dist/style/styled";
-
+import "./ChangeColor.local.less";
 const gray = [
     "rgb(0,0,0)",
     "rgb(68,68,68)",
@@ -89,30 +88,7 @@ const all = [
     ]
 ];
 
-const colorSelectorCss = styled.css `
-
-    width: 400px;
-    display: flex;
-    justify-content: space-evenly;
-
-    & > table {
-        display: inline-table; 
-    }
-    
-    & .color-button {
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        border-width: 1px;
-        margin: 1px;
-        cursor: pointer;
-        border-style: solid;
-        border-color: transparent; 
-        &:hover {
-            border-color: black; 
-        }
-    }    
-    `.installLocal();
+const colorSelectorCss = "web-controls-html-editor-change-color";
 
 function TextColor(color: string) {
     return <div
