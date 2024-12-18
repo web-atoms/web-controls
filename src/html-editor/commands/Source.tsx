@@ -5,14 +5,9 @@ import PopupService, { PopupWindow } from "@web-atoms/core/dist/web/services/Pop
 import type AtomHtmlEditor from "../AtomHtmlEditor";
 import CommandButton from "./CommandButton";
 import HtmlCommands from "./HtmlCommands";
-import styled from "@web-atoms/core/dist/style/styled";
+import "./Source.local.less";
 
-const css = styled.css `
-    & > textarea {
-        min-height: 500px;
-        min-width: 700px;
-    }
-`.installLocal();
+const css = "web-controls-html-editor-source";
 
 async function showDialog(s: AtomHtmlEditor, e: Event): Promise<string> {
 
