@@ -19,17 +19,16 @@
   },
   "homepage": "https://github.com/web-atoms/web-controls#readme",
   "dependencies": {
-    "@web-atoms/core": "^2.4.19",
+    "@web-atoms/core": "^2.4.36",
     "@web-atoms/data-styles": "^1.0.120",
     "@web-atoms/date-time": "^1.0.26",
     "@web-atoms/module-loader": "^2.1.47",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "gulp": "^5.0.0",
-    "gulp-less": "^5.0.0",
-    "gulp-rename": "^2.0.0",
-    "gulp-sourcemaps": "^3.0.0",
+    "@neurospeech/jex": "^1.0.112",
+    "@web-atoms/pack": "1.0.105",
+    "less": "^4.2.1",
     "tslib": "^2.4.1",
     "typescript": "^5.7.2"
   }
