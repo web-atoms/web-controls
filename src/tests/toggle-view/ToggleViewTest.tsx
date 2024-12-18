@@ -2,17 +2,9 @@ import XNode from "@web-atoms/core/dist/core/XNode";
 import Pack from "@web-atoms/core/dist/Pack";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import AtomToggleView, { ToggleView } from "../../toggle-view/AtomToggleView";
-import styled from "@web-atoms/core/dist/style/styled";
+import "./ToggleView.local.less";
 
-const css = styled.css `
-    display: flex;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px; 
-
-    `.installLocal();
+const css = "toggle-view-test";
 
 @Pack
 export default class ToggleViewTest extends AtomControl {
