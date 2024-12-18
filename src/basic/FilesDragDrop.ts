@@ -4,16 +4,9 @@ const supportsWebkitGetAsEntry =
   "webkitGetAsEntry" in DataTransferItem.prototype;
 
 import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
-import styled from "@web-atoms/core/dist/style/styled";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
+import "./FilesDragDrop.global.less";
 
-    styled.css `
-
-        &[data-drop-enabled] {
-            outline: solid 5px green;
-        }
-
-    `.installGlobal("[data-drag-drop=\"1\"]");
 
 const dragEnter = (e: DragEvent) => {
     if (!e.dataTransfer) {

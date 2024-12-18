@@ -12,42 +12,9 @@ import DISingleton from "@web-atoms/core/dist/di/DISingleton";
 import AtomRepeater from "../basic/AtomRepeater";
 import ToggleButtonBar from "../basic/ToggleButtonBar";
 
-	styled.css `
-		:root {
-			--accent-color: orangered;
-			--accent-text-color: white;
-		}
-		html, body {
-			margin: 0;
-			padding: 0;
-			font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-		}
-	`.installGlobal();
+import "./Devhost.global.less";
 
-	const css = styled.css `
-		position: absolute;
-		left: 0;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		display: grid;
-		grid-template-rows: auto 1fr;
-		gap: 5px;
-
-		& > header {
-			grid-row: 1;
-		}
-		& > div {
-			grid-row: 2;
-			align-items: stretch;
-			justify-self: stretch;
-			overflow: auto;
-
-			& [data-item-index]:hover {
-				background-color: lightgreen;
-			}
-		}
-	`.installLocal();
+	const css = "dev-host-local";
 
 const fileTypes = () => [
 	{ label: "Packed", value: "packed"},

@@ -7,7 +7,7 @@ import FormField from "../../basic/FormField";
 import type AtomHtmlEditor from "../AtomHtmlEditor";
 import CommandButton, { notSet } from "./CommandButton";
 import HtmlCommands from "./HtmlCommands";
-import styled from "@web-atoms/core/dist/style/styled";
+import "./AddLink.local.less";
 
 const linkTypes = [
     {
@@ -28,11 +28,7 @@ const linkTypes = [
     }
 ];
 
-const linkDialogCss = styled.css `
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-`.installLocal();
+const linkDialogCss = "html-editor-commands-add-link";
 
 class LinkDialog extends PopupWindow {
 
