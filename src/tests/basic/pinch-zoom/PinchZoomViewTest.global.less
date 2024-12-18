@@ -1,0 +1,29 @@
+html, body {
+
+    @media (max-width: 700px) {
+        position: flex;
+        overflow: hidden;            
+    }
+
+}
+
+.pinch-zoom-local-test {
+    position: absolute;
+    left: 50px;
+    top: 50px;
+    width: 600px;
+    height: 600px;
+    display: grid;
+    align-items: stretch;
+    justify-items: stretch;
+
+    @media (max-width: 700px) {
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: unset;
+        height:unset;;
+    }
+
+}

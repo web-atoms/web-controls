@@ -4,27 +4,10 @@ import Pack from "@web-atoms/core/dist/Pack";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import AtomRepeater from "../../../basic/AtomRepeater";
 import { SwipeLeft } from "../../../basic/Swipe";
-import styled from "@web-atoms/core/dist/style/styled";
 
-const css = styled.css `
+import "./SwipeTest.local.less";
 
-    & [data-swipe] > * {
-        padding-left: 10px;
-        padding-right: 10px;
-        margin: 5px;
-        border-radius: 10px; 
-        &:not(*:first-child) {
-            min-width: 50px;
-            background-color: #0000ff;
-            color: #ffffff; 
-        }
-
-        &:first-child {
-            background-color: #f5f5f5; 
-        }
-    }
-    
-    `.installLocal();
+const css = "swipe-test-local";
 
 @Pack
 export default class SwipeTest extends AtomControl {

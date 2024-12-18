@@ -4,15 +4,10 @@ import Pack from "@web-atoms/core/dist/Pack";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import AtomChips, { Chip } from "../../../basic/AtomChips";
 import GridTestViewModel, { ICurrencyInfo } from "../../data-grid/GridTestViewModel";
-import styled from "@web-atoms/core/dist/style/styled";
 
-const css = styled.css `
-    & > * {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-    }
-`.installLocal();
+import "./ChipsTest.local.less";
+
+const css = "chip-test";
 
 @Pack
 export default class ChipsTest extends AtomControl {
