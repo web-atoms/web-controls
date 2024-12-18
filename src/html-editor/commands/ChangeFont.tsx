@@ -2,12 +2,9 @@ import Bind from "@web-atoms/core/dist/core/Bind";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import PopupButton, { MenuItem } from "../../basic/PopupButton";
 import type AtomHtmlEditor from "../AtomHtmlEditor";
-import styled from "@web-atoms/core/dist/style/styled";
+import "./ChangeFont.local.less";
 
-const fontMenuCSS = styled.css `
-    padding: 5px;
-    width: 170px;
-`.installLocal();
+const fontMenuCSS = "web-controls-html-editor-change-font";
 
 const fonts: Array<[string, string[]]> = [
     ["Sans Serif", ["arial", "sans-serif"]],
