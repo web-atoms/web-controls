@@ -2,24 +2,9 @@ import XNode from "@web-atoms/core/dist/core/XNode";
 import Pack from "@web-atoms/core/dist/Pack";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import AtomVideoPlayer from "../../../player/AtomVideoPlayer";
-import styled from "@web-atoms/core/dist/style/styled";
 
-
-const css = styled.css `
-    position: absolute;
-    top: 50px;
-    left: 50px;
-    right: 50px;
-    bottom: 50px;
-    
-    & > [data-video-player] {
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        right: 0; 
-    }
-    `.installLocal();
+import "./AtomVideoTest.local.less";
+const css = "atom-video-test-local";
 
 @Pack
 export default class AtomVideoTest extends AtomControl {
