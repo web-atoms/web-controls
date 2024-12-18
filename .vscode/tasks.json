@@ -25,9 +25,11 @@
         {
             "label": "Less Build Watch",
             "type": "shell",
-            "command": "gulp",
+            "command": "npx",
             "args": [
-                "watch"
+                "jex",
+                "build.jsx",
+                "--watch"
             ]
         },
         {
