@@ -179,7 +179,7 @@
         overflow-y: auto;
         z-index: 10;
         scrollbar-width: 5px;
-        scrollbar-color: #ffa500 transparent;
+        scrollbar-color: var(--accent-color, #ffa500) transparent;
 
         &::-webkit-scrollbar {
             width: 5px; 
@@ -188,7 +188,7 @@
         &::-webkit-scrollbar-thumb {
             background-color: white;
             border-radius: 20px;
-            border: 3px solid #ffa500; 
+            border: 3px solid var(--accent-color, #ffa500);
         }
         
     }
