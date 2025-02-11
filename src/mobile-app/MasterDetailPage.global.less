@@ -1,4 +1,24 @@
 [data-page-type=master-detail] {
+
+    &[data-mode=desktop][data-is-open] {
+        grid-template-columns: auto auto auto 1fr;
+        & [data-element=detail] {
+            grid-column: 4;
+            grid-row: 1 / span 3;
+        }
+    }
+
+    & > *[data-element=close] {
+        grid-row: 1;
+        grid-column: 4;
+        color: red;
+        margin-top: 5px;
+        padding: 5px;
+        justify-self: end;
+        font-size: 1.5em;
+        z-index: 2;
+    }
+
     & > [data-page-element=content] {
         display: grid;
         & > * {
@@ -12,7 +32,6 @@
         }
         &[data-mode=desktop] {
             display: grid;
-            grid-template-columns: 5fr minmax(400px, 3fr) auto;
             grid-template-rows: auto 1fr;
             overflow: hidden;
             & > *{

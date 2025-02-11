@@ -1,6 +1,6 @@
 // Add Font awesome
 const fa = document.createElement("link");
-fa.href = "https://npm-git.azureedge.net/npm/package/@c8private/fa-icons@6.7.1/css/all.min.css";
+fa.href = "https://dtzkc6yot8xw8.cloudfront.net/npm/package/@c8private/fa-icons@6.7.1/css/all.min.css";
 fa.crossOrigin = "anonymous";
 fa.rel = "stylesheet";
 document.head.appendChild(fa);

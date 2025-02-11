@@ -3,7 +3,7 @@ import { ContentPage, isMobileView } from "./MobileApp";
 import { descendentElementIterator } from "@web-atoms/core/dist/web/core/AtomUI";
 import AtomRepeater from "../basic/AtomRepeater";
 
-import "./master-detail.global.less";
+import "./MasterDetailPage.global.less";
 
 
 const findItem = (content: Element, item) => {
@@ -79,6 +79,7 @@ export default class MasterDetailPage<T = any, TResult = any> extends ContentPag
 
         const content = this.element.querySelector(`[data-page-element="content"]`);
         content.setAttribute("data-mode", "desktop");
+        this.element.setAttribute("data-is-open", "true");
 
         let highlightElement;
         if (highlightElementOrItem instanceof HTMLElement) {
@@ -101,7 +102,7 @@ export default class MasterDetailPage<T = any, TResult = any> extends ContentPag
             closeButton.setAttribute("data-element", "close");
             closeButton.className = "fas fa-times-circle";
             this.closeButton = closeButton;
-            content.appendChild(closeButton);            
+            this.element.appendChild(closeButton);
             closeButton.addEventListener("click", () => this.closeDetail());
         }
 
@@ -121,7 +122,8 @@ export default class MasterDetailPage<T = any, TResult = any> extends ContentPag
 
         const P = page;
         lastDetail = new P(this.app);
-        content.appendChild(lastDetail.element);
+        //content.appendChild(lastDetail.element);
+        this.element.appendChild(lastDetail.element);
         lastDetail.element.setAttribute("data-element", "detail");
         this.lastDetail = lastDetail;
         lastDetail.parameters = parameters;
@@ -168,6 +170,9 @@ export default class MasterDetailPage<T = any, TResult = any> extends ContentPag
 
     protected preCreate(): void {
         super.preCreate();
+        if (!isMobileView) {
+            this.element.setAttribute("data-mode", "desktop");
+        }
         this.element.setAttribute("data-page-type", "master-detail");
     }
 
@@ -186,6 +191,7 @@ export default class MasterDetailPage<T = any, TResult = any> extends ContentPag
         }
         const content = this.element.querySelector(`[data-page-element="content"]`);
         content.removeAttribute("data-mode");
+        this.element.removeAttribute("data-is-open");
         this.scrollTargetIntoView(true);
     }
 }
