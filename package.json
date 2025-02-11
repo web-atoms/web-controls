@@ -18,10 +18,10 @@
   },
   "homepage": "https://github.com/web-atoms/web-controls#readme",
   "dependencies": {
-    "@web-atoms/core": "^2.4.37",
-    "@web-atoms/data-styles": "^1.0.120",
-    "@web-atoms/date-time": "^1.0.26",
-    "@web-atoms/module-loader": "^2.1.47",
+    "@web-atoms/core": "^2.4.47",
+    "@web-atoms/data-styles": "^1.0.124",
+    "@web-atoms/date-time": "^1.1.3",
+    "@web-atoms/module-loader": "^2.1.87",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
