@@ -4,18 +4,6 @@
     right: 0px;
     bottom: 0px;
 
-    @media screen {
-        & {
-            height: 100vh;
-        }
-        @supports (height: 100dvh) {
-            & {
-                height: 100dvh;
-            }
-        }
-    }
-
-
     & > [data-container] {
         top: 0px;
         left: 0px;
@@ -249,5 +237,14 @@
 @media screen {
     body {
         overflow: hidden;
+        & > [data-page-app=page-app] {
+            height: 100vh;
+
+            @supports (height: 100vdh) {
+                & {
+                    height: 100vdh;
+                }
+            }
+        }
     }
 }
