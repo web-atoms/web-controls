@@ -240,11 +240,14 @@
         & > [data-page-app=page-app] {
             height: 100vh;
 
-            @supports (height: 100vdh) {
-                & {
-                    height: 100vdh;
-                }
-            }
+        }
+    }
+}
+
+@supports (height: 100dvh) {
+    body {
+        & > [data-page-app=page-app] {
+            height: 100dvh;
         }
     }
 }
