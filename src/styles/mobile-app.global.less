@@ -4,6 +4,18 @@
     right: 0px;
     bottom: 0px;
 
+    @media screen {
+        & {
+            height: 100vh;
+        }
+        @supports (height: 100dvh) {
+            & {
+                height: 100dvh;
+            }
+        }
+    }
+
+
     & > [data-container] {
         top: 0px;
         left: 0px;
@@ -14,20 +26,13 @@
 
     @media screen {
         & {
-            position: fixed;
+            position: absolute;
             overflow: hidden;
-            height: 100vh;
         
             & > [data-container] {
                 position: absolute;
                 overflow: hidden;
             }
-        }
-    }
-
-    @supports (height: 100dvh) {
-        & {
-            height: 100dvh;
         }
     }
     
