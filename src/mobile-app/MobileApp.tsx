@@ -16,7 +16,7 @@ import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import { displayRouteSymbol, routeSymbol } from "@web-atoms/core/dist/core/Command";
 import Route from "@web-atoms/core/dist/core/Route";
 
-import "../styles/mobile-app.global.less";
+import "./MobileApp.global.less";
 
 export function PullToRefresh() {
     return <div>
