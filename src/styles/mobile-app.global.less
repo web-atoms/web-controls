@@ -14,13 +14,20 @@
 
     @media screen {
         & {
-            position: absolute;
-            overflow: hidden;        
+            position: fixed;
+            overflow: hidden;
+            height: 100vh;
         
             & > [data-container] {
                 position: absolute;
                 overflow: hidden;
             }
+        }
+    }
+
+    @supports (height: 100dvh) {
+        & {
+            height: 100dvh;
         }
     }
     
