@@ -5,7 +5,6 @@ module.exports = (ctx) => ({
         require('postcss-preset-env')(),
         require("postcss-import")(),
         require("postcss-import-ext-glob")(),
-        require("postcss-data-uri")(),
         require("postcss-nested")(),
         require("postcss-copy-assets")({ base: ctx.options.base }),
         require("cssnano")()

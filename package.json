@@ -34,7 +34,6 @@
     "postcss": "^8.5.3",
     "postcss-cli": "^11.0.1",
     "postcss-copy-assets": "^0.3.1",
-    "postcss-data-uri": "^1.0.3",
     "postcss-import": "^16.1.0",
     "postcss-import-ext-glob": "^2.1.1",
     "postcss-nested": "^7.0.2",
