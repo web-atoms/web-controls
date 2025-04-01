@@ -8,7 +8,7 @@ import "@web-atoms/data-styles/data-styles";
 import { showImageDialog } from "./commands/AddImage";
 import { FilesAvailableEventArgs } from "../basic/UploadEvent";
 
-import "../styles/inline-html-editor.global.less";
+import "../styles/inline-html-editor.global.css";
 
 export default class InlineHtmlEditor extends AtomControl {
 

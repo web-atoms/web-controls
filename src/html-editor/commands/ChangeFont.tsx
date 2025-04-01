@@ -2,7 +2,7 @@ import Bind from "@web-atoms/core/dist/core/Bind";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import PopupButton, { MenuItem } from "../../basic/PopupButton";
 import type AtomHtmlEditor from "../AtomHtmlEditor";
-import "./ChangeFont.local.less";
+import "./ChangeFont.local.css";
 
 const fontMenuCSS = "web-controls-html-editor-change-font";
 

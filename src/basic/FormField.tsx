@@ -4,7 +4,7 @@ import FormattedString from "@web-atoms/core/dist/core/FormattedString";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import { NavigationService } from "@web-atoms/core/dist/services/NavigationService";
 import { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
-import "./styles/form-field.global.less";
+import "./styles/form-field.global.css";
 
 export interface IFormField {
     label: string | XNode;

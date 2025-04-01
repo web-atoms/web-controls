@@ -6,7 +6,7 @@ import DateTime from "@web-atoms/date-time/dist/DateTime";
 import AtomRepeater from "./AtomRepeater";
 import Select from "./Select";
 
-import "./styles/calendar.global.less";
+import "./styles/calendar.global.css";
 
 const start = DateTime.now;
 

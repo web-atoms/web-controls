@@ -1,6 +1,6 @@
 import XNode from "@web-atoms/core/dist/core/XNode";
 
-import "./Button.local.less";
+import "./Button.local.css";
 
 export interface IButton {
     id?: string;

@@ -1,5 +1,5 @@
 import XNode from "@web-atoms/core/dist/core/XNode";
-import "./styles/swipe.global.less";
+import "./styles/swipe.global.css";
 
 interface ISwipeStart {
     element: HTMLElement;

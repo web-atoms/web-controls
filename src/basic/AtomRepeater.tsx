@@ -14,9 +14,9 @@ import InlinePopup from "./InlinePopup";
 import MergeNode from "./MergeNode";
 import ItemPath from "./ItemPath";
 
-import "./styles/popup.global.less";
-import "./styles/suggestion-popup.global.less";
-import "./styles/repeater.global.less";
+import "./styles/popup.global.css";
+import "./styles/suggestion-popup.global.css";
+import "./styles/repeater.global.css";
 import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import DataAttributes from "../DataAttributes";
 

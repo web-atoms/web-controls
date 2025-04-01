@@ -12,7 +12,7 @@ import DISingleton from "@web-atoms/core/dist/di/DISingleton";
 import AtomRepeater from "../basic/AtomRepeater";
 import ToggleButtonBar from "../basic/ToggleButtonBar";
 
-import "./Devhost.global.less";
+import "./Devhost.global.css";
 
 	const css = "dev-host-local";
 

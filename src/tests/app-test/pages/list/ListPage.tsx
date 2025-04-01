@@ -8,7 +8,7 @@ import Action from "@web-atoms/core/dist/view-model/Action";
 import MasterDetailPage from "../../../../mobile-app/MasterDetailPage";
 import DetailPage from "../detail/DetailPage";
 
-import "./ListPage.local.less";
+import "./ListPage.local.css";
 
 export default class ListPage extends MasterDetailPage {
 

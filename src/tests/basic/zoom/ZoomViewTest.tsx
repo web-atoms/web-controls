@@ -3,7 +3,7 @@ import Pack from "@web-atoms/core/dist/Pack";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import ZoomView from "../../../basic/ZoomView";
 
-import "./ZoomViewTest.local.less";
+import "./ZoomViewTest.local.css";
 
 let meta = document.head.querySelector("meta[name=viewport]") as HTMLMetaElement;
 if (!meta) {

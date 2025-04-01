@@ -1,7 +1,7 @@
 import XNode from "@web-atoms/core/dist/core/XNode";
 import IElement from "./IElement";
 
-import "./styles/chip.global.less";
+import "./styles/chip.global.css";
 
 export interface IChip extends IElement {
     icon?: string;

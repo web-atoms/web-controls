@@ -1,6 +1,6 @@
 import XNode from "@web-atoms/core/dist/core/XNode";
 
-import "../styles/limited-text.global.less";
+import "../styles/limited-text.global.css";
 
 const toggleDetails = (e: Event) => {
     let start = e.target as HTMLElement;

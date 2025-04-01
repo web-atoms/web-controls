@@ -3,7 +3,7 @@ import { ContentPage, isMobileView } from "./MobileApp";
 import { descendentElementIterator } from "@web-atoms/core/dist/web/core/AtomUI";
 import AtomRepeater from "../basic/AtomRepeater";
 
-import "./MasterDetailPage.global.less";
+import "./MasterDetailPage.global.css";
 
 
 const findItem = (content: Element, item) => {

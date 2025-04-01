@@ -7,7 +7,7 @@ import FormField from "../../basic/FormField";
 import type AtomHtmlEditor from "../AtomHtmlEditor";
 import CommandButton, { notSet } from "./CommandButton";
 import HtmlCommands from "./HtmlCommands";
-import "./AddLink.local.less";
+import "./AddLink.local.css";
 
 const linkTypes = [
     {

@@ -3,7 +3,7 @@ import Pack from "@web-atoms/core/dist/Pack";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import AtomVideoPlayer from "../../../player/AtomVideoPlayer";
 
-import "./AtomVideoTest.local.less";
+import "./AtomVideoTest.local.css";
 const css = "atom-video-test-local";
 
 @Pack

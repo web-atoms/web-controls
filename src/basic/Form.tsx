@@ -2,7 +2,7 @@ import Bind from "@web-atoms/core/dist/core/Bind";
 import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
 import XNode from "@web-atoms/core/dist/core/XNode";
 
-import "../styles/form.global.less";
+import "../styles/form.global.css";
 
 const checkClick = (e: MouseEvent) => {
     const form = e.currentTarget as HTMLDivElement;

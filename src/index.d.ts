@@ -23,7 +23,7 @@ declare module "*.svg" {
     export default value;
 }
 
-declare module "*.less" {
+declare module "*.css" {
     const value: string;
     export default value;
 }

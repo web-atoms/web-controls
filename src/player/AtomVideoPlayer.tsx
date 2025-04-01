@@ -8,7 +8,7 @@ import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 // check if it is a mobile..
 const isTouchEnabled = /android|iPhone|iPad/i.test(navigator.userAgent);
 
-import "./AtomVideoPlayer.global.less";
+import "./AtomVideoPlayer.global.css";
 
 const gatherElements = (e: HTMLElement, data = {}) => {
     const ce = ChildEnumerator.enumerate(e);

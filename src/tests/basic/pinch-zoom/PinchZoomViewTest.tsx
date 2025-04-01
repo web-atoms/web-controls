@@ -3,7 +3,7 @@ import Pack from "@web-atoms/core/dist/Pack";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import PinchZoomView from "../../../basic/PinchZoomView";
 
-import "./PinchZoomViewTest.global.less";
+import "./PinchZoomViewTest.global.css";
 
 let meta = document.head.querySelector("meta[name=viewport]") as HTMLMetaElement;
 if (!meta) {
@@ -15,7 +15,7 @@ if (!meta) {
 meta.content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no";
 const isMobile = window.innerHeight > window.innerWidth;
 
-import "./PinchZoomViewTest.global.less";
+import "./PinchZoomViewTest.global.css";
 
 
 // tslint:disable-next-line: max-line-length

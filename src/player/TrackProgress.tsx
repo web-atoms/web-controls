@@ -1,6 +1,6 @@
 import XNode from "@web-atoms/core/dist/core/XNode";
 
-import "../styles/track-progress.global.less";
+import "../styles/track-progress.global.css";
 
 export default function TrackProgress(a) {
     return <div

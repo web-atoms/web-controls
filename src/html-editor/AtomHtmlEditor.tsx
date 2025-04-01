@@ -28,7 +28,7 @@ import UnorderedList from "./commands/UnorderedList";
 import Toolbar from "./commands/Toolbar";
 export { default as Toolbar} from "./commands/Toolbar";
 
-import "../styles/atom-html-editor.global.less";
+import "../styles/atom-html-editor.global.css";
 
 const link = document.createElement("link");
 link.href = "https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css";

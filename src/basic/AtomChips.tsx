@@ -8,8 +8,8 @@ import type { IChip } from "./Chip";
 export { default as Chip } from "./Chip";
 import InlinePopup from "./InlinePopup";
 
-import "./styles/chips.global.less";
-import "./styles/item-suggestion.global.less";
+import "./styles/chips.global.css";
+import "./styles/item-suggestion.global.css";
 
 function getChips(target: HTMLElement): AtomChips {
     let start = target;

@@ -1,7 +1,7 @@
 import XNode from "@web-atoms/core/dist/core/XNode";
 import AtomRepeater from "./AtomRepeater";
 
-import "./styles/radio-button-list.global.less";
+import "./styles/radio-button-list.global.css";
 
 export default class RadioButtonList extends AtomRepeater {
 

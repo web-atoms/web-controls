@@ -4,7 +4,7 @@ import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import MobileApp from "../mobile-app/MobileApp";
 
-import "../styles/desktop-app.global.less";
+import "../styles/desktop-app.global.css";
 
 export default class DesktopApp extends AtomControl {
 

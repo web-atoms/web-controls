@@ -7,7 +7,7 @@ import PopupService, { IPopupOptions, PopupControl, PopupWindow } from "@web-ato
 export * as zDoNotUse from "../animations/Animations";
 import MobileApp from "./MobileApp";
 
-import "./bottom-popup.global.less";
+import "./bottom-popup.global.css";
 
 export interface IBottomPopupOptions extends IPopupOptions {
     parameters?: {[key: string]: any};

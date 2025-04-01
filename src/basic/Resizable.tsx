@@ -3,7 +3,7 @@ import XNode from "@web-atoms/core/dist/core/XNode";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { isMobileView } from "../mobile-app/MobileApp";
 
-import "../styles/resizable.global.less";
+import "../styles/resizable.global.css";
     
 const pointerDown = (e: PointerEvent) => {
 

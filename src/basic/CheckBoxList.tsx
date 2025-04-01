@@ -2,7 +2,7 @@ import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import AtomRepeater, { SameObjectValue } from "./AtomRepeater";
 
-import "./styles/check-box-list.global.less";
+import "./styles/check-box-list.global.css";
 
 export default class CheckBoxList extends AtomRepeater {
 

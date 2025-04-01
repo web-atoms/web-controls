@@ -2,7 +2,7 @@ import XNode from "@web-atoms/core/dist/core/XNode";
 import Pack from "@web-atoms/core/dist/Pack";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import AtomToggleView, { ToggleView } from "../../toggle-view/AtomToggleView";
-import "./ToggleView.local.less";
+import "./ToggleView.local.css";
 
 const css = "toggle-view-test";
 

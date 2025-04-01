@@ -1,7 +1,7 @@
 import XNode from "@web-atoms/core/dist/core/XNode";
 import IElement from "./IElement";
 
-import "./styles/masked-input.global.less";
+import "./styles/masked-input.global.css";
 
 export interface IMaskedInput extends IElement {
     mask?: string;

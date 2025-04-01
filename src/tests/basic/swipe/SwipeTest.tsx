@@ -5,7 +5,7 @@ import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import AtomRepeater from "../../../basic/AtomRepeater";
 import { SwipeLeft } from "../../../basic/Swipe";
 
-import "./SwipeTest.local.less";
+import "./SwipeTest.local.css";
 
 const css = "swipe-test-local";
 

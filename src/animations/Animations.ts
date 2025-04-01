@@ -1,6 +1,6 @@
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 
-import "./Animations.global.less";
+import "./Animations.global.css";
 
 
 export default class Animations {

@@ -1,7 +1,7 @@
 import XNode from "@web-atoms/core/dist/core/XNode";
 import IElement from "./IElement";
 
-import "./styles/title-editor.global.less";
+import "./styles/title-editor.global.css";
 
 export type Capitalize = "none" | "off" | "on" | "sentences" | "words" | "characters";
 

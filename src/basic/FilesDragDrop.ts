@@ -5,7 +5,7 @@ const supportsWebkitGetAsEntry =
 
 import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import "./FilesDragDrop.global.less";
+import "./FilesDragDrop.global.css";
 
 
 const dragEnter = (e: DragEvent) => {

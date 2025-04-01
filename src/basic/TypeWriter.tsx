@@ -3,7 +3,7 @@ import sleep from "@web-atoms/core/dist/core/sleep";
 import { CancelToken } from "@web-atoms/core/dist/core/types";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 
-import "../styles/type-writer.global.less";
+import "../styles/type-writer.global.css";
 
 const disposableProperty = Symbol("type-writer-timer");
 

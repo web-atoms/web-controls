@@ -5,7 +5,7 @@ import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import AtomChips, { Chip } from "../../../basic/AtomChips";
 import GridTestViewModel, { ICurrencyInfo } from "../../data-grid/GridTestViewModel";
 
-import "./ChipsTest.local.less";
+import "./ChipsTest.local.css";
 
 const css = "chip-test";
 

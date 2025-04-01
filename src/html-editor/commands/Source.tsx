@@ -5,7 +5,7 @@ import PopupService, { PopupWindow } from "@web-atoms/core/dist/web/services/Pop
 import type AtomHtmlEditor from "../AtomHtmlEditor";
 import CommandButton from "./CommandButton";
 import HtmlCommands from "./HtmlCommands";
-import "./Source.local.less";
+import "./Source.local.css";
 
 const css = "web-controls-html-editor-source";
 
