@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
-    "build-css": "npx postcss ./src/**/*.css --base ./src --dir ./dist --map",
+    "build-css": "npx postcss ./src/**/*.css --base ./src --dir ./dist --map --verbose",
     "build-css-watch": "npx postcss src/**/*.css --base src --dir dist --map -w",
     "postversion": "git push --follow-tags"
   },
