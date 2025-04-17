@@ -6,6 +6,7 @@ import AtomChips, { Chip } from "../../../basic/AtomChips";
 import GridTestViewModel, { ICurrencyInfo } from "../../data-grid/GridTestViewModel";
 
 import "./ChipsTest.local.css";
+import { MatchCaseInsensitive } from "../../../basic/AtomRepeater";
 
 const css = "chip-test";
 
