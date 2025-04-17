@@ -9,6 +9,7 @@ import TimeEditor from "./TimeEditor";
 import TimeSpan from "@web-atoms/date-time/dist/TimeSpan";
 
 import "./styles/date-field.global.css";
+import AtomPopover from "./elements/AtomPopover";
 
 function hours() {
     return [
@@ -103,7 +104,7 @@ export default class DateField extends AtomControl {
                 });
 
         const owner = this;
-        class CalendarPopup extends InlinePopup {
+        class CalendarPopup extends AtomPopover {
 
             public owner: DateField;
 
@@ -111,16 +112,15 @@ export default class DateField extends AtomControl {
 
             public time: TimeSpan;
 
-            protected create(): void {
+            init() {
                 this.owner = owner;
                 this.type = "AM";
                 const now = DateTime.from(owner.value ?? DateTime.today.addHours(owner.hour || 0).addMinutes(owner.minute || 0));
                 this.time = new TimeSpan(0, now.hour, now.minute);
-                super.create();
                 const yearStart = typeof this.owner.yearStart === "number" ? this.owner.yearStart : -10;
                 const yearEnd = typeof this.owner.yearEnd === "number" ? this.owner.yearEnd : 10;
                 const year = typeof this.owner.year === "number" ? this.owner.year : now.year;
-                this.render(<div class="calendar-popup">
+                this.renderer = <div class="calendar-popup">
                     <Calendar
                         yearStart={yearStart}
                         yearEnd={yearEnd}
@@ -155,13 +155,13 @@ export default class DateField extends AtomControl {
                             e.stopPropagation();
                             this.save(DateTime.today.asJSDate);
                         }}/>
-                </div>);
+                </div>;
 
-                this.runAfterInit(() => {
-                    if (this.element) {
-                        (this.element as HTMLElement).scrollIntoView();
-                    }
-                });
+                // this.runAfterInit(() => {
+                //     if (this.element) {
+                //         (this.element as HTMLElement).scrollIntoView();
+                //     }
+                // });
             }
 
             private save(d?: Date) {
@@ -182,8 +182,8 @@ export default class DateField extends AtomControl {
         this.render(<InlinePopupButton
             data-layout="flex"
             data-date-field="date-field"
-            text={Bind.oneWay(() => this.format?.(this.value, this.enableTime) || this.prompt)}>
-            <CalendarPopup/>
+            text={Bind.oneWay(() => this.format?.(this.value, this.enableTime) || this.prompt)}
+            event-click={() => CalendarPopup.show(this)}>
         </InlinePopupButton>);
     }
 

@@ -6,6 +6,8 @@ import { AtomControl, ElementValueSetters } from "@web-atoms/core/dist/web/contr
 import { IPopup, IPopupOptions } from "@web-atoms/core/dist/web/services/PopupService";
 import IElement from "./IElement";
 
+import "./elements/AtomPopover";
+
 import "./styles/inline-popup.global.css";
 import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
 
@@ -105,7 +107,7 @@ export default class InlinePopup extends AtomControl {
         container._logicalParent = targetElement;
 
         // @ts-ignore
-        control.render(<div> {node} </div>, container, control);
+        control.render(<div> <atom-popup-container>{node}</atom-popup-container> </div>, container, control);
 
         targetElement.insertAdjacentElement("beforeend", container);
 
