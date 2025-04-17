@@ -106,7 +106,7 @@ class AtomPopoverElement extends HTMLElement {
             // this is to let other event handlers handle clicks
             let target = e.target as HTMLElement;
             while(target) {
-                if(target === this) {
+                if(target === this.parentElement) {
                     return;
                 }
                 target = target.parentElement;
