@@ -160,6 +160,10 @@ class AtomPopoverElement extends HTMLElement {
 
         let selfLeft = Math.max(0, thisRect.x - cbr.x - (cb.scrollLeft + window.scrollX));
         let parentLeft = Math.max(0, rect.x - cbr.x - (cb.scrollLeft + window.scrollX));
+
+        let selfRight = Math.max(0, thisRect.right - cbr.right - (cb.scrollLeft + window.scrollX));
+        let parentRight = Math.max(0, rect.right - cbr.right - (cb.scrollLeft + window.scrollX));
+
         let t = Math.max(0, thisRect.y - cbr.y - (cb.scrollTop + window.scrollY));
 
         const width = this.slotElement.offsetWidth;
@@ -179,9 +183,16 @@ class AtomPopoverElement extends HTMLElement {
         const r = selfLeft + (rect.x - cbr.x);
         const b = t + (rect.height);
 
-        const a = {
+        const topLeft = {
             "parent-left": `${parentLeft}px`,
             "parent-right": `${selfLeft}px`,
+            "parent-top": `${t}px`,
+            "parent-bottom": `${b}px`
+        };
+
+        const bottomRight = {
+            "parent-left": `${parentRight}px`,
+            "parent-right": `${selfRight}px`,
             "parent-top": `${t}px`,
             "parent-bottom": `${b}px`
         };
@@ -206,16 +217,16 @@ class AtomPopoverElement extends HTMLElement {
         }
 
         if (anchorTop) {
-            style.top = a[anchorTop];
+            style.top = topLeft[anchorTop];
         }
         if (anchorBottom) {
-            style.bottom = a[anchorBottom];
+            style.bottom = bottomRight[anchorBottom];
         }
         if (anchorLeft) {
-            style.left = a[anchorLeft];
+            style.left = topLeft[anchorLeft];
         }
         if (anchorRight) {
-            style.right =a[anchorRight];
+            style.right = bottomRight[anchorRight];
         }
 
 
