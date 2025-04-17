@@ -5,9 +5,9 @@ import AtomRepeater from "../../../basic/AtomRepeater";
 import Tooltip from "../../../basic/Tooltip";
 
 class CustomTooltip extends Tooltip {
-    protected create(): void {
-        this.render(<span>This is <i class="fa-solid fa-user"/>
-            <b>HTML</b> tooltip by <span text={this.data.label}/></span>);
+    init(data) {
+        this.renderer =<span>This is <i class="fa-solid fa-user"/>
+            <b>HTML</b> tooltip by <span text={data.label}/></span>;
     }
 }
 

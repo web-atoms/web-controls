@@ -222,7 +222,8 @@ class AtomPopoverElement extends HTMLElement {
 const existingPopup = Symbol("popup");
 
 export interface IAtomPopoverOptions {
-    node?: XNode | HTMLElement;
+    nodeFactory?: (data) => XNode | HTMLElement;
+    dataFactory?: () => any;
     "anchor-left"?: "parent-left" | "parent-right";
     "anchor-right"?: "parent-left" | "parent-right";
     "anchor-top"?: "parent-top" | "parent-bottom";
@@ -248,10 +249,8 @@ export default abstract class AtomPopover<T = any> {
 
     static create(
         parent: HTMLElement | AtomControl,
-        node: HTMLElement | XNode,
         options: IAtomPopoverOptions = {},
     ) {
-        options.node = node;
         return parent[existingPopup] ??= new (this as any)(parent, options);
     }
 
@@ -320,7 +319,8 @@ export default abstract class AtomPopover<T = any> {
 
         const {
             cancelToken,
-            node,
+            nodeFactory,
+            dataFactory,
             "anchor-left": anchorLeft,
             "anchor-right": anchorRight,
             "anchor-top": anchorTop,
@@ -350,13 +350,13 @@ export default abstract class AtomPopover<T = any> {
             popover.removeEventListener("removing", this.removing);
         });
 
-        this.init ??= () => {
-            if (node) {
-                this.renderer = node;
+        this.init ??= (data) => {
+            if (nodeFactory) {
+                this.renderer = nodeFactory(data);
             }
         };
 
-        const p = this.init?.();
+        const p = this.init?.(dataFactory?.());
         if (p?.then) {
             p.then(() => void 0, console.warn);
         }
@@ -365,16 +365,22 @@ export default abstract class AtomPopover<T = any> {
             this.resultResolve = resolve;
             this.resultReject = reject;
         });
+
+        // ignore error
+        this.resultPromise.catch(() => void 0);
     }
 
-    abstract init();
+    abstract init(data?: any);
 
     close(r) {
         (this.popover as any).result = r ?? null;
         this.popover.remove();
     }
 
-    async cancel() {}
+    async cancel() {
+        delete (this.popover as any).result;
+        this.popover.remove();
+    }
 
     removing = (ce?: Event) => {
         if (this.cancel) {
@@ -404,7 +410,5 @@ export default abstract class AtomPopover<T = any> {
     }
 
 }
-
-delete AtomPopover.prototype.cancel;
 
 customElements.define("atom-pop-over", AtomPopoverElement);

@@ -1,12 +1,14 @@
 import { CancelToken } from "@web-atoms/core/dist/core/types";
-import XNode from "@web-atoms/core/dist/core/XNode";
+import XNode, { xnodeSymbol } from "@web-atoms/core/dist/core/XNode";
 import { AtomControl, ElementValueSetters } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { getParentRepeaterItem } from "./AtomRepeater";
-import InlinePopup from "./InlinePopup";
 
 import "./styles/tooltip.global.css";
+import AtomPopover from "./elements/AtomPopover";
 
-const tooltips = new Map<HTMLElement, [{control: any, tooltip: CancelToken}, typeof InlinePopup]>();
+type toolTipInfo = [{control: any, tooltip: CancelToken}, typeof AtomPopover];
+
+const tooltips = new Map<HTMLElement, toolTipInfo>();
 
 ElementValueSetters.tooltip = (control: AtomControl, e: HTMLElement, value: any) => {
     tooltips.set(e, [{ control, tooltip: undefined }, value]);
@@ -34,64 +36,36 @@ document.body.addEventListener("pointerleave", (ev) => {
     }, 250);
 }, true);
 
-export default class Tooltip extends InlinePopup {
+export default abstract class Tooltip extends AtomPopover {
 
-    public static showTooltip(start: HTMLElement) {
-        while (start) {
-            const item = tooltips.get(start);
-            if (!item) {
-                start = start.parentElement;
+    public static showTooltip(target: HTMLElement) {
+        let item: toolTipInfo;
+        while(target) {
+            item = tooltips.get(target);
+            if(!item) {
+                target = target.parentElement;
                 continue;
             }
-            const [host, node] = item;
-            if (!host.tooltip) {
-                host.tooltip = new CancelToken();
-                const reset = () => delete host.tooltip;
 
-                // find associated data/item
-                let data = getParentRepeaterItem(start);
-                if (data) {
-                    data = data[2];
-                }
-
-                class TooltipControl extends node {
-
-                    private enterEventDisposable;
-
-                    protected preCreate(): void {
-                        this.element._logicalParent = start;
-                        if (data) {
-                            this.data = data;
-                        }
-                        const { element } = this;
-                        // tooltips.set(element, [{ tooltip: this, control: null }, node]);
-                        this.enterEventDisposable = this.bindEvent(element, "mouseenter", () => {
-                            setTimeout(() => {
-                                tooltips.set(element, [{ tooltip: host.tooltip, control: null}, null]);
-                                delete host.tooltip;
-                                this.enterEventDisposable.dispose();
-                            }, 10);
-                        });
-                        this.registerDisposable({
-                            dispose: () => {
-                                tooltips.delete(element);
-                            }
-                        });
-                    }
-                }
-
-                TooltipControl.show(
-                    start,
-                    XNode.create(TooltipControl as any, {}),
-                    {
-                        cancelToken: host.tooltip,
-                        alignment: "topRight"
-                    }
-                    ).then(reset, reset) ;
-            }
             break;
         }
 
+        if (!item) {
+            return;
+        }
+
+        const [host, node] = item;
+
+        host.tooltip = node.create(target, {
+            dataFactory: () => {
+                let data = getParentRepeaterItem(target);
+                if (!data) {
+                    return AtomControl.from(target).data;
+                }
+                data = data[2];
+                return data;
+            }
+        });
     }
 
     // public static show(start: HTMLElement) {

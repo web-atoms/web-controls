@@ -70,35 +70,42 @@ document.body.addEventListener("click", (e) => {
     const app = control.app as App;
     const target = start;
     const element = control.element;
-    let itemIndex;
-    let data;
-    if (control.items && control.itemRenderer) {
-        // this is atom repeater
-        while (start && start !== element) {
-            itemIndex ??= start.getAttribute("data-item-index");
-            if (itemIndex) {
-                data = control.items[~~itemIndex];
-                break;
-            }
-            start = start.parentElement;
-        }
-    }
 
-    if (!data) {
-        data = new Proxy(target, {
-            get(t, p, receiver) {
-                let s = target;
-                while (s) {
-                    const v = s.dataset[p as string];
-                    if (v !== void 0) {
-                        return v;
-                    }
-                    s = s.parentElement;
+    const dataFactory = () => {
+
+        let itemIndex;
+
+        let data;
+
+
+        if (control.items && control.itemRenderer) {
+            // this is atom repeater
+            while (start && start !== element) {
+                itemIndex ??= start.getAttribute("data-item-index");
+                if (itemIndex) {
+                    data = control.items[~~itemIndex];
+                    break;
                 }
-            },
-        });
-    }
+                start = start.parentElement;
+            }
+        }
 
-    const node = pf(data);
-    AtomPopover.create(start, node);
+        if (!data) {
+            data = new Proxy(target, {
+                get(t, p, receiver) {
+                    let s = target;
+                    while (s) {
+                        const v = s.dataset[p as string];
+                        if (v !== void 0) {
+                            return v;
+                        }
+                        s = s.parentElement;
+                    }
+                },
+            });
+        }
+        return data;
+    };
+
+    AtomPopover.create(start, { nodeFactory: (data) => pf(data), dataFactory });
 })

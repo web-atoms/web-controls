@@ -1,8 +1,6 @@
 import XNode from "@web-atoms/core/dist/core/XNode";
 import Pack from "@web-atoms/core/dist/Pack";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import AtomRepeater from "../../../basic/AtomRepeater";
-import Tooltip from "../../../basic/Tooltip";
 import TypeWriter from "../../../basic/TypeWriter";
 
 
