@@ -84,7 +84,8 @@ class AtomPopoverElement extends HTMLElement {
         setTimeout(() => {
             window.addEventListener("click", this.closePopover);
         }, 10);
-        this.updatePosition();
+
+        setTimeout(() => this.updatePosition(), 100);
     }
 
     disconnectedCallback() {
@@ -161,8 +162,19 @@ class AtomPopoverElement extends HTMLElement {
 
         const cbr = cb.getBoundingClientRect();
 
-        const l = rect.x - cbr.x;
-        const t = rect.y - cbr.y;
+        let l = Math.max(0, rect.x - cbr.x - (cb.scrollLeft + window.scrollX));
+        let t = Math.max(0, rect.y - cbr.y - (cb.scrollTop + window.scrollY));
+
+        const width = this.slotElement.offsetWidth;
+        const height = this.slotElement.offsetHeight;
+
+        if ((l + width) > cbr.width) {
+            l -= (l + width) - cbr.width;
+        }
+        if ((t + height) > cbr.height) {
+            t -= (t + height) - cbr.height;
+        }
+
 
         const r = l + rect.width;
         const b = t + rect.height;
