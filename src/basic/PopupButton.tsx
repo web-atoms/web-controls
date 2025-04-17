@@ -12,12 +12,12 @@ export interface IMenuItem {
     [key: string]: any;
 }
 
-export interface IPopupButton {
-    icon?: string;
-    label?: string;
-    showAsDialog?: boolean;
-    [key: string]: any;
-}
+// export interface IPopupButton {
+//     icon?: string;
+//     label?: string;
+//     showAsDialog?: boolean;
+//     [key: string]: any;
+// }
 
 export function MenuItem({
     label,

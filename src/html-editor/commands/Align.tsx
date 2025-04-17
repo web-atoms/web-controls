@@ -3,13 +3,14 @@ import XNode from "@web-atoms/core/dist/core/XNode";
 import PopupButton, { MenuItem } from "../../basic/PopupButton";
 import type AtomHtmlEditor from "../AtomHtmlEditor";
 import { IPopupOptions } from "@web-atoms/core/dist/web/services/PopupService";
+import { IPopupButton } from "../../basic/InlinePopupButton";
 
-export default function Align() {
+export default function Align(a: IPopupButton) {
     return <PopupButton
         class="command"
         data-layout="toolbar-button"
         icon="ri-align-left"
-        title="Change Alignment">
+        title="Change Alignment" { ... a}>
         <MenuItem
             icon="ri-align-left"
             title="Align Left"
