@@ -11,17 +11,18 @@ export interface IPopupButton extends IAnchorPopover {
     text?: string;
     label?: string;
     popup?: PopupFactory;
+    closeOnClick?: boolean;
     [k: string]: any;
 }
 
 
 
-export default function InlinePopupButton( { icon, text, label, popup, ... a }: IPopupButton, ... nodes: XNode[]) {
-    if(!a["anchor-right"]) {
-        a["anchor-left"] = "parent-right";
+export default function InlinePopupButton( { icon, text, label, closeOnClick, popup, ... a }: IPopupButton, ... nodes: XNode[]) {
+    if(!a["data-anchor-right"]) {
+        a["data-anchor-left"] = "parent-right";
     }
-    if (!a["anchor-bottom"]) {
-        a["anchor-top"] = "parent-top";
+    if (!a["data-anchor-bottom"]) {
+        a["data-anchor-top"] = "parent-top";
     }
     a["data-atom-popup-button"] = "popup-button";
     if (!popup) {
@@ -31,6 +32,10 @@ export default function InlinePopupButton( { icon, text, label, popup, ... a }: 
         nodes = [];
     }
     a["popupFctory"] = popup;
+
+    if (closeOnClick) {
+        a["data-close-on-click"] = true;
+    }
 
     if(!a["data-layout"]) {
         if (icon && text) {
@@ -107,5 +112,13 @@ document.body.addEventListener("click", (e) => {
         return data;
     };
 
-    AtomPopover.create(start, { nodeFactory: (data) => pf(data), dataFactory });
+    AtomPopover.create(start, {
+        nodeFactory: (data) => pf(data),
+        dataFactory,
+        closeOnClick: start.hasAttribute("data-close-on-click"),
+        "data-anchor-bottom": start.getAttribute("data-anchor-bottom") as any,
+        "data-anchor-top": start.getAttribute("data-anchor-top") as any,
+        "data-anchor-left": start.getAttribute("data-anchor-left") as any,
+        "data-anchor-right": start.getAttribute("data-anchor-right") as any,
+    });
 })

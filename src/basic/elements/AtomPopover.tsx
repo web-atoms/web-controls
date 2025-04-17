@@ -31,10 +31,10 @@ import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import "./AtomPopover.css";
 
 export interface IAnchorPopover extends IElementAttributes {
-    "anchor-left"?: "parent-left" | "parent-right",
-    "anchor-right"?: "parent-left" | "parent-right",
-    "anchor-top"?: "parent-top" | "parent-bottom",
-    "anchor-bottom"?: "parent-top" | "parent-bottom"
+    "data-anchor-left"?: "parent-left" | "parent-right",
+    "data-anchor-right"?: "parent-left" | "parent-right",
+    "data-anchor-top"?: "parent-top" | "parent-bottom",
+    "data-anchor-bottom"?: "parent-top" | "parent-bottom"
 }
 
 declare global {
@@ -106,6 +106,9 @@ class AtomPopoverElement extends HTMLElement {
             // this is to let other event handlers handle clicks
             let target = e.target as HTMLElement;
             while(target) {
+                if (target.hasAttribute("data-close-on-click")) {
+                    break;
+                }
                 if(target === this.parentElement) {
                     return;
                 }
@@ -183,6 +186,12 @@ class AtomPopoverElement extends HTMLElement {
         const r = selfLeft + (rect.x - cbr.x);
         const b = t + (rect.height);
 
+        let bottom = rect.bottom + (cb.scrollTop + window.scrollY);
+
+        if ((bottom + height) > cbr.bottom) {
+            bottom += (bottom + height) - cbr.bottom;
+        }
+
         const topLeft = {
             "parent-left": `${parentLeft}px`,
             "parent-right": `${selfLeft}px`,
@@ -193,15 +202,15 @@ class AtomPopoverElement extends HTMLElement {
         const bottomRight = {
             "parent-left": `${parentRight}px`,
             "parent-right": `${selfRight}px`,
-            "parent-top": `${t}px`,
-            "parent-bottom": `${b}px`
+            "parent-top": `${bottom}px`,
+            "parent-bottom": `${bottom}px`
         };
 
         
-        let anchorBottom = this.getAttribute("anchor-bottom");
-        let anchorRight = this.getAttribute("anchor-right");
-        let anchorTop = this.getAttribute("anchor-top");
-        let anchorLeft = this.getAttribute("anchor-left");
+        let anchorBottom = this.getAttribute("data-anchor-bottom");
+        let anchorRight = this.getAttribute("data-anchor-right");
+        let anchorTop = this.getAttribute("data-anchor-top");
+        let anchorLeft = this.getAttribute("data-anchor-left");
 
         const style = this.slotElement.style;
         style.removeProperty("left");
@@ -239,10 +248,11 @@ const existingPopup = Symbol("popup");
 export interface IAtomPopoverOptions {
     nodeFactory?: (data) => XNode | HTMLElement;
     dataFactory?: () => any;
-    "anchor-left"?: "parent-left" | "parent-right";
-    "anchor-right"?: "parent-left" | "parent-right";
-    "anchor-top"?: "parent-top" | "parent-bottom";
-    "anchor-bottom"?: "parent-top" | "parent-bottom";
+    "data-anchor-left"?: "parent-left" | "parent-right";
+    "data-anchor-right"?: "parent-left" | "parent-right";
+    "data-anchor-top"?: "parent-top" | "parent-bottom";
+    "data-anchor-bottom"?: "parent-top" | "parent-bottom";
+    closeOnClick?: boolean,
     cancelToken?: CancelToken;
 }
 
@@ -336,27 +346,31 @@ export default abstract class AtomPopover<T = any> {
             cancelToken,
             nodeFactory,
             dataFactory,
-            "anchor-left": anchorLeft,
-            "anchor-right": anchorRight,
-            "anchor-top": anchorTop,
-            "anchor-bottom": anchorBottom
+            closeOnClick,
+            "data-anchor-left": anchorLeft,
+            "data-anchor-right": anchorRight,
+            "data-anchor-top": anchorTop,
+            "data-anchor-bottom": anchorBottom
         } = options;
 
         cancelToken?.registerForCancel(this.removing as any);
 
         if (anchorLeft) {
-            popover.setAttribute("anchor-left", anchorLeft);
+            popover.setAttribute("data-anchor-left", anchorLeft);
         }
         if(anchorRight) {
-            popover.setAttribute("anchor-right", anchorRight);
+            popover.setAttribute("data-anchor-right", anchorRight);
         }
         if (anchorTop) {
-            popover.setAttribute("anchor-top", anchorTop);
+            popover.setAttribute("data-anchor-top", anchorTop);
         }
         if (anchorBottom) {
-            popover.setAttribute("anchor-bottom", anchorBottom);
+            popover.setAttribute("data-anchor-bottom", anchorBottom);
         }
         
+        if (closeOnClick) {
+            popover.setAttribute("data-close-on-click", "1");
+        }
 
         popover.addEventListener("removing", this.removing);
         popover.addEventListener("removed", this.remove);
