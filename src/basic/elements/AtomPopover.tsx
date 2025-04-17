@@ -55,9 +55,30 @@ class AtomPopoverElement extends HTMLElement {
     result: any;
     aborted = "cancel";
 
+    root: ShadowRoot;
+    slotElement: HTMLSlotElement;
+
     connectedCallback() {
 
         // set defaults...
+
+        if(!this.root) {
+
+            const root = this.root = this.attachShadow({ mode: "open" });
+            // const container = document.createElement("div");
+            const slot = document.createElement("slot");
+            slot.setAttribute("part", "container");
+            // slot.name = "container";
+            this.slotElement = slot;
+            // container.appendChild(slot);
+            root.appendChild(slot);
+        }
+
+        // let start = this.firstElementChild;
+        // while(start) {
+        //     start.setAttribute("slot", "container");
+        //     start = start.nextElementSibling;
+        // }
 
         setInterval(this.updatePosition, 1000);
         setTimeout(() => {
@@ -125,6 +146,12 @@ class AtomPopoverElement extends HTMLElement {
             return;
         }
 
+        // let start = this.firstElementChild;
+        // while(start) {
+        //     start.setAttribute("slot", "container");
+        //     start = start.nextElementSibling;
+        // }
+
         const cb = getContainingBlock(lastParent) as HTMLElement;
         if (!cb) {
             return;
@@ -153,7 +180,7 @@ class AtomPopoverElement extends HTMLElement {
         let anchorTop = this.getAttribute("anchor-top");
         let anchorLeft = this.getAttribute("anchor-left");
 
-        const style = (this.firstElementChild as HTMLElement).style;
+        const style = this.slotElement.style;
         style.removeProperty("left");
         style.removeProperty("top");
         style.removeProperty("right");
@@ -200,7 +227,7 @@ export default abstract class AtomPopover<T = any> {
     resultResolve: (value: T | PromiseLike<T>) => void;
     resultReject: (reason?: any) => void;
     parent: HTMLElement;
-    popoverContainer: HTMLDivElement;
+    popoverContainer: HTMLElement;
 
     static create(
         parent: HTMLElement | AtomControl,
@@ -267,10 +294,7 @@ export default abstract class AtomPopover<T = any> {
             parent = this.owner.element;
         }
         this.popover = document.createElement("atom-pop-over");
-        const container = document.createElement("div");
-        container.className = "container";
-        this.popoverContainer = container;
-        this.popover.appendChild(container);
+        this.popoverContainer = this.popover;
         parent.appendChild(this.popover);
 
         cancelToken?.registerForCancel(this.removing as any);

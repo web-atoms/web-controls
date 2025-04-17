@@ -85,7 +85,7 @@
                 opacity: 0.5;
             }
 
-            &[data-is-disabled] {
+            &[data-disabled] {
                 text-decoration: line-through;            
             }
 
