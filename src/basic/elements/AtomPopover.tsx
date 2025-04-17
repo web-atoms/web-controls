@@ -74,12 +74,6 @@ class AtomPopoverElement extends HTMLElement {
             root.appendChild(slot);
         }
 
-        // let start = this.firstElementChild;
-        // while(start) {
-        //     start.setAttribute("slot", "container");
-        //     start = start.nextElementSibling;
-        // }
-
         setInterval(this.updatePosition, 1000);
         setTimeout(() => {
             window.addEventListener("click", this.closePopover);
