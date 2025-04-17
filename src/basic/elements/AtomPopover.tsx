@@ -30,11 +30,11 @@ import XNode, { IElementAttributes, xnodeSymbol } from "@web-atoms/core/dist/cor
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import "./AtomPopover.css";
 
-interface IAnchorPopover extends IElementAttributes {
-    "anchor-left": "parent-left" | "parent-right",
-    "anchor-right": "parent-left" | "parent-right",
-    "anchor-top": "parent-top" | "parent-bottom",
-    "anchor-bottom": "parent-top" | "parent-bottom"
+export interface IAnchorPopover extends IElementAttributes {
+    "anchor-left"?: "parent-left" | "parent-right",
+    "anchor-right"?: "parent-left" | "parent-right",
+    "anchor-top"?: "parent-top" | "parent-bottom",
+    "anchor-bottom"?: "parent-top" | "parent-bottom"
 }
 
 declare global {
@@ -73,13 +73,9 @@ class AtomPopoverElement extends HTMLElement {
             // container.appendChild(slot);
             root.appendChild(slot);
         }
-
-        setInterval(this.updatePosition, 1000);
-        setTimeout(() => {
-            window.addEventListener("click", this.closePopover);
-        }, 10);
-
         setTimeout(() => this.updatePosition(), 100);
+
+        window.addEventListener("scroll", this.updatePosition, { passive : true });
     }
 
     disconnectedCallback() {
@@ -91,7 +87,8 @@ class AtomPopoverElement extends HTMLElement {
             }));
         }
 
-        window.removeEventListener("click", this.closePopover);
+        document.body.removeEventListener("click", this.closePopover);
+        window.removeEventListener("scroll", this.updatePosition);
         clearInterval(this.timer);
     }
 
@@ -132,7 +129,6 @@ class AtomPopoverElement extends HTMLElement {
     updatePosition = () => {
 
         if (!this.parentElement) {
-            clearInterval(this.timer);
             return;
         }
 
@@ -152,30 +148,36 @@ class AtomPopoverElement extends HTMLElement {
             return;
         }
 
-        const rect = this.getBoundingClientRect();
+        const rect = this.parentElement.getBoundingClientRect();
+
+        const thisRect = this.getBoundingClientRect();
 
         const cbr = cb.getBoundingClientRect();
 
-        let l = Math.max(0, rect.x - cbr.x - (cb.scrollLeft + window.scrollX));
-        let t = Math.max(0, rect.y - cbr.y - (cb.scrollTop + window.scrollY));
+        let selfLeft = Math.max(0, thisRect.x - cbr.x - (cb.scrollLeft + window.scrollX));
+        let parentLeft = Math.max(0, rect.x - cbr.x - (cb.scrollLeft + window.scrollX));
+        let t = Math.max(0, thisRect.y - cbr.y - (cb.scrollTop + window.scrollY));
 
         const width = this.slotElement.offsetWidth;
         const height = this.slotElement.offsetHeight;
 
-        if ((l + width) > cbr.width) {
-            l -= (l + width) - cbr.width;
+        if ((selfLeft + width) > cbr.width) {
+            selfLeft -= (selfLeft + width) - cbr.width;
+        }
+        if ((parentLeft + width) > cbr.width) {
+            parentLeft -= (parentLeft + width) - cbr.width;
         }
         if ((t + height) > cbr.height) {
             t -= (t + height) - cbr.height;
         }
 
 
-        const r = l + rect.width;
-        const b = t + rect.height;
+        const r = selfLeft + (rect.x - cbr.x);
+        const b = t + (rect.height);
 
         const a = {
-            "parent-left": `${l}px`,
-            "parent-right": `${r}px`,
+            "parent-left": `${parentLeft}px`,
+            "parent-right": `${selfLeft}px`,
             "parent-top": `${t}px`,
             "parent-bottom": `${b}px`
         };
@@ -219,6 +221,15 @@ class AtomPopoverElement extends HTMLElement {
 
 const existingPopup = Symbol("popup");
 
+export interface IAtomPopoverOptions {
+    node?: XNode | HTMLElement;
+    "anchor-left"?: "parent-left" | "parent-right";
+    "anchor-right"?: "parent-left" | "parent-right";
+    "anchor-top"?: "parent-top" | "parent-bottom";
+    "anchor-bottom"?: "parent-top" | "parent-bottom";
+    cancelToken?: CancelToken;
+}
+
 export default abstract class AtomPopover<T = any> {
 
     owner: AtomControl;
@@ -238,17 +249,18 @@ export default abstract class AtomPopover<T = any> {
     static create(
         parent: HTMLElement | AtomControl,
         node: HTMLElement | XNode,
-        cancelToken?: CancelToken
+        options: IAtomPopoverOptions = {},
     ) {
-
-        return parent[existingPopup] ??= new (this as any)(parent, cancelToken, node);
+        options.node = node;
+        return parent[existingPopup] ??= new (this as any)(parent, options);
     }
 
-    static show(
+    static show<T1 = any>(
         parent: HTMLElement | AtomControl,
-        cancelToken?: CancelToken
+        options: IAtomPopoverOptions = {}
     ) {
-        return parent[existingPopup] ??= new (this as any)(parent, cancelToken);
+        const p: AtomPopover<T1> = (parent[existingPopup] ??= new (this as any)(parent, options));
+        return p.resultPromise;
     }
 
     static menu(
@@ -284,12 +296,13 @@ export default abstract class AtomPopover<T = any> {
         } else {
             this.popoverContainer.appendChild(v as HTMLElement);
         }
+
+        (this.popoverContainer as any).updatePosition?.();
     }
 
     constructor(
         parent: HTMLElement | AtomControl,
-        cancelToken?: CancelToken,
-        node?: HTMLElement | XNode
+        options: IAtomPopoverOptions = {}
     ) {
 
         const p1 = parent;
@@ -298,18 +311,43 @@ export default abstract class AtomPopover<T = any> {
         if (parent instanceof AtomControl) {
             this.owner = parent;
             parent = this.owner.element;
+        } else {
+            this.owner = AtomControl.from(parent);
         }
-        this.popover = document.createElement("atom-pop-over");
-        this.popoverContainer = this.popover;
-        parent.appendChild(this.popover);
+        const popover = this.popover = document.createElement("atom-pop-over");
+        this.popoverContainer = popover;
+        parent.appendChild(popover);
+
+        const {
+            cancelToken,
+            node,
+            "anchor-left": anchorLeft,
+            "anchor-right": anchorRight,
+            "anchor-top": anchorTop,
+            "anchor-bottom": anchorBottom
+        } = options;
 
         cancelToken?.registerForCancel(this.removing as any);
 
-        this.popover.addEventListener("removing", this.removing);
-        this.popover.addEventListener("removed", this.remove);
+        if (anchorLeft) {
+            popover.setAttribute("anchor-left", anchorLeft);
+        }
+        if(anchorRight) {
+            popover.setAttribute("anchor-right", anchorRight);
+        }
+        if (anchorTop) {
+            popover.setAttribute("anchor-top", anchorTop);
+        }
+        if (anchorBottom) {
+            popover.setAttribute("anchor-bottom", anchorBottom);
+        }
+        
+
+        popover.addEventListener("removing", this.removing);
+        popover.addEventListener("removed", this.remove);
         this.disposables.add(() => {
-            this.popover.removeEventListener("removed", this.remove);
-            this.popover.removeEventListener("removing", this.removing);
+            popover.removeEventListener("removed", this.remove);
+            popover.removeEventListener("removing", this.removing);
         });
 
         this.init ??= () => {

@@ -6,8 +6,6 @@ import { AtomControl, ElementValueSetters } from "@web-atoms/core/dist/web/contr
 import { IPopup, IPopupOptions } from "@web-atoms/core/dist/web/services/PopupService";
 import IElement from "./IElement";
 
-import "./elements/AtomPopover";
-
 import "./styles/inline-popup.global.css";
 import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
 
@@ -297,6 +295,8 @@ export function InlinePopupButton(
     ... popupNodes: XNode[]) {
 
     alignment ||= anchorRight ? "bottomRight" : "bottomLeft";
+
+    console.warn(`Deprecated, use AtomPopover instead`);
 
     if(!a["data-layout"]) {
         if (icon && text) {

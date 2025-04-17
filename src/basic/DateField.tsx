@@ -4,7 +4,6 @@ import XNode from "@web-atoms/core/dist/core/XNode";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import DateTime from "@web-atoms/date-time/dist/DateTime";
 import Calendar, { ICalendarDate } from "./Calendar";
-import InlinePopup, { InlinePopupButton } from "./InlinePopup";
 import TimeEditor from "./TimeEditor";
 import TimeSpan from "@web-atoms/date-time/dist/TimeSpan";
 
@@ -179,12 +178,12 @@ export default class DateField extends AtomControl {
             }
         }
 
-        this.render(<InlinePopupButton
+        this.render(<div
             data-layout="flex"
             data-date-field="date-field"
             text={Bind.oneWay(() => this.format?.(this.value, this.enableTime) || this.prompt)}
             event-click={() => CalendarPopup.show(this)}>
-        </InlinePopupButton>);
+        </div>);
     }
 
 }

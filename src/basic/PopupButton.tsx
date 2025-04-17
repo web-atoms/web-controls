@@ -1,7 +1,7 @@
 import XNode from "@web-atoms/core/dist/core/XNode";
-import { IInlinePopupButtonOptions, InlinePopupButton } from "./InlinePopup";
 
 import "./styles/popup-button.global.css";
+import InlinePopupButton from "./InlinePopupButton";
 
 export interface IMenuItem {
     label?: string;
@@ -41,11 +41,12 @@ export function MenuItem({
     </div>;
 }
 
+
+
+
 export default InlinePopupButton;
 
-export function PopupActionButton(a: IInlinePopupButtonOptions, ... nodes: XNode[]) {
-    a.anchorRight = true;
-    a["data-alignment"] ??= "bottom-right";
+export function PopupActionButton(a, ... nodes: XNode[]) {
     return InlinePopupButton(a, ... nodes);
 }
 

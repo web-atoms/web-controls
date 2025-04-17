@@ -6,10 +6,10 @@ import XNode from "@web-atoms/core/dist/core/XNode";
 import AtomRepeater, { Match, MatchTrue } from "./AtomRepeater";
 import type { IChip } from "./Chip";
 export { default as Chip } from "./Chip";
-import InlinePopup from "./InlinePopup";
 
 import "./styles/chips.global.css";
 import "./styles/item-suggestion.global.css";
+import AtomPopover from "./elements/AtomPopover";
 
 function getChips(target: HTMLElement): AtomChips {
     let start = target;
@@ -51,17 +51,18 @@ function askSuggestionPopup<T>(
     suggestionFilter: (item) => boolean,
     cancelToken: CancelToken): Promise<T> {
 
-    class Suggestions extends InlinePopup {
+    class Suggestions extends AtomPopover {
 
         private opener: AtomChips;
 
-        protected create(): void {
+        init() {
+            // this.popover.setAttribute("cancel-on-blur", "0");
             this.opener = opener;
-            this.render(<div data-suggestion-popup="suggestion-popup">
+            this.renderer = <div data-suggestion-popup="suggestion-popup">
                 <div class="items">
                     <AtomRepeater
                         class="presenter"
-                        selectedItem={Bind.oneWay(() => this.opener.anchorItem)}
+                        selectedItem={Bind.source(opener, (x) => x.source.anchorItem)}
                         itemRenderer={itemRenderer}
                         eventDeleteSuggestion={(e) => opener.element.dispatchEvent(e) }
                         visibilityFilter={suggestionFilter ?? MatchTrue}
@@ -71,13 +72,13 @@ function askSuggestionPopup<T>(
                             e.stopPropagation();
                             this.close(e.detail);
                         }}
-                        items={Bind.oneWay(() => this.opener.suggestions)}/>
+                        items={Bind.source(opener, (x) => x.source.suggestions)}/>
                 </div>
-            </div>);
+            </div>;
         }
     }
 
-    return Suggestions.showControl(host, { cancelToken, alignment: "auto" });
+    return Suggestions.show(host, { "anchor-top": "parent-bottom", "anchor-left": "parent-left", cancelToken });
 }
 
 export function Suggestion(
