@@ -1,4 +1,3 @@
-import { App } from "@web-atoms/core/dist/App";
 import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder";
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
@@ -10,7 +9,6 @@ import WatchProperty from "@web-atoms/core/dist/core/WatchProperty";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { IDialogOptions, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
-import InlinePopup from "./InlinePopup";
 import MergeNode from "./MergeNode";
 import ItemPath from "./ItemPath";
 
@@ -19,6 +17,7 @@ import "./styles/suggestion-popup.global.css";
 import "./styles/repeater.global.css";
 import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import DataAttributes from "../DataAttributes";
+import AtomPopover from "./elements/AtomPopover";
 
 export interface IItemPair<ParentItem = any, ChildItem = any> {
     parent: ParentItem;
@@ -154,93 +153,46 @@ export function askSuggestion<T>(
  * @returns selected item
  */
 export function askSuggestionPopup<T>(
-    opener: HTMLElement | AtomControl,
+    opener: AtomRepeater & { search: string },
     items: T[],
     itemRenderer: (item: T, index: number, repeater: AtomRepeater) => XNode,
     match: Match<T>,
     selectedItem: T): Promise<T> {
 
-    const updateSearch = "search" in opener;
     const itemsInOpener = "items" in opener;
 
-    class Suggestions extends InlinePopup {
+    class Suggestions extends AtomPopover {
 
-        public anchorItem: T;
+        anchorItem = null;
 
-        public anchorIndex: number;
+        anchorIndex = null;
 
-        @BindableProperty
-        public search: string;
-
-        private opener: any;
-
-        private get items() {
-            return itemsInOpener ? this.opener.items : items;
-        }
-
-        public onPropertyChanged(name: string): void {
-            if (updateSearch && name === "search") {
-                (opener as any).search = this.search;
-            }
-            super.onPropertyChanged(name);
-        }
-
-        protected create(): void {
-            this.anchorItem = selectedItem;
-            this.opener = opener;
-            if (this.opener.search) {
-                this.search = this.opener.search;
-            }
-            if (selectedItem) {
-                this.anchorIndex = items.indexOf(selectedItem);
-            }
+        init() {
             const disableSearch = (opener as any).disableSearch;
-            if (itemsInOpener) {
-                this.render(<div data-suggestion-popup="suggestion-popup">
-                    {!disableSearch && <input
-                        type="search"
-                        value={Bind.twoWaysImmediate(() => this.search)}
-                        eventKeydown={(e) => this.onKey(e)}
-                        autofocus={true}/>}
-                    <div class="items">
-                        <AtomRepeater
-                            class="presenter"
-                            selectedItem={Bind.oneWay(() => this.anchorItem)}
-                            itemRenderer={itemRenderer}
-                            visibilityFilter={Bind.oneWay(() => match(this.search))}
-                            eventItemClick={(e) => {
-                                this.anchorItem = e.detail;
-                                setTimeout(() =>
-                                    this.close(e.detail), 100);
-                            }}
-                            items={Bind.oneWay(() => this.opener.items)}/>
-                    </div>
-                </div>);
-                return;
-            }
-            this.render(<div data-suggestion-popup="suggestion-popup">
+            this.renderer = <div data-suggestion-popup="suggestion-popup">
                 {!disableSearch && <input
                     type="search"
-                    value={Bind.twoWaysImmediate(() => this.search)}
+                    value={Bind.sourceTwoWays(opener, (x) => x.source.search)}
                     eventKeydown={(e) => this.onKey(e)}
-                    autofocus={true}/> }
+                    autofocus={true}/>}
                 <div class="items">
                     <AtomRepeater
                         class="presenter"
-                        selectedItem={Bind.oneWay(() => this.anchorItem)}
+                        selectedItem={Bind.source(this, (x) => x.source.anchorItem)}
                         itemRenderer={itemRenderer}
-                        visibilityFilter={Bind.oneWay(() => match(this.search))}
-                        scrollToSelection={true}
+                        visibilityFilter={Bind.source(opener, (x) => match(x.source.search))}
                         eventItemClick={(e) => {
-                            this.close(e.detail);
+                            this.anchorItem = e.detail;
+                            setTimeout(() =>
+                                this.close(e.detail), 100);
                         }}
-                        items={items}/>
+                        items={Bind.source(opener, (x) => x.source.items)}/>
                 </div>
-            </div>);
+            </div>;
         }
 
         protected onKey(e: KeyboardEvent) {
-            const suggested = match ? this.items?.filter(match(this.search)) : this.items;
+            const suggested = match ? opener.items?.filter(match(opener.search)) : opener.items;
             switch (e.key) {
                 case "Enter":
                     // selection mode...
@@ -251,7 +203,7 @@ export function askSuggestionPopup<T>(
                     this.anchorIndex = 0;
                     this.close(anchorItem);
                     this.anchorItem = null;
-                    this.search = "";
+                    opener.search = "";
                     break;
                 case "ArrowDown":
                     if (suggested) {
@@ -280,7 +232,7 @@ export function askSuggestionPopup<T>(
         }
     }
 
-    return Suggestions.showControl<T>(opener);
+    return Suggestions.show(opener.element, { });
 
 }
 
