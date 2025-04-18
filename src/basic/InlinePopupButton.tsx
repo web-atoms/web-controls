@@ -17,7 +17,7 @@ export interface IPopupButton extends IAnchorPopover {
 
 
 
-export default function InlinePopupButton( { icon, text, label, closeOnClick, popup, ... a }: IPopupButton, ... nodes: XNode[]) {
+export default function InlinePopupButton( { icon, text, label, closeOnClick = true, popup, ... a }: IPopupButton, ... nodes: XNode[]) {
     if(!a["anchor-right"]) {
         a["anchor-left"] ??= "parent-right";
     }
