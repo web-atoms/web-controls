@@ -160,6 +160,8 @@ class AtomPopoverElement extends HTMLElement {
             return;
         }
 
+        (this as any).containingBlock = cb;
+
         const rect = this.parentElement.getBoundingClientRect();
 
         const thisRect = this.getBoundingClientRect();
