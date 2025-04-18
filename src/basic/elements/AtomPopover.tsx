@@ -3,11 +3,16 @@ const testNode = (node) => {
     test = cs.getPropertyValue('position'); if ([
         'absolute', 'fixed'
     ].includes(test)) { return true; }
-    test = cs.getPropertyValue('transform');   if (test != 'none')  { return true; }
-    test = cs.getPropertyValue('perspective'); if (test != 'none')  { return true; }
-    test = cs.getPropertyValue('perspective'); if (test != 'none')  { return true; }
-    test = cs.getPropertyValue('filter');      if (test != 'none')  { return true; }
-    test = cs.getPropertyValue('contain');     if (test == 'paint') { return true; }
+    test = cs.getPropertyValue('transform');
+    if (test != 'none')  { return true; }
+    test = cs.getPropertyValue('perspective');
+    if (test != 'none')  { return true; }
+    test = cs.getPropertyValue('perspective');
+    if (test != 'none')  { return true; }
+    test = cs.getPropertyValue('filter');
+    if (test != 'none')  { return true; }
+    test = cs.getPropertyValue('contain');
+    if (/paint|content/i.test(test)) { return true; }
     test = cs.getPropertyValue('will-change'); if ([
         'transform', 'perspective', 'filter'
     ].includes(test)) { return true; }
