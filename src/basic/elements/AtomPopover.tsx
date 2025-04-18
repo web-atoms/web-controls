@@ -46,14 +46,14 @@ class AtomPopoverElement extends HTMLElement {
         if(!this.root) {
 
             const root = this.root = this.attachShadow({ mode: "open" });
-            const container = document.createElement("div");
-            container.setAttribute("part", "root");
+            // const container = document.createElement("div");
+            // container.setAttribute("part", "root");
             const slot = document.createElement("slot");
             slot.setAttribute("part", "container");
-            // slot.name = "container";
             this.slotElement = slot;
-            container.appendChild(slot);
-            root.appendChild(container);
+            root.appendChild(slot);
+            // container.appendChild(slot);
+            // root.appendChild(container);
         }
         setTimeout(() => this.updatePosition(), 100);
 

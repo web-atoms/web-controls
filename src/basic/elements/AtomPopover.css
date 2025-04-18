@@ -1,8 +1,5 @@
 atom-pop-over {
     position: relative;
-    &::part(root) {
-        position: absolute;
-    }
     &::part(container) {
         display: block;
         position: fixed;

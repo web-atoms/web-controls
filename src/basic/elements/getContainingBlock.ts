@@ -4,23 +4,40 @@ const getContainingBlock = (node: HTMLElement) => {
         return document.body;
     }
 
-    const cs = getComputedStyle(node);
+    let start = node.parentElement;
+    while (start) {
+    
+        const cs = getComputedStyle(start);
+        if(cs.filter !== "none") {
+            return start;
+        }
+        if (cs.backdropFilter !== "none") {
+            return start;
+        }
 
-    const position = cs.position;
-
-    if (/^(static|relative|sticky)$/.test(position)) {
-        return getContainingBlock(node.parentElement);
+        if (cs.transform !== "none") {
+            return start;
+        }
+        if (cs.perspective !== "none")  {
+            return start;
+        }
+        if (/layout|paint|strict|content/i.test(cs.contain)) {
+            return start;
+        }
+        if (cs.containerType && cs.containerType !== "normal") {
+            return start;
+        }
+        if (/filter|transform/i.test(cs.willChange)) {
+            return start;
+        }
+        if (/auto/i.test(cs.contentVisibility)) {
+            return start;
+        }
+    
+        start = start.parentElement;
     }
 
-    if (/^(absolute)$/.test(position)) {
-        
-    }
-
-    switch(node.tagName) {
-
-    }
-
-    return null;
+    return document.body;
 }
 
 export default getContainingBlock;
