@@ -112,10 +112,16 @@ document.body.addEventListener("click", (e) => {
         return data;
     };
 
+    let closeOnClick = void 0;
+    const dataCloseOnClick = target.getAttribute("data-close-on-click");
+    if (dataCloseOnClick) {
+        closeOnClick = /^(true|yes|1)$/i.test(dataCloseOnClick);
+    }
+
     AtomPopover.create(target, {
         nodeFactory: (data) => pf(data),
         dataFactory,
-        closeOnClick: target.hasAttribute("data-close-on-click"),
+        closeOnClick,
         "anchor-bottom": target.getAttribute("anchor-bottom") as any,
         "anchor-top": target.getAttribute("anchor-top") as any,
         "anchor-left": target.getAttribute("anchor-left") as any,
