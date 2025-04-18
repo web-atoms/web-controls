@@ -172,8 +172,6 @@ class AtomPopoverElement extends HTMLElement {
 
         const rrParent = relativeRect(this.parentElement, cb);
 
-        console.log(rrParent);
-
         const topLeft = {
             "parent-left": `${rrParent.left}px`,
             "parent-right": `${rrSelf.left}px`,
