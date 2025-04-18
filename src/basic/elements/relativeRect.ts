@@ -8,13 +8,21 @@ const getScreenRect = (e: HTMLElement) => {
 export function relativeRect(e: HTMLElement, cb: HTMLElement) {
 
     const ebr = getScreenRect(e);
-    // const cbr = getScreenRect(cb);
+    const cbr = getScreenRect(cb);
 
-    const left = ebr.left; // - cbr.left;
-    const top = ebr.top; // - cbr.top;
+    let left = ebr.left; // - cbr.left;
+    let top = ebr.top; // - cbr.top;
 
-    const bottom = ebr.bottom; // - cbr.bottom;
-    const right = ebr.right; // - cbr.bottom;
+
+    let bottom = ebr.bottom; // - cbr.bottom;
+    let right = ebr.right; // - cbr.bottom;
+
+    if (cb.offsetParent) {
+        left -= cbr.left;
+        top -= cbr.top;
+        bottom -= cbr.bottom;
+        right -= cbr.right;
+    }
 
     const height = e.offsetHeight;
     const width = e.offsetWidth;
