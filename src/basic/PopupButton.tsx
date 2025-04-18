@@ -48,6 +48,8 @@ export default InlinePopupButton;
 
 export function PopupActionButton(a: IPopupButton, ... nodes: XNode[]) {
     a.closeOnClick ??= true;
+    a["anchor-top"] = "parent-bottom";
+    a["anchor-right"] = "parent-left";
     return InlinePopupButton(a, ... nodes);
 }
 
