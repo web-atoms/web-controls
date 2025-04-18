@@ -328,7 +328,7 @@ export default abstract class AtomPopover<T = any> {
             cancelToken,
             nodeFactory,
             dataFactory,
-            closeOnClick,
+            closeOnClick = true,
             "anchor-left": anchorLeft,
             "anchor-right": anchorRight,
             "anchor-top": anchorTop,
