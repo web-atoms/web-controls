@@ -29,6 +29,7 @@ import { CancelToken } from "@web-atoms/core/dist/core/types";
 import XNode, { IElementAttributes, xnodeSymbol } from "@web-atoms/core/dist/core/XNode";
 import { AtomControl, ElementValueSetters } from "@web-atoms/core/dist/web/controls/AtomControl";
 import "./AtomPopover.css";
+import { relativeRect } from "./relativeRect";
 
 ElementValueSetters["anchor-left"] = (c, e, v) => e.setAttribute("anchor-left", v);
 ElementValueSetters["anchor-right"] = (c, e, v) => e.setAttribute("anchor-right", v);
@@ -162,55 +163,24 @@ class AtomPopoverElement extends HTMLElement {
 
         (this as any).containingBlock = cb;
 
-        const rect = this.parentElement.getBoundingClientRect();
+        const rrSelf = relativeRect(this, cb);
 
-        const thisRect = this.getBoundingClientRect();
+        const rrParent = relativeRect(this.parentElement, cb);
 
-        const cbr = cb.getBoundingClientRect();
-
-        let selfLeft = Math.max(0, thisRect.x - cbr.x - (cb.scrollLeft + window.scrollX));
-        let parentLeft = Math.max(0, rect.x - cbr.x - (cb.scrollLeft + window.scrollX));
-
-        let selfRight = Math.max(0, thisRect.right - cbr.right - (cb.scrollLeft + window.scrollX));
-        let parentRight = Math.max(0, rect.right - cbr.right - (cb.scrollLeft + window.scrollX));
-
-        let t = Math.max(0, thisRect.y - cbr.y - (cb.scrollTop + window.scrollY));
-
-        const width = this.slotElement.offsetWidth;
-        const height = this.slotElement.offsetHeight;
-
-        if ((selfLeft + width) > cbr.width) {
-            selfLeft -= (selfLeft + width) - cbr.width;
-        }
-        if ((parentLeft + width) > cbr.width) {
-            parentLeft -= (parentLeft + width) - cbr.width;
-        }
-        if ((t + height) > cbr.height) {
-            t -= (t + height) - cbr.height;
-        }
-
-
-        const r = selfLeft + (rect.x - cbr.x);
-        const b = t + (rect.height);
-
-        let bottom = rect.bottom + (cb.scrollTop + window.scrollY);
-
-        if ((bottom + height) > cbr.bottom) {
-            bottom += (bottom + height) - cbr.bottom;
-        }
+        console.log(rrParent);
 
         const topLeft = {
-            "parent-left": `${parentLeft}px`,
-            "parent-right": `${selfLeft}px`,
-            "parent-top": `${t}px`,
-            "parent-bottom": `${b}px`
+            "parent-left": `${rrParent.left}px`,
+            "parent-right": `${rrSelf.left}px`,
+            "parent-top": `${rrParent.top}px`,
+            "parent-bottom": `${rrParent.top + rrParent.height}px`
         };
 
         const bottomRight = {
-            "parent-left": `${parentRight}px`,
-            "parent-right": `${selfRight}px`,
-            "parent-top": `${bottom}px`,
-            "parent-bottom": `${bottom}px`
+            "parent-left": `${rrParent.right}px`,
+            "parent-right": `${rrSelf.right}px`,
+            "parent-top": `${rrParent.bottom + rrSelf.height}px`,
+            "parent-bottom": `${rrParent.bottom + rrParent.height}px`
         };
 
         
@@ -235,11 +205,11 @@ class AtomPopoverElement extends HTMLElement {
         if (anchorTop) {
             style.top = topLeft[anchorTop];
         }
-        if (anchorBottom) {
-            style.bottom = bottomRight[anchorBottom];
-        }
         if (anchorLeft) {
             style.left = topLeft[anchorLeft];
+        }
+        if (anchorBottom) {
+            style.bottom = bottomRight[anchorBottom];
         }
         if (anchorRight) {
             style.right = bottomRight[anchorRight];
