@@ -31,7 +31,7 @@ export default function InlinePopupButton( { icon, text, label, closeOnClick, po
         popup = () => div;
         nodes = [];
     }
-    a["popupFctory"] = popup;
+    a["popupFactory"] = popup;
 
     if (closeOnClick) {
         a["data-close-on-click"] = true;
@@ -66,7 +66,7 @@ document.body.addEventListener("click", (e) => {
         return;
     }
 
-    const pf = start["popupFctory"] as PopupFactory;
+    const pf = start["popupFactory"] as PopupFactory;
     if (!pf) {
         return;
     }
@@ -112,13 +112,13 @@ document.body.addEventListener("click", (e) => {
         return data;
     };
 
-    AtomPopover.create(start, {
+    AtomPopover.create(target, {
         nodeFactory: (data) => pf(data),
         dataFactory,
-        closeOnClick: start.hasAttribute("data-close-on-click"),
-        "anchor-bottom": start.getAttribute("anchor-bottom") as any,
-        "anchor-top": start.getAttribute("anchor-top") as any,
-        "anchor-left": start.getAttribute("anchor-left") as any,
-        "anchor-right": start.getAttribute("anchor-right") as any,
+        closeOnClick: target.hasAttribute("data-close-on-click"),
+        "anchor-bottom": target.getAttribute("anchor-bottom") as any,
+        "anchor-top": target.getAttribute("anchor-top") as any,
+        "anchor-left": target.getAttribute("anchor-left") as any,
+        "anchor-right": target.getAttribute("anchor-right") as any,
     });
 })
