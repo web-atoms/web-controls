@@ -18,11 +18,11 @@ export interface IPopupButton extends IAnchorPopover {
 
 
 export default function InlinePopupButton( { icon, text, label, closeOnClick, popup, ... a }: IPopupButton, ... nodes: XNode[]) {
-    if(!a["data-anchor-right"]) {
-        a["data-anchor-left"] = "parent-right";
+    if(!a["anchor-right"]) {
+        a["anchor-left"] = "parent-right";
     }
-    if (!a["data-anchor-bottom"]) {
-        a["data-anchor-top"] = "parent-top";
+    if (!a["anchor-bottom"]) {
+        a["anchor-top"] = "parent-top";
     }
     a["data-atom-popup-button"] = "popup-button";
     if (!popup) {
@@ -116,9 +116,9 @@ document.body.addEventListener("click", (e) => {
         nodeFactory: (data) => pf(data),
         dataFactory,
         closeOnClick: start.hasAttribute("data-close-on-click"),
-        "data-anchor-bottom": start.getAttribute("data-anchor-bottom") as any,
-        "data-anchor-top": start.getAttribute("data-anchor-top") as any,
-        "data-anchor-left": start.getAttribute("data-anchor-left") as any,
-        "data-anchor-right": start.getAttribute("data-anchor-right") as any,
+        "anchor-bottom": start.getAttribute("anchor-bottom") as any,
+        "anchor-top": start.getAttribute("anchor-top") as any,
+        "anchor-left": start.getAttribute("anchor-left") as any,
+        "anchor-right": start.getAttribute("anchor-right") as any,
     });
 })

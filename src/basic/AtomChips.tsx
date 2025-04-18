@@ -78,7 +78,7 @@ function askSuggestionPopup<T>(
         }
     }
 
-    return Suggestions.show(host, { "data-anchor-top": "parent-bottom", "data-anchor-left": "parent-left", cancelToken });
+    return Suggestions.show(host, { "anchor-top": "parent-bottom", "anchor-left": "parent-left", cancelToken });
 }
 
 export function Suggestion(
