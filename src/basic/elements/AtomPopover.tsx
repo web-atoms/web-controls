@@ -80,7 +80,7 @@ class AtomPopoverElement extends HTMLElement {
         }
         setTimeout(() => this.updatePosition(), 100);
 
-        window.addEventListener("scroll", this.updatePosition, { passive : true });
+        window.addEventListener("scroll", this.updatePosition, { passive : true, capture: true });
 
         setTimeout(() => {
             document.body.addEventListener("click", this.closePopover);
