@@ -1,40 +1,10 @@
-const testNode = (node) => {
-    let test; let cs = getComputedStyle(node);
-    test = cs.getPropertyValue('position'); if ([
-        'absolute', 'fixed'
-    ].includes(test)) { return true; }
-    test = cs.getPropertyValue('transform');
-    if (test != 'none')  { return true; }
-    test = cs.getPropertyValue('perspective');
-    if (test != 'none')  { return true; }
-    test = cs.getPropertyValue('perspective');
-    if (test != 'none')  { return true; }
-    test = cs.getPropertyValue('filter');
-    if (test != 'none')  { return true; }
-    test = cs.getPropertyValue('contain');
-    if (/paint|content/i.test(test)) { return true; }
-    test = cs.getPropertyValue('will-change'); if ([
-        'transform', 'perspective', 'filter'
-    ].includes(test)) { return true; }
-    return false;
-}
-
-const getContainingBlock = (node) => {
-    if (node.parentElement) {
-        if (node.parentElement == document.body) {
-            return document.body;
-        } else if (testNode(node.parentElement) == false) {
-            return getContainingBlock(node.parentElement);
-        } else { return node.parentElement; }
-    } else { return null; }
-}
-
 import { AtomDisposableList } from "@web-atoms/core/dist/core/AtomDisposableList";
 import { CancelToken } from "@web-atoms/core/dist/core/types";
 import XNode, { IElementAttributes, xnodeSymbol } from "@web-atoms/core/dist/core/XNode";
 import { AtomControl, ElementValueSetters } from "@web-atoms/core/dist/web/controls/AtomControl";
 import "./AtomPopover.css";
 import { relativeRect } from "./relativeRect";
+import getContainingBlock from "./getContainingBlock";
 
 ElementValueSetters["anchor-left"] = (c, e, v) => e.setAttribute("anchor-left", v);
 ElementValueSetters["anchor-right"] = (c, e, v) => e.setAttribute("anchor-right", v);
@@ -76,13 +46,14 @@ class AtomPopoverElement extends HTMLElement {
         if(!this.root) {
 
             const root = this.root = this.attachShadow({ mode: "open" });
-            // const container = document.createElement("div");
+            const container = document.createElement("div");
+            container.setAttribute("part", "root");
             const slot = document.createElement("slot");
             slot.setAttribute("part", "container");
             // slot.name = "container";
             this.slotElement = slot;
-            // container.appendChild(slot);
-            root.appendChild(slot);
+            container.appendChild(slot);
+            root.appendChild(container);
         }
         setTimeout(() => this.updatePosition(), 100);
 
