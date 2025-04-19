@@ -184,7 +184,7 @@ export function askSuggestionPopup<T>(
                         eventItemClick={(e) => {
                             this.anchorItem = e.detail;
                             setTimeout(() =>
-                                this.close(e.detail), 100);
+                                this.close(e.detail), 50);
                         }}
                         items={Bind.source(opener, (x) => x.source.items)}/>
                 </div>

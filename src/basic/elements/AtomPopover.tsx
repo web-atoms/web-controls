@@ -112,7 +112,7 @@ class AtomPopoverElement extends HTMLElement {
                 bubbles: true,
             }));
             this.remove();
-        }, 10);
+        }, 250);
     };
 
     updatePosition = () => {
@@ -379,7 +379,7 @@ export default abstract class AtomPopover<T = any> {
 
         const { result } = this.popover as any;
         if (result === void 0) {
-            this.resultReject?.();
+            this.resultReject?.("canceled");
         } else {
             this.resultResolve?.(result);
         }
