@@ -232,7 +232,7 @@ export function askSuggestionPopup<T>(
         }
     }
 
-    return Suggestions.show(opener.element, { });
+    return Suggestions.show(opener.element, { "anchor-left": "parent-left" });
 
 }
 
