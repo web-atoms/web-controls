@@ -2,7 +2,7 @@
 
     &[data-mode=desktop][data-is-open] {
         grid-template-columns: auto auto auto 1fr;
-        & [data-element=detail] {
+        & [data-base-page][data-element=detail] {
             grid-column: 4;
             grid-row: 1 / span 3;
         }
@@ -50,7 +50,7 @@
                 font-size: 1.5em;
                 z-index: 2;
             }
-            & > *[data-element=detail] {
+            & > [data-element=detail] {
                 grid-row: 1 / span 2;
                 grid-column: 2 / span 2;
                 align-self: stretch;
