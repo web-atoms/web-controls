@@ -28,7 +28,7 @@ button-bar {
 
         &:has(input:checked) {
             background-color: var(--selection-color, highlight);
-            color: var(--selection-color, highlighttext);
+            color: var(--selection-text-color, highlighttext);
         }
 
         & > input[type=radio] {
