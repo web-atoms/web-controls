@@ -1,5 +1,8 @@
 button-bar {
     display: flex;
-    gap: 5px;
-    align-items: center;
+    & button-bar-item {
+        gap: 5px;
+        align-items: center;
+        display: flex;
+    }
 }
