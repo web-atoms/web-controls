@@ -83,12 +83,14 @@ const changeTracker = (e: CustomEvent) => {
     const target = e.currentTarget as HTMLElement;
     const hidden = target.querySelector(`input.hidden`) as HTMLInputElement;
     const buttons = target.querySelectorAll(`input[type="radio"]`);
-    buttons.forEach((v: HTMLInputElement) => {
-        if(v.checked) {
-            hidden.value = v.value;
-            hidden.dispatchEvent(new CustomEvent("change", { detail: v.value, bubbles: true }));
+    for (let index = 0; index < buttons.length; index++) {
+        const element = buttons[index] as HTMLInputElement;
+        if (element.checked) {
+            hidden.value = element.value;
+            hidden.dispatchEvent(new CustomEvent("change", { detail: element.value, bubbles: true }));
+            break;
         }
-    });
+    }
 };
 
 export interface IButtonBar extends IElement {
