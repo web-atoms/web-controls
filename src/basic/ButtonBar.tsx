@@ -87,7 +87,7 @@ const changeTracker = (e: CustomEvent) => {
         const element = buttons[index] as HTMLInputElement;
         if (element.checked) {
             hidden.value = element.value;
-            hidden.dispatchEvent(new CustomEvent("change", { detail: element.value, bubbles: true }));
+            hidden.dispatchEvent(new CustomEvent("input", { detail: element.value, bubbles: true }));
             break;
         }
     }
