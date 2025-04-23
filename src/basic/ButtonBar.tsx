@@ -2,7 +2,7 @@ import XNode, { constructorNeedsArgumentsSymbol, IElementAttributes } from "@web
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import IElement from "./IElement";
 
-import "./Button.local.css";
+import "./ButtonBar.global.css";
 
 declare global {
     namespace JSX {
@@ -73,7 +73,7 @@ const refreshItems = (element: HTMLElement, items?: any[]) => {
     const name = element["namePath"];
     let i = 0;
 
-    const all = Array.from(element.querySelectorAll(`button-bar-item`));
+    const all = Array.from(element.querySelectorAll(`label`));
     for (const element of all) {
         element.remove();
     }
@@ -82,8 +82,8 @@ const refreshItems = (element: HTMLElement, items?: any[]) => {
 
     if(items?.length) {
         for (const iterator of items) {
-            const item = document.createElement("button-bar-item");
-            element.appendChild(item);
+            const item = document.createElement("label");
+            const labelName = name + i;
             const value = vp(item);
             let checked = false;
             if(cv !== void 0) {
@@ -91,8 +91,10 @@ const refreshItems = (element: HTMLElement, items?: any[]) => {
                     checked = true;
                 }
             }
+            item.setAttribute("for", labelName);
+            element.appendChild(item);
             // @ts-expect-error
-            control.render(<div> <input type="radio" name={name} value={value} checked={checked} /> { ir(iterator) }</div>, item, control);
+            control.render(<div> <input id={labelName} type="radio" name={name} value={value} checked={checked} /> { ir(iterator) }</div>, item, control);
             i++;
         }
     }

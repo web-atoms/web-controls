@@ -3,6 +3,8 @@ import Pack from "@web-atoms/core/dist/Pack";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import AtomButtonBar from "../../button-bar/AtomButtonBar";
 import ButtonBar from "../../basic/ButtonBar";
+import Form from "../../basic/Form";
+import FormField from "../../basic/FormField";
 
 const genders = [
     { label: "Male", value: "Male" },
@@ -14,9 +16,19 @@ export default class ButtonBarTest extends AtomControl {
 
     protected create(): void {
         this.render(<div>
-            <ButtonBar
-                items={genders}
-                />
+            <Form data-padding="auto">
+                <FormField label="Name">
+                    <input placeholder="Name"/>
+                </FormField>
+                <FormField label="Gender">
+                    <ButtonBar
+                        items={genders}
+                        />
+                </FormField>
+                <FormField label="">
+                    <button>Save</button>
+                </FormField>
+            </Form>
         </div>);
     }
 
