@@ -1,8 +1,10 @@
 button-bar {
     display: flex;
+    flex-direction: row;
     & > button-bar-item {
         gap: 5px;
         align-items: center;
         display: flex;
+        flex-direction: row;
     }
 }
