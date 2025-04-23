@@ -31,41 +31,8 @@ const itemRendererSetter = AtomControl.registerProperty("data-button-bar-items",
     element["itemRenderer"] = value;
 });
 
-
-const valueSetter = AtomControl.registerProperty("data-button-bar-items", "items", (ctrl, element, value) => {
-    element["initialValue"] = value;
-    element["value"] = value;
-    const select = element as HTMLSelectElement;
-    let length = select.options.length;
-    if (!length) {
-        setTimeout(refreshItems, 1, element);
-        return;
-    }
-
-    // go through all items...
-    const items = element["items"];
-    if (!items) {
-        setTimeout(refreshItems, 1, element);
-        return;
-    }
-
-    const vp = element["valuePath"] ?? ((item) => item?.value ?? item);
-    let index = 0;
-    for (const item of items) {
-        const v = vp(item);
-        if (v == value) {
-            select.selectedIndex = index;
-            return;
-        }
-        index++;
-    }
-    setTimeout(refreshItems, 1, element);
-});
-
 const refreshItems = (element: HTMLElement, items?: any[]) => {
     items ??= element["items"];
-    (element as any).update = true;
-    let cv = element["value"] ?? element["initialValue"];
 
     const lp = element["labelPath"] ?? ((item) => item?.label ?? item);
     const vp = element["valuePath"] ?? ((item) => item?.value ?? item);
@@ -80,11 +47,14 @@ const refreshItems = (element: HTMLElement, items?: any[]) => {
 
     const control = AtomControl.from(element);
 
+    const hidden = element.querySelector(`input.hidden`) as HTMLInputElement;
+    const cv = hidden.value;
+
     if(items?.length) {
         for (const iterator of items) {
             const item = document.createElement("label");
             const labelName = name + i;
-            const value = vp(item);
+            const value = vp(iterator);
             let checked = false;
             if(cv !== void 0) {
                 if (cv == value) {
@@ -98,15 +68,28 @@ const refreshItems = (element: HTMLElement, items?: any[]) => {
             i++;
         }
     }
-    (element as any).update = false;
-
 };
 
 
 const itemsSetter = AtomControl.registerProperty("data-items", "value", (ctrl, element: HTMLSelectElement, value) => {
     element["items"] = value;
-    setTimeout(refreshItems, 1, element, value);
+    ctrl.runAfterInit(() => setTimeout(refreshItems, 1, element, value));
 });
+
+const changeTracker = (e: CustomEvent) => {
+    if (e.detail) {
+        return;
+    }
+    const target = e.currentTarget as HTMLElement;
+    const hidden = target.querySelector(`input.hidden`) as HTMLInputElement;
+    const buttons = target.querySelectorAll(`input[type="radio"]`);
+    buttons.forEach((v: HTMLInputElement) => {
+        if(v.checked) {
+            hidden.value = v.value;
+            hidden.dispatchEvent(new CustomEvent("change", { detail: v.value, bubbles: true }));
+        }
+    });
+};
 
 export interface IButtonBar extends IElement {
     items: any[];
@@ -127,11 +110,13 @@ export default function ButtonBar({
     }: IButtonBar) {
     a[labelPathSetter.property] = labelPath;
     a[valuePathSetter.property] = valuePath;
-    a[valueSetter.property] = value;
     a[itemsSetter.property] = items;
     a[itemRendererSetter.property] = itemRenderer;
     a[namePathSetter.property] = name;
+    a["event-change"] = changeTracker;
     return <button-bar
         { ... a}
-        ></button-bar>;
+        >
+        <input class="hidden" value={value}/>
+    </button-bar>;
 }
