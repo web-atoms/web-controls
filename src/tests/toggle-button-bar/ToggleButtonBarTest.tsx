@@ -2,7 +2,6 @@ import XNode from "@web-atoms/core/dist/core/XNode";
 import Pack from "@web-atoms/core/dist/Pack";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import AtomButtonBar from "../../button-bar/AtomButtonBar";
-import ButtonBar from "../../basic/ButtonBar";
 
 const genders = [
     { label: "Male", value: "Male" },
@@ -14,7 +13,7 @@ export default class ButtonBarTest extends AtomControl {
 
     protected create(): void {
         this.render(<div>
-            <ButtonBar
+            <AtomButtonBar
                 items={genders}
                 />
         </div>);
