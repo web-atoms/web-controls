@@ -1,6 +1,6 @@
 button-bar {
     display: flex;
-    & button-bar-item {
+    & > button-bar-item {
         gap: 5px;
         align-items: center;
         display: flex;
