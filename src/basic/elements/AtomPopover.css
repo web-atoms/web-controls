@@ -11,5 +11,7 @@ atom-pop-over {
         background-color: var(--popup-background-color, var(--default-background-color, canvas));
         color: var(--popup-text-color, canvasText);
         font-family: var(--popup-menu-font, var(--body-font-family, ui-serif ));
+        font-weight: normal;
+        line-height: var(--body-line-height, 1.4);
     }
 }
