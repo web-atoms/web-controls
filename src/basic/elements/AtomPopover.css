@@ -10,5 +10,6 @@ atom-pop-over {
         z-index: 5000;
         background-color: var(--popup-background-color, var(--default-background-color, canvas));
         color: var(--popup-text-color, canvasText);
+        font-family: var(--popup-menu-font, var(--body-font-family, ui-serif ));
     }
 }
