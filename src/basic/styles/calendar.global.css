@@ -91,7 +91,7 @@
 
             &[data-selected-item=true] {
                 background-color: var( --selection-color, blueviolet);
-                color: var( --selection-color-text, white);
+                color: var( --selection-text-color, white);
             }
         }
     }
