@@ -8,7 +8,11 @@ module.exports = (ctx) => ({
         require("postcss-import-ext-glob")(),
         require("postcss-import")(),
         require("postcss-nested")(),
-        require("postcss-copy-assets")({ base: ctx.options.base }),
+        require("postcss-url")({
+          url: "copy",
+          basePath: ctx.options.base,
+          assetsPath: ctx.options.dist
+        }),
         require("cssnano")()
     ]
   });
