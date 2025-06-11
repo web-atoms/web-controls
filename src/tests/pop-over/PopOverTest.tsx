@@ -49,8 +49,6 @@ export default class PopOverTest extends AtomControl {
                         <MenuItem label="As Attachment"/>
                         <MenuItem label="As Inline"/>
                         <MenuItem label="As Attachment"/>
-                        <MenuItem label="As Inline"/>
-                        <MenuItem label="As Attachment"/>
                     </div>}
                     >Forward</PopupMenu>
             <br/>
