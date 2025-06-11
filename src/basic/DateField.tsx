@@ -182,7 +182,7 @@ export default class DateField extends AtomControl {
             data-layout="flex"
             data-date-field="date-field"
             text={Bind.oneWay(() => this.format?.(this.value, this.enableTime) || this.prompt)}
-            event-click={() => CalendarPopup.show(this, { "anchor-left": "parent-left"})}>
+            event-click={() => CalendarPopup.show(this, { "anchor-left": "parent-left" , closeOnClick: false})}>
         </div>);
     }
 
