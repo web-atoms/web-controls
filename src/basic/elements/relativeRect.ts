@@ -16,12 +16,12 @@ export function relativeRect(e: HTMLElement, cbr: DOMRect, cb) {
     let bottom = ebr.bottom; // - cbr.bottom;
     let right = ebr.right; // - cbr.bottom;
 
-    // if (cb.offsetParent) {
-    //     left -= cbr.left;
-    //     top -= cbr.top;
-    //     bottom += cbr.height;
-    //     right += cbr.width;
-    // }
+    if (cb.offsetParent) {
+        left -= cbr.left;
+        top -= cbr.top;
+        bottom -= cbr.bottom;
+        right -= cbr.right;
+    }
 
     const height = e.offsetHeight;
     const width = e.offsetWidth;

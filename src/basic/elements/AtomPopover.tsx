@@ -148,9 +148,11 @@ class AtomPopoverElement extends HTMLElement {
          // auto adjust if the target is outside the
         // container
         const firstChild = this.firstElementChild.getBoundingClientRect();
-        let diffTop =  Math.min(window.visualViewport.height, cb.offsetHeight) - (rrParent.top + firstChild.height);
+        let diffTop =  Math.min(window.visualViewport.height, cbr.height) - (rrParent.top + firstChild.height);
         if(diffTop > 0) {
             diffTop = 0;
+        } else {
+            diffTop -= 40;
         }
 
         let diffBottom = rrParent.top - firstChild.height;
