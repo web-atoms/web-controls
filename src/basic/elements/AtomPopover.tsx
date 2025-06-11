@@ -240,10 +240,12 @@ export default abstract class AtomPopover<T = any> {
 
     static menu(
         parent: HTMLElement | AtomControl,
-        node: HTMLElement | XNode
+        node: HTMLElement | XNode,
+        options: IAtomPopoverOptions = {}
     ) {
         const ct = new CancelToken();
-        const p: AtomPopover = new (this as any)(parent, ct, node);
+        options.nodeFactory = () => node;
+        const p: AtomPopover = new (this as any)(parent, options);
         p.result = 1;
         p.disposables.add(p.owner.bindEvent(p.popover, "click", () => {
             setTimeout(() => {
