@@ -5,10 +5,9 @@ const getScreenRect = (e: HTMLElement) => {
     return { left, top, right, bottom, height, width };
 };
 
-export function relativeRect(e: HTMLElement, cb: HTMLElement) {
+export function relativeRect(e: HTMLElement, cbr: DOMRect, cb) {
 
     const ebr = getScreenRect(e);
-    const cbr = getScreenRect(cb);
 
     let left = ebr.left; // - cbr.left;
     let top = ebr.top; // - cbr.top;

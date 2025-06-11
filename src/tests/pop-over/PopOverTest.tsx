@@ -35,9 +35,20 @@ export default class PopOverTest extends AtomControl {
                 <br/>
 
                 <PopupMenu
-                    anchor-bottom="parent-top"
                     anchor-left="parent-right"
                     popup={() => <div>
+                        <MenuItem label="As Inline"/>
+                        <MenuItem label="As Attachment"/>
+                        <MenuItem label="As Inline"/>
+                        <MenuItem label="As Attachment"/>
+                        <MenuItem label="As Inline"/>
+                        <MenuItem label="As Attachment"/>
+                        <MenuItem label="As Inline"/>
+                        <MenuItem label="As Attachment"/>
+                        <MenuItem label="As Inline"/>
+                        <MenuItem label="As Attachment"/>
+                        <MenuItem label="As Inline"/>
+                        <MenuItem label="As Attachment"/>
                         <MenuItem label="As Inline"/>
                         <MenuItem label="As Attachment"/>
                     </div>}
