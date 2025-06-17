@@ -141,9 +141,9 @@ class AtomPopoverElement extends HTMLElement {
 
         const cbr = cb.getBoundingClientRect();
 
-        const rrSelf = relativeRect(this, cbr, cb);
+        const rrSelf = relativeRect(this, cb);
 
-        const rrParent = relativeRect(this.parentElement, cbr, cb);
+        const rrParent = relativeRect(this.parentElement, cb);
 
          // auto adjust if the target is outside the
         // container

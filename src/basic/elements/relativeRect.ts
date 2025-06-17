@@ -1,13 +1,14 @@
-const getScreenRect = (e: HTMLElement) => {
-    const { left, top, height, width} = e.getBoundingClientRect();
+const getScreenRect = (e: HTMLElement, cbr: DOMRect = e.getBoundingClientRect()) => {
+    const { left, top, height, width} = cbr;
     const right = visualViewport.width - left - width;
     const bottom = visualViewport.height - top - height;
     return { left, top, right, bottom, height, width };
 };
 
-export function relativeRect(e: HTMLElement, cbr: DOMRect, cb) {
+export function relativeRect(e: HTMLElement, cb) {
 
     const ebr = getScreenRect(e);
+    const cbr = getScreenRect(cb);
 
     let left = ebr.left; // - cbr.left;
     let top = ebr.top; // - cbr.top;
