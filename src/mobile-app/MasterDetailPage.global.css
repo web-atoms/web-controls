@@ -6,6 +6,7 @@
         & [data-base-page][data-element=detail] {
             grid-column: 4;
             grid-row: 1 / span 3;
+            transition: none;
         }
     }
 
