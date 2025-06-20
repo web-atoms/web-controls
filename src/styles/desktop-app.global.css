@@ -28,6 +28,19 @@ body {
     min-width: 900px;
     grid-template-rows: 1fr auto;
     grid-template-columns: auto 1fr auto;
+
+    & drawer-menu {
+        transition: all 0.5s ease-out;
+        &[drawer-hidden] {
+            width: 1px;
+        }
+    }
+
+    &[drawer-hidden] {
+        & drawer-menu {
+            width: 1px;
+        }
+    }
     
     & > [data-page-element=app] {
         grid-row: 1;

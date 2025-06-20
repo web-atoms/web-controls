@@ -77,6 +77,6 @@ export default class DesktopApp extends AtomControl {
         this.runAfterInit(() => {
             this.app.runAsync(() => this.init());
         });
-    }
 
+    }
 }
