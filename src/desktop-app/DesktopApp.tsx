@@ -5,6 +5,7 @@ import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import MobileApp from "../mobile-app/MobileApp";
 
 import "../styles/desktop-app.global.css";
+import Action from "@web-atoms/core/dist/view-model/Action";
 
 export default class DesktopApp extends AtomControl {
 
@@ -78,5 +79,14 @@ export default class DesktopApp extends AtomControl {
             this.app.runAsync(() => this.init());
         });
 
+    }
+
+    @Action({ onEvent: "iconClick"})
+    onIconClick() {
+        if(this.element.hasAttribute("drawer-hidden")) {
+            this.element.removeAttribute("drawer-hidden");
+        } else {
+            this.element.setAttribute("drawer-hidden", "1");
+        }
     }
 }
