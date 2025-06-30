@@ -130,7 +130,7 @@
         grid-row-start: 2;
         grid-column-start: 1;
         grid-column-end: span 3;
-        background-color: #c0c0c0; 
+        background-color: #c0c0c030; 
     }
     
     & > [data-page-element=pull-to-refresh] {
