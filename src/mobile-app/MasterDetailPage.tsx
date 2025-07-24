@@ -110,6 +110,7 @@ export default class MasterDetailPage<T = any, TResult = any> extends ContentPag
         if (lastDetail) {
             const { element } = lastDetail;
             lastDetail.dispose();
+            this.lastDetail = null;
             element.remove();
             if (this.scrollEveryNewTarget) {
                 this.scrollTargetIntoView();
