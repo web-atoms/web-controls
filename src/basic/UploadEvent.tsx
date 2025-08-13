@@ -6,6 +6,7 @@ import XNode from "@web-atoms/core/dist/core/XNode";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
 import { AncestorEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import PopupService from "@web-atoms/core/dist/web/services/PopupService";
+import { toFileSize } from "../NumberFormats";
 
 const acceptCache = {};
 
@@ -149,14 +150,14 @@ const requestUpload = ({
                 }
                 if (stream) {
                     if (iterator.size > maxStreamSize) {
-                        msgItems.push(`Size of ${iterator.name} is more than ${maxSize}.`, <br/>);
+                        msgItems.push(`Size of ${iterator.name} is more than ${toFileSize(maxStreamSize)}.`, <br/>);
                         continue;
                     }
                     validated.push(iterator);
                     continue;
                 }
                 if (!convert && maxSize && iterator.size > maxSize) {
-                    msgItems.push(`Size of ${iterator.name} is more than ${maxSize}.`, <br/>);
+                    msgItems.push(`Size of ${iterator.name} is more than ${toFileSize(maxSize)}.`, <br/>);
                     continue;
                 }
                 validated.push(iterator);
