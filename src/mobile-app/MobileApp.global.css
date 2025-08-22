@@ -87,6 +87,7 @@
         grid-row-start: 1;
         grid-column-start: 1;
         color: var(--accent-text-color, black); 
+        width: 40px;
     }
     
     & > [data-page-element=title] {
@@ -106,6 +107,7 @@
         padding: 10px;
         grid-row-start: 1;
         grid-column-start: 3;
+        min-width: 40px;
         color: var(--accent-text-color, black); 
 
         & button {
