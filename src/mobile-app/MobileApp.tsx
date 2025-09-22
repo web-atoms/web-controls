@@ -36,12 +36,13 @@ export class Drawer extends AtomControl {
         this.element.dataset.drawerPage = "drawer-page";
         this.bindEvent(this.element, "click", (e: Event) => {
             const target = e.target as HTMLInputElement;
+            if (e.defaultPrevented) {
+                return;
+            }
             if (/input/i.test(target.tagName) && !/button|submit/i.test(target.type)) {
                 return;
             }
-            if(e.defaultPrevented) {
-                this.closeDrawer();
-            }
+            this.closeDrawer();
         });
         this.runAfterInit(() => this.app.runAsync(() => this.init?.()));
     }
