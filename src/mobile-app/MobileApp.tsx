@@ -12,7 +12,7 @@ import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
 import { AtomDisposableList } from "@web-atoms/core/dist/core/AtomDisposableList";
 import Bind from "@web-atoms/core/dist/core/Bind";
 import { CancelToken, IDisposable } from "@web-atoms/core/dist/core/types";
-import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
+import { AncestorEnumerator, ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import { displayRouteSymbol, routeSymbol } from "@web-atoms/core/dist/core/Command";
 import Route from "@web-atoms/core/dist/core/Route";
 
@@ -589,6 +589,10 @@ export default class MobileApp extends AtomControl {
                 // const da = drawerNode.attributes ??= {};
                 const dispatchCloseDrawer = (de: Event) => {
                     if (de.defaultPrevented) {
+                        return;
+                    }
+                    const target = de.target as HTMLElement;
+                    if(AncestorEnumerator.find(target, (x) => x === drawerPage.element)) {
                         return;
                     }
                     de.target.dispatchEvent(new CustomEvent("closeDrawer", { bubbles: true }));
