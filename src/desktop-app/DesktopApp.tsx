@@ -89,4 +89,10 @@ export default class DesktopApp extends AtomControl {
             this.element.setAttribute("drawer-hidden", "1");
         }
     }
+
+    @Action({ onEvent: "hideDrawer"})
+    onHideDrawer() {
+        this.element.setAttribute("drawer-hidden", "1");
+    }
+
 }
