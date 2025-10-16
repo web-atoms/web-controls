@@ -232,6 +232,10 @@
         & > [data-page-element=action] {
             display: none;    
         }
+
+        & > [data-page-element=content] {
+            grid-row: 1 / span 3;
+        }
     }
 }
 
