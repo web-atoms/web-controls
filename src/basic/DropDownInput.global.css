@@ -1,0 +1,16 @@
+drop-down-input {
+    display: inline-grid;
+    & > * {
+        grid-row: 1;
+        grid-column: 1;
+    }
+    & > label {
+        pointer-events: none;
+    }
+    & > input {
+        opacity: 0;
+    }
+    & > input:focus {
+        opacity: 1;
+    }
+}
