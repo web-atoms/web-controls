@@ -218,6 +218,10 @@ export function askSuggestionPopup<T>(
                     // selection mode...
                     const anchorItem = this.anchorItem;
                     if (!anchorItem) {
+                        if (e.key === "Tab") {
+                            e.preventDefault();
+                            this.cancelSelection().catch(console.error);
+                        }
                         return;
                     }
                     this.anchorIndex = 0;
