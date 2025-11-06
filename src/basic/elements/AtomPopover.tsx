@@ -157,7 +157,7 @@ class AtomPopoverElement extends HTMLElement {
 
         let diffBottom = rrParent.top - firstChild.height;
         if (diffBottom > 0) {
-            diffBottom = 0;
+            diffBottom += this.parentElement.offsetHeight;
         }
 
         const topLeft = {
