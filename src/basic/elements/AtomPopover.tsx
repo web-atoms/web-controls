@@ -159,7 +159,7 @@ class AtomPopoverElement extends HTMLElement {
             diffTop = 0;
         } else {
             diffTop -= 40;
-            if (anchorBottom) {
+            if (anchorTop) {
                 anchorBottom = "parent-top";
                 anchorTop = void 0;
             }
