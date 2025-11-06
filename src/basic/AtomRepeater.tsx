@@ -195,7 +195,6 @@ export function askSuggestionPopup<T>(
                 const { input } = (opener as any);
                 if (input) {
                     this.disposables.add(opener.bindEvent(input, "keydown", (e) => this.onKey(e as KeyboardEvent)));
-                    this.disposables.add(opener.bindEvent(input, "blur", (e) => this.cancelSelection()));
                 }
             }
         }
@@ -214,6 +213,7 @@ export function askSuggestionPopup<T>(
                 case "Escape":
                     this.cancelSelection().catch(console.error);
                     return;
+                case "Tab":
                 case "Enter":
                     // selection mode...
                     const anchorItem = this.anchorItem;
