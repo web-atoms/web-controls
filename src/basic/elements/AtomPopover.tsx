@@ -145,6 +145,12 @@ class AtomPopoverElement extends HTMLElement {
 
         const rrParent = relativeRect(this.parentElement, cb);
 
+        let anchorBottom = this.getAttribute("anchor-bottom");
+        let anchorRight = this.getAttribute("anchor-right");
+        let anchorTop = this.getAttribute("anchor-top");
+        let anchorLeft = this.getAttribute("anchor-left");
+
+
          // auto adjust if the target is outside the
         // container
         const firstChild = this.firstElementChild.getBoundingClientRect();
@@ -153,11 +159,15 @@ class AtomPopoverElement extends HTMLElement {
             diffTop = 0;
         } else {
             diffTop -= 40;
+            if (anchorBottom) {
+                anchorBottom = "parent-top";
+                anchorTop = void 0;
+            }
         }
 
         let diffBottom = rrParent.top - firstChild.height;
         if (diffBottom > 0) {
-            diffBottom += this.parentElement.offsetHeight;
+            diffBottom = 0;
         }
 
         const topLeft = {
@@ -175,10 +185,6 @@ class AtomPopoverElement extends HTMLElement {
         };
 
         
-        let anchorBottom = this.getAttribute("anchor-bottom");
-        let anchorRight = this.getAttribute("anchor-right");
-        let anchorTop = this.getAttribute("anchor-top");
-        let anchorLeft = this.getAttribute("anchor-left");
 
         const style = this.slotElement.style;
         style.removeProperty("left");
