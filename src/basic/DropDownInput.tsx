@@ -1,15 +1,11 @@
-import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder";
 import Bind from "@web-atoms/core/dist/core/Bind";
-import { IDisposable } from "@web-atoms/core/dist/core/types";
 import XNode from "@web-atoms/core/dist/core/XNode";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { IDialogOptions } from "@web-atoms/core/dist/web/services/PopupService";
-import PopupWindow from "@web-atoms/core/dist/web/services/PopupWindow";
-import AtomRepeater, { askSuggestionPopup, Match, MatchAnyCaseInsensitive } from "./AtomRepeater";
-import AtomPopover from "./elements/AtomPopover";
+import { askSuggestionPopup, Match, MatchAnyCaseInsensitive } from "./AtomRepeater";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
+import { Focusable } from "../Focusable";
 
-let dlID = 1;
+import "./DropDownInput.global.css";
 
 export default class DropDownInput<T> extends AtomControl {
 
@@ -38,6 +34,9 @@ public "event-selection-changed"?: (e: CustomEvent) => void;
     public suggestionPrompt: string;
 
     @BindableProperty
+    public autofocus: boolean;
+
+    @BindableProperty
     public itemRenderer: (item: T) => XNode;
 
     @BindableProperty
@@ -55,6 +54,8 @@ public "event-selection-changed"?: (e: CustomEvent) => void;
     private isPopupOpen: boolean;
     input: HTMLInputElement;
     labelElement: HTMLLabelElement;
+    anchorItem: any;
+    selectedItem: any;
 
     constructor(app, e = document.createElement("drop-down-input")) {
         super(app, e);
@@ -63,8 +64,9 @@ public "event-selection-changed"?: (e: CustomEvent) => void;
     protected preCreate(): void {
         this.items = null;
         this.value = null;
-        this.labelPath = (x) => (x as any).label ?? x;
-        this.valuePath = (x) => (x as any).value ?? x;
+        this.selectedItem = null;
+        this.labelPath = (x) => (x as any)?.label ?? x;
+        this.valuePath = (x) => (x as any)?.value ?? x;
         this.itemRenderer = (x) => <div text={this.labelPath?.(x) ?? x}/>;
         this.search = "";
         this.label = "";
@@ -73,17 +75,23 @@ public "event-selection-changed"?: (e: CustomEvent) => void;
         this.render(<div
             event-click={() => this.input.focus()}>
             <input
+                autofocus={Bind.oneTime(() => this.autofocus)}
                 event-focus={() => this.onFocus()}
                 value={Bind.twoWaysImmediate(() => this.search)}
                 placeholder={Bind.oneWay(() => this.label)}/>
             <label text={Bind.oneWay((x) => this.labelPath(this.items.find((i) => this.valuePath(i) === this.value)))}/>
+            <i/>
         </div>);
 
         this.input = this.element.querySelector("input");
         this.labelElement = this.element.querySelector("label");
     }
     onFocus(): any {
-        this.label = this.input.value || this.label;
+
+        const value = this.value;
+        if (value) {
+            this.input.placeholder = this.items.find((i) => this.valuePath?.(i) === value)?.label;
+        }
         this.input.value = "";
         this.app.runAsync(() => this.openPopup())
     }
@@ -96,24 +104,28 @@ public "event-selection-changed"?: (e: CustomEvent) => void;
         try {
 
             let selectedItem = this.items.find((i) => this.value === (this.valuePath?.(i) ?? i));
+            this.anchorItem = selectedItem;
+            this.selectedItem = selectedItem;
 
             const newItem = await askSuggestionPopup(
-                        this as any,
-                        this.items,
-                        this.itemRenderer,
-                        this.match ?? MatchAnyCaseInsensitive(this.labelPath),
-                        selectedItem);
-                    if (newItem !== selectedItem) {
-                        this.value = this.valuePath?.(newItem) ?? newItem;
-                        this.element.dispatchEvent(new CustomEvent(
-                            "selectionChanged",
-                            {
-                                bubbles: true,
-                                detail: newItem,
-                                cancelable: true
-                            }
-                        ));
+                this as any,
+                this.items,
+                this.itemRenderer,
+                this.match ?? MatchAnyCaseInsensitive(this.labelPath),
+                selectedItem);
+            if (newItem !== selectedItem) {
+                this.selectedItem = selectedItem;
+                this.value = this.valuePath?.(newItem) ?? newItem;
+                this.element.dispatchEvent(new CustomEvent(
+                    "selectionChanged",
+                    {
+                        bubbles: true,
+                        detail: newItem,
+                        cancelable: true
                     }
+                ));
+            }
+            Focusable.moveNext(this.input);
         } finally {
             this.isPopupOpen = false;
         } 

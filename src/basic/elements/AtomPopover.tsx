@@ -239,6 +239,7 @@ export default abstract class AtomPopover<T = any> {
     resultReject: (reason?: any) => void;
     parent: HTMLElement;
     popoverContainer: HTMLElement;
+    removed: boolean;
 
     static create(
         parent: HTMLElement | AtomControl,
@@ -372,11 +373,13 @@ export default abstract class AtomPopover<T = any> {
     abstract init(data?: any);
 
     close(r) {
+        this.removed = true;
         (this.popover as any).result = r ?? null;
         this.popover.remove();
     }
 
     async cancel() {
+        this.removed = true;
         delete (this.popover as any).result;
         this.popover.remove();
     }

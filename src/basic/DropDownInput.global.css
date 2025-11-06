@@ -1,5 +1,9 @@
 drop-down-input {
     display: inline-grid;
+    grid-template-columns: 1fr auto;
+    border-bottom: solid 1px lightgray;
+    padding-left: 5px;
+    padding-right: 5px;
     & > * {
         grid-row: 1;
         grid-column: 1;
@@ -9,8 +13,27 @@ drop-down-input {
     }
     & > input {
         opacity: 0;
+        outline: none;
+        border: none;
     }
     & > input:focus {
         opacity: 1;
+    }
+    &:has(input:focus) {
+        & > label {
+            opacity: 0;
+        }
+        border-bottom-color: var(--focus-border-color, black);
+    }
+
+    & > i {
+        grid-column: 2;
+        background-image: url(../../images/svgs/caret-down.svg);
+        background-size: 16px 16px;
+        background-position: center right;
+        background-repeat: no-repeat;
+        width: 16px;
+        height: 16px;
+        display: inline-block;
     }
 }

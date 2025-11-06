@@ -12,6 +12,7 @@
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "importHelpers": true,
+        "skipLibCheck": true,
         "jsx": "react",
         "jsxFactory": "XNode.create",
         "lib": [

@@ -18,6 +18,7 @@ import "./styles/repeater.global.css";
 import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
 import DataAttributes from "../DataAttributes";
 import AtomPopover from "./elements/AtomPopover";
+import sleep from "@web-atoms/core/dist/core/sleep";
 
 export interface IItemPair<ParentItem = any, ChildItem = any> {
     parent: ParentItem;
@@ -189,11 +190,30 @@ export function askSuggestionPopup<T>(
                         items={Bind.source(opener, (x) => x.source.items)}/>
                 </div>
             </div>;
+
+            if (disableSearch) {
+                const { input } = (opener as any);
+                if (input) {
+                    this.disposables.add(opener.bindEvent(input, "keydown", (e) => this.onKey(e as KeyboardEvent)));
+                    this.disposables.add(opener.bindEvent(input, "blur", (e) => this.cancelSelection()));
+                }
+            }
+        }
+
+        protected async cancelSelection() {
+            await sleep(100);
+            if (!this.removed) {
+                this.close(opener.selectedItem);
+            }
+
         }
 
         protected onKey(e: KeyboardEvent) {
             const suggested = match ? opener.items?.filter(match(opener.search)) : opener.items;
             switch (e.key) {
+                case "Escape":
+                    this.cancelSelection().catch(console.error);
+                    return;
                 case "Enter":
                     // selection mode...
                     const anchorItem = this.anchorItem;
@@ -201,9 +221,10 @@ export function askSuggestionPopup<T>(
                         return;
                     }
                     this.anchorIndex = 0;
-                    this.close(anchorItem);
+                    setTimeout(() => this.close(anchorItem), 10);
                     this.anchorItem = null;
                     opener.search = "";
+                    e.preventDefault();
                     break;
                 case "ArrowDown":
                     if (suggested) {
@@ -215,6 +236,7 @@ export function askSuggestionPopup<T>(
                             }
                         }
                         this.anchorItem = suggested[this.anchorIndex];
+                        e.preventDefault();
                     }
                     break;
                 case "ArrowUp":
@@ -226,6 +248,7 @@ export function askSuggestionPopup<T>(
                                 this.anchorIndex--;
                             }
                             this.anchorItem = suggested[this.anchorIndex];
+                            e.preventDefault();
                         }
                         break;
                 }
