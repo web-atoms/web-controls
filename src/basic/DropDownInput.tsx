@@ -77,8 +77,7 @@ public "event-selection-changed"?: (e: CustomEvent) => void;
             <input
                 autofocus={Bind.oneTime(() => this.autofocus)}
                 event-focus={() => this.onFocus()}
-                value={Bind.twoWaysImmediate(() => this.search)}
-                placeholder={Bind.oneWay(() => this.label)}/>
+                value={Bind.twoWaysImmediate(() => this.search)}/>
             <label text={Bind.oneWay((x) => this.labelPath(this.items.find((i) => this.valuePath(i) === this.value)))}/>
             <i/>
         </div>);
@@ -90,7 +89,8 @@ public "event-selection-changed"?: (e: CustomEvent) => void;
 
         const value = this.value;
         if (value) {
-            this.input.placeholder = this.items.find((i) => this.valuePath?.(i) === value)?.label;
+            const item = this.items.find((i) => this.valuePath?.(i) == value);
+            this.input.placeholder = item ? this.labelPath(item) : this.label;
         }
         this.input.value = "";
         this.app.runAsync(() => this.openPopup())
