@@ -168,6 +168,8 @@ export function askSuggestionPopup<T>(
 
         anchorIndex = null;
 
+        repeater: AtomRepeater = null;
+
         init() {
             const disableSearch = (opener as any).disableSearch;
             this.renderer = <div data-suggestion-popup="suggestion-popup">
@@ -182,6 +184,7 @@ export function askSuggestionPopup<T>(
                         selectedItem={Bind.source(this, (x) => x.source.anchorItem)}
                         itemRenderer={itemRenderer}
                         visibilityFilter={Bind.source(opener, (x) => match(x.source.search))}
+                        presenter={Bind.presenter((c) => this.repeater = c}
                         eventItemClick={(e) => {
                             this.anchorItem = e.detail;
                             setTimeout(() =>
@@ -240,6 +243,10 @@ export function askSuggestionPopup<T>(
                             }
                         }
                         this.anchorItem = suggested[this.anchorIndex];
+                        if (this.anchorItem) {
+                            const current = this.repeater.elementForItem(this.anchorItem);
+                            current?.scrollIntoView({ behavior: "auto", block: "center", inline: "nearest"})
+                        }
                         e.preventDefault();
                     }
                     break;
@@ -252,6 +259,10 @@ export function askSuggestionPopup<T>(
                                 this.anchorIndex--;
                             }
                             this.anchorItem = suggested[this.anchorIndex];
+                        if (this.anchorItem) {
+                            const current = this.repeater.elementForItem(this.anchorItem);
+                            current?.scrollIntoView({ behavior: "auto", block: "center", inline: "nearest"})
+                        }
                             e.preventDefault();
                         }
                         break;
