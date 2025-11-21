@@ -184,7 +184,7 @@ export function askSuggestionPopup<T>(
                         selectedItem={Bind.source(this, (x) => x.source.anchorItem)}
                         itemRenderer={itemRenderer}
                         visibilityFilter={Bind.source(opener, (x) => match(x.source.search))}
-                        presenter={Bind.presenter((c) => this.repeater = c}
+                        presenter={Bind.presenter((c) => this.repeater = c)}
                         eventItemClick={(e) => {
                             this.anchorItem = e.detail;
                             setTimeout(() =>
