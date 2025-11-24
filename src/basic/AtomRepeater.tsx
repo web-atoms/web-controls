@@ -168,7 +168,7 @@ export function askSuggestionPopup<T>(
 
         anchorIndex = null;
 
-        repeater: AtomRepeater = null;
+        repeater: AtomRepeater;
 
         init() {
             const disableSearch = (opener as any).disableSearch;
