@@ -78,7 +78,7 @@ public "event-selection-changed"?: (e: CustomEvent) => void;
                 autofocus={Bind.oneTime(() => this.autofocus)}
                 event-focus={() => this.onFocus()}
                 value={Bind.twoWaysImmediate(() => this.search)}/>
-            <label text={Bind.oneWay((x) => this.labelPath(this.items.find((i) => this.valuePath(i) === this.value)))}/>
+            <label text={Bind.oneWay((x) => this.labelPath(this.items?.find((i) => this.valuePath(i) === this.value)))}/>
             <i/>
         </div>);
 
