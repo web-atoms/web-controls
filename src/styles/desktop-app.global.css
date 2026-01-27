@@ -84,6 +84,10 @@ body {
 
     &[data-hide-toolbar=true] {
 
+        & [data-base-page=base-page] {
+            grid-template-rows: auto auto 1fr auto;
+        }
+
         & [data-page-element=status-bar] {
             display: none;
         }
