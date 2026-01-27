@@ -215,7 +215,23 @@
         z-index: -1000;
     }
 
+    &[data-hide-menu=true] {
+        & drawer-menu, &[data-drwaer-page] {
+            display: none;
+        }
+    }
+
+    &[data-hide-menu=true] {
+        & drawer-menu, &[data-drwaer-page] {
+            display: none;
+        }
+    }
+
     &[data-hide-toolbar=true] {
+
+        & [data-page-element=status-bar] {
+            display: none;
+        }
 
         & > [data-page-element=icon] {
             display: none; 
