@@ -233,8 +233,12 @@
             display: none;    
         }
 
+        & > [data-page-element=header] {
+            grid-row: 1;
+        }
+
         & > [data-page-element=content] {
-            grid-row: 1 / span 3;
+            grid-row: 2 / span 3;
         }
     }
 }
