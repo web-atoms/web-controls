@@ -43,6 +43,44 @@
         overflow: hidden;
         transition: left 0.3s ease-out;
     }
+
+    &[data-hide-drawer=true] {
+        & drawer-menu, & [data-drwaer-page] {
+            display: none;
+        }
+    }
+
+    &[data-hide-toolbar=true] {
+
+        & [data-page-element=status-bar] {
+            display: none;
+        }
+
+        & [data-page-element=icon] {
+            display: none; 
+        }
+        
+        & [data-page-element=title] {
+            display: none; 
+        }
+        
+        & [data-page-element=action-bar] {
+            display: none; 
+        }
+        
+        & [data-page-element=action] {
+            display: none;    
+        }
+
+        & [data-page-element=header] {
+            grid-row: 1;
+        }
+
+        & [data-page-element=content] {
+            grid-row: 2 / span 3;
+        }
+    }
+
 }
 
 
@@ -216,13 +254,7 @@
     }
 
     &[data-hide-drawer=true] {
-        & drawer-menu, &[data-drwaer-page] {
-            display: none;
-        }
-    }
-
-    &[data-hide-menu=true] {
-        & drawer-menu, &[data-drwaer-page] {
+        & drawer-menu, & [data-drwaer-page] {
             display: none;
         }
     }
