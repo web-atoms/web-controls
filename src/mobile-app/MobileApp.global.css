@@ -215,7 +215,7 @@
         z-index: -1000;
     }
 
-    &[data-hide-menu=true] {
+    &[data-hide-drawer=true] {
         & drawer-menu, &[data-drwaer-page] {
             display: none;
         }

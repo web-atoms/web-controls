@@ -168,10 +168,26 @@ export class BasePage extends AtomControl {
     private scrollTop: number;
 
     public get hideToolbar() {
-        return this.element?.dataset?.hideToolbar ? true : false;
+        return /true/i.test(this.element?.getAttribute("data-hide-toolbar"));
     }
     public set hideToolbar(v: boolean) {
-        this.element.dataset.hideToolbar = v ? "true" : "false";
+        if (v) {
+            this.element.setAttribute("data-hide-toolbar", "true");
+        } else {
+            this.element.removeAttribute("data-hide-toolbar");
+        }
+    }
+
+
+    public get hideDrawer() {
+        return /true/i.test(this.element?.getAttribute("data-hide-drawer"));
+    }
+    public set hideDrawer(v: boolean) {
+        if (v) {
+            this.element.setAttribute("data-hide-drawer", "true");
+        } else {
+            this.element.removeAttribute("data-hide-drawer");
+        }
     }
 
     protected readonly cancelToken: CancelToken;
