@@ -71,6 +71,11 @@ body {
         overflow: hidden; 
     }
 
+    &[data-full-width] {
+        width: 100vw;
+        min-width: 100vw;
+    }
+
     &[data-hide-drawer=true] {
         & drawer-menu, & [data-drwaer-page] {
             display: none;
