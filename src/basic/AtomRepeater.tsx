@@ -548,6 +548,9 @@ export default class AtomRepeater<T = any> extends AtomControl {
     @BindableProperty
     public enableDragDrop: any;
 
+    @BindableProperty
+    public orderBy: any;
+
     public itemTag: string;
 
     public set refreshEventScope(v: EventScope) {
@@ -1039,6 +1042,7 @@ export default class AtomRepeater<T = any> extends AtomControl {
     }
 
     protected preCreate() {
+        this.orderBy = null;
         this.mergeOnRefresh = false;
         this.selectOnClick = false;
         this.element.setAttribute("data-click-event", "item-click");

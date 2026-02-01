@@ -1,0 +1,14 @@
+sort-by-button {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+    & i.sort {
+        opacity: 0.2;
+    }
+    &[data-sort=true] {
+        & i.sort {
+            opacity: 1;
+        }
+    }
+}

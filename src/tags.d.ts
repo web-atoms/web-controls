@@ -2,5 +2,6 @@
 namespace JSX {
     interface IntrinsicElements {
         "data-list-input": any;
+        "sort-by-button": any;
     }
 }
