@@ -22,7 +22,7 @@ export default function SortByButton({
         }
         return "";
     };
-    return <menu><sort-by-button event-click={BindRepeater.event((s) => {
+    return <sort-by-button event-click={BindRepeater.event((s) => {
         if (s.orderBy === orderBy) {
             s.orderBy = orderByDesc;
             return;
@@ -41,5 +41,5 @@ export default function SortByButton({
         {icon && <i class="icon"/>}
         <label text={header}/>
         <i class={BindRepeater.oneWay((x) => css(x.orderBy))}/>
-    </sort-by-button> </menu> ;
+    </sort-by-button>;
 }
