@@ -1,6 +1,6 @@
 {
   "name": "@web-atoms/web-controls",
-  "version": "2.5.33",
+  "version": "2.5.34",
   "description": "HTML controls for web atoms core",
   "main": "index.js",
   "scripts": {
