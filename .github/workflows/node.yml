@@ -5,6 +5,10 @@ on:
     tags:
       - '*'
 
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,5 +27,4 @@ jobs:
       - run: node ./node_modules/@web-atoms/ts-to-systemjs/index.js
       - run: npm run build-css
       - run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+
