@@ -61,6 +61,17 @@ public "event-selection-changed"?: (e: CustomEvent) => void;
         super(app, e);
     }
 
+    onPropertyChanged(name: string): void {
+        super.onPropertyChanged(name);
+        switch(name) {
+            case "search":
+                if (this.search) {
+                    this.openPopup().catch(console.error);
+                }
+                break;
+        }
+    }
+
     protected preCreate(): void {
         this.items = null;
         this.value = null;

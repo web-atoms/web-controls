@@ -49,13 +49,13 @@ export default class DropDown<T = any> extends AtomRepeater<T> {
             case "prompt":
                 this.updateClasses();
                 break;
-            case "search":
-                setTimeout(() => {
-                    if (this.search) {
-                        this.openPopup().catch(console.error);
-                    }
-                }, 100);
-                break;
+            // case "search":
+            //     setTimeout(() => {
+            //         if (this.search) {
+            //             this.openPopup().catch(console.error);
+            //         }
+            //     }, 100);
+            //     break;
         }
     }
 
