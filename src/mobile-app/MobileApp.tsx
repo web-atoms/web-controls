@@ -364,6 +364,9 @@ export class BasePage extends AtomControl {
         </div>, e, creator);
         this.contentElement = this.element.querySelector("[data-page-element='content']");
 
+        if (document.body.hasAttribute("ios-keyboard")) {
+            return;
+        }
         setTimeout(() => {
             // this.contentElement.scrollTo(0, 0);
             this.contentElement.scrollTop = 0;
