@@ -51,11 +51,13 @@ public "event-selection-changed"?: (e: CustomEvent) => void;
     @BindableProperty
     public suggestionRenderer: (item: T) => XNode;
 
+    @BindableProperty
+    selectedItem: any;
+
     private isPopupOpen: boolean;
     input: HTMLInputElement;
     labelElement: HTMLLabelElement;
     anchorItem: any;
-    selectedItem: any;
 
     constructor(app, e = document.createElement("drop-down-input")) {
         super(app, e);
