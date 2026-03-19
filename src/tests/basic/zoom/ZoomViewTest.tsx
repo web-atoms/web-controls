@@ -1,7 +1,7 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
-import Pack from "@web-atoms/core/dist/Pack";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import ZoomView from "../../../basic/ZoomView";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import Pack from "@web-atoms/core/dist/Pack.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import ZoomView from "../../../basic/ZoomView.js";
 
 import "./ZoomViewTest.local.css";
 

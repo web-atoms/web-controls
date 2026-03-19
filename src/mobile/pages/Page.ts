@@ -1,7 +1,7 @@
-import { App } from "@web-atoms/core/dist/App";
-import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
+import { App } from "@web-atoms/core/dist/App.js";
+import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
 
 export default class Page extends AtomControl {
 

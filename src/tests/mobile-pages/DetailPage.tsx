@@ -1,6 +1,6 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
-import {AtomControl} from "@web-atoms/core/dist/web/controls/AtomControl";
-import Page from "../../mobile/pages/Page";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import {AtomControl} from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import Page from "../../mobile/pages/Page.js";
 
 export default class DetailPage extends Page {
 

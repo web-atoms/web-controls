@@ -1,13 +1,13 @@
-import { App } from "@web-atoms/core/dist/App";
-import { AtomDisposableList } from "@web-atoms/core/dist/core/AtomDisposableList";
-import sleep from "@web-atoms/core/dist/core/sleep";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { AtomControl, ElementValueSetters } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { IPopup, IPopupOptions } from "@web-atoms/core/dist/web/services/PopupService";
-import IElement from "./IElement";
+import { App } from "@web-atoms/core/dist/App.js";
+import { AtomDisposableList } from "@web-atoms/core/dist/core/AtomDisposableList.js";
+import sleep from "@web-atoms/core/dist/core/sleep.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { AtomControl, ElementValueSetters } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import { IPopup, IPopupOptions } from "@web-atoms/core/dist/web/services/PopupService.js";
+import IElement from "./IElement.js";
 
 import "./styles/inline-popup.global.css";
-import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
+import { StringHelper } from "@web-atoms/core/dist/core/StringHelper.js";
 
 function closeHandler(
     opener: HTMLElement,

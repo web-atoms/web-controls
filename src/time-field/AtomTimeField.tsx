@@ -1,13 +1,13 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import { PropertyBinding } from "@web-atoms/core/dist/core/PropertyBinding";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { AtomViewModel } from "@web-atoms/core/dist/view-model/AtomViewModel";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { AtomToggleButtonBar } from "@web-atoms/core/dist/web/controls/AtomToggleButtonBar";
-import DateTime from "@web-atoms/date-time/dist/DateTime";
-import TimeSpan from "@web-atoms/date-time/dist/TimeSpan";
-import AtomTimeFieldStyle from "./AtomTimeFieldStyle";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty.js";
+import { PropertyBinding } from "@web-atoms/core/dist/core/PropertyBinding.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { AtomViewModel } from "@web-atoms/core/dist/view-model/AtomViewModel.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import { AtomToggleButtonBar } from "@web-atoms/core/dist/web/controls/AtomToggleButtonBar.js";
+import DateTime from "@web-atoms/date-time/dist/DateTime.js";
+import TimeSpan from "@web-atoms/date-time/dist/TimeSpan.js";
+import AtomTimeFieldStyle from "./AtomTimeFieldStyle.js";
 
 const zones = [
     { label: "AM", value: "AM" },

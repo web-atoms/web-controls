@@ -1,6 +1,6 @@
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import AtomFormStyle from "./AtomFormStyle";
-import { refreshInherited } from "@web-atoms/core/dist/core/Hacks";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import AtomFormStyle from "./AtomFormStyle.js";
+import { refreshInherited } from "@web-atoms/core/dist/core/Hacks.js";
 
 export default class AtomForm extends AtomControl {
 

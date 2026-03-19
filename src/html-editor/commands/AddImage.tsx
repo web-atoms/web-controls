@@ -1,11 +1,11 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import PopupService, { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
-import FormField from "../../basic/FormField";
-import type AtomHtmlEditor from "../AtomHtmlEditor";
-import CommandButton, { notSet } from "./CommandButton";
-import HtmlCommands from "./HtmlCommands";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import PopupService, { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService.js";
+import FormField from "../../basic/FormField.js";
+import type AtomHtmlEditor from "../AtomHtmlEditor.js";
+import CommandButton, { notSet } from "./CommandButton.js";
+import HtmlCommands from "./HtmlCommands.js";
 
 class ImageDialog extends PopupWindow {
 

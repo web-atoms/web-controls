@@ -1,9 +1,9 @@
-import {BindableProperty} from "@web-atoms/core/dist/core/BindableProperty";
-import {AtomItemsControl} from "@web-atoms/core/dist/web/controls/AtomItemsControl";
-import AtomColumn from "./AtomColumn";
-import AtomDataGridStyle from "./AtomDataGridStyle";
-import AtomDataGridViewModel from "./AtomDataGridViewModel";
-import GridTemplate from "./GridTemplate";
+import {BindableProperty} from "@web-atoms/core/dist/core/BindableProperty.js";
+import {AtomItemsControl} from "@web-atoms/core/dist/web/controls/AtomItemsControl.js";
+import AtomColumn from "./AtomColumn.js";
+import AtomDataGridStyle from "./AtomDataGridStyle.js";
+import AtomDataGridViewModel from "./AtomDataGridViewModel.js";
+import GridTemplate from "./GridTemplate.js";
 
 declare var UMD: any;
 const moduleName = globalThis.filename;

@@ -1,7 +1,7 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
 
 import "./styles/popup-button.global.css";
-import InlinePopupButton, { IPopupButton } from "./InlinePopupButton";
+import InlinePopupButton, { IPopupButton } from "./InlinePopupButton.js";
 
 export interface IMenuItem {
     label?: string;

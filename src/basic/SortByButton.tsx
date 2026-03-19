@@ -1,8 +1,8 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import XNode from "@web-atoms/core/dist/core/XNode";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
 
 import "./SortByButton.global.css";
-import AtomRepeater from "./AtomRepeater";
+import AtomRepeater from "./AtomRepeater.js";
 
 const BindRepeater = Bind.forControl<AtomRepeater>();
 

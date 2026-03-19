@@ -1,7 +1,7 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import PopupButton, { MenuItem } from "../../basic/PopupButton";
-import type AtomHtmlEditor from "../AtomHtmlEditor";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import PopupButton, { MenuItem } from "../../basic/PopupButton.js";
+import type AtomHtmlEditor from "../AtomHtmlEditor.js";
 import "./ChangeFont.local.css";
 
 const fontMenuCSS = "web-controls-html-editor-change-font";

@@ -1,6 +1,6 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import PopupButton, { MenuItem } from "../../basic/PopupButton";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import PopupButton, { MenuItem } from "../../basic/PopupButton.js";
 
 export default class PopupTest extends AtomControl {
 

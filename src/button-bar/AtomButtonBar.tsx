@@ -1,6 +1,6 @@
-import styled from "@web-atoms/core/dist/style/styled";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { AtomItemsControl } from "@web-atoms/core/dist/web/controls/AtomItemsControl";
+import styled from "@web-atoms/core/dist/style/styled.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import { AtomItemsControl } from "@web-atoms/core/dist/web/controls/AtomItemsControl.js";
 
 import "../styles/button-bar.global.css";
 

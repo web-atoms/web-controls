@@ -1,8 +1,8 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import Pack from "@web-atoms/core/dist/Pack";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import Expander from "../../../basic/Expander";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import Pack from "@web-atoms/core/dist/Pack.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import Expander from "../../../basic/Expander.js";
 
 @Pack
 export default class ExpanderTest extends AtomControl {

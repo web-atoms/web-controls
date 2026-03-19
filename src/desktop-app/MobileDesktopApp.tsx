@@ -1,9 +1,9 @@
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import MobileApp, { Drawer } from "../mobile-app/MobileApp";
-import { isMobileView } from "../mobile-app/MobileApp";
-import DesktopApp from "./DesktopApp";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import PopupService from "@web-atoms/core/dist/web/services/PopupService";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import MobileApp, { Drawer } from "../mobile-app/MobileApp.js";
+import { isMobileView } from "../mobile-app/MobileApp.js";
+import DesktopApp from "./DesktopApp.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import PopupService from "@web-atoms/core/dist/web/services/PopupService.js";
 
 const T = isMobileView ? MobileApp : DesktopApp;
 

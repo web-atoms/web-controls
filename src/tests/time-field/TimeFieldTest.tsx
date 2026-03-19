@@ -1,13 +1,13 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { AtomViewModel, Watch } from "@web-atoms/core/dist/view-model/AtomViewModel";
-import Load from "@web-atoms/core/dist/view-model/Load";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import DateTime from "@web-atoms/date-time/dist/DateTime";
-import TimeSpan from "@web-atoms/date-time/dist/TimeSpan";
-import AtomDateField from "../../date-field/AtomDateField";
-import AtomTimeField from "../../time-field/AtomTimeField";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { AtomViewModel, Watch } from "@web-atoms/core/dist/view-model/AtomViewModel.js";
+import Load from "@web-atoms/core/dist/view-model/Load.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import DateTime from "@web-atoms/date-time/dist/DateTime.js";
+import TimeSpan from "@web-atoms/date-time/dist/TimeSpan.js";
+import AtomDateField from "../../date-field/AtomDateField.js";
+import AtomTimeField from "../../time-field/AtomTimeField.js";
 
 export class TimeFieldTestViewModel extends AtomViewModel {
 

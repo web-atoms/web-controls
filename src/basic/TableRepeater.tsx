@@ -1,5 +1,5 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
-import AtomRepeater from "./AtomRepeater";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import AtomRepeater from "./AtomRepeater.js";
 
 export default class TableRepeater extends AtomRepeater {
 

@@ -1,11 +1,11 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import Colors from "@web-atoms/core/dist/core/Colors";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { AtomViewModel, Watch } from "@web-atoms/core/dist/view-model/AtomViewModel";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { AtomItemsControl } from "@web-atoms/core/dist/web/controls/AtomItemsControl";
-import { AtomStyle } from "@web-atoms/core/dist/web/styles/AtomStyle";
-import { IStyleDeclaration } from "@web-atoms/core/dist/web/styles/IStyleDeclaration";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import Colors from "@web-atoms/core/dist/core/Colors.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { AtomViewModel, Watch } from "@web-atoms/core/dist/view-model/AtomViewModel.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import { AtomItemsControl } from "@web-atoms/core/dist/web/controls/AtomItemsControl.js";
+import { AtomStyle } from "@web-atoms/core/dist/web/styles/AtomStyle.js";
+import { IStyleDeclaration } from "@web-atoms/core/dist/web/styles/IStyleDeclaration.js";
 
 export class AtomDataPagerViewModel extends AtomViewModel {
 

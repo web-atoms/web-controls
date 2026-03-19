@@ -1,11 +1,11 @@
-import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import { CancelToken } from "@web-atoms/core/dist/core/types";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
-import PopupService, { IPopupOptions, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
-export * as zDoNotUse from "../animations/Animations";
-import MobileApp from "./MobileApp";
+import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty.js";
+import { CancelToken } from "@web-atoms/core/dist/core/types.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI.js";
+import PopupService, { IPopupOptions, PopupControl, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService.js";
+export * as zDoNotUse from "../animations/Animations.js";
+import MobileApp from "./MobileApp.js";
 
 import "./bottom-popup.global.css";
 

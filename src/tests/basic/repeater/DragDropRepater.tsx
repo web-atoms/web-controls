@@ -1,8 +1,8 @@
-import Colors from "@web-atoms/core/dist/core/Colors";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import Pack from "@web-atoms/core/dist/Pack";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import AtomRepeater from "../../../basic/AtomRepeater";
+import Colors from "@web-atoms/core/dist/core/Colors.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import Pack from "@web-atoms/core/dist/Pack.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import AtomRepeater from "../../../basic/AtomRepeater.js";
 
 const images1 = [1, 2, 3, 4];
 const images2 = [5, 6, 7, 8];

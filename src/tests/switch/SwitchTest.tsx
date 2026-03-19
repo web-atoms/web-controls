@@ -1,7 +1,7 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import Switch from "../../basic/Switch";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import Switch from "../../basic/Switch.js";
 
 export default class SwitchTest extends AtomControl {
 

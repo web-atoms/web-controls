@@ -1,16 +1,16 @@
 import Bind from "@web-atoms/core/dist/core/Bind"
 import XNode from "@web-atoms/core/dist/core/XNode"
-import { BaseService, Get, Query } from "@web-atoms/core/dist/services/http/RestService";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import styled from "@web-atoms/core/dist/style/styled";
-import InjectProperty from "@web-atoms/core/dist/core/InjectProperty";
+import { BaseService, Get, Query } from "@web-atoms/core/dist/services/http/RestService.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import styled from "@web-atoms/core/dist/style/styled.js";
+import InjectProperty from "@web-atoms/core/dist/core/InjectProperty.js";
 
 import "@web-atoms/data-styles/data-styles";
-import { CancelToken } from "@web-atoms/core/dist/core/types";
-import Action from "@web-atoms/core/dist/view-model/Action";
-import DISingleton from "@web-atoms/core/dist/di/DISingleton";
-import AtomRepeater from "../basic/AtomRepeater";
-import ToggleButtonBar from "../basic/ToggleButtonBar";
+import { CancelToken } from "@web-atoms/core/dist/core/types.js";
+import Action from "@web-atoms/core/dist/view-model/Action.js";
+import DISingleton from "@web-atoms/core/dist/di/DISingleton.js";
+import AtomRepeater from "../basic/AtomRepeater.js";
+import ToggleButtonBar from "../basic/ToggleButtonBar.js";
 
 import "./Devhost.global.css";
 

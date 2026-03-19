@@ -1,10 +1,10 @@
-import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
+import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
 
 import "../basic/styles/toggle-view.global.css";
-import IElement from "../basic/IElement";
-import Action from "@web-atoms/core/dist/view-model/Action";
+import IElement from "../basic/IElement.js";
+import Action from "@web-atoms/core/dist/view-model/Action.js";
 
 
 export interface IToggleView {

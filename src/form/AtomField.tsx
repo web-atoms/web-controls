@@ -1,12 +1,12 @@
-import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder";
-import Bind from "@web-atoms/core/dist/core/Bind";
-import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import { IClassOf } from "@web-atoms/core/dist/core/types";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { NavigationService } from "@web-atoms/core/dist/services/NavigationService";
-import { AtomContentControl } from "@web-atoms/core/dist/web/controls/AtomContentControl";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-export { default as HP } from "./HelpPopup";
+import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder.js";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty.js";
+import { IClassOf } from "@web-atoms/core/dist/core/types.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { NavigationService } from "@web-atoms/core/dist/services/NavigationService.js";
+import { AtomContentControl } from "@web-atoms/core/dist/web/controls/AtomContentControl.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+export { default as HP } from "./HelpPopup.js";
 
 let inputID = 0;
 

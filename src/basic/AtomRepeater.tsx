@@ -1,24 +1,24 @@
-import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder";
-import Bind from "@web-atoms/core/dist/core/Bind";
-import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import Colors from "@web-atoms/core/dist/core/Colors";
-import EventScope from "@web-atoms/core/dist/core/EventScope";
-import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
-import { CancelToken, IDisposable } from "@web-atoms/core/dist/core/types";
-import WatchProperty from "@web-atoms/core/dist/core/WatchProperty";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { IDialogOptions, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
-import MergeNode from "./MergeNode";
-import ItemPath from "./ItemPath";
+import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder.js";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty.js";
+import Colors from "@web-atoms/core/dist/core/Colors.js";
+import EventScope from "@web-atoms/core/dist/core/EventScope.js";
+import { StringHelper } from "@web-atoms/core/dist/core/StringHelper.js";
+import { CancelToken, IDisposable } from "@web-atoms/core/dist/core/types.js";
+import WatchProperty from "@web-atoms/core/dist/core/WatchProperty.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import { IDialogOptions, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService.js";
+import MergeNode from "./MergeNode.js";
+import ItemPath from "./ItemPath.js";
 
 import "./styles/popup.global.css";
 import "./styles/suggestion-popup.global.css";
 import "./styles/repeater.global.css";
-import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
-import DataAttributes from "../DataAttributes";
-import AtomPopover from "./elements/AtomPopover";
-import sleep from "@web-atoms/core/dist/core/sleep";
+import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI.js";
+import DataAttributes from "../DataAttributes.js";
+import AtomPopover from "./elements/AtomPopover.js";
+import sleep from "@web-atoms/core/dist/core/sleep.js";
 
 export interface IItemPair<ParentItem = any, ChildItem = any> {
     parent: ParentItem;

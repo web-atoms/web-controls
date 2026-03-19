@@ -1,7 +1,7 @@
-import Pack from "@web-atoms/core/dist/Pack";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import TimeEditor from "../../basic/TimeEditor";
+import Pack from "@web-atoms/core/dist/Pack.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import TimeEditor from "../../basic/TimeEditor.js";
 
 @Pack
 export default class TimeEditorTest extends AtomControl {

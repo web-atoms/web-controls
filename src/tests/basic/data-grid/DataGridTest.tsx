@@ -1,9 +1,9 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import Pack from "@web-atoms/core/dist/Pack";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import DataGrid, { IDataGridColumn, InputColumn, SelectAllColumn } from "../../../basic/DataGrid";
-import GridTestViewModel, { ICurrencyInfo } from "../../data-grid/GridTestViewModel";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import Pack from "@web-atoms/core/dist/Pack.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import DataGrid, { IDataGridColumn, InputColumn, SelectAllColumn } from "../../../basic/DataGrid.js";
+import GridTestViewModel, { ICurrencyInfo } from "../../data-grid/GridTestViewModel.js";
 
 @Pack
 export default class DataGridTest extends AtomControl {

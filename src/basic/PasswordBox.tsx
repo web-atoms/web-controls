@@ -1,5 +1,5 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
-import IElement from "./IElement";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import IElement from "./IElement.js";
 
 import "./styles/password-box.global.css";
 

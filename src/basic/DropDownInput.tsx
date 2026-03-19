@@ -1,9 +1,9 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { askSuggestionPopup, Match, MatchAnyCaseInsensitive } from "./AtomRepeater";
-import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import { Focusable } from "../Focusable";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import { askSuggestionPopup, Match, MatchAnyCaseInsensitive } from "./AtomRepeater.js";
+import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty.js";
+import { Focusable } from "../Focusable.js";
 
 import "./DropDownInput.global.css";
 

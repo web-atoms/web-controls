@@ -1,4 +1,4 @@
-import type AtomHtmlEditor from "../AtomHtmlEditor";
+import type AtomHtmlEditor from "../AtomHtmlEditor.js";
 
 function query(name: keyof typeof HtmlCommands): IHtmlCommand {
     return {

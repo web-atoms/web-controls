@@ -1,11 +1,11 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import DISingleton from "@web-atoms/core/dist/di/DISingleton";
-import Pack from "@web-atoms/core/dist/Pack";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import DateTime from "@web-atoms/date-time/dist/DateTime";
-import InjectProperty from "@web-atoms/core/dist/core/InjectProperty";
-import WatchProperty from "@web-atoms/core/dist/core/WatchProperty";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import DISingleton from "@web-atoms/core/dist/di/DISingleton.js";
+import Pack from "@web-atoms/core/dist/Pack.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import DateTime from "@web-atoms/date-time/dist/DateTime.js";
+import InjectProperty from "@web-atoms/core/dist/core/InjectProperty.js";
+import WatchProperty from "@web-atoms/core/dist/core/WatchProperty.js";
 
 @DISingleton()
 class SomeService {

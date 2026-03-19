@@ -1,7 +1,7 @@
-import { Inject } from "@web-atoms/core/dist/di/Inject";
-import { NavigationService } from "@web-atoms/core/dist/services/NavigationService";
-import { AtomViewModel } from "@web-atoms/core/dist/view-model/AtomViewModel";
-import DetailPage from "./DetailPage";
+import { Inject } from "@web-atoms/core/dist/di/Inject.js";
+import { NavigationService } from "@web-atoms/core/dist/services/NavigationService.js";
+import { AtomViewModel } from "@web-atoms/core/dist/view-model/AtomViewModel.js";
+import DetailPage from "./DetailPage.js";
 
 export default class ListPageViewModel extends AtomViewModel {
 

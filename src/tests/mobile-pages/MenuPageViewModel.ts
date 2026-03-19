@@ -1,7 +1,7 @@
-import { Inject } from "@web-atoms/core/dist/di/Inject";
-import { NavigationService } from "@web-atoms/core/dist/services/NavigationService";
-import { AtomWindowViewModel } from "@web-atoms/core/dist/view-model/AtomWindowViewModel";
-import ListPage from "./ListPage";
+import { Inject } from "@web-atoms/core/dist/di/Inject.js";
+import { NavigationService } from "@web-atoms/core/dist/services/NavigationService.js";
+import { AtomWindowViewModel } from "@web-atoms/core/dist/view-model/AtomWindowViewModel.js";
+import ListPage from "./ListPage.js";
 
 export default class MenuPageViewModel extends AtomWindowViewModel {
 

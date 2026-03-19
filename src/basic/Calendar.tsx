@@ -1,10 +1,10 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import WatchProperty from "@web-atoms/core/dist/core/WatchProperty";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import DateTime from "@web-atoms/date-time/dist/DateTime";
-import AtomRepeater from "./AtomRepeater";
-import Select from "./Select";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty.js";
+import WatchProperty from "@web-atoms/core/dist/core/WatchProperty.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import DateTime from "@web-atoms/date-time/dist/DateTime.js";
+import AtomRepeater from "./AtomRepeater.js";
+import Select from "./Select.js";
 
 import "./styles/calendar.global.css";
 

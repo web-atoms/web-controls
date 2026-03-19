@@ -1,14 +1,14 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import DateTime from "@web-atoms/date-time/dist/DateTime";
-import Calendar, { ICalendarDate } from "./Calendar";
-import TimeEditor from "./TimeEditor";
-import TimeSpan from "@web-atoms/date-time/dist/TimeSpan";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import DateTime from "@web-atoms/date-time/dist/DateTime.js";
+import Calendar, { ICalendarDate } from "./Calendar.js";
+import TimeEditor from "./TimeEditor.js";
+import TimeSpan from "@web-atoms/date-time/dist/TimeSpan.js";
 
 import "./styles/date-field.global.css";
-import AtomPopover from "./elements/AtomPopover";
+import AtomPopover from "./elements/AtomPopover.js";
 
 function hours() {
     return [

@@ -1,9 +1,9 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import {BindableProperty} from "@web-atoms/core/dist/core/BindableProperty";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import AtomPopupButton from "../buttons/AtomPopupButton";
-import AtomCalendar from "../calendar/AtomCalendar";
-import SRCalendar from "../calendar/res/SRCalendar";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import {BindableProperty} from "@web-atoms/core/dist/core/BindableProperty.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import AtomPopupButton from "../buttons/AtomPopupButton.js";
+import AtomCalendar from "../calendar/AtomCalendar.js";
+import SRCalendar from "../calendar/res/SRCalendar.js";
 
 const shortDate = {
 	year: "numeric",

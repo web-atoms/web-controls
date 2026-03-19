@@ -1,8 +1,8 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import InlinePopupButton from "../../basic/InlinePopupButton";
-import { MenuItem } from "../../basic/PopupButton";
-import PopupMenu from "../../basic/PopupMenu";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import InlinePopupButton from "../../basic/InlinePopupButton.js";
+import { MenuItem } from "../../basic/PopupButton.js";
+import PopupMenu from "../../basic/PopupMenu.js";
 
 export default class PopOverTest extends AtomControl {
 

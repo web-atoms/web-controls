@@ -1,7 +1,7 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import TitleEditor from "../../../basic/TitleEditor";
-import Pack from "@web-atoms/core/dist/Pack";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import TitleEditor from "../../../basic/TitleEditor.js";
+import Pack from "@web-atoms/core/dist/Pack.js";
 
 @Pack
 export default class TitleEditorTest extends AtomControl {

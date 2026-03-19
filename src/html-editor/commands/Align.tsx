@@ -1,9 +1,9 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import PopupButton, { MenuItem } from "../../basic/PopupButton";
-import type AtomHtmlEditor from "../AtomHtmlEditor";
-import { IPopupOptions } from "@web-atoms/core/dist/web/services/PopupService";
-import { IPopupButton } from "../../basic/InlinePopupButton";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import PopupButton, { MenuItem } from "../../basic/PopupButton.js";
+import type AtomHtmlEditor from "../AtomHtmlEditor.js";
+import { IPopupOptions } from "@web-atoms/core/dist/web/services/PopupService.js";
+import { IPopupButton } from "../../basic/InlinePopupButton.js";
 
 export default function Align(a: IPopupButton) {
     return <PopupButton

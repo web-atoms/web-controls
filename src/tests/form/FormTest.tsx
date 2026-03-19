@@ -1,10 +1,10 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import Pack from "@web-atoms/core/dist/Pack";
-import {AtomControl} from "@web-atoms/core/dist/web/controls/AtomControl";
-import AtomField from "../../form/AtomField";
-import AtomForm from "../../form/AtomForm";
-import FormViewModel from "./FormViewModel";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import Pack from "@web-atoms/core/dist/Pack.js";
+import {AtomControl} from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import AtomField from "../../form/AtomField.js";
+import AtomForm from "../../form/AtomForm.js";
+import FormViewModel from "./FormViewModel.js";
 
 @Pack
 export default class FormTest extends AtomControl {

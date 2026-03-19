@@ -3,8 +3,8 @@ const supportsFileSystemAccessAPI =
 const supportsWebkitGetAsEntry =
   "webkitGetAsEntry" in DataTransferItem.prototype;
 
-import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
+import { StringHelper } from "@web-atoms/core/dist/core/StringHelper.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
 import "./FilesDragDrop.global.css";
 
 

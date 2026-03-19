@@ -1,11 +1,11 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import Pack from "@web-atoms/core/dist/Pack";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import DropDownInput from "../../../basic/DropDownInput";
-import Form from "../../../basic/Form";
-import FormField from "../../../basic/FormField";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import Pack from "@web-atoms/core/dist/Pack.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import DropDownInput from "../../../basic/DropDownInput.js";
+import Form from "../../../basic/Form.js";
+import FormField from "../../../basic/FormField.js";
 
 const genders = [
     { label: "Male", value: "male" },

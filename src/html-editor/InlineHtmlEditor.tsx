@@ -1,12 +1,12 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
-import sleep from "@web-atoms/core/dist/core/sleep";
-import { CancelToken } from "@web-atoms/core/dist/core/types";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { ChildEnumerator, descendentElementIterator } from "@web-atoms/core/dist/web/core/AtomUI";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import sleep from "@web-atoms/core/dist/core/sleep.js";
+import { CancelToken } from "@web-atoms/core/dist/core/types.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import { ChildEnumerator, descendentElementIterator } from "@web-atoms/core/dist/web/core/AtomUI.js";
 
 import "@web-atoms/data-styles/data-styles";
-import { showImageDialog } from "./commands/AddImage";
-import { FilesAvailableEventArgs } from "../basic/UploadEvent";
+import { showImageDialog } from "./commands/AddImage.js";
+import { FilesAvailableEventArgs } from "../basic/UploadEvent.js";
 
 import "../styles/inline-html-editor.global.css";
 

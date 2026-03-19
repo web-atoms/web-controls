@@ -1,7 +1,7 @@
-import PageNavigator, { Page } from "../PageNavigator";
-import { ContentPage, isMobileView } from "./MobileApp";
-import { descendentElementIterator } from "@web-atoms/core/dist/web/core/AtomUI";
-import AtomRepeater from "../basic/AtomRepeater";
+import PageNavigator, { Page } from "../PageNavigator.js";
+import { ContentPage, isMobileView } from "./MobileApp.js";
+import { descendentElementIterator } from "@web-atoms/core/dist/web/core/AtomUI.js";
+import AtomRepeater from "../basic/AtomRepeater.js";
 
 import "./MasterDetailPage.global.css";
 

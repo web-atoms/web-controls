@@ -1,6 +1,6 @@
-import XNode, { constructorNeedsArgumentsSymbol, IElementAttributes } from "@web-atoms/core/dist/core/XNode";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import IElement from "./IElement";
+import XNode, { constructorNeedsArgumentsSymbol, IElementAttributes } from "@web-atoms/core/dist/core/XNode.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import IElement from "./IElement.js";
 
 import "./ButtonBar.global.css";
 

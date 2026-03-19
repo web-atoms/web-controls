@@ -1,10 +1,10 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import { CancelToken } from "@web-atoms/core/dist/core/types";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import AtomRepeater, { getParentRepeaterItem, SelectorCheckBox } from "./AtomRepeater";
-import { EditableInput, getPropertyInfo, IPropertyInfo } from "./Editable";
-import TableRepeater from "./TableRepeater";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty.js";
+import { CancelToken } from "@web-atoms/core/dist/core/types.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import AtomRepeater, { getParentRepeaterItem, SelectorCheckBox } from "./AtomRepeater.js";
+import { EditableInput, getPropertyInfo, IPropertyInfo } from "./Editable.js";
+import TableRepeater from "./TableRepeater.js";
 
 import "./styles/data-grid.global.css";
 

@@ -1,7 +1,7 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
-import sleep from "@web-atoms/core/dist/core/sleep";
-import { CancelToken } from "@web-atoms/core/dist/core/types";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import sleep from "@web-atoms/core/dist/core/sleep.js";
+import { CancelToken } from "@web-atoms/core/dist/core/types.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
 
 import "../styles/type-writer.global.css";
 

@@ -1,8 +1,8 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
 
 import "./styles/checkbox.global.css";
 
-import IElement from "./IElement";
+import IElement from "./IElement.js";
 
 export interface ICheckbox extends IElement {
     checked: any;

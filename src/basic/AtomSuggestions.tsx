@@ -1,9 +1,9 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import Colors from "@web-atoms/core/dist/core/Colors";
-import { IDisposable } from "@web-atoms/core/dist/core/types";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import AtomRepeater, { askSuggestion, askSuggestionPopup } from "./AtomRepeater";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty.js";
+import Colors from "@web-atoms/core/dist/core/Colors.js";
+import { IDisposable } from "@web-atoms/core/dist/core/types.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import AtomRepeater, { askSuggestion, askSuggestionPopup } from "./AtomRepeater.js";
 
 import "./styles/suggestion.global.css";
 

@@ -1,9 +1,9 @@
 // tslint:disable
 import Bind from "@web-atoms/core/dist/core/Bind"
 import XNode from "@web-atoms/core/dist/core/XNode"
-import {BindableProperty} from "@web-atoms/core/dist/core/BindableProperty";
+import {BindableProperty} from "@web-atoms/core/dist/core/BindableProperty.js";
 
-    import Page from "../../mobile/pages/Page";
+    import Page from "../../mobile/pages/Page.js";
 
 
 

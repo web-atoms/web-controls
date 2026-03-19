@@ -1,7 +1,7 @@
-import { AtomDisposableList } from "@web-atoms/core/dist/core/AtomDisposableList";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { isMobileView } from "../mobile-app/MobileApp";
+import { AtomDisposableList } from "@web-atoms/core/dist/core/AtomDisposableList.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import { isMobileView } from "../mobile-app/MobileApp.js";
 
 import "../styles/resizable.global.css";
     

@@ -1,5 +1,5 @@
-import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import AtomRepeater from "./AtomRepeater";
+import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty.js";
+import AtomRepeater from "./AtomRepeater.js";
 
 import "./styles/list-repeater.global.css";
 export default class ListRepeater<T = any> extends AtomRepeater<T> {

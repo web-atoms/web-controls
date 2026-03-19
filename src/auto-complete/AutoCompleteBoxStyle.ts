@@ -1,7 +1,7 @@
-import { AtomStyle } from "@web-atoms/core/dist/web/styles/AtomStyle";
-import { AtomTheme } from "@web-atoms/core/dist/web/styles/AtomTheme";
-import { IStyleDeclaration } from "@web-atoms/core/dist/web/styles/IStyleDeclaration";
-import StyleBuilder from "@web-atoms/core/dist/web/styles/StyleBuilder";
+import { AtomStyle } from "@web-atoms/core/dist/web/styles/AtomStyle.js";
+import { AtomTheme } from "@web-atoms/core/dist/web/styles/AtomTheme.js";
+import { IStyleDeclaration } from "@web-atoms/core/dist/web/styles/IStyleDeclaration.js";
+import StyleBuilder from "@web-atoms/core/dist/web/styles/StyleBuilder.js";
 
 export default class AutoCompleteBoxStyle extends AtomStyle {
 

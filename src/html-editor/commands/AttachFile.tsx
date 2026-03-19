@@ -1,9 +1,9 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
-import AtomHtmlEditor from "../AtomHtmlEditor";
-import CommandButton from "./CommandButton";
-import HtmlCommands from "./HtmlCommands";
-import UploadEvent from "../../basic/UploadEvent";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import AtomHtmlEditor from "../AtomHtmlEditor.js";
+import CommandButton from "./CommandButton.js";
+import HtmlCommands from "./HtmlCommands.js";
+import UploadEvent from "../../basic/UploadEvent.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
 
 export default function AttachFile({
     accept = "image/*",

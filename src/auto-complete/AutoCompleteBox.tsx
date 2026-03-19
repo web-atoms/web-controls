@@ -1,17 +1,17 @@
-import { Atom } from "@web-atoms/core/dist/Atom";
-import Bind from "@web-atoms/core/dist/core/Bind";
-import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import { CancelToken, IClassOf } from "@web-atoms/core/dist/core/types";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { NavigationService } from "@web-atoms/core/dist/services/NavigationService";
-import ReferenceService from "@web-atoms/core/dist/services/ReferenceService";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { AtomTemplateControl } from "@web-atoms/core/dist/web/controls/AtomTemplateControl";
-import PopupService from "@web-atoms/core/dist/web/services/PopupService";
-import { WindowService } from "@web-atoms/core/dist/web/services/WindowService";
-import AppComboBoxViewModel from "./AppComboBoxViewModel";
-import AutoCompleteBoxStyle from "./AutoCompleteBoxStyle";
-import ItemHost from "./ItemHost";
+import { Atom } from "@web-atoms/core/dist/Atom.js";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty.js";
+import { CancelToken, IClassOf } from "@web-atoms/core/dist/core/types.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { NavigationService } from "@web-atoms/core/dist/services/NavigationService.js";
+import ReferenceService from "@web-atoms/core/dist/services/ReferenceService.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import { AtomTemplateControl } from "@web-atoms/core/dist/web/controls/AtomTemplateControl.js";
+import PopupService from "@web-atoms/core/dist/web/services/PopupService.js";
+import { WindowService } from "@web-atoms/core/dist/web/services/WindowService.js";
+import AppComboBoxViewModel from "./AppComboBoxViewModel.js";
+import AutoCompleteBoxStyle from "./AutoCompleteBoxStyle.js";
+import ItemHost from "./ItemHost.js";
 
 export interface IFetchEvent {
     search?: string;

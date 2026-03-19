@@ -1,6 +1,6 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import type AtomHtmlEditor from "../AtomHtmlEditor";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import type AtomHtmlEditor from "../AtomHtmlEditor.js";
 
 export interface ICommand {
     label?: string;

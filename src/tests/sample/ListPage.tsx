@@ -1,9 +1,9 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import {BindableProperty} from "@web-atoms/core/dist/core/BindableProperty";
-import XNode from "@web-atoms/core/dist/core/XNode";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import {BindableProperty} from "@web-atoms/core/dist/core/BindableProperty.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
 
-import Page from "../../mobile/pages/Page";
-import ListPageViewModel from "../mobile-pages/ListPageViewModel";
+import Page from "../../mobile/pages/Page.js";
+import ListPageViewModel from "../mobile-pages/ListPageViewModel.js";
 
 export default class ListPage extends Page {
 

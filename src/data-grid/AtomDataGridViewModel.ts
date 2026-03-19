@@ -1,8 +1,8 @@
-import { App } from "@web-atoms/core/dist/App";
-import { Inject } from "@web-atoms/core/dist/di/Inject";
-import { AtomViewModel, Watch } from "@web-atoms/core/dist/view-model/AtomViewModel";
-import Load from "@web-atoms/core/dist/view-model/Load";
-import AtomColumn from "./AtomColumn";
+import { App } from "@web-atoms/core/dist/App.js";
+import { Inject } from "@web-atoms/core/dist/di/Inject.js";
+import { AtomViewModel, Watch } from "@web-atoms/core/dist/view-model/AtomViewModel.js";
+import Load from "@web-atoms/core/dist/view-model/Load.js";
+import AtomColumn from "./AtomColumn.js";
 
 interface IDataGrid {
     columns: AtomColumn[];

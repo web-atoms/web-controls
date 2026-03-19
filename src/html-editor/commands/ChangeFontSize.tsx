@@ -1,8 +1,8 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import PopupButton, { MenuItem } from "../../basic/PopupButton";
-import type AtomHtmlEditor from "../AtomHtmlEditor";
-import Command, { ICommand } from "./Command";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import PopupButton, { MenuItem } from "../../basic/PopupButton.js";
+import type AtomHtmlEditor from "../AtomHtmlEditor.js";
+import Command, { ICommand } from "./Command.js";
 
 export default function ChangeFontSize(cmd: ICommand) {
     return <PopupButton

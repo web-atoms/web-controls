@@ -1,10 +1,10 @@
-import Pack from "@web-atoms/core/dist/Pack";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import Form, { BindError } from "../../../basic/Form";
-import FormField from "../../../basic/FormField";
-import Bind from "@web-atoms/core/dist/core/Bind";
-import Action from "@web-atoms/core/dist/view-model/Action";
+import Pack from "@web-atoms/core/dist/Pack.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import Form, { BindError } from "../../../basic/Form.js";
+import FormField from "../../../basic/FormField.js";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import Action from "@web-atoms/core/dist/view-model/Action.js";
 
 @Pack
 export default class Form2Test extends AtomControl {

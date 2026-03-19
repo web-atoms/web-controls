@@ -1,4 +1,4 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
 
 import "./styles/expander.global.css";
 

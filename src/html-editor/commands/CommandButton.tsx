@@ -1,7 +1,7 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import type AtomHtmlEditor from "../AtomHtmlEditor";
-import { IHtmlCommand } from "./HtmlCommands";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import type AtomHtmlEditor from "../AtomHtmlEditor.js";
+import { IHtmlCommand } from "./HtmlCommands.js";
 
 export interface ICommandButton {
     icon?: string;

@@ -1,8 +1,8 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
-import type { IAnchorPopover } from "./elements/AtomPopover";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { App } from "@web-atoms/core/dist/App";
-import AtomPopover from "./elements/AtomPopover";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import type { IAnchorPopover } from "./elements/AtomPopover.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import { App } from "@web-atoms/core/dist/App.js";
+import AtomPopover from "./elements/AtomPopover.js";
 
 export type PopupFactory = (data) => XNode;
 

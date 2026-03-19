@@ -1,6 +1,6 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { getParentRepeaterItem } from "./AtomRepeater";
-import IElement from "./IElement";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { getParentRepeaterItem } from "./AtomRepeater.js";
+import IElement from "./IElement.js";
 
 type Getter = (item) => any;
 

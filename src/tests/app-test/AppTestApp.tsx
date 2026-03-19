@@ -1,8 +1,8 @@
-import Route from "@web-atoms/core/dist/core/Route";
-import MobileDesktopApp from "../../desktop-app/MobileDesktopApp";
-import AppCommands from "./commands/AppCommands";
-import Command from "@web-atoms/core/dist/core/Command";
-import Pack from "@web-atoms/core/dist/Pack";
+import Route from "@web-atoms/core/dist/core/Route.js";
+import MobileDesktopApp from "../../desktop-app/MobileDesktopApp.js";
+import AppCommands from "./commands/AppCommands.js";
+import Command from "@web-atoms/core/dist/core/Command.js";
+import Pack from "@web-atoms/core/dist/Pack.js";
 
 const fa = document.createElement("link");
 fa.href = "https://dtzkc6yot8xw8.cloudfront.net/npm/package/@c8private/fa-icons@6.7.1/css/all.min.css";

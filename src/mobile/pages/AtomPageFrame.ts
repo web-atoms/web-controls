@@ -1,12 +1,12 @@
-import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { AtomFrame } from "@web-atoms/core/dist/web/controls/AtomFrame";
-import AtomPageFrameTemplate from "./AtomPageFrameTemplate";
-import Page from "./Page";
-import PageFrameViewModel from "./PageFrameViewModel";
-import TitleTemplate from "./TitleTemplate";
-import { refreshInherited } from "@web-atoms/core/dist/core/Hacks";
+import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import { AtomFrame } from "@web-atoms/core/dist/web/controls/AtomFrame.js";
+import AtomPageFrameTemplate from "./AtomPageFrameTemplate.js";
+import Page from "./Page.js";
+import PageFrameViewModel from "./PageFrameViewModel.js";
+import TitleTemplate from "./TitleTemplate.js";
+import { refreshInherited } from "@web-atoms/core/dist/core/Hacks.js";
 
 export default class AtomPageFrame extends AtomFrame {
 

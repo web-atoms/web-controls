@@ -1,8 +1,8 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
-import Pack from "@web-atoms/core/dist/Pack";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import AtomRepeater from "../../../basic/AtomRepeater";
-import Tooltip from "../../../basic/Tooltip";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import Pack from "@web-atoms/core/dist/Pack.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import AtomRepeater from "../../../basic/AtomRepeater.js";
+import Tooltip from "../../../basic/Tooltip.js";
 
 class CustomTooltip extends Tooltip {
     init(data) {

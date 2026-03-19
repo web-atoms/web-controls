@@ -1,7 +1,7 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { ContentPage } from "../../../../mobile-app/MobileApp";
-import { IPost } from "../../model/model";
-import FormField from "../../../../basic/FormField";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { ContentPage } from "../../../../mobile-app/MobileApp.js";
+import { IPost } from "../../model/model.js";
+import FormField from "../../../../basic/FormField.js";
 
 export default class DetailPage extends ContentPage<IPost> {
 

@@ -1,9 +1,9 @@
-import type { App } from "@web-atoms/core/dist/App";
-import Bind from "@web-atoms/core/dist/core/Bind";
-import FormattedString from "@web-atoms/core/dist/core/FormattedString";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { NavigationService } from "@web-atoms/core/dist/services/NavigationService";
-import { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
+import type { App } from "@web-atoms/core/dist/App.js";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import FormattedString from "@web-atoms/core/dist/core/FormattedString.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { NavigationService } from "@web-atoms/core/dist/services/NavigationService.js";
+import { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService.js";
 import "./styles/form-field.global.css";
 
 export interface IFormField {

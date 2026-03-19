@@ -1,6 +1,6 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { ContentPage } from "../../../../mobile-app/MobileApp";
-import AppCommands from "../../commands/AppCommands";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { ContentPage } from "../../../../mobile-app/MobileApp.js";
+import AppCommands from "../../commands/AppCommands.js";
 
 export default class HomePage extends ContentPage {
 

@@ -1,15 +1,15 @@
-import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder";
-import Bind from "@web-atoms/core/dist/core/Bind";
-import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import { CancelToken, IDisposable } from "@web-atoms/core/dist/core/types";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import AtomRepeater, { Match, MatchTrue } from "./AtomRepeater";
-import type { IChip } from "./Chip";
-export { default as Chip } from "./Chip";
+import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder.js";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty.js";
+import { CancelToken, IDisposable } from "@web-atoms/core/dist/core/types.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import AtomRepeater, { Match, MatchTrue } from "./AtomRepeater.js";
+import type { IChip } from "./Chip.js";
+export { default as Chip } from "./Chip.js";
 
 import "./styles/chips.global.css";
 import "./styles/item-suggestion.global.css";
-import AtomPopover from "./elements/AtomPopover";
+import AtomPopover from "./elements/AtomPopover.js";
 
 function getChips(target: HTMLElement): AtomChips {
     let start = target;

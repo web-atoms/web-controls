@@ -1,6 +1,6 @@
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import IElement from "./IElement";
-import XNode from "@web-atoms/core/dist/core/XNode";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import IElement from "./IElement.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
 
 const labelPathSetter = AtomControl.registerProperty("data-items", "value", (ctrl, element, value) => {
     element["labelPath"] = value;

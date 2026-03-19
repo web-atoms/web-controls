@@ -1,4 +1,4 @@
-import Command, { ICommand } from "./Command";
+import Command, { ICommand } from "./Command.js";
 
 export default function Italic(cmd: ICommand) {
     return Command({

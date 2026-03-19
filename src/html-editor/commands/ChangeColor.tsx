@@ -1,7 +1,7 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import PopupButton from "../../basic/PopupButton";
-import type AtomHtmlEditor from "../AtomHtmlEditor";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import PopupButton from "../../basic/PopupButton.js";
+import type AtomHtmlEditor from "../AtomHtmlEditor.js";
 import "./ChangeColor.local.css";
 const gray = [
     "rgb(0,0,0)",

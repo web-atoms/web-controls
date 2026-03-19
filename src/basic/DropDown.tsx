@@ -1,7 +1,7 @@
-import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import XNode from "@web-atoms/core/dist/core/XNode";
+import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
 import AtomRepeater, { askSuggestion, askSuggestionPopup,
-    disposeChildren, Match, MatchAnyCaseInsensitive } from "./AtomRepeater";
+    disposeChildren, Match, MatchAnyCaseInsensitive } from "./AtomRepeater.js";
 
 import "./styles/drop-down.global.css";
 

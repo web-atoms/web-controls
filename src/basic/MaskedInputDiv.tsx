@@ -1,6 +1,6 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import IElement from "./IElement";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import IElement from "./IElement.js";
 
 export interface IMaskedInput extends IElement {
     mask?: string;

@@ -1,11 +1,11 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
-import Pack from "@web-atoms/core/dist/Pack";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import AtomButtonBar from "../../button-bar/AtomButtonBar";
-import ButtonBar from "../../basic/ButtonBar";
-import Form from "../../basic/Form";
-import FormField from "../../basic/FormField";
-import Bind from "@web-atoms/core/dist/core/Bind";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import Pack from "@web-atoms/core/dist/Pack.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import AtomButtonBar from "../../button-bar/AtomButtonBar.js";
+import ButtonBar from "../../basic/ButtonBar.js";
+import Form from "../../basic/Form.js";
+import FormField from "../../basic/FormField.js";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
 
 const genders = [
     { label: "Male", value: "Male" },

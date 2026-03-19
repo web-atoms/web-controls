@@ -1,13 +1,13 @@
-import InjectProperty from "@web-atoms/core/dist/core/InjectProperty";
-import sleep from "@web-atoms/core/dist/core/sleep";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import Pack from "@web-atoms/core/dist/Pack";
-import { NavigationService } from "@web-atoms/core/dist/services/NavigationService";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { MenuItem } from "../../basic/PopupButton";
-import BottomPopup from "../../mobile-app/BottomPopup";
-import MobileApp, { ContentPage, Drawer,  PullToRefresh } from "../../mobile-app/MobileApp";
-import PageNavigator from "../../PageNavigator";
+import InjectProperty from "@web-atoms/core/dist/core/InjectProperty.js";
+import sleep from "@web-atoms/core/dist/core/sleep.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import Pack from "@web-atoms/core/dist/Pack.js";
+import { NavigationService } from "@web-atoms/core/dist/services/NavigationService.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import { MenuItem } from "../../basic/PopupButton.js";
+import BottomPopup from "../../mobile-app/BottomPopup.js";
+import MobileApp, { ContentPage, Drawer,  PullToRefresh } from "../../mobile-app/MobileApp.js";
+import PageNavigator from "../../PageNavigator.js";
 
 class Detail extends ContentPage {
     protected create(): void {

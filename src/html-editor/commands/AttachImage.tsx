@@ -1,6 +1,6 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
-import UploadEvent, { FilesAvailableEventArgs } from "../../basic/UploadEvent";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import UploadEvent, { FilesAvailableEventArgs } from "../../basic/UploadEvent.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
 
 const onAttachImage = async (ce: FilesAvailableEventArgs) => {
     const c = AtomControl.from(ce.target) as any;

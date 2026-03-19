@@ -1,11 +1,11 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
-import Pack from "@web-atoms/core/dist/Pack";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import DateTime from "@web-atoms/date-time/dist/DateTime";
-import { ICalendarDate } from "../../../basic/Calendar";
-import DateField from "../../../basic/DateField";
-import Form from "../../../basic/Form";
-import FormField from "../../../basic/FormField";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import Pack from "@web-atoms/core/dist/Pack.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import DateTime from "@web-atoms/date-time/dist/DateTime.js";
+import { ICalendarDate } from "../../../basic/Calendar.js";
+import DateField from "../../../basic/DateField.js";
+import Form from "../../../basic/Form.js";
+import FormField from "../../../basic/FormField.js";
 
 const today = DateTime.today;
 

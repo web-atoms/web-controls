@@ -1,9 +1,9 @@
-import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import TimeSpan from "@web-atoms/date-time/dist/TimeSpan";
-import Select from "./Select";
-import Bind from "@web-atoms/core/dist/core/Bind";
+import { AtomBinder } from "@web-atoms/core/dist/core/AtomBinder.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import TimeSpan from "@web-atoms/date-time/dist/TimeSpan.js";
+import Select from "./Select.js";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
 
 import "./styles/time-editor.global.css";
 

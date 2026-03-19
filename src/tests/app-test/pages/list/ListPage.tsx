@@ -1,12 +1,12 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { ContentPage } from "../../../../mobile-app/MobileApp";
-import Bind from "@web-atoms/core/dist/core/Bind";
-import AtomRepeater from "../../../../basic/AtomRepeater";
-import FetchBuilder from "@web-atoms/core/dist/services/FetchBuilder";
-import { IPost, IPostSearchResult } from "../../model/model";
-import Action from "@web-atoms/core/dist/view-model/Action";
-import MasterDetailPage from "../../../../mobile-app/MasterDetailPage";
-import DetailPage from "../detail/DetailPage";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { ContentPage } from "../../../../mobile-app/MobileApp.js";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import AtomRepeater from "../../../../basic/AtomRepeater.js";
+import FetchBuilder from "@web-atoms/core/dist/services/FetchBuilder.js";
+import { IPost, IPostSearchResult } from "../../model/model.js";
+import Action from "@web-atoms/core/dist/view-model/Action.js";
+import MasterDetailPage from "../../../../mobile-app/MasterDetailPage.js";
+import DetailPage from "../detail/DetailPage.js";
 
 import "./ListPage.local.css";
 

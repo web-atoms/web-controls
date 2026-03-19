@@ -1,10 +1,10 @@
-import { CancelToken } from "@web-atoms/core/dist/core/types";
-import XNode, { xnodeSymbol } from "@web-atoms/core/dist/core/XNode";
-import { AtomControl, ElementValueSetters } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { getParentRepeaterItem } from "./AtomRepeater";
+import { CancelToken } from "@web-atoms/core/dist/core/types.js";
+import XNode, { xnodeSymbol } from "@web-atoms/core/dist/core/XNode.js";
+import { AtomControl, ElementValueSetters } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import { getParentRepeaterItem } from "./AtomRepeater.js";
 
 import "./styles/tooltip.global.css";
-import AtomPopover from "./elements/AtomPopover";
+import AtomPopover from "./elements/AtomPopover.js";
 
 type toolTipInfo = [{control: any, tooltip: CancelToken}, typeof AtomPopover];
 

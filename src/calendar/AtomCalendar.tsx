@@ -1,12 +1,12 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import {BindableProperty} from "@web-atoms/core/dist/core/BindableProperty";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import {AtomComboBox} from "@web-atoms/core/dist/web/controls/AtomComboBox";
-import {AtomControl} from "@web-atoms/core/dist/web/controls/AtomControl";
-import {AtomItemsControl} from "@web-atoms/core/dist/web/controls/AtomItemsControl";
-import AtomCalendarStyle from "./AtomCalendarStyle";
-import CalendarViewModel from "./CalendarViewModel";
-import SRCalendar from "./res/SRCalendar";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import {BindableProperty} from "@web-atoms/core/dist/core/BindableProperty.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import {AtomComboBox} from "@web-atoms/core/dist/web/controls/AtomComboBox.js";
+import {AtomControl} from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import {AtomItemsControl} from "@web-atoms/core/dist/web/controls/AtomItemsControl.js";
+import AtomCalendarStyle from "./AtomCalendarStyle.js";
+import CalendarViewModel from "./CalendarViewModel.js";
+import SRCalendar from "./res/SRCalendar.js";
 
 const BindCalendar = Bind
 	.forLocalViewModel<CalendarViewModel>();

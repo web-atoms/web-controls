@@ -1,4 +1,4 @@
-import Command from "./Command";
+import Command from "./Command.js";
 
 export default function RemoveFormat(cmd: any) {
     return Command({

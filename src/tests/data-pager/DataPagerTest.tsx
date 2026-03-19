@@ -1,8 +1,8 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { AtomComboBox } from "@web-atoms/core/dist/web/controls/AtomComboBox";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import AtomDataPager from "../../data-pager/AtomDataPager";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { AtomComboBox } from "@web-atoms/core/dist/web/controls/AtomComboBox.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import AtomDataPager from "../../data-pager/AtomDataPager.js";
 
 const items = (() => {
     const r = [];

@@ -1,7 +1,7 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
-import Pack from "@web-atoms/core/dist/Pack";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import AtomVideoPlayer from "../../../player/AtomVideoPlayer";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import Pack from "@web-atoms/core/dist/Pack.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import AtomVideoPlayer from "../../../player/AtomVideoPlayer.js";
 
 import "./AtomVideoTest.local.css";
 const css = "atom-video-test-local";

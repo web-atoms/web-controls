@@ -1,11 +1,11 @@
-import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
-import MobileApp from "../mobile-app/MobileApp";
+import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import { ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI.js";
+import MobileApp from "../mobile-app/MobileApp.js";
 
 import "../styles/desktop-app.global.css";
-import Action from "@web-atoms/core/dist/view-model/Action";
+import Action from "@web-atoms/core/dist/view-model/Action.js";
 
 export default class DesktopApp extends AtomControl {
 

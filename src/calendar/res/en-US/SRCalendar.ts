@@ -1,4 +1,4 @@
-import SRCalendar from "../SRCalendar";
+import SRCalendar from "../SRCalendar.js";
 
 export default class Calendar extends SRCalendar {
 

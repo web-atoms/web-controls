@@ -1,20 +1,20 @@
-import { AtomLoader } from "@web-atoms/core/dist/core/AtomLoader";
-import { AtomUri } from "@web-atoms/core/dist/core/AtomUri";
-import sleep from "@web-atoms/core/dist/core/sleep";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { NavigationService } from "@web-atoms/core/dist/services/NavigationService";
-import { AtomWindowViewModel } from "@web-atoms/core/dist/view-model/AtomWindowViewModel";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import PopupService, { IDialogOptions, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService";
-import PageNavigator from "../PageNavigator";
-import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
-import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import { AtomDisposableList } from "@web-atoms/core/dist/core/AtomDisposableList";
-import Bind from "@web-atoms/core/dist/core/Bind";
-import { CancelToken, IDisposable } from "@web-atoms/core/dist/core/types";
-import { AncestorEnumerator, ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
-import { displayRouteSymbol, routeSymbol } from "@web-atoms/core/dist/core/Command";
-import Route from "@web-atoms/core/dist/core/Route";
+import { AtomLoader } from "@web-atoms/core/dist/core/AtomLoader.js";
+import { AtomUri } from "@web-atoms/core/dist/core/AtomUri.js";
+import sleep from "@web-atoms/core/dist/core/sleep.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { NavigationService } from "@web-atoms/core/dist/services/NavigationService.js";
+import { AtomWindowViewModel } from "@web-atoms/core/dist/view-model/AtomWindowViewModel.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import PopupService, { IDialogOptions, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService.js";
+import PageNavigator from "../PageNavigator.js";
+import { StringHelper } from "@web-atoms/core/dist/core/StringHelper.js";
+import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty.js";
+import { AtomDisposableList } from "@web-atoms/core/dist/core/AtomDisposableList.js";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import { CancelToken, IDisposable } from "@web-atoms/core/dist/core/types.js";
+import { AncestorEnumerator, ChildEnumerator } from "@web-atoms/core/dist/web/core/AtomUI.js";
+import { displayRouteSymbol, routeSymbol } from "@web-atoms/core/dist/core/Command.js";
+import Route from "@web-atoms/core/dist/core/Route.js";
 
 import "./MobileApp.global.css";
 

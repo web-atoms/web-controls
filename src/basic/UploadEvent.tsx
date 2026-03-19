@@ -1,12 +1,12 @@
-import { App } from "@web-atoms/core/dist/App";
-import Command from "@web-atoms/core/dist/core/Command";
-import EventScope from "@web-atoms/core/dist/core/EventScope";
-import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { AncestorEnumerator } from "@web-atoms/core/dist/web/core/AtomUI";
-import PopupService from "@web-atoms/core/dist/web/services/PopupService";
-import { toFileSize } from "../NumberFormats";
+import { App } from "@web-atoms/core/dist/App.js";
+import Command from "@web-atoms/core/dist/core/Command.js";
+import EventScope from "@web-atoms/core/dist/core/EventScope.js";
+import { StringHelper } from "@web-atoms/core/dist/core/StringHelper.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import { AncestorEnumerator } from "@web-atoms/core/dist/web/core/AtomUI.js";
+import PopupService from "@web-atoms/core/dist/web/services/PopupService.js";
+import { toFileSize } from "../NumberFormats.js";
 
 const acceptCache = {};
 

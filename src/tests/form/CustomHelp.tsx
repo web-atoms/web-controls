@@ -1,5 +1,5 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
-import {AtomControl} from "@web-atoms/core/dist/web/controls/AtomControl";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import {AtomControl} from "@web-atoms/core/dist/web/controls/AtomControl.js";
 
 export default class CustomHelp extends AtomControl {
 

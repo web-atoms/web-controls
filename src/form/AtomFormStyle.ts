@@ -1,6 +1,6 @@
-import Colors, { ColorItem } from "@web-atoms/core/dist/core/Colors";
-import { AtomStyle } from "@web-atoms/core/dist/web/styles/AtomStyle";
-import { IStyleDeclaration } from "@web-atoms/core/dist/web/styles/IStyleDeclaration";
+import Colors, { ColorItem } from "@web-atoms/core/dist/core/Colors.js";
+import { AtomStyle } from "@web-atoms/core/dist/web/styles/AtomStyle.js";
+import { IStyleDeclaration } from "@web-atoms/core/dist/web/styles/IStyleDeclaration.js";
 
 export default class AtomFormStyle extends AtomStyle {
 

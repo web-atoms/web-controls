@@ -1,4 +1,4 @@
-import { ChildEnumerator, descendentElementIterator } from "@web-atoms/core/dist/web/core/AtomUI";
+import { ChildEnumerator, descendentElementIterator } from "@web-atoms/core/dist/web/core/AtomUI.js";
 
 export const checkAnyParent = (check: (e: HTMLElement) => boolean) => (e: HTMLElement) => {
     while (e) {

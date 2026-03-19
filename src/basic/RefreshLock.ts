@@ -1,5 +1,5 @@
-import { App } from "@web-atoms/core/dist/App";
-import { IDisposable } from "@web-atoms/core/dist/core/types";
+import { App } from "@web-atoms/core/dist/App.js";
+import { IDisposable } from "@web-atoms/core/dist/core/types.js";
 
 export default class RefreshLock implements IDisposable {
 

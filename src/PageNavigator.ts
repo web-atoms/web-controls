@@ -1,6 +1,6 @@
-import { CancelToken } from "@web-atoms/core/dist/core/types";
-import type { ContentPage } from "./mobile-app/MobileApp";
-import { PageCommands } from "@web-atoms/core/dist/core/Command";
+import { CancelToken } from "@web-atoms/core/dist/core/types.js";
+import type { ContentPage } from "./mobile-app/MobileApp.js";
+import { PageCommands } from "@web-atoms/core/dist/core/Command.js";
 
 export type Page<T> = typeof ContentPage<T, any>;
 export type PageWith<T, T2> = typeof ContentPage<T, T2>;

@@ -1,11 +1,11 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import {BindableProperty} from "@web-atoms/core/dist/core/BindableProperty";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import {AtomGridView} from "@web-atoms/core/dist/web/controls/AtomGridView";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import {BindableProperty} from "@web-atoms/core/dist/core/BindableProperty.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import {AtomGridView} from "@web-atoms/core/dist/web/controls/AtomGridView.js";
 
-import GridTestViewModel from "./GridTestViewModel";
+import GridTestViewModel from "./GridTestViewModel.js";
 
-import AtomDataGrid from "../../data-grid/AtomDataGrid";
+import AtomDataGrid from "../../data-grid/AtomDataGrid.js";
 
 export default class GridTest extends AtomGridView {
 

@@ -1,9 +1,9 @@
-import Colors from "@web-atoms/core/dist/core/Colors";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import Pack from "@web-atoms/core/dist/Pack";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import AtomRepeater from "../../../basic/AtomRepeater";
-import { SwipeLeft } from "../../../basic/Swipe";
+import Colors from "@web-atoms/core/dist/core/Colors.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import Pack from "@web-atoms/core/dist/Pack.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import AtomRepeater from "../../../basic/AtomRepeater.js";
+import { SwipeLeft } from "../../../basic/Swipe.js";
 
 import "./SwipeTest.local.css";
 

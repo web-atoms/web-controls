@@ -1,4 +1,4 @@
-import { IRangeUpdate } from "./RangeEditor";
+import { IRangeUpdate } from "./RangeEditor.js";
 
 export interface IHtmlEditorCommand {
     [key: string]: (e: IRangeUpdate) => void;

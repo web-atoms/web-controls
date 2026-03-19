@@ -1,6 +1,6 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { IPopupOptions, PopupControl } from "@web-atoms/core/dist/web/services/PopupService";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import { IPopupOptions, PopupControl } from "@web-atoms/core/dist/web/services/PopupService.js";
 
 export default class InlinePopupControl extends PopupControl {
 

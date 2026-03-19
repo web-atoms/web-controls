@@ -1,5 +1,5 @@
-import CommandButton from "./CommandButton";
-import HtmlCommands from "./HtmlCommands";
+import CommandButton from "./CommandButton.js";
+import HtmlCommands from "./HtmlCommands.js";
 
 export default function Unlink({
     insertCommand = HtmlCommands.unlink

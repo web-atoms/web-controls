@@ -1,5 +1,5 @@
-import XNode from "@web-atoms/core/dist/core/XNode";
-import InlinePopupButton, { IPopupButton } from "./InlinePopupButton";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import InlinePopupButton, { IPopupButton } from "./InlinePopupButton.js";
 
 export default function PopupMenu(a: IPopupButton, ... nodes: XNode[]) {
     a.closeOnClick ??= true;

@@ -1,9 +1,9 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import { AtomItemsControl } from "@web-atoms/core/dist/web/controls/AtomItemsControl";
-import { AtomTemplateControl } from "@web-atoms/core/dist/web/controls/AtomTemplateControl";
-import AppComboBoxViewModel from "./AppComboBoxViewModel";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import { AtomItemsControl } from "@web-atoms/core/dist/web/controls/AtomItemsControl.js";
+import { AtomTemplateControl } from "@web-atoms/core/dist/web/controls/AtomTemplateControl.js";
+import AppComboBoxViewModel from "./AppComboBoxViewModel.js";
 
 export default class ItemHost extends AtomControl {
 

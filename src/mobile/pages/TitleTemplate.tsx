@@ -1,6 +1,6 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import {AtomControl} from "@web-atoms/core/dist/web/controls/AtomControl";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import {AtomControl} from "@web-atoms/core/dist/web/controls/AtomControl.js";
 
 export default class TitleTemplate extends AtomControl {
 

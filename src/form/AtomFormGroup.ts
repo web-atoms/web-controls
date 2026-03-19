@@ -1,5 +1,5 @@
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl";
-import AtomForm from "./AtomForm";
+import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
+import AtomForm from "./AtomForm.js";
 
 export default class AtomFormGroup extends AtomForm {
 

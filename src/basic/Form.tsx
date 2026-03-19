@@ -1,6 +1,6 @@
-import Bind from "@web-atoms/core/dist/core/Bind";
-import { StringHelper } from "@web-atoms/core/dist/core/StringHelper";
-import XNode from "@web-atoms/core/dist/core/XNode";
+import Bind from "@web-atoms/core/dist/core/Bind.js";
+import { StringHelper } from "@web-atoms/core/dist/core/StringHelper.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
 
 import "../styles/form.global.css";
 

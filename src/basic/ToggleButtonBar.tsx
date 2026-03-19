@@ -1,6 +1,6 @@
-import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty";
-import XNode from "@web-atoms/core/dist/core/XNode";
-import AtomRepeater from "./AtomRepeater";
+import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty.js";
+import XNode from "@web-atoms/core/dist/core/XNode.js";
+import AtomRepeater from "./AtomRepeater.js";
 
 import "./styles/toggle-button-bar.global.css";
 
