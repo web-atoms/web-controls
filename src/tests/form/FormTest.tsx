@@ -9,7 +9,7 @@ import FormViewModel from "./FormViewModel";
 @Pack
 export default class FormTest extends AtomControl {
 
-	public viewModel: FormViewModel;
+	declare public viewModel: FormViewModel;
 
 	public create(): void {
 

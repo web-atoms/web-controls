@@ -7,7 +7,7 @@ import AppComboBoxViewModel from "./AppComboBoxViewModel";
 
 export default class ItemHost extends AtomControl {
 
-	public viewModel: AppComboBoxViewModel;
+	declare public viewModel: AppComboBoxViewModel;
 
 	public create(): void {
 

@@ -8,7 +8,7 @@ import GridTestViewModel, { ICurrencyInfo } from "../../data-grid/GridTestViewMo
 @Pack
 export default class DataGridTest extends AtomControl {
 
-    public viewModel: GridTestViewModel;
+    declare public viewModel: GridTestViewModel;
 
     public orderBy: string;
 

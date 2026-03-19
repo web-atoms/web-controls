@@ -105,7 +105,7 @@ export default class DateField extends AtomControl {
         const owner = this;
         class CalendarPopup extends AtomPopover {
 
-            public owner: DateField;
+            declare public owner: DateField;
 
             public type;
 

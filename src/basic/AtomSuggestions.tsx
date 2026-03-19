@@ -13,8 +13,8 @@ export default class AtomSuggestions extends AtomRepeater {
 
     public "event-item-selected": (ce: CustomEvent) => any;
 
-    @BindableProperty
-    public valuePath: any;
+    // @BindableProperty
+    // declare public valuePath: any;
 
     // Title to be displayed on the popup window for e.g. When we click on more in project tags
     @BindableProperty

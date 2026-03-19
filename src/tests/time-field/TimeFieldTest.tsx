@@ -33,7 +33,7 @@ export class TimeFieldTestViewModel extends AtomViewModel {
 
 export default class TimeFieldTest extends AtomControl {
 
-    public viewModel: TimeFieldTestViewModel;
+    declare public viewModel: TimeFieldTestViewModel;
 
     public create() {
         this.viewModel = this.resolve(TimeFieldTestViewModel);

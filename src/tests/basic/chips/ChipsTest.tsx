@@ -13,7 +13,7 @@ const css = "chip-test";
 @Pack
 export default class ChipsTest extends AtomControl {
 
-    public viewModel: GridTestViewModel;
+    declare public viewModel: GridTestViewModel;
 
     private selectedChips: ICurrencyInfo[];
 

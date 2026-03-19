@@ -67,7 +67,7 @@ export default class AtomDataPager extends AtomControl {
 
     public current: number;
 
-    public localViewModel: AtomDataPagerViewModel;
+    declare public localViewModel: AtomDataPagerViewModel;
 
     public create() {
         this.defaultControlStyle = AtomDataPagerStyle;

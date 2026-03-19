@@ -3,6 +3,7 @@
   "version": "2.5.38",
   "description": "HTML controls for web atoms core",
   "main": "index.js",
+  "esm": "dist-esm",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
     "build-css": "npx postcss \"./src/**/*.css\" --base ./src --dir ./dist --map --verbose",
@@ -20,11 +21,11 @@
   },
   "homepage": "https://github.com/web-atoms/web-controls#readme",
   "dependencies": {
-    "@web-atoms/core": "^2.5.5",
-    "@web-atoms/data-styles": "^1.0.124",
-    "@web-atoms/date-time": "^1.1.3",
+    "@web-atoms/core": "^2.5.16",
+    "@web-atoms/data-styles": "^1.0.129",
+    "@web-atoms/date-time": "^3.0.9",
     "@web-atoms/module-loader": "^2.1.87",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
     "@web-atoms/pack": "1.0.111",

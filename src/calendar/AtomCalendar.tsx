@@ -27,7 +27,7 @@ export default class AtomCalendar extends AtomControl {
 
 	public itemTemplate: any ;
 
-	public localViewModel: CalendarViewModel;
+	declare public localViewModel: CalendarViewModel;
 
 	protected srCalendar: SRCalendar;
 

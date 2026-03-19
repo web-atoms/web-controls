@@ -13,8 +13,8 @@ export default class AtomDataGridViewModel extends AtomViewModel {
 
     public owner: IDataGrid;
 
-    @Inject
-    public app: App;
+    // @Inject
+    // public app: App;
 
     @Watch
     public watchInit() {

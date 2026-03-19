@@ -527,7 +527,7 @@ delete (BasePage.prototype as any).init;
 
 export class ContentPage<T = any, TResult = any> extends BasePage {
     public parameters: T;
-    public close: (result: TResult) => any;
+    declare public close: (result: TResult) => any;
 }
 
 export type InputOf<T extends ContentPage> = T extends ContentPage<infer T> ? T : any;
@@ -796,21 +796,21 @@ const root = (isMobileView ? ContentPage : PopupWindowEx) as typeof AtomControl;
 export class PopupWindowPage<TIn = any, TOut = any> extends (root as any as typeof ContentPage) {
 
 
-    public parameters: TIn;
+    declare public parameters: TIn;
 
     public static dialogOptions: IDialogOptions;
 
-    public close: (r: TOut) => void;
+    declare public close: (r: TOut) => void;
 
-    public cancel: (error?: any) => void;
+    declare public cancel: (error?: any) => void;
 
-    public title: string;
+    declare public title: string;
 
-    public headerRenderer: () => XNode;
+    declare public headerRenderer: () => XNode;
 
-    public footerRenderer: () => XNode;
+    declare public footerRenderer: () => XNode;
 
-    public titleRenderer: () => XNode;
+    declare public titleRenderer: () => XNode;
 
 
 }

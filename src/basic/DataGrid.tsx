@@ -173,8 +173,8 @@ export default class DataGrid extends TableRepeater {
     @BindableProperty
     public columns: IDataGridColumn[];
 
-    @BindableProperty
-    public orderBy: any;
+    // @BindableProperty
+    // public orderBy: any;
 
     private orderBySet: boolean;
 
