@@ -137,6 +137,7 @@ public "event-selection-changed"?: (e: CustomEvent) => void;
                         cancelable: true
                     }
                 ));
+                this.input.placeholder = this.label;
             }
             // Focusable.moveNext(this.input);
         } finally {
