@@ -137,8 +137,10 @@ public "event-selection-changed"?: (e: CustomEvent) => void;
                         cancelable: true
                     }
                 ));
-                this.label = this.labelPath?.(this.selectedItem);
-                this.input.placeholder = this.label;
+                if (selectedItem) {
+                    this.label = this.labelPath(selectedItem);
+                    this.input.placeholder = this.label;
+                }
             }
             // Focusable.moveNext(this.input);
         } finally {
