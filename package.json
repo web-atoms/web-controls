@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 0",
     "build-css": "npx postcss \"./src/**/*.css\" --base ./src --dir ./dist --map --verbose",
     "build-css-watch": "npx postcss \"./src/**/*.css\" --base src --dir dist --map -w",
-    "postversion": "git push --follow-tags"
+    "postversion": "git push --follow-tags",
+    "push": "git add -A && git commit -m \"dep vb\" && npm version patch"
   },
   "repository": {
     "type": "git",
@@ -21,10 +22,10 @@
   },
   "homepage": "https://github.com/web-atoms/web-controls#readme",
   "dependencies": {
-    "@web-atoms/core": "^2.5.16",
+    "@web-atoms/core": "^2.5.20",
     "@web-atoms/data-styles": "^1.0.129",
-    "@web-atoms/date-time": "^3.0.9",
-    "@web-atoms/module-loader": "^2.1.87",
+    "@web-atoms/date-time": "^3.0.18",
+    "@web-atoms/module-loader": "^2.1.90",
     "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
