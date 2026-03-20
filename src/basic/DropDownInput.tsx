@@ -138,6 +138,7 @@ public "event-selection-changed"?: (e: CustomEvent) => void;
                     }
                 ));
             }
+            this.input.placeholder = this.label;
             // Focusable.moveNext(this.input);
         } finally {
             this.isPopupOpen = false;
