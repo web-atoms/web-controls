@@ -19,7 +19,7 @@
         {
             "label": "TypeScript Build Watch",
             "type": "typescript",
-            "tsconfig": "tsconfig.json",
+            "tsconfig": "tsconfig.esm.json",
             "option": "watch",
         },
         {
@@ -34,8 +34,9 @@
         {
             "label": "Web Atoms Dev Server",
             "type": "shell",
-            "command": "wads",
+            "command": "node",
             "args": [
+                "./node_modules/@package-verse/esmpack/serve.js",
                 "https://v2018-test.800casting.com"
             ],
             "problemMatcher": []
