@@ -9,8 +9,8 @@ import Action from "@web-atoms/core/dist/view-model/Action.js";
 @Pack
 export default class Form2Test extends AtomControl {
 
-    username: string;
-    password: string;
+    declare username: string;
+    declare password: string;
 
     protected create(): void {
 
@@ -23,7 +23,8 @@ export default class Form2Test extends AtomControl {
                 <FormField
                     label="Username"
                     required={true}
-                    error={BindError({ value: () => this.username })}>
+                    error={BindError({ value: () => this.username })}
+                    >
                     <input value={Bind.twoWaysImmediate(() => this.username)}/>
                 </FormField>
                 <div data-layout="command-row">
