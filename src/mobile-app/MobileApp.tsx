@@ -2,8 +2,6 @@ import { AtomLoader } from "@web-atoms/core/dist/core/AtomLoader.js";
 import { AtomUri } from "@web-atoms/core/dist/core/AtomUri.js";
 import sleep from "@web-atoms/core/dist/core/sleep.js";
 import XNode from "@web-atoms/core/dist/core/XNode.js";
-import { NavigationService } from "@web-atoms/core/dist/services/NavigationService.js";
-import { AtomWindowViewModel } from "@web-atoms/core/dist/view-model/AtomWindowViewModel.js";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
 import PopupService, { IDialogOptions, PopupWindow } from "@web-atoms/core/dist/web/services/PopupService.js";
 import PageNavigator from "../PageNavigator.js";
@@ -674,14 +672,14 @@ export default class MobileApp extends AtomControl {
         this.bindEvent(this.element, "closeDrawer", (e) => {
             this.hideDrawer?.();
         });
-        const navigationService = this.app.resolve(NavigationService);
-        navigationService.registerNavigationHook(
-            (uri, { target, clearHistory }) => {
-                if (/^(app|root)$/.test(target)) {
-                    return this.loadPageForReturn(uri, clearHistory);
-                }
-            }
-        );
+        // const navigationService = this.app.resolve(NavigationService);
+        // navigationService.registerNavigationHook(
+        //     (uri, { target, clearHistory }) => {
+        //         if (/^(app|root)$/.test(target)) {
+        //             return this.loadPageForReturn(uri, clearHistory);
+        //         }
+        //     }
+        // );
         this.runAfterInit(() => this.app.runAsync(() => this.init()));
     }
 
@@ -743,7 +741,7 @@ export default class MobileApp extends AtomControl {
         this.container.appendChild(page.element);
         this.selectedPage = page;
 
-        const vm = page.viewModel as AtomWindowViewModel;
+        // const vm = page.viewModel as AtomWindowViewModel;
         const element = page.element;
         return new Promise((resolve, reject) => {
 
@@ -767,10 +765,10 @@ export default class MobileApp extends AtomControl {
 
             const cancel = closeFactory(reject, "cancelled") as any;
             const close = closeFactory(resolve);
-            if (vm) {
-                vm.cancel = cancel;
-                vm.close = close;
-            }
+            // if (vm) {
+            //     vm.cancel = cancel;
+            //     vm.close = close;
+            // }
             page.cancel = cancel;
             page.close = close;
         });

@@ -2,8 +2,6 @@ import InjectProperty from "@web-atoms/core/dist/core/InjectProperty.js";
 import sleep from "@web-atoms/core/dist/core/sleep.js";
 import XNode from "@web-atoms/core/dist/core/XNode.js";
 import Pack from "@web-atoms/core/dist/Pack.js";
-import { NavigationService } from "@web-atoms/core/dist/services/NavigationService.js";
-import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
 import { MenuItem } from "../../basic/PopupButton.js";
 import BottomPopup from "../../mobile-app/BottomPopup.js";
 import MobileApp, { ContentPage, Drawer,  PullToRefresh } from "../../mobile-app/MobileApp.js";
@@ -19,9 +17,6 @@ class Detail extends ContentPage {
 
 class List extends ContentPage {
 
-    @InjectProperty
-    private navigationService: NavigationService;
-
     protected create(): void {
         this.pullToRefreshRenderer = PullToRefresh;
         const items = [];
@@ -36,14 +31,11 @@ class List extends ContentPage {
     }
 
     protected openDetail() {
-        void this.navigationService.openPage(Detail, { title: "Detail" }, { target: "app"});
+        void PageNavigator.openPage(Detail, { title: "Detail" });
     }
 }
 
 export class DrawerMenu extends Drawer {
-
-    @InjectProperty
-    private navigationService: NavigationService;
 
     protected create(): void {
         this.render(<div>
@@ -53,7 +45,7 @@ export class DrawerMenu extends Drawer {
     }
 
     protected openList() {
-        void this.navigationService.openPage(List, { title: "List"}, { target: "app"});
+        void PageNavigator.openPage(List, { title: "List"});
     }
 
 }
@@ -91,13 +83,10 @@ class PopupMenu extends BottomPopup {
 @Pack
 export default class MobileAppTest extends MobileApp {
 
-    @InjectProperty
-    private navigationService: NavigationService;
-
     protected create(): void {
         this.drawer = DrawerMenu;
 
-        this.navigationService.openPage(Home, { title: "Home" }, { target: "app"});
+        PageNavigator.openPage(Home, { title: "Home" });
 
         this.app.runAsync(async () => {
             await sleep(1);

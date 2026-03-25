@@ -2,8 +2,7 @@ import type { App } from "@web-atoms/core/dist/App.js";
 import Bind from "@web-atoms/core/dist/core/Bind.js";
 import FormattedString from "@web-atoms/core/dist/core/FormattedString.js";
 import XNode from "@web-atoms/core/dist/core/XNode.js";
-import { NavigationService } from "@web-atoms/core/dist/services/NavigationService.js";
-import { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService.js";
+import PopupService, { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService.js";
 import "./styles/form-field.global.css";
 
 export interface IFormField {
@@ -137,9 +136,8 @@ export default function FormField(
     if (!helpEventClick && help) {
         helpEventClick = Bind.event((s, e) => {
             const app = s.app as App;
-            if (typeof help === "string" || help instanceof FormattedString) {
-                const ns = app.resolve(NavigationService);
-                ns.notify(help);
+            if (typeof help === "string" || help instanceof XNode) {
+                PopupService.notify(help).catch(console.error);
                 return;
             }
 
@@ -214,9 +212,8 @@ export function HorizontalFormField(
     if (!helpEventClick && help) {
         helpEventClick = Bind.event((s, e) => {
             const app = s.app as App;
-            if (typeof help === "string" || help instanceof FormattedString) {
-                const ns = app.resolve(NavigationService);
-                ns.notify(help);
+            if (typeof help === "string" || help instanceof XNode) {
+                PopupService.notify(help).catch(console.error);
                 return;
             }
 
