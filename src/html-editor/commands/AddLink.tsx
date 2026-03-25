@@ -1,13 +1,13 @@
 import Bind from "@web-atoms/core/dist/core/Bind.js";
 import { BindableProperty } from "@web-atoms/core/dist/core/BindableProperty.js";
 import XNode from "@web-atoms/core/dist/core/XNode.js";
-import { AtomToggleButtonBar } from "@web-atoms/core/dist/web/controls/AtomToggleButtonBar.js";
 import PopupService, { PopupWindow } from "@web-atoms/core/dist/web/services/PopupService.js";
 import FormField from "../../basic/FormField.js";
 import type AtomHtmlEditor from "../AtomHtmlEditor.js";
 import CommandButton, { notSet } from "./CommandButton.js";
 import HtmlCommands from "./HtmlCommands.js";
 import "./AddLink.local.css";
+import ButtonBar from "../../basic/ButtonBar.js";
 
 const linkTypes = [
     {
@@ -43,7 +43,7 @@ class LinkDialog extends PopupWindow {
         this.title = "Create Link";
         this.render(<div class={linkDialogCss}>
             <FormField label="Type">
-                <AtomToggleButtonBar
+                <ButtonBar
                     items={linkTypes}
                     value={Bind.twoWays(() => this.type)}/>
             </FormField>
