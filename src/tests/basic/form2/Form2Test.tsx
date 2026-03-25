@@ -9,8 +9,8 @@ import Action from "@web-atoms/core/dist/view-model/Action.js";
 @Pack
 export default class Form2Test extends AtomControl {
 
-    declare username: string;
-    declare password: string;
+    username: string;
+    password: string;
 
     protected create(): void {
 

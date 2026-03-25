@@ -12,6 +12,7 @@
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "allowSyntheticDefaultImports": true,
+        "useDefineForClassFields": false,
         "removeComments": true,
         "importHelpers": true,
         "jsx": "react",
