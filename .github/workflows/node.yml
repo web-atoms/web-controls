@@ -27,5 +27,6 @@ jobs:
       - run: node ./node_modules/@web-atoms/ts-to-systemjs/index.js
       - run: npm run build-css
       - run: tsc -p tsconfig.esm.json
+      - run: npm run build-css-esm
       - run: npm publish --access public
 
