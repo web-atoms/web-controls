@@ -4,7 +4,7 @@ import { CancelToken } from "@web-atoms/core/dist/core/types.js";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
 import { ChildEnumerator, descendentElementIterator } from "@web-atoms/core/dist/web/core/AtomUI.js";
 
-import "@web-atoms/data-styles/data-styles";
+import "@web-atoms/data-styles/data-styles.css";
 import { showImageDialog } from "./commands/AddImage.js";
 import { FilesAvailableEventArgs } from "../basic/UploadEvent.js";
 
