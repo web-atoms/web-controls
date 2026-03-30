@@ -127,7 +127,7 @@ public "event-selection-changed"?: (e: CustomEvent) => void;
                 this.match ?? MatchAnyCaseInsensitive(this.labelPath),
                 selectedItem);
             if (newItem !== selectedItem) {
-                this.selectedItem = selectedItem;
+                this.selectedItem = newItem;
                 this.value = this.valuePath?.(newItem) ?? newItem;
                 this.element.dispatchEvent(new CustomEvent(
                     "selectionChanged",
@@ -137,7 +137,10 @@ public "event-selection-changed"?: (e: CustomEvent) => void;
                         cancelable: true
                     }
                 ));
-                this.input.placeholder = this.label;
+                if (newItem) {
+                    this.label = this.labelPath(newItem);
+                    this.input.placeholder = this.label;
+                }
             }
             // Focusable.moveNext(this.input);
         } finally {
