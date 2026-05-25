@@ -19,7 +19,7 @@ ElementValueSetters.tooltip = (control: AtomControl, e: HTMLElement, value: any)
     });
 };
 
-document.body.addEventListener("pointerenter", (ev) => Tooltip.showTooltip(ev.target as HTMLElement), true);
+document.body.addEventListener("pointerenter", (ev) => setTimeout(() => Tooltip.showTooltip(ev.target as HTMLElement), 150), true);
 
 document.body.addEventListener("pointerleave", (ev) => {
     const start = ev.target as HTMLElement;
