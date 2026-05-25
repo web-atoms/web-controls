@@ -40,7 +40,7 @@ export const getParentRepeaterItem = (target: HTMLElement): IRepeaterItemInfo =>
         }
         if (index === undefined) {
             const itemIndex = target.getAttribute("data-item-index");
-            if (typeof itemIndex !== "undefined") {
+            if (itemIndex) {
                 root = target;
                 // tslint:disable-next-line: no-bitwise
                 index = ~~itemIndex;
