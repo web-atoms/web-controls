@@ -1,8 +1,7 @@
 import XNode from "@web-atoms/core/dist/core/XNode.js";
-import type { IAnchorPopover } from "./elements/AtomPopover.js";
 import { AtomControl } from "@web-atoms/core/dist/web/controls/AtomControl.js";
 import { App } from "@web-atoms/core/dist/App.js";
-import AtomPopover from "./elements/AtomPopover.js";
+import AtomPopover, { IAnchorPopover } from "./elements/AtomPopover.js";
 
 export type PopupFactory = (data) => XNode;
 
@@ -45,7 +44,7 @@ export default function InlinePopupButton( { icon, text, label, closeOnClick = t
         }
     }
 
-    return <button data-inline-popup-button="inline-popup-button" data-atom-popup-button="1" { ... a}>
+    return <button data-atom-popup-button="1" { ... a}>
         {icon && <i class={icon}/>}
         {text && <span text={text}/>}
         {label && <label text={text}/>}
