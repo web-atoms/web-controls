@@ -69,7 +69,7 @@ class LinkDialog extends PopupWindow {
 }
 
 function showDialog(s: AtomHtmlEditor, e: Event): Promise<string> {
-    return PopupService.showWindow(s.element, LinkDialog);
+    return PopupService.showWindow(s.element, LinkDialog, { title: "Add Link"});
 }
 
 export default function AddLink({

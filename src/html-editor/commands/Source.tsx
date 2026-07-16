@@ -31,7 +31,7 @@ async function showDialog(s: AtomHtmlEditor, e: Event): Promise<string> {
 
     }
 
-    const result = await PopupService.showWindow(s.element, SourceDialog);
+    const result = await PopupService.showWindow(s.element, SourceDialog, { title: "Source"});
     s.htmlContent = result as string;
     return null;
 }
