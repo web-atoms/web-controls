@@ -15,10 +15,10 @@ class ImageDialog extends PopupWindow {
     @BindableProperty
     public alt: string;
 
-    protected create(): void {
+    init() {
         this.link = "";
         this.alt = "";
-        this.render(<div>
+        this.renderer = <div>
             <FormField label="Url">
                 <input value={Bind.twoWaysImmediate(() => this.link)}/>
             </FormField>
@@ -30,7 +30,7 @@ class ImageDialog extends PopupWindow {
                     eventClick={() => this.close(this.createImage())}
                     text="Add"/>
             </div>
-        </div>);
+        </div>;
     }
 
     private createImage() {

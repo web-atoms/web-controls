@@ -16,9 +16,9 @@ async function showDialog(s: AtomHtmlEditor, e: Event): Promise<string> {
         @BindableProperty
         public source: string;
 
-        protected create(): void {
+        init() {
             this.source = s.htmlContent;
-            this.render(<div class={css}>
+            this.renderer = <div class={css}>
                 <textarea
                     value={Bind.twoWaysImmediate(() => this.source)}/>
                 <div class="command-bar">
@@ -26,7 +26,7 @@ async function showDialog(s: AtomHtmlEditor, e: Event): Promise<string> {
                         eventClick={Bind.event(() => this.close(this.source))}
                         text="Save"/>
                 </div>
-            </div>);
+            </div>;
         }
 
     }

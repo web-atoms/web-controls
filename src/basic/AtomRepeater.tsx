@@ -113,9 +113,9 @@ export function askSuggestion<T>(
         @BindableProperty
         public search: string;
 
-        protected create(): void {
+        init() {
             this.title = options?.title ?? "Select";
-            this.render(<div data-repeater-popup="popup">
+            this.renderer = <div data-repeater-popup="popup">
                 <input
                     type="search"
                     value={Bind.twoWaysImmediate(() => this.search)}
@@ -130,7 +130,7 @@ export function askSuggestion<T>(
                         }}
                         items={items}/>
                 </div>
-            </div>);
+            </div>;
         }
     }
     options ??= {};

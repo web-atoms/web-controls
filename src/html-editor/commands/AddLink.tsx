@@ -38,10 +38,10 @@ class LinkDialog extends PopupWindow {
     @BindableProperty
     public type: string;
 
-    protected create(): void {
+    init() {
         this.type = "web-page";
         this.title = "Create Link";
-        this.render(<div class={linkDialogCss}>
+        this.renderer = <div class={linkDialogCss}>
             <FormField label="Type">
                 <ButtonBar
                     items={linkTypes}
@@ -57,7 +57,7 @@ class LinkDialog extends PopupWindow {
                     text="Add"
                     eventClick={Bind.event(() => this.close(this.toLink(this.link)))} />
             </div>
-        </div>);
+        </div>;
     }
 
     private toLink(link: string): string {
