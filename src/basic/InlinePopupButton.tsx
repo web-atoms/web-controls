@@ -30,7 +30,7 @@ export default function InlinePopupButton( { icon, text, label, closeOnClick = t
         popup = () => div;
         nodes = [];
     }
-    a["popupFactory"] = popup;
+    a["atomPopupFactory"] = popup;
 
     if (closeOnClick) {
         a["data-close-on-click"] = true;
@@ -65,7 +65,7 @@ document.body.addEventListener("click", (e) => {
         return;
     }
 
-    const pf = start["popupFactory"] as PopupFactory;
+    const pf = start["atomPopupFactory"] as PopupFactory;
     if (!pf) {
         return;
     }
