@@ -19,14 +19,13 @@ jobs:
           node-version: 24
           registry-url: https://registry.npmjs.org/
       - run: npm install
-      - run: npm install -g typescript
       - run: npm install -D istanbul remap-istanbul @web-atoms/ts-to-systemjs
-      - run: tsc
+      - run: npx tsc
       # - run: node ./node_modules/@web-atoms/ts-to-systemjs/index.js
       - run: npm run test
       - run: node ./node_modules/@web-atoms/ts-to-systemjs/index.js
       - run: npm run build-css
-      - run: tsc -p tsconfig.esm.json
+      - run: npx tsc -p tsconfig.esm.json
       - run: npm run build-css-esm
       - run: node ./node_modules/@package-verse/esmpack/pack.js dist-esm
       - run: npm publish --access public
