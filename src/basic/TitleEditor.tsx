@@ -9,6 +9,9 @@ export interface ITitleEditor extends IElement {
     value?: any;
     type?: any;
     placeholder?: any;
+
+    autofocus?: boolean;
+
     /**
      * Off - turn off,
      * On - Sentence capitalization
@@ -126,12 +129,14 @@ export default function TitleEditor({
     placeholder,
     capitalize = "on",
     capitalizationTitle = "Capitalization",
+    autofocus,
     ... a
 }: ITitleEditor) {
     return <div
         data-title-editor="title-editor" { ... a}>
         <input
             autocapitalize={capitalize}
+            autofocus={autofocus}
             type={type}
             placeholder={placeholder}
             value={value}
