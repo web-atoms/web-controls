@@ -166,6 +166,7 @@ export default class DateField extends AtomControl {
             private save(d?: Date) {
                 if (!d) {
                     this.owner.value = d;
+                    this.owner.element.dispatchEvent(new InputEvent("input"));
                     this.close(d);
                     return;
                 }
@@ -174,6 +175,7 @@ export default class DateField extends AtomControl {
                     date = date.add(this.time);
                 }
                 this.owner.value = date.asJSDate;
+                this.owner.element.dispatchEvent(new InputEvent("input"));
                 this.close(date);
             }
         }
