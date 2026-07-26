@@ -143,7 +143,7 @@ export default class DateField extends AtomControl {
                             e.preventDefault();
                             e.stopImmediatePropagation();
                             e.stopPropagation();
-                            this.save();
+                            this.save(null);
                         }}/>
                     <button
                         class="today"
