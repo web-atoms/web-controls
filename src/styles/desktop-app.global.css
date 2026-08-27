@@ -77,7 +77,7 @@ body {
     }
 
     &[data-hide-drawer=true] {
-        & drawer-menu, & [data-drwaer-page] {
+        & drawer-menu, & [data-drawer-page] {
             display: none;
         }
     }
