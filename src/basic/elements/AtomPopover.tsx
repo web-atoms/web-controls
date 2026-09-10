@@ -2,9 +2,10 @@ import { AtomDisposableList } from "@web-atoms/core/dist/core/AtomDisposableList
 import { CancelToken } from "@web-atoms/core/dist/core/types.js";
 import XNode, { IElementAttributes, xnodeSymbol } from "@web-atoms/core/dist/core/XNode.js";
 import { AtomControl, ElementValueSetters } from "@web-atoms/core/dist/web/controls/AtomControl.js";
-import "./AtomPopover.css";
 import { relativeRect } from "./relativeRect.js";
 import getContainingBlock from "./getContainingBlock.js";
+
+import "./AtomPopover.css";
 
 ElementValueSetters["anchor-left"] = (c, e, v) => e.setAttribute("anchor-left", v);
 ElementValueSetters["anchor-right"] = (c, e, v) => e.setAttribute("anchor-right", v);
